@@ -1,6 +1,8 @@
 import Tablero from "./Tablero.js";
 export default class Inicio extends Phaser.Scene {
-
+    constructor(){
+        super("Inicio")
+    }
 
     init() {
         console.log("prueba");
