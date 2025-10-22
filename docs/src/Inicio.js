@@ -18,6 +18,8 @@ export default class Inicio extends Phaser.Scene {
 
         //Dibujamos el tablero
         this.tabGrafico = new TableroGrafico(this,this.tab);
+
+        this.scene.launch('SidePanel');
     }
 
 
