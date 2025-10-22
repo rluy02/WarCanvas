@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         inicio: document.getElementById('inicio'),
         reglas: document.getElementById('reglas'),
         creditos: document.getElementById('creditos'),
-        jugar: document.getElementById('jugar')
+        juego: document.getElementById('juego')
     };
 
     // Función para mostrar una sección y ocultar todas las demás
@@ -57,6 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnJuego.addEventListener('click', e=> {
         e.preventDefault();
-        mostrarSeccion(secciones.jugar);
+        mostrarSeccion(secciones.juego);
     });
 });

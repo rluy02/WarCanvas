@@ -6,8 +6,8 @@
   <meta charset="utf-8">
   <title>War Canvas</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="responsive.css">
-  <link rel="stylesheet" href="estilo.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/estilo.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="icon" type="image/png" sizes="16x16" href="imgs/war-canvas.webp">
   <!-- Esto cargaria un archivo de estilo, pero no es necesario en Fiddle porque lo hace automáticamente -->
@@ -36,16 +36,26 @@
   <hr class=" fila col-12">
 
   <main>
+    <!-- CANVAS DEL JUEGO -->
+    <section class="seccion-juego" id="juego" style="display:none">
+      <canvas id="canvas-juego"></canvas>
+      <script src="./src/game.js" type="module"></script>
+    </section>
+
     <!-- PAG SOBRE INICIO -->
     <section id="inicio">
       <h1 class="titulos-inicio">¡Bienvenido a War Canvas!</h1>
       <br>
       <div class="colp-6">
-      <h2 class="titulos-inicio">Resumen</h2>
-      <div><p>War Canvas es un juego en el que te conviertes en el buho de drawful y te enfrentas a un comandante enemigo. Tendrás que derrotarlo o conquistar un 80% del territorio para sobrepasar la frontera y obtener la victoria</p></div>
+        <h2 class="titulos-inicio">Resumen</h2>
+        <div>
+          <p>War Canvas es un juego en el que te conviertes en el buho de drawful y te enfrentas a un comandante
+            enemigo. Tendrás que derrotarlo o conquistar un 80% del territorio para sobrepasar la frontera y obtener la
+            victoria</p>
+        </div>
       </div>
-      <h2 class="titulos-inicio" >Equipos</h2>
-      
+      <h2 class="titulos-inicio">Equipos</h2>
+
     </section>
 
     <!-- PAG SOBRE REGLAS -->
@@ -160,10 +170,7 @@
 
       </div>
     </section>
-    <section class = "juego" id = "jugar" style = "display:none"> 
-      <canvas id="juego"></canvas>
-      <script src="./src/game.js" type="module"></script>
-    </section>
+
   </main>
 
   <!-- Pie de pagina -->
