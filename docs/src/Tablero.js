@@ -1,19 +1,25 @@
+import Celdas from "./Celdas.js";
+
 export default class Tablero {
     constructor(_filas = 8, _columnas = 10) {
         this.filas = _filas;
         this.columnas = _columnas;
-        this.grid = this.crearTablero(); //creamos el tablero vacio con el constructor
+        this.tablero = this.crearTablero(); //creamos el tablero lleno de celdas
     }
 
     crearTablero() {
-        let tablero = [];
+        let tab = [];
         for (let i = 0; i < this.filas; i++) {
-            tablero[i] = [];
+            tab[i] = [];
             for (let j = 0; j < this.columnas; j++) {
-                tablero[i][j] = null;
+                tab[i][j] = new Celdas(i, j);
             }
         }
-        return tablero;
+        return tab;
+    }
+
+    getCelda(fila, columna) {
+        return this.tablero[fila][columna];
     }
 
 }

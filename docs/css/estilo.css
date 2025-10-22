@@ -117,10 +117,13 @@ button:active {
   font-size: 2em;
 }
 
-/* .seccion-juego {
+/* Contenedor (padre) del canvas del juego */
+.seccion-juego {
   text-align: center;
-  padding-top: 2em;
-} */
+  margin: 0;
+  padding: 0;
+   align-items: center;  
+}
 
 .jugar,
 .logo-studio,
