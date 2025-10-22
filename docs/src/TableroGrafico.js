@@ -14,6 +14,7 @@ export default class TableroGrafico {
             graficos[fila] = [];
             for (let col = 0; col < this.tablero.columnas; col++) {
                 const color = (fila + col) % 2 === 0 ? 0xffffff : 0xcccccc;
+                 //los rectangulos se empiezan a dibujar desde el centro (por eso, +tamCasillas/2)
                 const x = col * this.tamCasilla + this.tamCasilla / 2;
                 const y = fila * this.tamCasilla + this.tamCasilla / 2;
 
