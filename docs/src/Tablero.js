@@ -1,4 +1,4 @@
-import Celdas from "./Celdas.js";
+import Celda from "./Celda.js";
 
 export default class Tablero {
     constructor(_filas = 8, _columnas = 10) {
@@ -12,7 +12,7 @@ export default class Tablero {
         for (let i = 0; i < this.filas; i++) {
             tab[i] = [];
             for (let j = 0; j < this.columnas; j++) {
-                tab[i][j] = new Celdas(i, j);
+                tab[i][j] = new Celda(i, j);
             }
         }
         return tab;
