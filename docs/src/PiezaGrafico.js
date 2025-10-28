@@ -1,0 +1,26 @@
+export default class PiezaGrafico {
+
+    constructor(escena, tablero, tamCasilla = 64) {
+        this.escena = escena;
+        this.tablero = tablero;
+        this.tamCasilla = tamCasilla;
+        this.sprites = new Map(); // estructura tipo array (parecida a un diccionario)
+      }
+
+      preload(){
+        this.escena.load.image('peon','imgs/peon.webp');
+      }
+    
+      dibujarPieza(pieza) {
+        const x = pieza.col * this.tamCasilla + this.tamCasilla / 2;
+        const y = pieza.fil * this.tamCasilla + this.tamCasilla / 2;
+        
+        const sprite = this.escena.add.image(x, y, 'peon');
+        sprite.setDisplaySize(this.tamCasilla, this.tamCasilla);
+        this.sprites.set(pieza, sprite);
+
+        console.log(`Pieza "${pieza.tipoPieza}" en fila=${pieza.fil}, col=${pieza.col} → x=${x}, y=${y}`);
+
+      }
+
+}
