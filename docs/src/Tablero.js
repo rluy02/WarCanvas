@@ -1,5 +1,5 @@
 import Celda from "./Celda.js";
-import { eventos } from "./Events.js";
+import { eventos } from "./events.js";
 import { EventBus } from "./EventBus.js";
 
 export default class Tablero {
@@ -27,11 +27,15 @@ export default class Tablero {
 
     // Selecciona las casillas de movimiento/ataque de la pieza
     piezaSeleccionada(fil, col) {
+
         let celda = this.tablero[fil][col];
         let celdasSeleccionadas = [];
 
         let pieza = celda.getPieza();
         this.piezaActiva = pieza;
+
+        //Lanzamos el evento de pieza seleccionada
+        EventBus.emit(eventos.PIECE_SELECTED, pieza);
 
         // Direcciones cardinales
         const direcciones = [

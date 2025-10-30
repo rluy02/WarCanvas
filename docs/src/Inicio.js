@@ -1,4 +1,4 @@
-import { eventos } from "./Events.js";
+import { eventos } from "./events.js";
 import { EventBus } from "./EventBus.js";
 
 import PanelLateral from "./PanelLateral.js";
@@ -6,6 +6,7 @@ import Soldado from "./Soldado.js";
 import Tablero from "./Tablero.js";
 import TableroGrafico from "./TableroGrafico.js";
 import PiezaGrafico from "./PiezaGrafico.js";
+import TurnoGraficos from "./TurnoGrafico.js";
 
 
 export default class Inicio extends Phaser.Scene {
@@ -21,6 +22,7 @@ export default class Inicio extends Phaser.Scene {
 
     preload() {
         this.panel = new PanelLateral(this);
+        this.turnoGrafico = new TurnoGraficos(this);
         this.panel.preload();
         //Cargar los sprites de las piezas aqui
 
@@ -40,7 +42,7 @@ export default class Inicio extends Phaser.Scene {
         this.piezas.push(this.soldado);
 
 
-        this.soldado2 = new Soldado(3, 5, 'J1');
+        this.soldado2 = new Soldado(3, 5, 'J2');
         this.tab.getCelda(3, 5).setContenido(this.soldado2)
         this.piezas.push(this.soldado2);
 
@@ -56,6 +58,7 @@ export default class Inicio extends Phaser.Scene {
 
 
         this.panel.create();
+        this.turnoGrafico.create();
     }
 
     update() { }
