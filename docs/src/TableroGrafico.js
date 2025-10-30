@@ -4,7 +4,8 @@ export default class TableroGrafico {
         this.tablero = tablero;
         this.tamCasilla = tamCasilla;
         this.graficos = this.dibujarTablero(); //Este tablero visual esta lleno de "rects" //Phaser.GameObjects.Rectangle
-        
+        this.celdaSeleccionada = null; // La celda que estas seleccionando
+        this.celdasColoreadas = []; // Las celdas a las que te puedes mover
     }
 
     dibujarTablero() {
@@ -14,7 +15,7 @@ export default class TableroGrafico {
             graficos[fila] = [];
             for (let col = 0; col < this.tablero.columnas; col++) {
                 const color = (fila + col) % 2 === 0 ? 0xffffff : 0xcccccc;
-                 //los rectangulos se empiezan a dibujar desde el centro (por eso, +tamCasillas/2)
+                //los rectangulos se empiezan a dibujar desde el centro (por eso, +tamCasillas/2)
                 const x = col * this.tamCasilla + this.tamCasilla / 2;
                 const y = fila * this.tamCasilla + this.tamCasilla / 2;
 
@@ -22,11 +23,10 @@ export default class TableroGrafico {
                 const rect = this.escena.add.rectangle(
                     x, y, this.tamCasilla, this.tamCasilla, color
                 ).setStrokeStyle(1, 0x000000)
-                 .setInteractive();
+                    .setInteractive();
 
                 // Detectar click
                 rect.on('pointerdown', () => {
-                    console.log(`Click en fila ${fila}, columna ${col}`);
                     this.onCeldaClick(fila, col);
                 });
 
@@ -38,11 +38,77 @@ export default class TableroGrafico {
     }
 
     onCeldaClick(fila, col) {
-        // Pregunta que celda se esta clickando
         let celda = this.tablero.getCelda(fila, col);
-        console.log(celda);
 
-        //Muestra rapida de seleccion de casilla
-        this.graficos[fila][col].setStrokeStyle(3, 0xffff00);
+        // Si no hay celda seleccionada y no esta vacía se marcan las oppciones de la pieza
+        if (this.celdaSeleccionada == null) {
+            // Si la celda contiene una pieza
+            if (!celda.estaVacia()) {
+                this.colorearRango(fila, col);
+            }
+        }
+        else {
+            // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
+            // Limpiamos el tablero para resetear las casillas seleccionadas
+            this.limpiarTablero();
+
+            // Si es vacía se mueve
+            if (this.esTipoCelda(fila, col, "vacia")) {
+                //Se limpia el tablero
+
+                //Se informa del movimiento de pieza
+                this.tablero.moverPieza(fila, col);
+                this.onCeldaClick(fila, col);
+            }
+            else if (this.esTipoCelda(fila, col, "enemigo")) {
+                // Ataque
+            }
+        }
+    }
+
+    // Colorea el rango de movimiento de la pieza
+    colorearRango(fila, col) {
+        let celda = this.tablero.getCelda(fila, col);
+
+        this.celdasColoreadas = this.tablero.piezaSeleccionada(fila, col);
+        //La de la ficha actual
+        this.graficos[fila][col].setStrokeStyle(3, 0xf5a927);
+
+        for (let cel of this.celdasColoreadas) {
+            if (cel.tipo == "vacia") {
+                this.graficos[cel.fil][cel.col].setStrokeStyle(3, 0x69CF4E);
+            }
+            else if (cel.tipo == "enemigo") {
+                this.graficos[cel.fil][cel.col].setStrokeStyle(3, 0xF23A1D);
+            }
+        }
+
+        this.celdaSeleccionada = celda;
+    }
+
+    // Mira si la celda (fil,col) esta entre las seleccionadas, y ademas mira que el tipo sea correcto
+    esTipoCelda(fil, col, tipo) {
+        for (let celda of this.celdasColoreadas) {
+            if (celda.fil == fil && celda.col == col && celda.tipo == tipo) return true;
+        }
+
+        return false;
+    }
+
+    // Resetea todas las casillas coloreadas y la seleccionada
+    limpiarTablero() {
+        // Descolorear las anteriores
+        for (let i = 0; i < this.celdasColoreadas.length; i++) {
+            let { fil, col } = this.celdasColoreadas[i];
+            this.graficos[fil][col].setStrokeStyle(1, 0x000000);
+        }
+
+        //Desmarcamos la casilla central
+        let f = this.celdaSeleccionada.getPosicion().fila;
+        let c = this.celdaSeleccionada.getPosicion().col;
+        this.graficos[f][c].setStrokeStyle(1, 0x000000);
+
+        this.celdasColoreadas = [];
+        this.celdaSeleccionada = null;
     }
 }

@@ -16,4 +16,12 @@ export default class Celda {
     limpiar() {
         this.contenido = null;
     }
+
+    getPieza(){
+        return this.contenido;
+    }
+
+    getPosicion(){
+        return {fila: this.fila, col: this.columna};
+    }
 }
