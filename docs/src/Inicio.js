@@ -44,10 +44,12 @@ export default class Inicio extends Phaser.Scene {
         this.tab.getCelda(3, 5).setContenido(this.soldado2)
         this.piezas.push(this.soldado2);
 
+        // Recorre todas las piezas y las dibuja
         for (let p of this.piezas) {
             this.piezaGrafico.dibujarPieza(p);
         }
 
+        // Se añade un evento para cuando se mueve la pieza
         EventBus.on(eventos.PIECE_MOVED, (pieza) => {
             this.moverPieza(pieza);
         });
@@ -58,6 +60,7 @@ export default class Inicio extends Phaser.Scene {
 
     update() { }
 
+    // Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
     moverPieza(pieza){
         for (let p of this.piezas) {
             if (p == pieza){

@@ -49,12 +49,11 @@ export default class TableroGrafico {
         }
         else {
             // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
-            // Limpiamos el tablero para resetear las casillas seleccionadas
-            this.limpiarTablero();
 
             // Si es vacía se mueve
             if (this.esTipoCelda(fila, col, "vacia")) {
                 //Se limpia el tablero
+                this.limpiarTablero();
 
                 //Se informa del movimiento de pieza
                 this.tablero.moverPieza(fila, col);
@@ -62,6 +61,9 @@ export default class TableroGrafico {
             }
             else if (this.esTipoCelda(fila, col, "enemigo")) {
                 // Ataque
+            }
+            else {
+                this.limpiarTablero();
             }
         }
     }
