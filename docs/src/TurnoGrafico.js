@@ -3,4 +3,9 @@ export default class TurnoGraficos{
         this.escena = escena;
     }
     
+    create() {
+        const width = this.escena.scale.width;
+        const height = this.escena.scale.height;
+        
+    }
 }
