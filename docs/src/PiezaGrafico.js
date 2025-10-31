@@ -9,13 +9,16 @@ export default class PiezaGrafico {
 
   preload() {
     this.escena.load.image('peon', 'imgs/peon.webp');
+    this.escena.load.image('peon2', 'imgs/peon2.webp');
   }
 
   dibujarPieza(pieza) {
     const x = pieza.col * this.tamCasilla + this.tamCasilla / 2;
     const y = pieza.fil * this.tamCasilla + this.tamCasilla / 2;
 
-    const sprite = this.escena.add.image(x, y, 'peon');
+    let sprite = null;
+    if (pieza.getJugador() == "J1") sprite = this.escena.add.image(x, y, 'peon');
+    else sprite = this.escena.add.image(x, y, 'peon2');
     sprite.setDisplaySize(this.tamCasilla, this.tamCasilla);
     this.sprites.set(pieza, sprite);
   }

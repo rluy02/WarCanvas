@@ -1,5 +1,6 @@
 import { eventos } from "./events.js";
 import { EventBus } from "./EventBus.js";
+import { turnoJugador } from "./Turno.js";
 
 export default class TableroGrafico {
     constructor(escena, tablero, PanelLateral, tamCasilla = 64) {
@@ -11,11 +12,13 @@ export default class TableroGrafico {
         this.celdasColoreadas = []; // Las celdas a las que te puedes mover
         this.PanelLateral = PanelLateral;
 
+        //Si se esta moviendo
         this.moviendoPieza = false;
-
+        
         EventBus.on(eventos.PIECE_END_ACTIONS, () => {
-            console.log("limpiado tamelro")
             this.moviendoPieza = false;
+            this.movimientoIniciado = false;
+
             this.limpiarTablero();
             this.celdaSeleccionada = null;
         });
@@ -51,23 +54,25 @@ export default class TableroGrafico {
     }
 
     onCeldaClick(fila, col) {
+        console.log("Click ", fila + " ", col);   
         let celda = this.tablero.getCelda(fila, col);
         let pieza = celda.getPieza();
 
+        let jugador = "";
+        if (pieza) jugador = pieza.getJugador();
+
         // Si no hay celda seleccionada y no esta vacía se marcan las oppciones de la pieza
-        if (this.celdaSeleccionada == null && !this.moviendoPieza && !pieza.getMovida()) {
+        if (this.celdaSeleccionada == null && !this.moviendoPieza && !pieza.getMovida() && jugador == turnoJugador) {
             // Si la celda contiene una pieza
             if (!celda.estaVacia()) {
-                console.log("pieza sol");
                 this.colorearRango(fila, col);
             }
         }
         else {
             // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
-
+            
             // Si es vacía se mueve
-            if (this.esTipoCelda(fila, col, "vacia")) {
-                 console.log("moviendo ", fila, " ", col)
+            if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida()) {
 
                 this.moviendoPieza = true;
                 //Se limpia el tablero
@@ -77,7 +82,7 @@ export default class TableroGrafico {
                 this.tablero.moverPieza(fila, col);
                 this.colorearRango(fila, col);
             }
-            else if (this.esTipoCelda(fila, col, "enemigo")) {
+            else if (this.esTipoCelda(fila, col, "enemigo") && !this.tablero.getPiezaActiva().getMovida()) {
                 this.moviendoPieza = false;
 
                 // Combate
@@ -123,6 +128,7 @@ export default class TableroGrafico {
 
     // Resetea todas las casillas coloreadas y la seleccionada
     limpiarTablero() {
+        let i = 0;
         // Descolorear las anteriores
         for (let i = 0; i < this.celdasColoreadas.length; i++) {
             let { fil, col } = this.celdasColoreadas[i];

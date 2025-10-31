@@ -90,4 +90,8 @@ export default class Tablero {
         EventBus.emit(eventos.ENEMY_SELECTED, ataque, defensa);
     }
 
+    getPiezaActiva(){
+        return this.piezaActiva;
+    }
+
 }

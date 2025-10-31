@@ -59,4 +59,8 @@ export default class TurnoGraficos {
         this.piezasMover = acciones;
         this.turnosText.text = 'Piezas a mover: ' + this.piezasMover;
     }
+
+    setTurnoJugador(jugador) {
+        this.JugadorText.text = 'Jugador ' + jugador;
+    }
 }

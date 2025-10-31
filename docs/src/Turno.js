@@ -1,6 +1,8 @@
 import { eventos } from "./events.js";
 import { EventBus } from "./EventBus.js";
 
+export let turnoJugador = "J1";
+
 export default class Turno{
     constructor(acciones, turnoGrafico){
         this.accionesTurno = acciones;
@@ -15,6 +17,9 @@ export default class Turno{
         EventBus.on(eventos.PIECE_MOVED, (pieza) => { this.restarAccion()})
         EventBus.on(eventos.ATACK, () => {this.acabarMovimientos()})
         EventBus.on(eventos.PIECE_END_ACTIONS, () => {this.acabarMovimientos()})
+        EventBus.on(eventos.CHANGE_TURN, (turnoJugador) => {
+            this.turnoGrafico.setTurnoJugador(turnoJugador);
+        })
     }
 
     setPieza(pieza){
@@ -29,10 +34,19 @@ export default class Turno{
         this.movimientosPieza = this.movimientosPieza - 1;
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
         if (this.movimientosPieza <= 0) EventBus.emit(eventos.PIECE_END_ACTIONS);
+
+        if (this.accionesTurno <= 0) {
+            if (turnoJugador == "J1") turnoJugador = "J2"
+            else turnoJugador = "J1"
+            this.accionesTurno = 3;
+            this.movimientosPieza = 0;
+
+            EventBus.emit(eventos.CHANGE_TURN, turnoJugador);
+        }
     }
 
     acabarMovimientos(){
-        console.log("FIN: ", this.piezaActual);
+        if (!this.piezaActual) return;
 
         this.piezaActual.setMovida();
 
@@ -41,4 +55,6 @@ export default class Turno{
         this.accionesTurno--;
         this.turnoGrafico.setAccionesTurno(this.accionesTurno);
     }
+
+
 }
