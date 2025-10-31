@@ -33,14 +33,16 @@ export default class Turno{
     restarAccion(){
         this.movimientosPieza = this.movimientosPieza - 1;
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
-        if (this.movimientosPieza <= 0) EventBus.emit(eventos.PIECE_END_ACTIONS);
+        if (this.movimientosPieza <= 0) {
+            EventBus.emit(eventos.PIECE_END_ACTIONS);
+        }
 
         if (this.accionesTurno <= 0) {
             if (turnoJugador == "J1") turnoJugador = "J2"
             else turnoJugador = "J1"
             this.accionesTurno = 3;
             this.movimientosPieza = 0;
-
+            
             EventBus.emit(eventos.CHANGE_TURN, turnoJugador);
         }
     }

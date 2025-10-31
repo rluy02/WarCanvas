@@ -35,6 +35,10 @@ export default class Pieza {
       this.movida = true;
     }
 
+    resetMovida(){
+      this.movida = false;
+    }
+
     getMovida(){
       return this.movida;
     }

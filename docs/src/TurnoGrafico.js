@@ -12,7 +12,7 @@ export default class TurnoGraficos {
         const width = this.escena.scale.width;
         const height = this.escena.scale.height;
 
-        this.JugadorText = this.escena.add.text(40, height - 70, 'Jugador 1', { // Título
+        this.JugadorText = this.escena.add.text(40, height - 70, 'Turno J1', { // Título
             fontSize: '22px',
             fontFamily: 'Arial',
             fill: '#ffffff'
@@ -30,11 +30,11 @@ export default class TurnoGraficos {
             fill: '#ffffff'
         });
 
-        this.acabarText = this.escena.add.text(210, height - 40, 'Finalizar Movimiento', { // Título
-            fontSize: '22px',
-            fontFamily: 'Arial',
-            fill: '#ce2020ff'
-        }).setInteractive({ useHandCursor: true })
+        // this.acabarText = this.escena.add.text(210, height - 40, 'Finalizar Movimiento', { // Título
+        //     fontSize: '22px',
+        //     fontFamily: 'Arial',
+        //     fill: '#ce2020ff'
+        // }).setInteractive({ useHandCursor: true })
 
         this.acabarText.on('pointerdown', () => {
             EventBus.emit(eventos.PIECE_END_ACTIONS);
@@ -61,6 +61,6 @@ export default class TurnoGraficos {
     }
 
     setTurnoJugador(jugador) {
-        this.JugadorText.text = 'Jugador ' + jugador;
+        this.JugadorText.text = 'Turno ' + jugador;
     }
 }

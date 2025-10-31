@@ -64,6 +64,10 @@ export default class Inicio extends Phaser.Scene {
         this.tab.getCelda(1, 1).setContenido(this.soldado5)
         this.piezas.push(this.soldado5);
 
+        this.soldado6 = new Soldado(4, 2, 'J2');
+        this.tab.getCelda(4, 2).setContenido(this.soldado6)
+        this.piezas.push(this.soldado6);
+
         // Recorre todas las piezas y las dibuja
         for (let p of this.piezas) {
             this.piezaGrafico.dibujarPieza(p);

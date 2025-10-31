@@ -53,7 +53,7 @@ export default class Tablero {
             let f = fil + dir.df;
             let c = col + dir.dc;
             // Evitar índices fuera de rango
-            if (f > 0 && c > 0 && f < this.filas && c < this.columnas) {
+            if (f >= 0 && c >= 0 && f < this.filas && c < this.columnas) {
                 //La celda que se está pintando
                 let cel = this.tablero[f][c];
 
