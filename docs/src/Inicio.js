@@ -7,6 +7,7 @@ import Tablero from "./Tablero.js";
 import TableroGrafico from "./TableroGrafico.js";
 import PiezaGrafico from "./PiezaGrafico.js";
 import TurnoGraficos from "./TurnoGrafico.js";
+import Combates from "./Combates.js";
 
 
 export default class Inicio extends Phaser.Scene {
@@ -35,8 +36,10 @@ export default class Inicio extends Phaser.Scene {
         this.tab = new Tablero();
 
         //Dibujamos el tablero
-        this.tabGrafico = new TableroGrafico(this, this.tab);
+        this.tabGrafico = new TableroGrafico(this, this.tab, this.panel); 
 
+        this.combates = new Combates(this.tab, this.tabGrafico, this.panel);
+        
         this.soldado = new Soldado(5, 5, 'J1');
         this.tab.getCelda(5, 5).setContenido(this.soldado)
         this.piezas.push(this.soldado);
@@ -46,6 +49,14 @@ export default class Inicio extends Phaser.Scene {
         this.tab.getCelda(3, 5).setContenido(this.soldado2)
         this.piezas.push(this.soldado2);
 
+         this.soldado3 = new Soldado(6, 5, 'J2');
+        this.tab.getCelda(6, 5).setContenido(this.soldado3)
+        this.piezas.push(this.soldado3);
+
+        this.soldado4 = new Soldado(6, 3, 'J1');
+        this.tab.getCelda(6, 3).setContenido(this.soldado4)
+        this.piezas.push(this.soldado4);
+
         // Recorre todas las piezas y las dibuja
         for (let p of this.piezas) {
             this.piezaGrafico.dibujarPieza(p);
@@ -54,6 +65,10 @@ export default class Inicio extends Phaser.Scene {
         // Se añade un evento para cuando se mueve la pieza
         EventBus.on(eventos.PIECE_MOVED, (pieza) => {
             this.moverPieza(pieza);
+        });
+
+        EventBus.on(eventos.PIECE_DEAD, (pieza) => {
+            this.eliminarPieza(pieza);
         });
 
 
@@ -69,6 +84,14 @@ export default class Inicio extends Phaser.Scene {
             if (p == pieza){
                 this.piezaGrafico.eliminarPieza(pieza);
                 this.piezaGrafico.dibujarPieza(pieza);
+            }
+        }
+    }
+
+    eliminarPieza(pieza){
+        for (let p of this.piezas) {
+            if (p == pieza){
+                this.piezaGrafico.eliminarPieza(pieza);
             }
         }
     }

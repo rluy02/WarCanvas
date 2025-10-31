@@ -1,5 +1,10 @@
 // Para Acceder a los eventos sin usar strings
 export const eventos =  {
     PIECE_MOVED: "piece_moved",
-    PIECE_SELECTED: "piece_selected"
+    PIECE_SELECTED: "piece_selected",
+    ENEMY_SELECTED: "enemy_selected",
+    ATACK: "atack",
+    PIECE_DEAD: "piece_dead",
+    PIECE_ERRASE: "piece_dead",
+
 }

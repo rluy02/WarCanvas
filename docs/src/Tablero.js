@@ -79,4 +79,11 @@ export default class Tablero {
         EventBus.emit(eventos.PIECE_MOVED, this.piezaActiva);
     }
 
+    ataque(fil, col) {
+        let defensa = this.getCelda(fil, col)
+        let origen = this.piezaActiva.getPosicion()
+        let ataque = this.getCelda(origen.fila, origen.col)
+        EventBus.emit(eventos.ENEMY_SELECTED, ataque, defensa);
+    }
+
 }

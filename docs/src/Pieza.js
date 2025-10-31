@@ -21,6 +21,10 @@ export default class Pieza {
       return this.jugador;
     }
 
+    getTipo(){
+      return this.tipoPieza;
+    }
+
     getPosicion(){
       return {fila: this.fil, col: this.col};
     }

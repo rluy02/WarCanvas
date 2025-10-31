@@ -1,6 +1,12 @@
+import Celda from "./Celda.js";
+import { eventos } from "./events.js";
+import { EventBus } from "./EventBus.js";
+
 export default class PanelLateral {
     constructor(escena) {
         this.escena = escena;
+        let atacante = null;
+        let defensa = null;
     }
 
     preload() { // Se cargan las imagenes de los dados
@@ -23,7 +29,7 @@ export default class PanelLateral {
             fill: '#ffffff'
         });
 
-        this.infoText = this.escena.add.text(width - sideWidth + 20, 80, 'Esperando acción...', { // Texto del combate (ej: Soldado vs Caballería)
+        this.infoText = this.escena.add.text(width - sideWidth + 20, 100, 'Esperando acción...', { // Texto del combate (ej: Soldado vs Caballería)
             fontSize: '16px',
             fontFamily: 'Arial',
             fill: '#ffffffff', });
@@ -53,29 +59,50 @@ export default class PanelLateral {
 
         // AUXILIAR - Para comprobar que se actualizan los dados
 
-        let buttonTry = this.escena.add.text(width - sideWidth / 2, 500, 'JUGAR', { // Botón Provisional para ver si funcionan los dados
+        this.buttonTry = this.escena.add.text(width - sideWidth / 2, 500, ' ', { // Botón Provisional para ver si funcionan los dados
             fontSize: '30px',
             color: '#ffffff',
             fontFamily: 'Arial',
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+        }).setOrigin(0.5).disableInteractive();
 
-        buttonTry.on('pointerdown', () => {
-
-            this.updateCombatInfo('Partida de Prueba', 'NADIE', 'Dibujo', 'Real', Math.floor(Math.random() * (6 - 1) ) + 1, Math.floor(Math.random() * (6 - 1) ) + 1, Math.floor(Math.random() * (6 - 1) ) + 1, Math.floor(Math.random() * (6 - 1) ) + 1);
-
+        this.buttonTry.on('pointerdown', () => {
+            // Se lanza el evento de ataque
+            EventBus.emit(eventos.ATACK);
         });
     }
 
-    updateCombatInfo(message, result, attackerTeam, defenderTeam, attackerRoll1, attackerRoll2, defenderRoll1, defenderRoll2) {
+    updateCombatInfo(mensaje, resultado, atacante, defensa, atacanteTirada1, atacanteTirada2, defensaTirada1, defensaTirada2, bonusAtaca, bonusDefiende) {
         // Actualiza la información del panel
-        this.infoText.setText(`${message}\n${'Resultado: ' + result}`);
-        this.infoTextAttacker.setText('Ataca: ' + attackerTeam);
-        this.infoTextDefender.setText('Defiende: ' + defenderTeam);
+        this.titleText.setText('COMBATE');
+        this.infoText.setText(`${mensaje}\n${resultado}`);
+        this.infoTextAttacker.setText(`Ataca ${atacante} = ${atacanteTirada1 + atacanteTirada2 + bonusAtaca} Bonus(${bonusAtaca})`);
+        this.infoTextDefender.setText(`Ataca ${defensa} = ${defensaTirada1 + defensaTirada2 + bonusDefiende} Bonus(${bonusDefiende})`);
 
-        this.diceImages.attacker[0].setTexture(`dice${attackerRoll1}`);
-                this.diceImages.attacker[1].setTexture(`dice${attackerRoll2}`);
-        this.diceImages.defender[0].setTexture(`dice${defenderRoll1}`);
-                this.diceImages.defender[1].setTexture(`dice${defenderRoll2}`);
+        this.diceImages.attacker[0].setTexture(`dice${atacanteTirada1}`);
+                this.diceImages.attacker[1].setTexture(`dice${atacanteTirada2}`);
+        this.diceImages.defender[0].setTexture(`dice${defensaTirada1}`);
+                this.diceImages.defender[1].setTexture(`dice${defensaTirada2}`);
+        
+        this.buttonTry.disableInteractive();
+        this.buttonTry.setText(' ');
+    }
+
+    updateInfo(fichaDefiende, fichaAtaque, equipoAtaque, equipoDefensa, accion) {
+
+        // Actualiza el título del panel
+        this.titleText.setText('CONFIRMA \nEL COMBATE');
+        // Actualiza la información del panel
+        this.infoText.setText(fichaAtaque + ' de ' + equipoAtaque + ' ataca a ' + fichaDefiende + ' de ' + equipoDefensa);
+        this.infoTextAttacker.setText('Ataca: ' + equipoAtaque);
+        this.infoTextDefender.setText('Defiende: ' + equipoDefensa);
+
+        this.diceImages.attacker[0].setTexture(`dice${0}`);
+                this.diceImages.attacker[1].setTexture(`dice${0}`);
+        this.diceImages.defender[0].setTexture(`dice${0}`);
+                this.diceImages.defender[1].setTexture(`dice${0}`);
+        
+        this.buttonTry.setInteractive({ useHandCursor: true });
+        this.buttonTry.setText(accion);
     }
 
 }

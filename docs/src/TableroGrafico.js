@@ -1,11 +1,12 @@
 export default class TableroGrafico {
-    constructor(escena, tablero, tamCasilla = 64) {
+    constructor(escena, tablero, PanelLateral, tamCasilla = 64) {
         this.escena = escena;
         this.tablero = tablero;
         this.tamCasilla = tamCasilla;
         this.graficos = this.dibujarTablero(); //Este tablero visual esta lleno de "rects" //Phaser.GameObjects.Rectangle
         this.celdaSeleccionada = null; // La celda que estas seleccionando
         this.celdasColoreadas = []; // Las celdas a las que te puedes mover
+        this.PanelLateral = PanelLateral;
     }
 
     dibujarTablero() {
@@ -60,7 +61,10 @@ export default class TableroGrafico {
                 this.onCeldaClick(fila, col);
             }
             else if (this.esTipoCelda(fila, col, "enemigo")) {
-                // Ataque
+                // Combate
+                this.confirmarAtaque(fila, col, this.celdaSeleccionada);
+                // Posible Ataque si se confirma en el panel Lateral
+                this.tablero.ataque(fila, col);
             }
             else {
                 this.limpiarTablero();
@@ -112,5 +116,17 @@ export default class TableroGrafico {
 
         this.celdasColoreadas = [];
         this.celdaSeleccionada = null;
+    }
+
+    confirmarAtaque(fila, columna, celdaSeleccionada){
+
+        let casillaAtacante = this.tablero.getCelda(fila, columna);
+        let casillaDefensa = this.tablero.getCelda(celdaSeleccionada.fila, celdaSeleccionada.columna);
+        let atacante = casillaAtacante.getPieza().getJugador();
+        let defensa = casillaDefensa.getPieza().getJugador();
+        let atacantePieza = this.tablero.getCelda(fila, columna).getPieza().getTipo();
+        let defensaPieza = this.tablero.getCelda(celdaSeleccionada.fila, celdaSeleccionada.columna).getPieza().getTipo();
+        this.PanelLateral.updateInfo(defensaPieza, atacantePieza, atacante, defensa, "Atacar", casillaAtacante, casillaDefensa);
+        console.log("Confirmar Combate - TableroGráfico");
     }
 }
