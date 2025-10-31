@@ -18,9 +18,6 @@ export default class PiezaGrafico {
     const sprite = this.escena.add.image(x, y, 'peon');
     sprite.setDisplaySize(this.tamCasilla, this.tamCasilla);
     this.sprites.set(pieza, sprite);
-
-    console.log(`Pieza "${pieza.tipoPieza}" en fila=${pieza.fil}, col=${pieza.col} → x=${x}, y=${y}`);
-
   }
 
   eliminarPieza(pieza) {
@@ -31,7 +28,6 @@ export default class PiezaGrafico {
     if (sprite) {
       sprite.destroy(); // Esto elimina el sprite de la escena de Phaser
       this.sprites.delete(pieza); // Y lo quitamos del Map
-      console.log(`Pieza eliminada: "${pieza.tipoPieza}" en fila=${pieza.fil}, col=${pieza.col}`);
     } else {
       console.warn("Intento de eliminar pieza que no tiene sprite asociado:", pieza);
     }

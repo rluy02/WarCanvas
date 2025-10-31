@@ -1,3 +1,6 @@
+import { eventos } from "./events.js";
+import { EventBus } from "./EventBus.js";
+
 export default class TableroGrafico {
     constructor(escena, tablero, PanelLateral, tamCasilla = 64) {
         this.escena = escena;
@@ -7,6 +10,15 @@ export default class TableroGrafico {
         this.celdaSeleccionada = null; // La celda que estas seleccionando
         this.celdasColoreadas = []; // Las celdas a las que te puedes mover
         this.PanelLateral = PanelLateral;
+
+        this.moviendoPieza = false;
+
+        EventBus.on(eventos.PIECE_END_ACTIONS, () => {
+            console.log("limpiado tamelro")
+            this.moviendoPieza = false;
+            this.limpiarTablero();
+            this.celdaSeleccionada = null;
+        });
     }
 
     dibujarTablero() {
@@ -40,11 +52,13 @@ export default class TableroGrafico {
 
     onCeldaClick(fila, col) {
         let celda = this.tablero.getCelda(fila, col);
+        let pieza = celda.getPieza();
 
         // Si no hay celda seleccionada y no esta vacía se marcan las oppciones de la pieza
-        if (this.celdaSeleccionada == null) {
+        if (this.celdaSeleccionada == null && !this.moviendoPieza && !pieza.getMovida()) {
             // Si la celda contiene una pieza
             if (!celda.estaVacia()) {
+                console.log("pieza sol");
                 this.colorearRango(fila, col);
             }
         }
@@ -53,21 +67,27 @@ export default class TableroGrafico {
 
             // Si es vacía se mueve
             if (this.esTipoCelda(fila, col, "vacia")) {
+                 console.log("moviendo ", fila, " ", col)
+
+                this.moviendoPieza = true;
                 //Se limpia el tablero
                 this.limpiarTablero();
 
                 //Se informa del movimiento de pieza
                 this.tablero.moverPieza(fila, col);
-                this.onCeldaClick(fila, col);
+                this.colorearRango(fila, col);
             }
             else if (this.esTipoCelda(fila, col, "enemigo")) {
+                this.moviendoPieza = false;
+
                 // Combate
                 this.confirmarAtaque(fila, col, this.celdaSeleccionada);
                 // Posible Ataque si se confirma en el panel Lateral
                 this.tablero.ataque(fila, col);
             }
-            else {
+            else if (!this.moviendoPieza) {
                 this.limpiarTablero();
+                this.celdaSeleccionada = null;
             }
         }
     }
@@ -115,10 +135,9 @@ export default class TableroGrafico {
         this.graficos[f][c].setStrokeStyle(1, 0x000000);
 
         this.celdasColoreadas = [];
-        this.celdaSeleccionada = null;
     }
 
-    confirmarAtaque(fila, columna, celdaSeleccionada){
+    confirmarAtaque(fila, columna, celdaSeleccionada) {
 
         let casillaAtacante = this.tablero.getCelda(fila, columna);
         let casillaDefensa = this.tablero.getCelda(celdaSeleccionada.fila, celdaSeleccionada.columna);

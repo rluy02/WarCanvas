@@ -12,12 +12,33 @@ export default class Turno{
         this.turnoGrafico = turnoGrafico;
 
         EventBus.on(eventos.PIECE_SELECTED, (pieza) => { this.setPieza(pieza)});
+        EventBus.on(eventos.PIECE_MOVED, (pieza) => { this.restarAccion()})
+        EventBus.on(eventos.ATACK, () => {this.acabarMovimientos()})
+        EventBus.on(eventos.PIECE_END_ACTIONS, () => {this.acabarMovimientos()})
     }
 
     setPieza(pieza){
         this.piezaActual = pieza;
         this.movimientosPieza = pieza.getMovimientos();
 
+        console.log(this.piezaActual);
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
+    }
+
+    restarAccion(){
+        this.movimientosPieza = this.movimientosPieza - 1;
+        this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
+        if (this.movimientosPieza <= 0) EventBus.emit(eventos.PIECE_END_ACTIONS);
+    }
+
+    acabarMovimientos(){
+        console.log("FIN: ", this.piezaActual);
+
+        this.piezaActual.setMovida();
+
+        this.piezaActual = null;
+
+        this.accionesTurno--;
+        this.turnoGrafico.setAccionesTurno(this.accionesTurno);
     }
 }

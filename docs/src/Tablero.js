@@ -8,6 +8,8 @@ export default class Tablero {
         this.columnas = _columnas;
         this.tablero = this.crearTablero(); //creamos el tablero lleno de celdas
         this.piezaActiva = null;
+
+        this.turnoActivo = null;
     }
 
     crearTablero() {
@@ -32,10 +34,12 @@ export default class Tablero {
         let celdasSeleccionadas = [];
 
         let pieza = celda.getPieza();
-        this.piezaActiva = pieza;
 
-        //Lanzamos el evento de pieza seleccionada
-        EventBus.emit(eventos.PIECE_SELECTED, pieza);
+        if (pieza != this.piezaActiva) {
+            //Lanzamos el evento de pieza seleccionada
+            EventBus.emit(eventos.PIECE_SELECTED, pieza);
+            this.piezaActiva = pieza;
+        }
 
         // Direcciones cardinales
         const direcciones = [
@@ -66,7 +70,7 @@ export default class Tablero {
     }
 
     // Mueve la pieza a fil, col
-    moverPieza(fil, col){
+    moverPieza(fil, col) {
 
         //Limpia la celda de origen
         let origen = this.piezaActiva.getPosicion()

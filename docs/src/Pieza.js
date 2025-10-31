@@ -6,6 +6,8 @@ export default class Pieza {
         this.col = col;
         this.jugador = jugador;
         this.numMovimientos = numMovimientos;
+
+        this.movida = false;
       }
 
     moverse(fil, col) {
@@ -27,5 +29,13 @@ export default class Pieza {
 
     getPosicion(){
       return {fila: this.fil, col: this.col};
+    }
+
+    setMovida(){
+      this.movida = true;
+    }
+
+    getMovida(){
+      return this.movida;
     }
 }

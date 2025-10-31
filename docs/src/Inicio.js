@@ -8,6 +8,7 @@ import TableroGrafico from "./TableroGrafico.js";
 import PiezaGrafico from "./PiezaGrafico.js";
 import TurnoGraficos from "./TurnoGrafico.js";
 import Combates from "./Combates.js";
+import Turno from "./Turno.js";
 
 
 export default class Inicio extends Phaser.Scene {
@@ -36,10 +37,12 @@ export default class Inicio extends Phaser.Scene {
         this.tab = new Tablero();
 
         //Dibujamos el tablero
-        this.tabGrafico = new TableroGrafico(this, this.tab, this.panel); 
+        this.tabGrafico = new TableroGrafico(this, this.tab, this.panel);
 
         this.combates = new Combates(this.tab, this.tabGrafico, this.panel);
-        
+
+        this.turno = new Turno(3, this.turnoGrafico);
+
         this.soldado = new Soldado(5, 5, 'J1');
         this.tab.getCelda(5, 5).setContenido(this.soldado)
         this.piezas.push(this.soldado);
@@ -49,7 +52,7 @@ export default class Inicio extends Phaser.Scene {
         this.tab.getCelda(3, 5).setContenido(this.soldado2)
         this.piezas.push(this.soldado2);
 
-         this.soldado3 = new Soldado(6, 5, 'J2');
+        this.soldado3 = new Soldado(6, 5, 'J2');
         this.tab.getCelda(6, 5).setContenido(this.soldado3)
         this.piezas.push(this.soldado3);
 
@@ -79,18 +82,18 @@ export default class Inicio extends Phaser.Scene {
     update() { }
 
     // Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
-    moverPieza(pieza){
+    moverPieza(pieza) {
         for (let p of this.piezas) {
-            if (p == pieza){
+            if (p == pieza) {
                 this.piezaGrafico.eliminarPieza(pieza);
                 this.piezaGrafico.dibujarPieza(pieza);
             }
         }
     }
 
-    eliminarPieza(pieza){
+    eliminarPieza(pieza) {
         for (let p of this.piezas) {
-            if (p == pieza){
+            if (p == pieza) {
                 this.piezaGrafico.eliminarPieza(pieza);
             }
         }
