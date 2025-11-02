@@ -3,6 +3,7 @@ import { EventBus } from "./EventBus.js";
 
 import PanelLateral from "./PanelLateral.js";
 import Soldado from "./Soldado.js";
+import Caballeria from "./Caballeria.js";
 import Tablero from "./Tablero.js";
 import TableroGrafico from "./TableroGrafico.js";
 import PiezaGrafico from "./PiezaGrafico.js";
@@ -67,6 +68,22 @@ export default class Inicio extends Phaser.Scene {
         this.soldado6 = new Soldado(4, 2, 'J2');
         this.tab.getCelda(4, 2).setContenido(this.soldado6)
         this.piezas.push(this.soldado6);
+
+        this.caballeria = new Caballeria(7, 5, 'J1');
+        this.tab.getCelda(7, 5).setContenido(this.caballeria);
+        this.piezas.push(this.caballeria);
+
+        this.caballeria = new Caballeria(5, 7, 'J2');
+        this.tab.getCelda(5, 7).setContenido(this.caballeria);
+        this.piezas.push(this.caballeria);
+
+        this.caballeria = new Caballeria(2, 6, 'J1');
+        this.tab.getCelda(2, 6).setContenido(this.caballeria);
+        this.piezas.push(this.caballeria);
+
+        this.caballeria = new Caballeria(6, 1, 'J2');
+        this.tab.getCelda(6, 1).setContenido(this.caballeria);
+        this.piezas.push(this.caballeria);
 
         // Recorre todas las piezas y las dibuja
         for (let p of this.piezas) {

@@ -50,19 +50,24 @@ export default class Tablero {
         ];
 
         for (let dir of direcciones) {
-            let f = fil + dir.df;
-            let c = col + dir.dc;
-            // Evitar índices fuera de rango
-            if (f >= 0 && c >= 0 && f < this.filas && c < this.columnas) {
-                //La celda que se está pintando
-                let cel = this.tablero[f][c];
+            for (let paso = 1; paso <= pieza.rango; paso++) {
+                const f = fil + paso * dir.df;
+                const c = col + paso * dir.dc;
 
-                if (cel.estaVacia()) {
-                    celdasSeleccionadas.push({ fil: f, col: c, tipo: "vacia" }); //Solo hay 2 tipos, o "vacia" o "enemigo"
-                }
-                else if (cel.getPieza().getJugador() != celda.getPieza().getJugador()) {
-                    celdasSeleccionadas.push({ fil: f, col: c, tipo: "enemigo" });
-                }
+              
+                // fuera de tablero → deja de mirar en esta dirección
+                if (f < 0 || c < 0 || f >= this.filas || c >= this.columnas) break;
+
+                    const cel = this.tablero[f][c];
+
+                    if (cel.estaVacia()) {
+                    // casilla libre: se puede mover; sigue mirando más lejos
+                    celdasSeleccionadas.push({ fil: f, col: c, tipo: "vacia" });
+                    } else {
+                    // hay pieza: si es rival, puedes atacar esa casilla; en ambos casos paras
+                    const esRival = cel.getPieza().getJugador() !== celda.getPieza().getJugador();
+                    if (esRival) celdasSeleccionadas.push({ fil: f, col: c, tipo: "enemigo" });
+                    }
             }
         }
 
