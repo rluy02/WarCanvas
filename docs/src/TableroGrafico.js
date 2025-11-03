@@ -14,7 +14,7 @@ export default class TableroGrafico {
 
         //Si se esta moviendo
         this.moviendoPieza = false;
-        
+
         EventBus.on(Eventos.PIECE_END_ACTIONS, () => {
             this.moviendoPieza = false;
             this.movimientoIniciado = false;
@@ -75,15 +75,12 @@ export default class TableroGrafico {
             if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida()) {
 
                 this.moviendoPieza = true;
+                //Se limpia el tablero
                 this.limpiarTablero();
 
+                //Se informa del movimiento de pieza
                 this.tablero.moverPieza(fila, col);
-
-                // Solo volver a pintar si la pieza aún tiene acciones
-                const activa = this.tablero.getPiezaActiva();
-                if (activa && !activa.getMovida()) {
-                    this.colorearRango(fila, col);
-                }
+                this.colorearRango(fila, col);
             }
             else if (this.esTipoCelda(fila, col, "enemigo") && !this.tablero.getPiezaActiva().getMovida()) {
                 this.moviendoPieza = false;

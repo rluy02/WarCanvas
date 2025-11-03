@@ -67,7 +67,7 @@ export default class Tablero {
                     // hay pieza: si es rival, puedes atacar esa casilla; en ambos casos paras
                     const esRival = cel.getPieza().getJugador() !== celda.getPieza().getJugador();
                     if (esRival) celdasSeleccionadas.push({ fil: f, col: c, tipo: "enemigo" });
-                    else if ((f + dir.df > 0 || c + dir.dc > 0 || f + dir.df <= this.filas || c + dir.dc <= this.columnas) && pieza.getTipo() == "Caballeria" && pieza.getSaltoCaballeria() == true){
+                    if ((f + dir.df > 0 || c + dir.dc > 0 || f + dir.df <= this.filas || c + dir.dc <= this.columnas) && pieza.getTipo() == "Caballeria" && pieza.getSaltoCaballeria() == true){
                         if (this.tablero[f + dir.df][c + dir.dc].estaVacia()){
                             console.log("se puede usar salto de caballeria");
                             celdasSeleccionadas.push({ fil: f + dir.df, col: c + dir.dc, tipo: "vacia" });
