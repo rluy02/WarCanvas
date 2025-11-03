@@ -1,12 +1,11 @@
 export default class Pieza {
 
-    constructor(tipoPieza, fil, col, jugador, numMovimientos, rango) {
+    constructor(tipoPieza, fil, col, jugador, numMovimientos) {
         this.tipoPieza = tipoPieza;
         this.fil = fil;
         this.col = col;
         this.jugador = jugador;
         this.numMovimientos = numMovimientos;
-        this.rango = rango;
         this.movida = false;
       }
 

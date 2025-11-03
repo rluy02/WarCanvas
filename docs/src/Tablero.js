@@ -32,7 +32,7 @@ export default class Tablero {
 
         let celda = this.tablero[fil][col];
         let celdasSeleccionadas = [];
-
+        
         let pieza = celda.getPieza();
 
         if (pieza != this.piezaActiva) {
@@ -50,27 +50,30 @@ export default class Tablero {
         ];
 
         for (let dir of direcciones) {
-            for (let paso = 1; paso <= pieza.rango; paso++) {
-                const f = fil + paso * dir.df;
-                const c = col + paso * dir.dc;
+            const f = fil + dir.df;
+            const c = col + dir.dc;
+            // fuera de tablero → deja de mirar en esta dirección
+            if (f < 0 || c < 0 || f >= this.filas || c >= this.columnas) continue;
 
-              
-                // fuera de tablero → deja de mirar en esta dirección
-                if (f < 0 || c < 0 || f >= this.filas || c >= this.columnas) break;
+                const cel = this.tablero[f][c];
 
-                    const cel = this.tablero[f][c];
-
-                    if (cel.estaVacia()) {
+                if (cel.estaVacia()) {
                     // casilla libre: se puede mover; sigue mirando más lejos
                     celdasSeleccionadas.push({ fil: f, col: c, tipo: "vacia" });
-                    } else {
+                } else {
                     // hay pieza: si es rival, puedes atacar esa casilla; en ambos casos paras
                     const esRival = cel.getPieza().getJugador() !== celda.getPieza().getJugador();
                     if (esRival) celdasSeleccionadas.push({ fil: f, col: c, tipo: "enemigo" });
+                    else if ((f + dir.df > 0 || c + dir.dc > 0 || f + dir.df <= this.filas || c + dir.dc <= this.columnas) && pieza.getTipo() == "Caballeria" && pieza.getSaltoCaballeria()) {
+                        if (this.tablero[f + dir.df][c + dir.dc].estaVacia()){
+                            console.log("no Salto caballeria");
+                            celdasSeleccionadas.push({ fil: f + dir.df, col: c + dir.dc, tipo: "vacia" });
+                        }
+                            
                     }
-            }
+                        
+                }
         }
-
         return celdasSeleccionadas;
     }
 

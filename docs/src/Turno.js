@@ -10,6 +10,7 @@ export default class Turno{
 
         this.piezaActual = null;
         this.movimientosPieza = 0;
+        this.posicionPieza;
 
         this.turnoGrafico = turnoGrafico;
 
@@ -25,13 +26,23 @@ export default class Turno{
     setPieza(pieza){
         this.piezaActual = pieza;
         this.movimientosPieza = pieza.getMovimientos();
+        this.posicionPieza = pieza.getPosicion();
 
         console.log(this.piezaActual);
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
     }
 
     restarAccion(){
-        this.movimientosPieza = this.movimientosPieza - 1;
+
+        //Se que el if se entiende mas bien poco pero lo que hace es que guarda la posición de la pieza seleccionada y comprueba si se ha movido dos casillas en cualquier dirección, si lo ha hecho le resta 2 acciones
+        if (((this.piezaActual.getPosicion().fila % 2 == this.posicionPieza.fila % 2) && this.piezaActual.getPosicion().fila != this.posicionPieza.fila) || 
+        ((this.piezaActual.getPosicion().col % 2 == this.posicionPieza.col % 2) && this.piezaActual.getPosicion().col != this.posicionPieza.col))
+        {
+             this.movimientosPieza = this.movimientosPieza - 2;
+             this.piezaActual.setSaltoCaballeria(false);
+        }
+        else this.movimientosPieza = this.movimientosPieza - 1;
+        
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
         if (this.movimientosPieza <= 0) {
             EventBus.emit(eventos.PIECE_END_ACTIONS);
@@ -51,7 +62,9 @@ export default class Turno{
         if (!this.piezaActual) return;
 
         this.piezaActual.setMovida();
-
+        if (this.piezaActual.getTipo() == "Caballeria") {
+            this.piezaActual.setSaltoCaballeria(true);
+        }
         this.piezaActual = null;
 
         this.accionesTurno--;
