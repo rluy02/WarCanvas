@@ -40,7 +40,7 @@ export default class Tablero {
 
         if (pieza != this.piezaActiva) {
             //Lanzamos el evento de pieza seleccionada
-            EventBus.emit(eventos.PIECE_SELECTED, pieza);
+            EventBus.emit(Eventos.PIECE_SELECTED, pieza);
             this.piezaActiva = pieza;
         }
 
@@ -91,14 +91,14 @@ export default class Tablero {
         this.piezaActiva.moverse(fil, col);
         this.tablero[fil][col].setContenido(this.piezaActiva);
 
-        EventBus.emit(eventos.PIECE_MOVED, this.piezaActiva);
+        EventBus.emit(Eventos.PIECE_MOVED, this.piezaActiva);
     }
 
     ataque(fil, col) {
         let defensa = this.getCelda(fil, col)
         let origen = this.piezaActiva.getPosicion()
         let ataque = this.getCelda(origen.fila, origen.col)
-        EventBus.emit(eventos.ENEMY_SELECTED, ataque, defensa);
+        EventBus.emit(Eventos.ENEMY_SELECTED, ataque, defensa);
     }
 
     getPiezaActiva(){

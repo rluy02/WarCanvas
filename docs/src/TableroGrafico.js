@@ -1,4 +1,4 @@
-import { eventos } from "./events.js";
+import { Eventos } from "./Events.js";
 import { EventBus } from "./EventBus.js";
 import { turnoJugador } from "./Turno.js";
 
@@ -15,7 +15,7 @@ export default class TableroGrafico {
         //Si se esta moviendo
         this.moviendoPieza = false;
         
-        EventBus.on(eventos.PIECE_END_ACTIONS, () => {
+        EventBus.on(Eventos.PIECE_END_ACTIONS, () => {
             this.moviendoPieza = false;
             this.movimientoIniciado = false;
 

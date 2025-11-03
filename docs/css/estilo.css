@@ -73,11 +73,30 @@ body {
   color: #d1cea9;
 }
 
-/* separador */
+/* Separador */
 hr {
   margin: 3px 0 1vh;
   background-color: #25210f;
 }
+
+/* --- IMÁGENES DE EQUIPOS --- */
+.img-equipos {
+  display: inline-block;
+  width: 40%;
+  max-width: 400px;
+  height: auto;
+  margin: 1em;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  object-fit: cover;
+}
+
+.img-equipos:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
 
 /* BOTONES */
 button {
@@ -129,7 +148,8 @@ button:active {
 .logo-studio,
 .izq,
 .mid,
-.der {
+.der,
+.info {
   text-align: center;
 }
 
@@ -147,7 +167,7 @@ footer {
   width: 100%;
 }
 
-/* enlaces */
+/* Enlaces */
 
 a,
 a:visited {
@@ -164,17 +184,52 @@ footer a:hover {
 
 
 
-/* ---Estilos imágenes--- */
-/* .imgs {
-   background: #e0d3f0;
-  display: none;
+/* ----- PAGINA SOBRE COMO JUGAR ----- */
+
+#reglas h3.info {
+  color: #455036;
+  font-size: 1.6em;
+  margin-top: 1em;
+  margin-bottom: 0.3em;
   text-align: center;
 }
-.imgs:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
-} */
 
+#reglas table {
+  width: 80%;
+  border-collapse: collapse;
+  margin: auto;
+  font-size: 0.95em;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+#reglas th {
+  background: #747537;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  font-weight: 600;
+}
+
+#reglas td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+#reglas tr:nth-child(even) {
+  background-color: #efefef;
+}
+#reglas ul li::before {
+  content: "📖";
+}
+#reglas li::marker {
+  content: ""; /* oculta el marcador */
+}
+
+/* ----- FIN PAGINA SOBRE COMO JUGAR ----- */
 
 /*--------------- PAGINA SOBRE CREDITOS-------- */
 

@@ -1,4 +1,4 @@
-import { eventos } from "./events.js";
+import { Eventos } from "./Events.js";
 import { EventBus } from "./EventBus.js";
 
 import PanelLateral from "./PanelLateral.js";
@@ -103,11 +103,11 @@ export default class Inicio extends Phaser.Scene {
         }
 
         // Se añade un evento para cuando se mueve la pieza
-        EventBus.on(eventos.PIECE_MOVED, (pieza) => {
+        EventBus.on(Eventos.PIECE_MOVED, (pieza) => {
             this.moverPieza(pieza);
         });
 
-        EventBus.on(eventos.PIECE_DEAD, (pieza) => {
+        EventBus.on(Eventos.PIECE_DEAD, (pieza) => {
             this.eliminarPieza(pieza);
         });
 

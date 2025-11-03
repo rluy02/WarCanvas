@@ -67,7 +67,7 @@ export default class PanelLateral {
 
         this.buttonTry.on('pointerdown', () => {
             // Se lanza el evento de ataque
-            EventBus.emit(eventos.ATACK);
+            EventBus.emit(Eventos.ATACK);
         });
     }
 

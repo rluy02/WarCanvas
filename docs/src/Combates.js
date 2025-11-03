@@ -10,8 +10,8 @@ export default class Combates{
         this.atacante = null;
         this.defensa = null;
 
-        EventBus.on(eventos.ENEMY_SELECTED, (atacante, defensa) => { this.enemigoSeleccionado(atacante, defensa)});
-        EventBus.on(eventos.ATACK, () => { this.ataque()});
+        EventBus.on(Eventos.ENEMY_SELECTED, (atacante, defensa) => { this.enemigoSeleccionado(atacante, defensa)});
+        EventBus.on(Eventos.ATACK, () => { this.ataque()});
     }
 
     enemigoSeleccionado(atacante, defensa){
@@ -77,6 +77,6 @@ export default class Combates{
 
         console.log('Panel ataque - Combate.js');
 
-        if (ganador) EventBus.emit(eventos.PIECE_ERRASE, defiende);
+        if (ganador) EventBus.emit(Eventos.PIECE_ERRASE, defiende);
     }
 }

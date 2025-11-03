@@ -38,34 +38,154 @@
     <!-- CANVAS DEL JUEGO -->
     <section class="seccion-juego" id="juego" style="display:none">
       <canvas id="canvas-juego"></canvas>
-      <script src="./src/Game.js" type="module"></script> 
+      <script src="./src/Game.js" type="module"></script>
     </section>
 
     <!-- PAG SOBRE INICIO -->
     <section id="inicio">
       <h1 class="titulos-inicio">¡Bienvenido a War Canvas!</h1>
       <br>
-      <div class="colp-6">
+      <div class="colp-12">
         <h2 class="titulos-inicio">Resumen</h2>
         <div>
-          <p>War Canvas es un juego en el que te conviertes en el buho de drawful y te enfrentas a un comandante
-            enemigo. Tendrás que derrotarlo o conquistar un 80% del territorio para sobrepasar la frontera y obtener la
-            victoria</p>
+          <p>En este juego te conviertes en el búho de drawful, liderando un ejército en una batalla táctica contra un
+            comandante rival. A medida que avanzas por el tablero, conquistarás territorio, desplegarás unidades y
+            tomarás decisiones clave para superar a tu enemigo y hacerte con la frontera.
+          </p>
         </div>
       </div>
-      <h2 class="titulos-inicio">Equipos</h2>
-
+      <div class="colp-12">
+        <h2 class="titulos-inicio">Equipos</h2>
+        <div class="col-6 info">
+        <img class="img-equipos" src="./imgs/equipos/equipo-dibujado.webp" alt="equipo dibujado"></div>
+        <div class="col-6 info">
+        <img class="img-equipos" src="./imgs/equipos/equipo-realista.webp" alt="equipo dibujado"></div>
+      </div>
     </section>
 
     <!-- PAG SOBRE REGLAS -->
     <section id="reglas" class="fila" style="display: none;">
+      <!-- Objetivo del juego -->
+      <h2 class="titulos-reglas">🎯 Objetivo</h2>
+      <div class="col-12 info">
+        <p>
+          Gana la partida conquistando al menos el <strong>80% del tablero</strong> o eliminando al
+          <strong>Comandante enemigo</strong>. Usa tus piezas estratégicamente: cada tipo tiene sus propias habilidades,
+          movimiento y fuerza.
+        </p>
+      </div>
+      <hr>
+      <!-- Normas e información -->
       <h2 class="titulos-reglas">¿Cómo jugar?</h2>
-      <h2 class="titulos-reglas">Objetivo</h2>
-      <h2 class="titulos-reglas">Reglas</h2>
-      <ul>
-        <li>.</li>
-        <li>.</li>
-      </ul>
+      <h3 class="info">🧮 Tablero</h3>
+      <div class="col-12 info">
+        <p>
+          El tablero tiene un tamaño de <strong>8x10 casillas</strong>, dividido en tres zonas:
+        </p>
+        <ul>
+          <li>Terreno del equipo A</li>
+          <li>Zona neutra</li>
+          <li>Terreno del equipo B</li>
+        </ul>
+      </div>
+      <!-- Info Tipos de Piezas -->
+      <h3 class="info">🧩 Tipos de Piezas</h3>
+      <div class="col-12 info">
+        <p>Cada jugador cuenta con <strong>24 unidades</strong>:</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Unidad</th>
+              <th>Cantidad</th>
+              <th>Movimiento</th>
+              <th>Acciones / Turno</th>
+              <th>Ataque</th>
+              <th>Defensa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>🧑‍✈️ Comandante</td>
+              <td>1</td>
+              <td>En cualquier dirección (hasta 4 casillas)</td>
+              <td>4</td>
+              <td>+4</td>
+              <td>+5</td>
+            </tr>
+            <tr>
+              <td>💣 Artillería</td>
+              <td>3</td>
+              <td>No se mueve, pero puede atacar a distancia</td>
+              <td>1</td>
+              <td>+3</td>
+              <td>-1</td>
+            </tr>
+            <tr>
+              <td>🐎 Caballería</td>
+              <td>6</td>
+              <td>Horizontal o vertical (puede saltar otras piezas)</td>
+              <td>3</td>
+              <td>+2</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>⚔️ Soldado</td>
+              <td>14</td>
+              <td>Horizontal o vertical</td>
+              <td>2</td>
+              <td>+1</td>
+              <td>+1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-12">
+        <!-- Info Turno y Acciones -->
+        <div class="col-6 info">
+          <h3 class="info">⚙️ Turnos y Acciones</h3>
+          <ul>
+            <li>En tu turno puedes mover hasta <strong>3 piezas</strong>.</li>
+            <li>Cada pieza tiene un número máximo de <strong>acciones</strong> (mover y/o atacar).</li>
+            <li>No puedes atacar dos veces con la misma pieza en un turno.</li>
+          </ul>
+        </div>
+        <!-- Info Ataques -->
+        <div class="col-6 info">
+          <h3 class="info">⚔️ Ataques</h3>
+          <ul>
+            <li>Para atacar, tira <strong>dos dados</strong> y suma el poder de ataque (bonus) de tu unidad.</li>
+            <li>Solo puedes atacar casillas adyacentes, excepto la artillería (que ataca a distancia).</li>
+            <li>Si el atacante gana, la pieza enemiga es eliminada.</li>
+            <li>En empate, siempre gana la <strong>defensa</strong>.</li>
+            <li>
+              Los <strong>soldados</strong> pueden combinar ataques con hasta dos soldados adyacentes (+1 por cada
+              aliado).
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-12">
+        <!-- Info Conquistar Terreno -->
+        <div class="col-6 info">
+          <h3 class="info">🏳️ Conquistar Casillas</h3>
+
+          <ul>
+            <li>Si entras en una casilla vacía, la conquistas automáticamente.</li>
+            <li>Si hay un enemigo, se resuelve con un duelo. Si el atacante vence, conquista la casilla ocupada
+              previamente por el rival</li>
+          </ul>
+        </div>
+        <!-- Info Eventos Especiales -->
+        <div class="col-6 info">
+          <h3 class="info">🌪️ Eventos Especiales (por definir)</h3>
+
+          <p>
+            Durante la partida pueden ocurrir <strong>eventos especiales</strong> como tormentas, niebla o inundaciones.
+            Estos activan <strong>minijuegos con físicas</strong> que afectan a las piezas de distintas formas.
+          </p>
+        </div>
+      </div>
+      <hr>
     </section>
     <!-- PAG SOBRE CREDITOS -->
     <section id="creditos" class="fila" style="display: none;">
@@ -76,7 +196,7 @@
         <button class="card" id="Tarjeta1">
           <div class="card-inner">
             <div class="card-front">
-              <img src="imgs/Frosty.webp" alt="Ricardo">
+              <img src="imgs/devs/Frosty.webp" alt="Ricardo">
             </div>
             <div class="card-back">
               <h2>Ricardo Luy</h2>
@@ -88,7 +208,7 @@
         <button class="card" id="Tarjeta2">
           <div class="card-inner">
             <div class="card-front">
-              <img src="imgs/julia.webp" alt="Julia">
+              <img src="imgs/devs/julia.webp" alt="Julia">
             </div>
             <div class="card-back">
               <h2>Julia Vera</h2>
@@ -100,7 +220,7 @@
         <button class="card" id="Tarjeta3">
           <div class="card-inner">
             <div class="card-front">
-              <img src="imgs/capi.webp" alt="Samuel">
+              <img src="imgs/devs/capi.webp" alt="Samuel">
             </div>
             <div class="card-back">
               <h2>Samuel Manzaneque</h2>
@@ -112,7 +232,7 @@
         <button class="card" id="Tarjeta4">
           <div class="card-inner">
             <div class="card-front">
-              <img src="imgs/Diego.webp" alt="Diego">
+              <img src="imgs/devs/Diego.webp" alt="Diego">
             </div>
             <div class="card-back">
               <h2>Diego Jimenez</h2>
@@ -130,8 +250,8 @@
         <button class="card referencias" id="ref1">
           <div class="card-inner">
             <div class="card-front">
-              <img class="iconos-ref" src="imgs/piezas-de-ajedrez.webp" alt="Ajedrez">
-              <img class="iconos-ref" src="imgs/stratego.webp" alt="Stratego">
+              <img class="iconos-ref" src="imgs/referencias/piezas-de-ajedrez.webp" alt="Ajedrez">
+              <img class="iconos-ref" src="imgs/referencias/stratego.webp" alt="Stratego">
             </div>
             <div class="card-back">
               <h2>Ajedrez y Stratego</h2>
@@ -143,7 +263,7 @@
         <button class="card referencias" id="ref2">
           <div class="card-inner">
             <div class="card-front">
-              <img class="iconos-ref" src="imgs/risk.webp" alt="Risk">
+              <img class="iconos-ref" src="imgs/referencias/risk.webp" alt="Risk">
 
             </div>
             <div class="card-back">
@@ -156,7 +276,7 @@
         <button class="card referencias" id="ref3">
           <div class="card-inner">
             <div class="card-front">
-              <img class="iconos-ref" src="imgs/drawful.webp" alt="Drawful">
+              <img class="iconos-ref" src="imgs/referencias/drawful.webp" alt="Drawful">
 
             </div>
             <div class="card-back">

@@ -37,7 +37,7 @@ export default class TurnoGraficos {
         // }).setInteractive({ useHandCursor: true })
 
         this.acabarText.on('pointerdown', () => {
-            EventBus.emit(eventos.PIECE_END_ACTIONS);
+            EventBus.emit(Eventos.PIECE_END_ACTIONS);
         })
 
         this.acabarText.on('pointerover', () => {

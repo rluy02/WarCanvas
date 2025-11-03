@@ -14,11 +14,11 @@ export default class Turno{
 
         this.turnoGrafico = turnoGrafico;
 
-        EventBus.on(eventos.PIECE_SELECTED, (pieza) => { this.setPieza(pieza)});
-        EventBus.on(eventos.PIECE_MOVED, (pieza) => { this.restarAccion()})
-        EventBus.on(eventos.ATACK, () => {this.acabarMovimientos()})
-        EventBus.on(eventos.PIECE_END_ACTIONS, () => {this.acabarMovimientos()})
-        EventBus.on(eventos.CHANGE_TURN, (turnoJugador) => {
+        EventBus.on(Eventos.PIECE_SELECTED, (pieza) => { this.setPieza(pieza)});
+        EventBus.on(Eventos.PIECE_MOVED, (pieza) => { this.restarAccion()})
+        EventBus.on(Eventos.ATACK, () => {this.acabarMovimientos()})
+        EventBus.on(Eventos.PIECE_END_ACTIONS, () => {this.acabarMovimientos()})
+        EventBus.on(Eventos.CHANGE_TURN, (turnoJugador) => {
             this.turnoGrafico.setTurnoJugador(turnoJugador);
         })
     }
@@ -53,7 +53,7 @@ export default class Turno{
 
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
         if (this.movimientosPieza <= 0) {
-            EventBus.emit(eventos.PIECE_END_ACTIONS);
+            EventBus.emit(Eventos.PIECE_END_ACTIONS);
         } 
         
 
@@ -63,7 +63,7 @@ export default class Turno{
             this.accionesTurno = 3;
             this.movimientosPieza = 0;
             
-            EventBus.emit(eventos.CHANGE_TURN, turnoJugador);
+            EventBus.emit(Eventos.CHANGE_TURN, turnoJugador);
         }
     }
 
