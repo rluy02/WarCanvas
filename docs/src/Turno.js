@@ -40,13 +40,22 @@ export default class Turno{
         {
              this.movimientosPieza = this.movimientosPieza - 2;
              this.piezaActual.setSaltoCaballeria(false);
+             console.log("Se ha usado el salto de caballeria");
         }
         else this.movimientosPieza = this.movimientosPieza - 1;
-        
+
+        this.posicionPieza = this.piezaActual.getPosicion();
+
+        if (this.piezaActual.getTipo() == 'Caballeria' && this.piezaActual.getSaltoCaballeria() == true && this.movimientosPieza < 2){
+            this.piezaActual.setSaltoCaballeria(false);
+            console.log("no se ha usado el salto de caballeria");
+        }
+
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
         if (this.movimientosPieza <= 0) {
             EventBus.emit(eventos.PIECE_END_ACTIONS);
-        }
+        } 
+        
 
         if (this.accionesTurno <= 0) {
             if (turnoJugador == "J1") turnoJugador = "J2"
