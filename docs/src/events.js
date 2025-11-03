@@ -1,5 +1,5 @@
 // Para Acceder a los eventos sin usar strings
-export const eventos =  {
+export const Eventos =  {
     PIECE_MOVED: "piece_moved",
     PIECE_SELECTED: "piece_selected",
     ENEMY_SELECTED: "enemy_selected",

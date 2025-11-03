@@ -1,5 +1,5 @@
 import Celda  from "./Celda.js";
-import { eventos } from "./events.js";
+import { Eventos } from "./Events.js";
 import { EventBus } from "./EventBus.js";
 
 export default class Combates{
