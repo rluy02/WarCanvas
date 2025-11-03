@@ -11,7 +11,7 @@ export default class PanelLateral {
 
     preload() { // Se cargan las imagenes de los dados
         for (let i = 0; i <= 6; i++) {
-            this.escena.load.image(`dice${i}`, `imgs/dice/dice${i}.webp`);
+            this.escena.load.image(`dice${i}`, `./imgs/dice/dice${i}.webp`);
         }
     }
 

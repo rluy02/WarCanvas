@@ -8,10 +8,10 @@ export default class PiezaGrafico {
   }
 
   preload() {
-    this.escena.load.image('peon', 'imgs/peon.webp');
-    this.escena.load.image('peon2', 'imgs/peon2.webp');
-    this.escena.load.image('caballeria', 'imgs/Caballeria.webp');
-    this.escena.load.image('caballeria2', 'imgs/Caballeria2.webp');
+    this.escena.load.image('peon', './imgs/peon.webp');
+    this.escena.load.image('peon2', './imgs/peon2.webp');
+    this.escena.load.image('caballeria', './imgs/Caballeria.webp');
+    this.escena.load.image('caballeria2', './imgs/Caballeria2.webp');
   }
 
   dibujarPieza(pieza) {
