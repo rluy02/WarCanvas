@@ -145,12 +145,12 @@ export default class TableroGrafico {
 
     confirmarAtaque(fila, columna, celdaSeleccionada) {
 
-        let casillaAtacante = this.tablero.getCelda(fila, columna);
-        let casillaDefensa = this.tablero.getCelda(celdaSeleccionada.fila, celdaSeleccionada.columna);
+        let casillaAtacante = this.tablero.getCelda(celdaSeleccionada.fila, celdaSeleccionada.columna);
+        let casillaDefensa = this.tablero.getCelda(fila, columna);
         let atacante = casillaAtacante.getPieza().getJugador();
         let defensa = casillaDefensa.getPieza().getJugador();
-        let atacantePieza = this.tablero.getCelda(fila, columna).getPieza().getTipo();
-        let defensaPieza = this.tablero.getCelda(celdaSeleccionada.fila, celdaSeleccionada.columna).getPieza().getTipo();
+        let atacantePieza = this.tablero.getCelda(celdaSeleccionada.fila, celdaSeleccionada.columna).getPieza().getTipo();
+        let defensaPieza = this.tablero.getCelda(fila, columna).getPieza().getTipo();
         this.PanelLateral.updateInfo(defensaPieza, atacantePieza, atacante, defensa, "Atacar", casillaAtacante, casillaDefensa);
         console.log("Confirmar Combate - TableroGráfico");
     }

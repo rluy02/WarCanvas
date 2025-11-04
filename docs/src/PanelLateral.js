@@ -57,10 +57,9 @@ export default class PanelLateral {
             ]
         };
 
-        // AUXILIAR - Para comprobar que se actualizan los dados
+        // Boton de Ataque / defensa
 
-        this.buttonTry = this.escena.add.text(width - sideWidth / 2, 500, ' ', { // Botón Provisional para ver si funcionan los dados
-            fontSize: '30px',
+        this.buttonTry = this.escena.add.text(width - sideWidth / 2, 500, ' ', {
             color: '#ffffff',
             fontFamily: 'Arial',
         }).setOrigin(0.5).disableInteractive();
@@ -76,7 +75,7 @@ export default class PanelLateral {
         this.titleText.setText('COMBATE');
         this.infoText.setText(`${mensaje}\n${resultado}`);
         this.infoTextAttacker.setText(`Ataca ${atacante} = ${atacanteTirada1 + atacanteTirada2 + bonusAtaca} Bonus(${bonusAtaca})`);
-        this.infoTextDefender.setText(`Ataca ${defensa} = ${defensaTirada1 + defensaTirada2 + bonusDefiende} Bonus(${bonusDefiende})`);
+        this.infoTextDefender.setText(`Defiende ${defensa} = ${defensaTirada1 + defensaTirada2 + bonusDefiende} Bonus(${bonusDefiende})`);
 
         this.diceImages.attacker[0].setTexture(`dice${atacanteTirada1}`);
                 this.diceImages.attacker[1].setTexture(`dice${atacanteTirada2}`);

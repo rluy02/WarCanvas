@@ -38,10 +38,10 @@ export default class Combates{
         let bonusDefiende;
         let ganador;
 
-        if(ataca == "Soldado") { bonusAtaca = 1};
-        if(defiende == "Soldado") { bonusDefiende = 1};
-        if(ataca == "Caballeria") { bonusAtaca = 2};
-        if(defiende == "Caballeria") { bonusDefiende = 0};
+        if(ataca == 'Soldado') { bonusAtaca = 1};
+        if(defiende == 'Soldado') { bonusDefiende = 1};
+        if(ataca == 'Caballeria') { bonusAtaca = 2};
+        if(defiende == 'Caballeria') { bonusDefiende = 0};
         if(ataca == "Artilleria") { bonusAtaca = 3};
         if(defiende == "Artilleria") { bonusDefiende = -1};
         if(ataca == "Comandante") { bonusAtaca = 4};
