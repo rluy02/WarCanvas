@@ -13,6 +13,9 @@ export default class PanelLateral {
         for (let i = 0; i <= 6; i++) {
             this.escena.load.image(`dice${i}`, `./imgs/dice/dice${i}.webp`);
         }
+        for (let i = 0; i <= 6; i++) {
+    console.log(`dice${i}:`, this.escena.textures.exists(`dice${i}`));
+}
     }
 
     create() {
@@ -46,7 +49,6 @@ export default class PanelLateral {
         }).setOrigin(0.5);
 
         const frames = [
-            { key: 'dice0' },
             { key: 'dice1' },
             { key: 'dice2' },
             { key: 'dice3' },
