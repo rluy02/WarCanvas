@@ -82,10 +82,10 @@ export default class PanelLateral {
         this.buttonTry.on('pointerdown', () => {
             // Se lanza el evento de ataque
             this.ataque = true;
-            this.diceImages.attacker[0].play('roll');
-            this.diceImages.attacker[1].play('roll');
-            this.diceImages.defender[0].play('roll');
-            this.diceImages.defender[1].play('roll');
+            [...this.diceImages.attacker, ...this.diceImages.defender].forEach(d => {
+                    d.setTexture(`dice${Phaser.Math.Between(1, 6)}`);
+                    d.play('roll');
+                }); 
         });
 
         this.diceImages.attacker[0].on('animationcomplete', (anim) => {
@@ -128,11 +128,6 @@ export default class PanelLateral {
         
         this.buttonTry.setInteractive({ useHandCursor: true });
         this.buttonTry.setText(accion);
-    }
-
-    constDados(){
-
-
     }
 
 }

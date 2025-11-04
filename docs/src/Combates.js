@@ -26,10 +26,10 @@ export default class Combates{
         ataque(){
 
         // Dados
-        let dadosAtaque1 = Math.floor(Math.random() * 6) + 1;
-        let dadosAtaque2 = Math.floor(Math.random() * 6) + 1;
-        let dadosDefensa1 = Math.floor(Math.random() * 6) + 1;
-        let dadosDefensa2 = Math.floor(Math.random() * 6) + 1;
+        let dadosAtaque1 = Phaser.Math.Between(1, 6);
+        let dadosAtaque2 = Phaser.Math.Between(1, 6);
+        let dadosDefensa1 = Phaser.Math.Between(1, 6);
+        let dadosDefensa2 = Phaser.Math.Between(1, 6);
 
         // Se suman los bonus
         let ataca = this.atacante.getPieza().getTipo();
