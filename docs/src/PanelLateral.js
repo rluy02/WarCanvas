@@ -43,20 +43,35 @@ export default class PanelLateral {
             fontSize: '16px',
             fontFamily: 'Arial',
             fill: '#ffffffff',
-        }).setOrigin(0.5);;
+        }).setOrigin(0.5);
 
-        // Dados
+        const frames = [
+            { key: 'dice1' },
+            { key: 'dice2' },
+            { key: 'dice3' },
+            { key: 'dice4' },
+            { key: 'dice5' },
+            { key: 'dice6' }
+        ];
+
+        this.escena.anims.create({
+            key: 'roll',
+            frames: frames,
+            frameRate: 10,
+            repeat: 3
+        });
+
         this.diceImages = { // Los dos dados de cada equipo
             attacker: [
-                this.escena.add.image(width - sideWidth / 2 - 40, 200, 'dice0'),
-                this.escena.add.image(width - sideWidth / 2 + 40, 200, 'dice0')
+                this.escena.add.sprite(width - sideWidth / 2 - 40, 200, 'dice0'),
+                this.escena.add.sprite(width - sideWidth / 2 + 40, 200, 'dice0')
             ],
             defender: [
-                this.escena.add.image(width - sideWidth / 2 - 40, 300, 'dice0'),
-                this.escena.add.image(width - sideWidth / 2 + 40, 300, 'dice0')
+                this.escena.add.sprite(width - sideWidth / 2 - 40, 300, 'dice0'),
+                this.escena.add.sprite(width - sideWidth / 2 + 40, 300, 'dice0')
             ]
         };
-
+        
         // Boton de Ataque / defensa
 
         this.buttonTry = this.escena.add.text(width - sideWidth / 2, 500, ' ', {
@@ -66,8 +81,19 @@ export default class PanelLateral {
 
         this.buttonTry.on('pointerdown', () => {
             // Se lanza el evento de ataque
-            EventBus.emit(Eventos.ATACK);
+            this.ataque = true;
+            this.diceImages.attacker[0].play('roll');
+            this.diceImages.attacker[1].play('roll');
+            this.diceImages.defender[0].play('roll');
+            this.diceImages.defender[1].play('roll');
         });
+
+        this.diceImages.attacker[0].on('animationcomplete', (anim) => {
+        if (anim.key === 'roll') {
+            if (this.ataque==true)
+            EventBus.emit(Eventos.ATACK);
+        }
+    });
     }
 
     updateCombatInfo(mensaje, resultado, atacante, defensa, atacanteTirada1, atacanteTirada2, defensaTirada1, defensaTirada2, bonusAtaca, bonusDefiende) {
@@ -102,6 +128,11 @@ export default class PanelLateral {
         
         this.buttonTry.setInteractive({ useHandCursor: true });
         this.buttonTry.setText(accion);
+    }
+
+    constDados(){
+
+
     }
 
 }

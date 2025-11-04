@@ -42,10 +42,10 @@ export default class Combates{
         if(defiende == 'Soldado') { bonusDefiende = 1};
         if(ataca == 'Caballeria') { bonusAtaca = 2};
         if(defiende == 'Caballeria') { bonusDefiende = 0};
-        if(ataca == "Artilleria") { bonusAtaca = 3};
-        if(defiende == "Artilleria") { bonusDefiende = -1};
-        if(ataca == "Comandante") { bonusAtaca = 4};
-        if(defiende == "Comandante") { bonusDefiende = 5};
+        if(ataca == 'Artilleria') { bonusAtaca = 3};
+        if(defiende == 'Artilleria') { bonusDefiende = -1};
+        if(ataca == 'Comandante') { bonusAtaca = 4};
+        if(defiende == 'Comandante') { bonusDefiende = 5};
 
         let totalAtaque = dadosAtaque1 + dadosAtaque2 + bonusAtaca;
         let totalDefensa = dadosDefensa1 + dadosDefensa2 + bonusDefiende;
