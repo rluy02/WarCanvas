@@ -7,15 +7,7 @@ export default class PanelLateral {
         this.escena = escena;
         let atacante = null;
         let defensa = null;
-    }
-
-    preload() { // Se cargan las imagenes de los dados
-        for (let i = 0; i <= 6; i++) {
-            this.escena.load.image(`dice${i}`, `./imgs/dice/dice${i}.webp`);
-        }
-        for (let i = 0; i <= 6; i++) {
-            console.log(`dice${i}:`, this.escena.textures.exists(`dice${i}`));
-        }
+        this.create();
     }
 
     create() {

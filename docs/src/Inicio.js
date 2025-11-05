@@ -2,8 +2,6 @@ import { Eventos } from "./Events.js";
 import { EventBus } from "./EventBus.js";
 
 import PanelLateral from "./PanelLateral.js";
-import Soldado from "./Soldado.js"; //cuando los equipos ya se creen por completo se puede quitar esto de aqui
-import Caballeria from "./Caballeria.js";
 import Tablero from "./Tablero.js";
 import TableroGrafico from "./TableroGrafico.js";
 import PiezaGrafico from "./PiezaGrafico.js";
@@ -16,8 +14,8 @@ import Equipo from "./Equipo.js";
 export default class Inicio extends Phaser.Scene {
     constructor() {
         super("Inicio")
-        this.events
-        this.piezas = [];
+        this.events;
+
     }
 
     init() {
@@ -28,18 +26,30 @@ export default class Inicio extends Phaser.Scene {
         this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
         this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
 
-        this.panel = new PanelLateral(this);
-        this.turnoGrafico = new TurnoGraficos(this);
-        this.panel.preload();
-        //Cargar los sprites de las piezas aqui
+        for (let i = 0; i <= 6; i++) {
+            this.load.image(`dice${i}`, `./imgs/dice/dice${i}.webp`);
+        }
+        for (let i = 0; i <= 6; i++) {
+            console.log(`dice${i}:`, this.textures.exists(`dice${i}`));
+        }
 
-        this.piezaGrafico = new PiezaGrafico(this, this.tablero);
-        this.piezaGrafico.preload();
+        this.load.image('peon', './imgs/peon.webp');
+        this.load.image('peon2', './imgs/peon2.webp');
+        this.load.image('caballeria', './imgs/Caballeria.webp');
+        this.load.image('caballeria2', './imgs/Caballeria2.webp');
+        this.load.image('comandante', './imgs/Comandante.webp');
+        this.load.image('comandante2', './imgs/Comandante2.webp');
     }
 
     create() {
+        this.piezas = [];
+        this.panel = new PanelLateral(this);
+        this.turnoGrafico = new TurnoGraficos(this);
+
         //Creamos la instancia y la guardamos en tab
         this.tab = new Tablero();
+
+        this.piezaGrafico = new PiezaGrafico(this, this.tab);
 
         //Dibujamos el tablero
         this.tabGrafico = new TableroGrafico(this, this.tab, this.panel);
@@ -67,7 +77,11 @@ export default class Inicio extends Phaser.Scene {
         });
 
         EventBus.on(Eventos.PIECE_ERASE, (pieza) => {
-            if (pieza.getTipo() == "Comandante") { }
+            if (pieza.getTipo() == "Comandante") {
+                this.eliminarPieza(pieza);
+
+                this.terminarPartida();
+            }
             //Si el comandante esta muerto, se deberia de:
             //Notificar el ganador de la partida
             //Volver al menu, reiniciar la escena del juego (ya sea destruyendo o manual)
@@ -75,7 +89,9 @@ export default class Inicio extends Phaser.Scene {
             //NOTA: emitir y recibir un tablero que tras cada movimiento de los peones se chequee si se ha superado o llegado al 80% del tablero
             //Repetir la misma logica para ganar la partida
 
-            this.eliminarPieza(pieza);
+
+
+
         });
 
 
@@ -102,5 +118,12 @@ export default class Inicio extends Phaser.Scene {
             }
         }
     }
+
+    terminarPartida() {
+
+        this.scene.stop();  // Detener la escena actual
+        this.scene.start("Menu");
+    }
+
 }
 
