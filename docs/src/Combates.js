@@ -78,6 +78,6 @@ export default class Combates {
 
         console.log('Panel ataque - Combate.js');
 
-        if (ganador) EventBus.emit(Eventos.PIECE_ERRASE, defiende);
+        if (ganador) EventBus.emit(Eventos.PIECE_ERASE, defiende); //Inicio
     }
 }

@@ -48,10 +48,10 @@ export default class Inicio extends Phaser.Scene {
         this.turno = new Turno(3, this.turnoGrafico);
 
         // Creación del equipo 1 (jugador lo controla)
-        this.equipoJ1 = new Equipo("J1",this.tab);
-        this.equipoJ2 = new Equipo("J2",this.tab);
+        this.equipoJ1 = new Equipo("J1", this.tab);
+        this.equipoJ2 = new Equipo("J2", this.tab);
 
-         // Dibujamos las piezas
+        // Dibujamos las piezas
         for (let pieza of this.equipoJ1.piezas) {
             this.piezaGrafico.dibujarPieza(pieza);
             this.piezas.push(pieza);
@@ -66,7 +66,15 @@ export default class Inicio extends Phaser.Scene {
             this.moverPieza(pieza);
         });
 
-        EventBus.on(Eventos.PIECE_DEAD, (pieza) => {
+        EventBus.on(Eventos.PIECE_ERASE, (pieza) => {
+            if (pieza.getTipo() == "Comandante") { }
+            //Si el comandante esta muerto, se deberia de:
+            //Notificar el ganador de la partida
+            //Volver al menu, reiniciar la escena del juego (ya sea destruyendo o manual)
+            //Que el jugador pueda volver a jugar
+            //NOTA: emitir y recibir un tablero que tras cada movimiento de los peones se chequee si se ha superado o llegado al 80% del tablero
+            //Repetir la misma logica para ganar la partida
+
             this.eliminarPieza(pieza);
         });
 
