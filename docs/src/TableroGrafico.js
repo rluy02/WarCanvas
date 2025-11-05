@@ -32,10 +32,10 @@ export default class TableroGrafico {
         for (let fila = 0; fila < this.tablero.filas; fila++) {
             for (let col = 0; col < this.tablero.columnas; col++) {
 
-                if (col > this.tablero.columnas / 2 - 1) {
+                if (col < 3) {
                     this.dibujarFragmentoMapa(fila, col, "J1")
                 }
-                else {
+                else if (col > 6){
                     this.dibujarFragmentoMapa(fila, col, "J2")
                 }
             }
@@ -76,35 +76,42 @@ export default class TableroGrafico {
         const pieza = celda.getPieza();
         const jugador = pieza ? pieza.getJugador() : "";
 
-        // Selección inicial de pieza
-        if (this.celdaSeleccionada == null && !this.moviendoPieza && pieza && !pieza.getMovida() && jugador == turnoJugador) {
-            this.colorearRango(fila, col);
-            return;
+        // Si no hay celda seleccionada y no esta vacía se marcan las oppciones de la pieza
+        if (this.celdaSeleccionada == null && !this.moviendoPieza && !pieza.getMovida() && jugador == turnoJugador) {
+            // Si la celda contiene una pieza
+            if (!celda.estaVacia()) {
+                this.colorearRango(fila, col);
+            }
         }
+        else {
+            // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
 
-        // Mover
-        if (this.esTipoCelda(fila, col, "vacia")) {
-            this.moviendoPieza = true;
-            this.limpiarTablero();
-            this.tablero.moverPieza(fila, col);
+            // Si es vacía se mueve
+            if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
+                //Dibuja la conquista
+                this.dibujarFragmentoMapa(fila, col, this.tablero.getPiezaActiva().getJugador())
 
-            const sigueActiva = this.tablero.getPiezaActiva() && !this.tablero.getPiezaActiva().getMovida();
-            if (sigueActiva) this.colorearRango(fila, col);
-            return;
-        }
+                this.moviendoPieza = true;
+                //Se limpia el tablero
+                this.limpiarTablero();
 
-        // Atacar
-        if (this.esTipoCelda(fila, col, "enemigo")) {
-            this.moviendoPieza = false;
-            this.confirmarAtaque(fila, col, this.celdaSeleccionada);
-            this.tablero.ataque(fila, col);
-            return;
-        }
+                //Se informa del movimiento de pieza
+                this.tablero.moverPieza(fila, col);
+                this.colorearRango(fila, col);
 
-        // Si no coincide nada, limpiar
-        if (!this.moviendoPieza) {
-            this.limpiarTablero();
-            this.celdaSeleccionada = null;
+            }
+            else if (this.esTipoCelda(fila, col, "enemigo") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
+                this.moviendoPieza = false;
+
+                // Combate
+                this.confirmarAtaque(fila, col, this.celdaSeleccionada);
+                // Posible Ataque si se confirma en el panel Lateral
+                this.tablero.ataque(fila, col);
+            }
+            else if (!this.moviendoPieza) {
+                this.limpiarTablero();
+                this.celdaSeleccionada = null;
+            }
         }
     }
 
@@ -173,10 +180,8 @@ export default class TableroGrafico {
 
         const textura = this.escena.textures.get(key).getSourceImage();
 
-        const fragWidth = textura.width / this.tablero.columnas;
-        const fragHeight = textura.height / this.tablero.filas;
-        const cropX = col * fragWidth;
-        const cropY = fila * fragHeight;
+        const cropX = col * this.fragmentoAncho;
+        const cropY = fila * this.fragmentoAlto;
 
         const x = col * this.tamCasilla + this.tamCasilla / 2;
         const y = fila * this.tamCasilla + this.tamCasilla / 2;
@@ -186,7 +191,7 @@ export default class TableroGrafico {
             this.graficos[fila][col].imagen.destroy();
         }
 
-        const zoom = 1.6;
+        const zoom = 1.3;
         const renderSize = this.tamCasilla * zoom;
 
         // Crea un RenderTexture que actúa como "mini lienzo" para la celda
@@ -195,8 +200,8 @@ export default class TableroGrafico {
             .setDepth(0);
 
         // Escala proporcional al fragmento del mapa
-        const scaleX = renderSize / fragWidth;
-        const scaleY = renderSize / fragHeight;
+        const scaleX = renderSize / this.fragmentoAncho;
+        const scaleY = renderSize / this.fragmentoAlto;
 
         // Dibuja el fragmento del mapa en el renderTexture escalado a la celda
         rt.draw(key, -cropX * scaleX, -cropY * scaleY, key)
@@ -204,8 +209,7 @@ export default class TableroGrafico {
 
         this.graficos[fila][col].imagen = rt;
 
-        console.log(`Dibujo fragmento [${fila},${col}] (${cropX},${cropY},${fragWidth},${fragHeight}) del mapa ${key}`);
-    }
+        }
 
     restTablero() {
         this.moviendoPieza = false;
