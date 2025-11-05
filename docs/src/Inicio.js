@@ -80,6 +80,7 @@ export default class Inicio extends Phaser.Scene {
         EventBus.on(Eventos.PIECE_ERASE, (defiende, ataca) => {
             let move = defiende.getPosicion();
             this.eliminarPieza(defiende);
+            this.tabGrafico.dibujarFragmentoMapa(move.fila, move.col, ataca.getJugador());
             this.tab.moverPiezaCombate(move.fila, move.col, ataca);
         });
 

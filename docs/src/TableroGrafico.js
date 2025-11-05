@@ -22,6 +22,8 @@ export default class TableroGrafico {
         this.celdasColoreadas = []; // Las celdas a las que te puedes mover
         this.PanelLateral = PanelLateral;
 
+        this.casillasPintadas = [];
+
         //Si se esta moviendo
         this.moviendoPieza = false;
 
@@ -119,20 +121,37 @@ export default class TableroGrafico {
     colorearRango(fila, col) {
         let celda = this.tablero.getCelda(fila, col);
 
+        this.limpiarCapas();
+
         this.celdasColoreadas = this.tablero.piezaSeleccionada(fila, col);
         //La de la ficha actual
         this.graficos[fila][col].setStrokeStyle(3, 0xf5a927);
+        this.casillasPintadas.push(this.crearCapa(fila, col, 0xffc107, 0.3));
 
         for (let cel of this.celdasColoreadas) {
             if (cel.tipo == "vacia") {
                 this.graficos[cel.fil][cel.col].setStrokeStyle(3, 0x69CF4E);
+                this.casillasPintadas.push(this.crearCapa(cel.fil, cel.col, 0x00ff00, 0.3));
             }
             else if (cel.tipo == "enemigo") {
                 this.graficos[cel.fil][cel.col].setStrokeStyle(3, 0xF23A1D);
+                this.casillasPintadas.push(this.crearCapa(cel.fil, cel.col, 0xff0000, 0.3));
             }
         }
 
         this.celdaSeleccionada = celda;
+    }
+
+    crearCapa(fila, col, color, transparencia) {
+        const x = col * this.tamCasilla + this.tamCasilla / 2;
+        const y = fila * this.tamCasilla + this.tamCasilla / 2;
+        const capa = this.escena.add.rectangle(x, y, this.tamCasilla, this.tamCasilla, color, transparencia);
+        return capa;
+    }
+
+    limpiarCapas() {
+        this.casillasPintadas.forEach(o => o.destroy());
+        this.casillasPintadas = [];
     }
 
     // Mira si la celda (fil,col) esta entre las seleccionadas, y ademas mira que el tipo sea correcto
@@ -146,6 +165,8 @@ export default class TableroGrafico {
 
     // Resetea todas las casillas coloreadas y la seleccionada
     limpiarTablero() {
+
+        this.limpiarCapas();
         let i = 0;
         // Descolorear las anteriores
         for (let i = 0; i < this.celdasColoreadas.length; i++) {

@@ -127,7 +127,7 @@ export default class Tablero {
         this.tablero[fil][col].setContenido(pieza);
         console.log(pieza.fil, pieza.col);
         console.log(this.tablero[fil][col].contenido);
-        console.log(this.getCelda(fil,col).estaVacia());
+        console.log(this.getCelda(fil, col).estaVacia());
         EventBus.emit(Eventos.PIECE_MOVED, pieza);
     }
 
