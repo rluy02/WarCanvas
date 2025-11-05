@@ -52,7 +52,8 @@ export default class Tablero {
             { df: 0, dc: 1 }    // derecha
         ];
 
-        for (let dir of direcciones) {
+        if (pieza.getTipo() != "Comandante"){ //solo el comandante puede moverse en diagonal
+            for (let dir of direcciones) {
             const f = fil + dir.df;
             const c = col + dir.dc;
             // fuera de tablero → deja de mirar en esta dirección
@@ -76,9 +77,29 @@ export default class Tablero {
                     }
                         
                 }
+            }
         }
-        return celdasSeleccionadas;
-    }
+        else{
+            for (let i = col - 1; i <= col + 1; i++) {
+                for (let j = fil - 1; j <= fil + 1; j++) {
+                    // fuera de tablero → deja de mirar en esta dirección
+                    if (j < 0 || i < 0 || j >= this.filas || i >= this.columnas) continue;
+                    if (j == fil && i == col) continue; // saltar la casilla central
+                    const cel = this.tablero[i][j];
+                     
+                    if (cel.estaVacia()) {
+                        // casilla libre: se puede mover; sigue mirando más lejos
+                        celdasSeleccionadas.push({ fil: j, col: i, tipo: "vacia" });
+                    } else {
+                        // hay pieza: si es rival, puedes atacar esa casilla; en ambos casos paras
+                        const esRival = cel.getPieza().getJugador() !== celda.getPieza().getJugador();
+                        if (esRival) celdasSeleccionadas.push({ fil: j, col: i, tipo: "enemigo" });
+                    }
+                }
+            }
+        }
+       return celdasSeleccionadas;
+   }
 
     // Mueve la pieza a fil, col
     moverPieza(fil, col) {

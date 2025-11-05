@@ -1,5 +1,6 @@
 import Soldado from "./Soldado.js";
 import Caballeria from "./Caballeria.js";
+import Comandante from "./Comandante.js";
 
 export default class Equipo {
     constructor(equipo, tablero) {
@@ -24,6 +25,7 @@ export default class Equipo {
         const posicionesCaballeriasJ1 = [
             { x: 7, y: 5 }, { x: 4, y: 1 }
         ];
+        const posicionComandanteJ1 = { x: 3, y: 3 };
 
         // Generamos las piezas para el equipo "J1" 
         for (let pos of posicionesSoldadosJ1) {
@@ -38,6 +40,11 @@ export default class Equipo {
             this.tablero.getCelda(pos.x, pos.y).setContenido(caballeria)
             this.piezas.push(caballeria);
         }
+
+        // Crear comandante
+        let comandante = new Comandante(posicionComandanteJ1.x, posicionComandanteJ1.y, "J1");
+        this.tablero.getCelda(posicionComandanteJ1.x, posicionComandanteJ1.y).setContenido(comandante);
+        this.piezas.push(comandante);
     }
 
     crearPiezasJ2() {
@@ -48,6 +55,8 @@ export default class Equipo {
         const posicionesCaballeriasJ2 = [
             { x: 7, y: 7 }
         ];
+
+        const posicionComandanteJ2 = { x: 4, y: 4 };
 
 
         // Generamos las piezas para el equipo "J2" 
@@ -62,6 +71,11 @@ export default class Equipo {
             this.tablero.getCelda(pos.x, pos.y).setContenido(caballeria)
             this.piezas.push(caballeria);
         }
+
+        // Crear comandante
+        let comandante = new Comandante(posicionComandanteJ2.x, posicionComandanteJ2.y, "J2");
+        this.tablero.getCelda(posicionComandanteJ2.x, posicionComandanteJ2.y).setContenido(comandante);
+        this.piezas.push(comandante);
 
     }
 }
