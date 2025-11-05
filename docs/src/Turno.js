@@ -57,8 +57,26 @@ export default class Turno {
             this.piezasMovidas.push(this.piezaActual);
             EventBus.emit(Eventos.PIECE_END_ACTIONS);
         }
+    }
 
+    acabarMovimientos() {
+        if (!this.piezaActual) {
+            console.log("La pieza al acabar movimientos es null")
+        }
+        else {
+            this.piezasMovidas.push(this.piezaActual);
 
+            this.piezaActual.setMovida();
+            if (this.piezaActual.getTipo() == "Caballeria") {
+                this.piezaActual.setSaltoCaballeria(true);
+            }
+            this.piezaActual = null;
+        }
+
+        this.accionesTurno--;
+        this.turnoGrafico.setAccionesTurno(this.accionesTurno);
+
+        //Ver si se cambia de jugador
         if (this.accionesTurno <= 0) {
             if (turnoJugador == "J1") turnoJugador = "J2"
             else turnoJugador = "J1"
@@ -73,19 +91,6 @@ export default class Turno {
 
             EventBus.emit(Eventos.CHANGE_TURN, turnoJugador);
         }
-    }
-
-    acabarMovimientos() {
-        if (!this.piezaActual) return;
-
-        this.piezaActual.setMovida();
-        if (this.piezaActual.getTipo() == "Caballeria") {
-            this.piezaActual.setSaltoCaballeria(true);
-        }
-        this.piezaActual = null;
-
-        this.accionesTurno--;
-        this.turnoGrafico.setAccionesTurno(this.accionesTurno);
     }
 
 

@@ -6,6 +6,10 @@ export default class TurnoGraficos {
         this.escena = escena;
         this.piezasMover = 3;
         this.accionesPieza = 0;
+
+        EventBus.on(Eventos.CHANGE_TURN, () => {
+            this.setAccionesTurno(3);
+        })
     }
 
     create() {
@@ -30,23 +34,23 @@ export default class TurnoGraficos {
             fill: '#ffffff'
         });
 
-        // this.acabarText = this.escena.add.text(210, height - 40, 'Finalizar Movimiento', { // Título
-        //     fontSize: '22px',
-        //     fontFamily: 'Arial',
-        //     fill: '#ce2020ff'
-        // }).setInteractive({ useHandCursor: true })
+        this.acabarText = this.escena.add.text(210, height - 40, 'Finalizar Movimiento', { // Título
+            fontSize: '22px',
+            fontFamily: 'Arial',
+            fill: '#ce2020ff'
+        }).setInteractive({ useHandCursor: true })
 
-        // this.acabarText.on('pointerdown', () => {
-        //     EventBus.emit(Eventos.PIECE_END_ACTIONS);
-        // })
+        this.acabarText.on('pointerdown', () => {
+            EventBus.emit(Eventos.PIECE_END_ACTIONS);
+        })
 
-        // this.acabarText.on('pointerover', () => {
-        //     this.acabarText.setColor('#febcbcff');
-        // })
+        this.acabarText.on('pointerover', () => {
+            this.acabarText.setColor('#febcbcff');
+        })
 
-        // this.acabarText.on('pointerout', () => {
-        //     this.acabarText.setColor('#ce2020ff');
-        // })
+        this.acabarText.on('pointerout', () => {
+            this.acabarText.setColor('#ce2020ff');
+        })
 
     }
 
