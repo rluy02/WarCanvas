@@ -119,8 +119,9 @@ export default class Inicio extends Phaser.Scene {
     terminarPartida() {
         EventBus.removeAllListeners(); //Los listeners persisten entre escenas. Han de destruirse para que no apunten a viejos con memoria ya destruida
         /*-- Si luego requerimos de listeners que persistan !!--> solo destruiremos los de combates, panel, ui con el EB.off()*/
-        this.scene.stop();  // Detener la escena actual
-        this.scene.start("Menu");
+       
+        this.scene.stop();  // Detener la escena actual (que se destruya)
+        this.scene.wake("Menu"); //Reactivamos la visibilidad del menu
     }
 
 }

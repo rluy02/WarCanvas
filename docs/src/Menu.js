@@ -1,16 +1,16 @@
-export default class Menu extends Phaser.Scene{
-    constructor(){
+export default class Menu extends Phaser.Scene {
+    constructor() {
         super("Menu");
     }
 
-     preload(){
+    preload() {
         this.load.image('fondo', 'imgs/FondoMenu.webp')
         this.load.image('boton', 'imgs/boton.webp')
-     }
+    }
 
-     create(){
+    create() {
         this.add.image(400, 300, 'fondo').setOrigin(0.5)
-        this.add.text(this.scale.width/2, this.scale.height/2 - 200, 'WAR CANVAS', {
+        this.add.text(this.scale.width / 2, this.scale.height / 2 - 200, 'WAR CANVAS', {
             fontSize: '60px',
             color: '#ffffff',
             stroke: '#000000',
@@ -18,15 +18,15 @@ export default class Menu extends Phaser.Scene{
             fontFamily: 'Arial',
         }).setOrigin(0.5);
 
-        let botonInicio = this.add.image(this.scale.width/2, this.scale.height/2 -80, 'boton')
-        .setOrigin(0.5)
-        .setScale(0.25)
-        .setInteractive({ useHandCursor: true }) // Se vuelve interactuable y muestra el cursor como una mano
+        let botonInicio = this.add.image(this.scale.width / 2, this.scale.height / 2 - 80, 'boton')
+            .setOrigin(0.5)
+            .setScale(0.25)
+            .setInteractive({ useHandCursor: true }) // Se vuelve interactuable y muestra el cursor como una mano
 
-        let botonCreditos = this.add.image(this.scale.width/2, this.scale.height/2 + 80, 'boton')
-        .setOrigin(0.5)
-        .setScale(0.25)
-        .setInteractive({ useHandCursor: true }) // Se vuelve interactuable y muestra el cursor como una mano
+        let botonCreditos = this.add.image(this.scale.width / 2, this.scale.height / 2 + 80, 'boton')
+            .setOrigin(0.5)
+            .setScale(0.25)
+            .setInteractive({ useHandCursor: true }) // Se vuelve interactuable y muestra el cursor como una mano
 
         let buttonText = this.add.text(botonInicio.x, botonInicio.y, 'JUGAR', {
             fontSize: '30px',
@@ -46,7 +46,12 @@ export default class Menu extends Phaser.Scene{
 
         //BOTON JUGAR
         botonInicio.on('pointerdown', () => {
-            this.scene.start('Inicio');
+            this.scene.launch('Inicio'); //launch para evitar destruir la escena del menu
+
+            //desactivamos los botones para evitar doble clicks mientras dormimos la escena
+            botonInicio.disableInteractive();
+            botonCreditos.disableInteractive();
+            this.scene.sleep(); //ocultamos el menu
         });
 
         botonInicio.on('pointerover', () => {
@@ -74,5 +79,16 @@ export default class Menu extends Phaser.Scene{
             creditosText.setColor('#ffffff');
             creditosText.setStroke('#7b0000ff');
         })
-     }
+
+        //Listener para cuando se vuelva al menu
+        this.events.on('wake', () => {
+            //Recuperamos las acciones
+            botonInicio.setInteractive({ useHandCursor: true });
+            botonCreditos.setInteractive({ useHandCursor: true });
+
+            //Por si el efecto del pointerDown se guardo al dormir la escena. Se redibuja al estado inicial
+            buttonText.setColor('#ffffff');
+            buttonText.setStroke('#7b0000ff');
+        });
+    }
 }
