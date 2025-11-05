@@ -25,7 +25,7 @@ export default class Combates {
 
     ataque() {
 
-        // Dados
+        // Dado s
         let dadosAtaque1 = Phaser.Math.Between(1, 6);
         let dadosAtaque2 = Phaser.Math.Between(1, 6);
         let dadosDefensa1 = Phaser.Math.Between(1, 6);
@@ -33,7 +33,7 @@ export default class Combates {
 
         // Se suman los bonus
         let ataca = this.atacante.getPieza().getTipo();
-        let defiende = this.atacante.getPieza().getTipo();
+        let defiende = this.defensa.getPieza().getTipo();
         let bonusAtaca;
         let bonusDefiende;
         let ganador;
@@ -54,8 +54,12 @@ export default class Combates {
         ganador = (totalAtaque > totalDefensa);
 
         this.actualizarPanelAtaque(dadosAtaque1, dadosAtaque2, dadosDefensa1, dadosDefensa2, ganador, bonusAtaca, bonusDefiende);
-        this.defensa.limpiar();
-        this.tableroGrafico.limpiarTablero();
+        // Solo se elimina la pieza si el atacante gana
+        if (ganador) {
+            this.defensa.limpiar();
+        }
+        // Restablecer resaltados/selección
+        this.tableroGrafico.restTablero();
     }
 
     actualizarPanelAtaque(dadosAtaque1, dadosAtaque2, dadosDefensa1, dadosDefensa2, ganador, bonusAtaca, bonusDefiende) {

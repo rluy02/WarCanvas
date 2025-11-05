@@ -85,7 +85,7 @@ export default class Tablero {
                     // fuera de tablero → deja de mirar en esta dirección
                     if (j < 0 || i < 0 || j >= this.filas || i >= this.columnas) continue;
                     if (j == fil && i == col) continue; // saltar la casilla central
-                    const cel = this.tablero[i][j];
+                    const cel = this.tablero[j][i];
                      
                     if (cel.estaVacia()) {
                         // casilla libre: se puede mover; sigue mirando más lejos

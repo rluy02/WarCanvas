@@ -72,47 +72,39 @@ export default class TableroGrafico {
     }
 
     onCeldaClick(fila, col) {
-        let celda = this.tablero.getCelda(fila, col);
-        let pieza = celda.getPieza();
+        const celda = this.tablero.getCelda(fila, col);
+        const pieza = celda.getPieza();
+        const jugador = pieza ? pieza.getJugador() : "";
 
-        let jugador = "";
-        if (pieza) {
-            jugador = pieza.getJugador();
+        // Selección inicial de pieza
+        if (this.celdaSeleccionada == null && !this.moviendoPieza && pieza && !pieza.getMovida() && jugador == turnoJugador) {
+            this.colorearRango(fila, col);
+            return;
         }
 
-        // Si no hay celda seleccionada y no esta vacía se marcan las oppciones de la pieza
-        if (this.celdaSeleccionada == null && !this.moviendoPieza && !pieza.getMovida() && jugador == turnoJugador) {
-            // Si la celda contiene una pieza
-            if (!celda.estaVacia()) {
-                this.colorearRango(fila, col);
-            }
+        // Mover
+        if (this.esTipoCelda(fila, col, "vacia")) {
+            this.moviendoPieza = true;
+            this.limpiarTablero();
+            this.tablero.moverPieza(fila, col);
+
+            const sigueActiva = this.tablero.getPiezaActiva() && !this.tablero.getPiezaActiva().getMovida();
+            if (sigueActiva) this.colorearRango(fila, col);
+            return;
         }
-        else {
-            // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
 
-            // Si es vacía se mueve
-            if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
+        // Atacar
+        if (this.esTipoCelda(fila, col, "enemigo")) {
+            this.moviendoPieza = false;
+            this.confirmarAtaque(fila, col, this.celdaSeleccionada);
+            this.tablero.ataque(fila, col);
+            return;
+        }
 
-                this.moviendoPieza = true;
-                //Se limpia el tablero
-                this.limpiarTablero();
-
-                //Se informa del movimiento de pieza
-                this.tablero.moverPieza(fila, col);
-                this.colorearRango(fila, col);
-            }
-            else if (this.esTipoCelda(fila, col, "enemigo") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
-                this.moviendoPieza = false;
-
-                // Combate
-                this.confirmarAtaque(fila, col, this.celdaSeleccionada);
-                // Posible Ataque si se confirma en el panel Lateral
-                this.tablero.ataque(fila, col);
-            }
-            else if (!this.moviendoPieza) {
-                this.limpiarTablero();
-                this.celdaSeleccionada = null;
-            }
+        // Si no coincide nada, limpiar
+        if (!this.moviendoPieza) {
+            this.limpiarTablero();
+            this.celdaSeleccionada = null;
         }
     }
 
