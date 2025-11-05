@@ -53,22 +53,23 @@ export default class PanelLateral {
             fill: '#ffffffff',
         }).setOrigin(0.5);
 
-        const frames = [
-            { key: 'dice1' },
-            { key: 'dice2' },
-            { key: 'dice3' },
-            { key: 'dice4' },
-            { key: 'dice5' },
-            { key: 'dice6' }
-        ];
+        if (!this.escena.anims.exists('roll')) {
+            const frames = [
+                { key: 'dice1' },
+                { key: 'dice2' },
+                { key: 'dice3' },
+                { key: 'dice4' },
+                { key: 'dice5' },
+                { key: 'dice6' }
+            ];
 
-        this.escena.anims.create({
-            key: 'roll',
-            frames: frames,
-            frameRate: 10,
-            repeat: 3
-        });
-
+            this.escena.anims.create({
+                key: 'roll',
+                frames: frames,
+                frameRate: 10,
+                repeat: 3
+            });
+        }
         this.diceImages = { // Los dos dados de cada equipo
             attacker: [
                 this.escena.add.sprite(width - sideWidth / 2 - 40, 250, 'dice0'),
