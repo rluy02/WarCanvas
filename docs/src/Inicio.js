@@ -76,29 +76,25 @@ export default class Inicio extends Phaser.Scene {
             this.moverPieza(pieza);
         });
 
+        //Evento eliminacion de una pieza tras combate
         EventBus.on(Eventos.PIECE_ERASE, (defiende, ataca) => {
-            if (defiende.getTipo() == "Comandante") {
-                this.eliminarPieza(defiende);
-                this.terminarPartida();
-            //Si el comandante esta muerto, se deberia de:
-            //Notificar el ganador de la partida
-            //Volver al menu, reiniciar la escena del juego (ya sea destruyendo o manual)
-            //Que el jugador pueda volver a jugar
-            //NOTA: emitir y recibir un tablero que tras cada movimiento de los peones se chequee si se ha superado o llegado al 80% del tablero
-            //Repetir la misma logica para ganar la partida
-            }
-            else {
-                let move = defiende.getPosicion();
-                this.eliminarPieza(defiende);
-                this.tab.moverPiezaCombate(move.fila, move.col, ataca);
-            }
+            let move = defiende.getPosicion();
+            this.eliminarPieza(defiende);
+            this.tab.moverPiezaCombate(move.fila, move.col, ataca);
+        });
+
+        //Finalizacion de la partida
+        EventBus.on(Eventos.END_GAME, (piezaGanadora) => {
+            console.log("Victoria para el jugador: " + piezaGanadora.getJugador());
+
+            //esperamos 1seg para que se vea la animacion de derrota del comandante
+            //esto luego podria interesar para animaciones o pantallas,botones,etc de victoria
+            this.time.delayedCall(1000, () => this.terminarPartida());
         });
 
         this.panel.create();
         this.turnoGrafico.create();
     }
-
-    update() { }
 
     // Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
     moverPieza(pieza) {
@@ -118,8 +114,10 @@ export default class Inicio extends Phaser.Scene {
         }
     }
 
+    //Metodo que finaliza la partida actual y envia al jugador a la pantalla del menu
     terminarPartida() {
-
+        EventBus.removeAllListeners(); //Los listeners persisten entre escenas. Han de destruirse para que no apunten a viejos con memoria ya destruida
+        /*-- Si luego requerimos de listeners que persistan !!--> solo destruiremos los de combates, panel, ui con el EB.off()*/
         this.scene.stop();  // Detener la escena actual
         this.scene.start("Menu");
     }

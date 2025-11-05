@@ -8,5 +8,6 @@ export const Eventos =  {
     PIECE_ERASE: "piece_erase",
     PIECE_END_ACTIONS: "piece_end_actions", // Se llama cuando las accines de una pieza se han acabado, o se acaban manualmente
     STAR_NEW_MOVEMENT: "start_new_movement", // Se llama al empezar un nuevo movimiento con una 
-    CHANGE_TURN: "change_turn"
+    CHANGE_TURN: "change_turn",
+    END_GAME: "end_game"
 }

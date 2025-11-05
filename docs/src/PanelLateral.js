@@ -76,8 +76,9 @@ export default class PanelLateral {
         // Boton de Ataque / defensa
 
         this.buttonTry = this.escena.add.text(width - sideWidth / 2, 500, ' ', {
-            color: '#ffffff',
+            color: '#ff0000',
             fontFamily: 'Arial',
+            fontSize: '24px'
         }).setOrigin(0.5).disableInteractive();
 
         this.buttonTry.on('pointerdown', () => {

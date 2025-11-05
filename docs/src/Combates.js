@@ -79,9 +79,11 @@ export default class Combates {
 
         console.log('Panel ataque - Combate.js');
 
-        if (ganador) 
-            {
-                EventBus.emit(Eventos.PIECE_ERASE, defiende, ataca); //Inicio (hace la parte grafica)
-            } 
+        if (ganador) {
+            EventBus.emit(Eventos.PIECE_ERASE, defiende, ataca); //Se captura en Inicio (hace la parte grafica)
+            if (defiende.getTipo() === "Comandante") {
+                EventBus.emit(Eventos.END_GAME, ataca); //Acabamos la partida capturandolo en Inicio
+            }
+        }
     }
 }
