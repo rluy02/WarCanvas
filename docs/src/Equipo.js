@@ -2,19 +2,19 @@ import Soldado from "./Soldado.js";
 import Caballeria from "./Caballeria.js";
 
 export default class Equipo {
-    constructor(tablero) {
-
+    constructor(equipo, tablero) {
+        this.equipo = equipo;
         this.tablero = tablero;
         this.piezas = [];  // Aquí guardamos las piezas del equipo
 
-        // Llamamos a un método para crear las piezas automáticamente
-        this.crearPiezas();
+        if (this.equipo === "J1") {
+            this.crearPiezasJ1();
+        } else this.crearPiezasJ2();
+
     }
 
-    // Método para crear las piezas del equipo
-    crearPiezas() {
-        // Creamos las piezas para el equipo J1 o J2
 
+    crearPiezasJ1() {
         const posicionesSoldadosJ1 = [
             { x: 5, y: 5 }, { x: 6, y: 5 }, { x: 6, y: 3 },
             { x: 1, y: 2 }, { x: 2, y: 0 }, { x: 2, y: 5 },
@@ -23,14 +23,6 @@ export default class Equipo {
 
         const posicionesCaballeriasJ1 = [
             { x: 7, y: 5 }, { x: 4, y: 1 }
-        ];
-
-        const posicionesSoldadosJ2 = [
-            { x: 0, y: 0 }, { x: 0, y: 1 }
-        ];
-
-        const posicionesCaballeriasJ2 = [
-            { x: 7, y: 7 }
         ];
 
         // Generamos las piezas para el equipo "J1" 
@@ -46,6 +38,17 @@ export default class Equipo {
             this.tablero.getCelda(pos.x, pos.y).setContenido(caballeria)
             this.piezas.push(caballeria);
         }
+    }
+
+    crearPiezasJ2() {
+        const posicionesSoldadosJ2 = [
+            { x: 0, y: 0 }, { x: 0, y: 1 }
+        ];
+
+        const posicionesCaballeriasJ2 = [
+            { x: 7, y: 7 }
+        ];
+
 
         // Generamos las piezas para el equipo "J2" 
         for (let pos of posicionesSoldadosJ2) {
@@ -59,5 +62,6 @@ export default class Equipo {
             this.tablero.getCelda(pos.x, pos.y).setContenido(caballeria)
             this.piezas.push(caballeria);
         }
+
     }
 }
