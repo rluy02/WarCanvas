@@ -24,6 +24,9 @@ export default class Inicio extends Phaser.Scene {
     }
 
     preload() {
+        this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
+        this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
+
         this.panel = new PanelLateral(this);
         this.turnoGrafico = new TurnoGraficos(this);
         this.panel.preload();

@@ -8,6 +8,16 @@ export default class TableroGrafico {
         this.tablero = tablero;
         this.tamCasilla = tamCasilla;
         this.graficos = this.dibujarTablero(); //Este tablero visual esta lleno de "rects" //Phaser.GameObjects.Rectangle
+
+        this.mapaTopografico = this.escena.textures.get('mapaTopo').getSourceImage();
+        this.mapaSatelital = this.escena.textures.get('mapaSat').getSourceImage();
+
+        this.mapaTopograficoWidth = this.mapaTopografico.width;
+        this.mapaTopograficoHeight = this.mapaTopografico.height;
+
+        this.fragmentoAncho = this.mapaTopograficoWidth / this.tablero.columnas;
+        this.fragmentoAlto = this.mapaTopograficoHeight / this.tablero.filas;
+
         this.celdaSeleccionada = null; // La celda que estas seleccionando
         this.celdasColoreadas = []; // Las celdas a las que te puedes mover
         this.PanelLateral = PanelLateral;
@@ -18,6 +28,18 @@ export default class TableroGrafico {
         EventBus.on(Eventos.PIECE_END_ACTIONS, () => {
             this.restTablero();
         });
+
+        for (let fila = 0; fila < this.tablero.filas; fila++) {
+            for (let col = 0; col < this.tablero.columnas; col++) {
+
+                if (col > this.tablero.columnas / 2 - 1) {
+                    this.dibujarFragmentoMapa(fila, col, "J1")
+                }
+                else {
+                    this.dibujarFragmentoMapa(fila, col, "J2")
+                }
+            }
+        }
     }
 
     dibujarTablero() {
@@ -151,6 +173,46 @@ export default class TableroGrafico {
         let atacantePieza = this.tablero.getCelda(celdaSeleccionada.fila, celdaSeleccionada.columna).getPieza().getTipo();
         let defensaPieza = this.tablero.getCelda(fila, columna).getPieza().getTipo();
         this.PanelLateral.updateInfo(defensaPieza, atacantePieza, atacante, defensa, "Atacar", casillaAtacante, casillaDefensa);
+    }
+
+    dibujarFragmentoMapa(fila, col, tipoJugador) {
+        // Determina qué mapa usar
+        const key = tipoJugador === 'J1' ? 'mapaTopo' : 'mapaSat';
+
+        const textura = this.escena.textures.get(key).getSourceImage();
+
+        const fragWidth = textura.width / this.tablero.columnas;
+        const fragHeight = textura.height / this.tablero.filas;
+        const cropX = col * fragWidth;
+        const cropY = fila * fragHeight;
+
+        const x = col * this.tamCasilla + this.tamCasilla / 2;
+        const y = fila * this.tamCasilla + this.tamCasilla / 2;
+
+        // Borra la imagen anterior si existe
+        if (this.graficos[fila][col].imagen) {
+            this.graficos[fila][col].imagen.destroy();
+        }
+
+        const zoom = 1.6;
+        const renderSize = this.tamCasilla * zoom;
+
+        // Crea un RenderTexture que actúa como "mini lienzo" para la celda
+        const rt = this.escena.add.renderTexture(x, y, renderSize, renderSize)
+            .setOrigin(0.5)
+            .setDepth(0);
+
+        // Escala proporcional al fragmento del mapa
+        const scaleX = renderSize / fragWidth;
+        const scaleY = renderSize / fragHeight;
+
+        // Dibuja el fragmento del mapa en el renderTexture escalado a la celda
+        rt.draw(key, -cropX * scaleX, -cropY * scaleY, key)
+            .setScale(scaleX, scaleY);
+
+        this.graficos[fila][col].imagen = rt;
+
+        console.log(`Dibujo fragmento [${fila},${col}] (${cropX},${cropY},${fragWidth},${fragHeight}) del mapa ${key}`);
     }
 
     restTablero() {
