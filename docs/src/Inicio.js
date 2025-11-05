@@ -76,24 +76,23 @@ export default class Inicio extends Phaser.Scene {
             this.moverPieza(pieza);
         });
 
-        EventBus.on(Eventos.PIECE_ERASE, (pieza) => {
-            if (pieza.getTipo() == "Comandante") {
-                this.eliminarPieza(pieza);
-
+        EventBus.on(Eventos.PIECE_ERASE, (defiende, ataca) => {
+            if (defiende.getTipo() == "Comandante") {
+                this.eliminarPieza(defiende);
                 this.terminarPartida();
-            }
             //Si el comandante esta muerto, se deberia de:
             //Notificar el ganador de la partida
             //Volver al menu, reiniciar la escena del juego (ya sea destruyendo o manual)
             //Que el jugador pueda volver a jugar
             //NOTA: emitir y recibir un tablero que tras cada movimiento de los peones se chequee si se ha superado o llegado al 80% del tablero
             //Repetir la misma logica para ganar la partida
-
-
-
-
+            }
+            else {
+                let move = defiende.getPosicion();
+                this.eliminarPieza(defiende);
+                this.tab.moverPiezaCombate(move.fila, move.col, ataca);
+            }
         });
-
 
         this.panel.create();
         this.turnoGrafico.create();

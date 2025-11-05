@@ -115,11 +115,27 @@ export default class Tablero {
         EventBus.emit(Eventos.PIECE_MOVED, this.piezaActiva);
     }
 
+        // Mueve la pieza a fil, col cuando gana un combate
+    moverPiezaCombate(fil, col, pieza) {
+
+        //Limpia la celda de origen
+        let origen = pieza.getPosicion();
+        this.tablero[origen.fila][origen.col].limpiar();
+
+        //Añade la pieza a la celda de destino
+        pieza.moverse(fil, col);
+        this.tablero[fil][col].setContenido(pieza);
+        console.log(pieza.fil, pieza.col);
+        console.log(this.tablero[fil][col].contenido);
+        console.log(this.getCelda(fil,col).estaVacia());
+        EventBus.emit(Eventos.PIECE_MOVED, pieza);
+    }
+
     ataque(fil, col) {
         let defensa = this.getCelda(fil, col)
         let origen = this.piezaActiva.getPosicion()
         let ataque = this.getCelda(origen.fila, origen.col)
-        EventBus.emit(Eventos.ENEMY_SELECTED, ataque, defensa);
+        EventBus.emit(Eventos.ENEMY_SELECTED, ataque, defensa); //Se recibe en Combate 
     }
 
     getPiezaActiva(){

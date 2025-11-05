@@ -97,7 +97,8 @@ export default class PanelLateral {
         this.diceImages.attacker[0].on('animationcomplete', (anim) => {
             if (anim.key === 'roll') {
                 if (this.ataque == true)
-                    EventBus.emit(Eventos.ATACK);
+                    EventBus.emit(Eventos.ATACK); // Se recibe en combate
+                    this.ataque = false;
             }
         });
     }

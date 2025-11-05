@@ -77,7 +77,7 @@ export default class TableroGrafico {
         const jugador = pieza ? pieza.getJugador() : "";
 
         // Si no hay celda seleccionada y no esta vacía se marcan las oppciones de la pieza
-        if (this.celdaSeleccionada == null && !this.moviendoPieza && !pieza.getMovida() && jugador == turnoJugador) {
+        if (pieza && this.celdaSeleccionada == null && !this.moviendoPieza && !pieza.getMovida() && jugador == turnoJugador) {
             // Si la celda contiene una pieza
             if (!celda.estaVacia()) {
                 this.colorearRango(fila, col);

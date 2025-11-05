@@ -10,8 +10,8 @@ export default class Combates {
         this.atacante = null;
         this.defensa = null;
 
-        EventBus.on(Eventos.ENEMY_SELECTED, (atacante, defensa) => { this.enemigoSeleccionado(atacante, defensa) });
-        EventBus.on(Eventos.ATACK, () => { this.ataque() });
+        EventBus.on(Eventos.ENEMY_SELECTED, (atacante, defensa) => { this.enemigoSeleccionado(atacante, defensa) }); // Se lanza desde Tablero.js ataque - que viene de onClick  enemigo 
+        EventBus.on(Eventos.ATACK, () => { this.ataque() }); // Se lanza desde PanelLateral.js - al pulsar el boton atacar
     }
 
     enemigoSeleccionado(atacante, defensa) {
@@ -54,10 +54,7 @@ export default class Combates {
         ganador = (totalAtaque > totalDefensa);
 
         this.actualizarPanelAtaque(dadosAtaque1, dadosAtaque2, dadosDefensa1, dadosDefensa2, ganador, bonusAtaca, bonusDefiende);
-        // Solo se elimina la pieza si el atacante gana
-        if (ganador) {
-            this.defensa.limpiar();
-        }
+        // Se elimina la pieza si el atacante gana en el evento que se emite en actualizarPanel (inicio)
         // Restablecer resaltados/selección
         this.tableroGrafico.restTablero();
     }
@@ -82,6 +79,9 @@ export default class Combates {
 
         console.log('Panel ataque - Combate.js');
 
-        if (ganador) EventBus.emit(Eventos.PIECE_ERASE, defiende); //Inicio
+        if (ganador) 
+            {
+                EventBus.emit(Eventos.PIECE_ERASE, defiende, ataca); //Inicio (hace la parte grafica)
+            } 
     }
 }
