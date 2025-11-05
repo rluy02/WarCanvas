@@ -1,29 +1,29 @@
-import Celda  from "./Celda.js";
+import Celda from "./Celda.js";
 import { Eventos } from "./Events.js";
 import { EventBus } from "./EventBus.js";
 
-export default class Combates{
-    constructor(tablero, tableroGrafico, panelLateral){
+export default class Combates {
+    constructor(tablero, tableroGrafico, panelLateral) {
         this.tablero = tablero;
         this.tableroGrafico = tableroGrafico;
         this.panelLateral = panelLateral;
         this.atacante = null;
         this.defensa = null;
 
-        EventBus.on(Eventos.ENEMY_SELECTED, (atacante, defensa) => { this.enemigoSeleccionado(atacante, defensa)});
-        EventBus.on(Eventos.ATACK, () => { this.ataque()});
+        EventBus.on(Eventos.ENEMY_SELECTED, (atacante, defensa) => { this.enemigoSeleccionado(atacante, defensa) });
+        EventBus.on(Eventos.ATACK, () => { this.ataque() });
     }
 
-    enemigoSeleccionado(atacante, defensa){
+    enemigoSeleccionado(atacante, defensa) {
         this.atacante = atacante;
         this.defensa = defensa;
 
         console.log('enemigo - Combate.js');
-                console.log(atacante);
-                console.log(defensa);
+        console.log(atacante);
+        console.log(defensa);
     }
 
-        ataque(){
+    ataque() {
 
         // Dados
         let dadosAtaque1 = Phaser.Math.Between(1, 6);
@@ -38,14 +38,15 @@ export default class Combates{
         let bonusDefiende;
         let ganador;
 
-        if(ataca == 'Soldado') { bonusAtaca = 1};
-        if(defiende == 'Soldado') { bonusDefiende = 1};
-        if(ataca == 'Caballeria') { bonusAtaca = 2};
-        if(defiende == 'Caballeria') { bonusDefiende = 0};
-        if(ataca == 'Artilleria') { bonusAtaca = 3};
-        if(defiende == 'Artilleria') { bonusDefiende = -1};
-        if(ataca == 'Comandante') { bonusAtaca = 4};
-        if(defiende == 'Comandante') { bonusDefiende = 5};
+        if (ataca == 'Soldado') { bonusAtaca = 1; }
+        else if (ataca == 'Caballeria') { bonusAtaca = 2; }
+        else if (ataca == 'Artilleria') { bonusAtaca = 3; }
+        else if (ataca == 'Comandante') { bonusAtaca = 4; }
+
+        if (defiende == 'Soldado') { bonusDefiende = 1; }
+        else if (defiende == 'Caballeria') { bonusDefiende = 0; }
+        else if (defiende == 'Artilleria') { bonusDefiende = -1; }
+        else if (defiende == 'Comandante') { bonusDefiende = 5; }
 
         let totalAtaque = dadosAtaque1 + dadosAtaque2 + bonusAtaca;
         let totalDefensa = dadosDefensa1 + dadosDefensa2 + bonusDefiende;
@@ -57,19 +58,19 @@ export default class Combates{
         this.tableroGrafico.limpiarTablero();
     }
 
-    actualizarPanelAtaque(dadosAtaque1, dadosAtaque2, dadosDefensa1, dadosDefensa2, ganador, bonusAtaca, bonusDefiende){
+    actualizarPanelAtaque(dadosAtaque1, dadosAtaque2, dadosDefensa1, dadosDefensa2, ganador, bonusAtaca, bonusDefiende) {
         let ataca = this.atacante.getPieza();
         let defiende = this.defensa.getPieza();
-        
+
         // let resultado;
         // if (ganador) {
         // resultado = `Gana: ${ataca.getJugador()}, Muere ${defiende.getTipo()} de ${defiende.getJugador()}`;}
         // else {
         // resultado = `Gana: ${defiende.getJugador()}, Pierde ${ataca.getTipo()} de ${ataca.getJugador()}`;}
 
-        let resultado = ganador 
-        ? `Gana: ${ataca.getJugador()}, Muere ${defiende.getTipo()} de ${defiende.getJugador()}`
-         : `Gana: ${defiende.getJugador()}, Pierde ${ataca.getTipo()} de ${ataca.getJugador()}`;
+        let resultado = ganador
+            ? `Gana: ${ataca.getJugador()}, Muere ${defiende.getTipo()} de ${defiende.getJugador()}`
+            : `Gana: ${defiende.getJugador()}, Pierde ${ataca.getTipo()} de ${ataca.getJugador()}`;
 
         let mensaje = `Ataca: ${ataca.getJugador()} Defiende: ${defiende.getJugador()}`;
 
