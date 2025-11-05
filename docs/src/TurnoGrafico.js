@@ -36,17 +36,17 @@ export default class TurnoGraficos {
         //     fill: '#ce2020ff'
         // }).setInteractive({ useHandCursor: true })
 
-        this.acabarText.on('pointerdown', () => {
-            EventBus.emit(Eventos.PIECE_END_ACTIONS);
-        })
+        // this.acabarText.on('pointerdown', () => {
+        //     EventBus.emit(Eventos.PIECE_END_ACTIONS);
+        // })
 
-        this.acabarText.on('pointerover', () => {
-            this.acabarText.setColor('#febcbcff');
-        })
+        // this.acabarText.on('pointerover', () => {
+        //     this.acabarText.setColor('#febcbcff');
+        // })
 
-        this.acabarText.on('pointerout', () => {
-            this.acabarText.setColor('#ce2020ff');
-        })
+        // this.acabarText.on('pointerout', () => {
+        //     this.acabarText.setColor('#ce2020ff');
+        // })
 
     }
 

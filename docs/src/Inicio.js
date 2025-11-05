@@ -69,33 +69,33 @@ export default class Inicio extends Phaser.Scene {
         this.tab.getCelda(4, 1).setContenido(this.soldado6)
         this.piezas.push(this.soldado6);
 
-        this.soldado7 = new Soldado(2, 0, 'J1');
-        this.tab.getCelda(2, 0).setContenido(this.soldado7);
-        this.piezas.push(this.soldado7);
+        // this.soldado7 = new Soldado(2, 0, 'J1');
+        // this.tab.getCelda(2, 0).setContenido(this.soldado7);
+        // this.piezas.push(this.soldado7);
 
-        this.soldado8 = new Soldado(4, 7, 'J2');
-        this.tab.getCelda(4, 7).setContenido(this.soldado8);
-        this.piezas.push(this.soldado8 );
+        // this.soldado8 = new Soldado(4, 7, 'J2');
+        // this.tab.getCelda(4, 7).setContenido(this.soldado8);
+        // this.piezas.push(this.soldado8 );
 
-        this.caballeria = new Caballeria(7, 5, 'J1');
-        this.tab.getCelda(7, 5).setContenido(this.caballeria);
-        this.piezas.push(this.caballeria);
+        // this.caballeria = new Caballeria(7, 5, 'J1');
+        // this.tab.getCelda(7, 5).setContenido(this.caballeria);
+        // this.piezas.push(this.caballeria);
 
-        this.caballeria2 = new Caballeria(5, 7, 'J2');
-        this.tab.getCelda(5, 7).setContenido(this.caballeria2);
-        this.piezas.push(this.caballeria2);
+        // this.caballeria2 = new Caballeria(5, 7, 'J2');
+        // this.tab.getCelda(5, 7).setContenido(this.caballeria2);
+        // this.piezas.push(this.caballeria2);
 
-        this.caballeria3 = new Caballeria(2, 6, 'J1');
-        this.tab.getCelda(2, 6).setContenido(this.caballeria3);
-        this.piezas.push(this.caballeria3);
+        // this.caballeria3 = new Caballeria(2, 6, 'J1');
+        // this.tab.getCelda(2, 6).setContenido(this.caballeria3);
+        // this.piezas.push(this.caballeria3);
 
-        this.caballeria4 = new Caballeria(6, 1, 'J2');
-        this.tab.getCelda(6, 1).setContenido(this.caballeria4);
-        this.piezas.push(this.caballeria4);
+        // this.caballeria4 = new Caballeria(6, 1, 'J2');
+        // this.tab.getCelda(6, 1).setContenido(this.caballeria4);
+        // this.piezas.push(this.caballeria4);
 
-        this.caballeria5 = new Caballeria(1, 0, 'J1');
-        this.tab.getCelda(1, 0).setContenido(this.caballeria5);
-        this.piezas.push(this.caballeria5);
+        // this.caballeria5 = new Caballeria(1, 0, 'J1');
+        // this.tab.getCelda(1, 0).setContenido(this.caballeria5);
+        // this.piezas.push(this.caballeria5);
 
         // Recorre todas las piezas y las dibuja
         for (let p of this.piezas) {

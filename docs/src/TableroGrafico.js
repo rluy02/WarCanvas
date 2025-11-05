@@ -16,11 +16,7 @@ export default class TableroGrafico {
         this.moviendoPieza = false;
 
         EventBus.on(Eventos.PIECE_END_ACTIONS, () => {
-            this.moviendoPieza = false;
-            this.movimientoIniciado = false;
-
-            this.limpiarTablero();
-            this.celdaSeleccionada = null;
+            this.restTablero();
         });
     }
 
@@ -54,12 +50,13 @@ export default class TableroGrafico {
     }
 
     onCeldaClick(fila, col) {
-        console.log("Click ", fila + " ", col);   
         let celda = this.tablero.getCelda(fila, col);
         let pieza = celda.getPieza();
 
         let jugador = "";
-        if (pieza) jugador = pieza.getJugador();
+        if (pieza) {
+            jugador = pieza.getJugador();
+        }
 
         // Si no hay celda seleccionada y no esta vacía se marcan las oppciones de la pieza
         if (this.celdaSeleccionada == null && !this.moviendoPieza && !pieza.getMovida() && jugador == turnoJugador) {
@@ -70,9 +67,9 @@ export default class TableroGrafico {
         }
         else {
             // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
-            
+
             // Si es vacía se mueve
-            if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida()) {
+            if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
 
                 this.moviendoPieza = true;
                 //Se limpia el tablero
@@ -82,7 +79,7 @@ export default class TableroGrafico {
                 this.tablero.moverPieza(fila, col);
                 this.colorearRango(fila, col);
             }
-            else if (this.esTipoCelda(fila, col, "enemigo") && !this.tablero.getPiezaActiva().getMovida()) {
+            else if (this.esTipoCelda(fila, col, "enemigo") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
                 this.moviendoPieza = false;
 
                 // Combate
@@ -135,10 +132,12 @@ export default class TableroGrafico {
             this.graficos[fil][col].setStrokeStyle(1, 0x000000);
         }
 
-        //Desmarcamos la casilla central
-        let f = this.celdaSeleccionada.getPosicion().fila;
-        let c = this.celdaSeleccionada.getPosicion().col;
-        this.graficos[f][c].setStrokeStyle(1, 0x000000);
+        if (this.celdaSeleccionada) {
+            //Desmarcamos la casilla central
+            let f = this.celdaSeleccionada.getPosicion().fila;
+            let c = this.celdaSeleccionada.getPosicion().col;
+            this.graficos[f][c].setStrokeStyle(1, 0x000000);
+        }
 
         this.celdasColoreadas = [];
     }
@@ -152,6 +151,13 @@ export default class TableroGrafico {
         let atacantePieza = this.tablero.getCelda(celdaSeleccionada.fila, celdaSeleccionada.columna).getPieza().getTipo();
         let defensaPieza = this.tablero.getCelda(fila, columna).getPieza().getTipo();
         this.PanelLateral.updateInfo(defensaPieza, atacantePieza, atacante, defensa, "Atacar", casillaAtacante, casillaDefensa);
-        console.log("Confirmar Combate - TableroGráfico");
+    }
+
+    restTablero() {
+        this.moviendoPieza = false;
+        this.movimientoIniciado = false;
+
+        this.limpiarTablero();
+        this.celdaSeleccionada = null;
     }
 }
