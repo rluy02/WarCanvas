@@ -24,6 +24,16 @@ El objetivo es **conquistar el 80% del tablero o derrotar al Comandante enemigo*
 
 ## 📸 Capturas del Juego
 
+<img width="1299" height="780" alt="Menu" src="https://github.com/user-attachments/assets/a3c569c0-a583-4894-8245-a575fd05806f" />
+
+<img width="1302" height="779" alt="Tablero" src="https://github.com/user-attachments/assets/123c917a-a362-4915-91d8-1caece44f786" />
+
+<img width="1301" height="778" alt="Movimiento" src="https://github.com/user-attachments/assets/ce289aa2-683c-44e0-bfb4-af844fbb1b81" />
+
+<img width="1296" height="776" alt="ConfirmarCombate" src="https://github.com/user-attachments/assets/8ba25ae8-7e3d-41cb-a914-b21e65bfc764" />
+
+<img width="1303" height="776" alt="Combate" src="https://github.com/user-attachments/assets/4d72e0ba-3953-460e-bfe1-24511132d029" />
+
 
 ---
 
