@@ -6,10 +6,10 @@
 ---
 
 **Equipo de desarrollo:**
-Ricardo Sebastian Luy Carapaica
-Samuel Manzaneque Rodríguez
-Diego Jimenez García
-Julia Vera Ruiz
+- Ricardo Sebastian Luy Carapaica
+- Samuel Manzaneque Rodríguez
+- Diego Jimenez García
+- Julia Vera Ruiz
 
 ***01/10/2025***
 
@@ -139,11 +139,11 @@ El juego finaliza cuando un jugador conquista el 80% del tablero o si se derrota
 
 ## 4 Estética
 
-<img width="613" height="451" alt="Mapa" src="https://github.com/user-attachments/assets/24940872-79dc-46eb-a74e-136f99b7705a" />
+<img width="575" height="395" alt="MapaBocetos" src="https://github.com/user-attachments/assets/54e04e47-298a-44f9-91e7-354b41555b5b" />
 
 
+<img width="792" height="393" alt="PersonajesBocetos" src="https://github.com/user-attachments/assets/296d90f5-e117-4c72-b19b-abf4c03376df" />
 
-<img width="609" height="303" alt="PersonajesBoceto" src="https://github.com/user-attachments/assets/5dfcaacc-116d-4071-809a-af6b8ce4e2b8" />
 
 
 - Respecto a la estética del juego se representa el mapa de un conflicto bélico. Un lado del territorio se representa como un mapa realista, mientras que el otro lado se representa como un mapa dibujado en un papel. Cada lado corresponde a un equipo. El bando dibujo tiene como comandante al búho del Drawful, mientras que el bando realista juega con piezas basadas en imágenes auténticas.
