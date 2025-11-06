@@ -102,6 +102,10 @@ export default class PanelLateral {
                     this.ataque = false;
             }
         });
+
+        EventBus.on(Eventos.CLEAN_SIDE_PANEL, () => {
+            this.updateInfoEsperandoAccion();
+        });
     }
 
     updateCombatInfo(mensaje, resultado, atacante, defensa, atacanteTirada1, atacanteTirada2, defensaTirada1, defensaTirada2, bonusAtaca, bonusDefiende) {
@@ -117,7 +121,7 @@ export default class PanelLateral {
         this.diceImages.defender[1].setTexture(`dice${defensaTirada2}`);
 
         this.buttonTry.disableInteractive();
-        this.buttonTry.setText(' ');
+        this.buttonTry.setVisible(false);
     }
 
     updateInfo(fichaDefiende, fichaAtaque, equipoAtaque, equipoDefensa, accion) {
@@ -136,6 +140,17 @@ export default class PanelLateral {
 
         this.buttonTry.setInteractive({ useHandCursor: true });
         this.buttonTry.setText(accion);
+        this.buttonTry.setVisible(true);
+    }
+
+    updateInfoEsperandoAccion() {
+         this.titleText.setText('COMBATE');
+         this.infoText.setText('Esperando acción...');
+         this.infoTextAttacker.setText('Ataca');
+         this.infoTextDefender.setText('Defiende');
+
+         this.buttonTry.disableInteractive();
+         this.buttonTry.setVisible(false);
     }
 
 }
