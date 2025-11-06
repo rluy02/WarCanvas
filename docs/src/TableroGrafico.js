@@ -209,15 +209,15 @@ export default class TableroGrafico {
         const y = fila * this.tamCasilla + this.tamCasilla / 2;
 
         // Borra la imagen anterior si existe
-        if (this.graficos[fila][col].imagen) {
+        if (this.graficos[fila][col].imagen && this.graficos[fila][col].imagen.mapKey != key) {
             this.graficos[fila][col].imagen.destroy();
-
             this.tablero.conquistarCelda(tipoJugador, true);
+            console.log("cambiando")
         }
-
-        this.tablero.conquistarCelda(tipoJugador, false);
-
-
+        else if (!this.graficos[fila][col].imagen) {
+            this.tablero.conquistarCelda(tipoJugador, false);
+        }
+        
         const zoom = 1.3;
         const renderSize = this.tamCasilla * zoom;
 
@@ -233,9 +233,9 @@ export default class TableroGrafico {
         // Dibuja el fragmento del mapa en el renderTexture escalado a la celda
         rt.draw(key, -cropX * scaleX, -cropY * scaleY, key)
             .setScale(scaleX, scaleY);
+        rt.mapKey = key;
 
         this.graficos[fila][col].imagen = rt;
-
     }
 
     restTablero() {
