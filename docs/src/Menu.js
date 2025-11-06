@@ -4,8 +4,8 @@ export default class Menu extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('fondo', 'imgs/FondoMenu.webp')
-        this.load.image('boton', 'imgs/boton.webp')
+        this.load.image('fondo', 'imgs/menuJuego/FondoMenu.webp')
+        this.load.image('boton', 'imgs/menuJuego/boton.webp')
     }
 
     create() {

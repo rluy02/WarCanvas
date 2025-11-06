@@ -14,8 +14,6 @@ import Equipo from "./Equipo.js";
 export default class Inicio extends Phaser.Scene {
     constructor() {
         super("Inicio")
-        this.events;
-
     }
 
     init() {
@@ -33,12 +31,12 @@ export default class Inicio extends Phaser.Scene {
             console.log(`dice${i}:`, this.textures.exists(`dice${i}`));
         }
 
-        this.load.image('peon', './imgs/peon.webp');
-        this.load.image('peon2', './imgs/peon2.webp');
-        this.load.image('caballeria', './imgs/Caballeria.webp');
-        this.load.image('caballeria2', './imgs/Caballeria2.webp');
-        this.load.image('comandante', './imgs/Comandante.webp');
-        this.load.image('comandante2', './imgs/Comandante2.webp');
+        this.load.image('peon', './imgs/piezas/peon.webp');
+        this.load.image('peon2', './imgs/piezas/peon2.webp');
+        this.load.image('caballeria', './imgs/piezas/Caballeria.webp');
+        this.load.image('caballeria2', './imgs/piezas/Caballeria2.webp');
+        this.load.image('comandante', './imgs/piezas/Comandante.webp');
+        this.load.image('comandante2', './imgs/piezas/Comandante2.webp');
     }
 
     create() {
