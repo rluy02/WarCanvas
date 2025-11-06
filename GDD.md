@@ -11,7 +11,7 @@
 - Diego Jimenez García
 - Julia Vera Ruiz
 
-***01/10/2025***
+***07/11/2025 - Hito 2***
 
 ## 1 Resumen
 
