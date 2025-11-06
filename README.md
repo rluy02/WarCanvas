@@ -52,5 +52,32 @@ El objetivo es **conquistar el 80% del tablero o derrotar al Comandante enemigo*
 
 ---
 
-## 📂 Estructura del Proyecto
+## 📂 Assets y referencias
+
+🖼️ Recursos visuales
+
+| Elemento | Procedencia / Autor | Licencia o condición de uso | Uso dentro del juego |
+|-----------|--------------------|-----------------------------|----------------------|
+| **Logo “WarCanvas”** | Generado con IA (OpenAI - DALL·E) | Uso permitido según los Términos de OpenAI. Derecho de uso reservado. | Logotipo principal |
+| **Caballería** | Diseño propio, inspirado en el caballo del episodio 2, temporada 2 de *Hora de Aventuras* ([Wikipedia](https://es.wikipedia.org/wiki/Adventure_Time#Temporada_2_(2010-11))) | Inspiración artística sin uso directo de material protegido. | Unidad del equipo |
+| **Búho (Comandante)** | © Jackbox Games – *Drawful 2* ([Wikipedia](https://en.wikipedia.org/wiki/Jackbox_Games#Drawful_2_(2016))) | Recurso con copyright. | Sprite del comandante dibujado |
+| **Cuadro de la Batalla de Navas de Tolosa** | Francisco de Paula Van Halen ([Wikipedia](https://es.wikipedia.org/wiki/Francisco_de_Paula_Van_Halen)) | Obra de dominio público. | Fondo del menú principal |
+| **Piezas de ajedrez** | Digital Design – Flaticon ([enlace](https://www.flaticon.es/icono-gratis/piezas-de-ajedrez_5462846)) | Licencia Flaticon (uso libre con atribución). | Referencia en los créditos |
+| **Mapas del tablero** | Google Maps | Usados como *placeholders* visuales. No se reclaman derechos. | Conquista del tablero |
+
+---
+
+## 🎨 Dirección artística
+El estilo visual sigue una estética **estratégica**, con diseños contrastados para diferenciar ambos bandos (realista y dibujado).  
+
+---
+
+## ⚖️ Uso de *placeholders*
+> Algunos elementos gráficos (mapas, sprites y piezas) son *placeholders temporales* empleados con fines académicos.  
+> No se reclaman derechos de autor sobre ellos y serán reemplazados por material original o libre de derechos en futuras versiones.
+
+---
+
+El resto de elementos no mencionados previamente se interpretarán como creación propia del equipo y se reserva el derecho de autor a los integrantes del estudio y a la Universidad Complutense de Madrid.
+
 
