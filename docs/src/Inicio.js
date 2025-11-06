@@ -7,7 +7,7 @@ import TableroGrafico from "./TableroGrafico.js";
 import PiezaGrafico from "./PiezaGrafico.js";
 import TurnoGraficos from "./TurnoGrafico.js";
 import Combates from "./Combates.js";
-import Turno from "./Turno.js";
+import Turno, { turnoJugador } from "./Turno.js";
 import Equipo from "./Equipo.js";
 
 
@@ -87,7 +87,6 @@ export default class Inicio extends Phaser.Scene {
         //Finalizacion de la partida
         EventBus.on(Eventos.END_GAME, (piezaGanadora) => {
             console.log("Victoria para el jugador: " + piezaGanadora.getJugador());
-
             //esperamos 1seg para que se vea la animacion de derrota del comandante
             //esto luego podria interesar para animaciones o pantallas,botones,etc de victoria
             this.time.delayedCall(1000, () => this.terminarPartida());
@@ -116,9 +115,15 @@ export default class Inicio extends Phaser.Scene {
 
     //Metodo que finaliza la partida actual y envia al jugador a la pantalla del menu
     terminarPartida() {
+        if (this.turno) {
+            this.turno.reiniciarTurno();
+            this.turno.destruirListeners();
+        }
+        console.log(turnoJugador);
+
         EventBus.removeAllListeners(); //Los listeners persisten entre escenas. Han de destruirse para que no apunten a viejos con memoria ya destruida
         /*-- Si luego requerimos de listeners que persistan !!--> solo destruiremos los de combates, panel, ui con el EB.off()*/
-       
+
         this.scene.stop();  // Detener la escena actual (que se destruya)
         this.scene.wake("Menu"); //Reactivamos la visibilidad del menu
     }

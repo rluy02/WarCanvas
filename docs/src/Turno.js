@@ -83,8 +83,8 @@ export default class Turno {
             this.accionesTurno = 3;
             this.movimientosPieza = 0;
 
-            for (let p of this.piezasMovidas) {
-                p.resetMovida();
+            for (let p of this.piezasMovidas) { //logica conflictiva en situaciones poco reproducibles (falta mejorar)
+                if (p) p.resetMovida();
             }
 
             this.piezasMovidas = [];
@@ -92,6 +92,24 @@ export default class Turno {
             EventBus.emit(Eventos.CHANGE_TURN, turnoJugador);
         }
     }
+
+    //Al finalizar el juego nos aseguramos que si se inicia otra partida todo este por default
+    reiniciarTurno() {
+        this.accionesTurno = 3;
+        this.movimientosPieza = 0;
+        this.piezaActual = null;
+        this.piezasMovidas = [];
+        turnoJugador = "J1";
+    }
+    //Nos aseguramos de que no se registren llamadas mientras se esta acabando la partida
+    destruirListeners() {
+    EventBus.off(Eventos.PIECE_SELECTED);
+    EventBus.off(Eventos.PIECE_MOVED);
+    EventBus.off(Eventos.ATACK);
+    EventBus.off(Eventos.PIECE_END_ACTIONS);
+    EventBus.off(Eventos.CHANGE_TURN);
+}
+
 
 
 }
