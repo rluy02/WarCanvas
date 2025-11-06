@@ -22,13 +22,15 @@ export default class PanelLateral {
             fontSize: '32px',
             fontFamily: 'Arial',
             fontStyle: 'bold',
-            fill: '#ffffff'
+            fill: '#ffffff',
+            wordWrap: { width: 300, useAdvancedWrap: true } // Divide el texto si llega al borde (advancewrap - no divide palabras por la mitad)
         });
 
         this.infoText = this.escena.add.text(width - sideWidth + 20, 100, 'Esperando acción...', { // Texto del combate (ej: Soldado vs Caballería)
             fontSize: '18px',
             fontFamily: 'Arial',
             fill: '#ffffffff',
+            wordWrap: { width: 300, useAdvancedWrap: true } 
         });
 
         this.infoTextAttacker = this.escena.add.text(width - sideWidth / 2, 200, 'Ataca', { // Equipo que ataca
@@ -36,6 +38,7 @@ export default class PanelLateral {
             fontFamily: 'Arial',
 
             fill: '#ffffffff',
+            wordWrap: { width: 300, useAdvancedWrap: true } 
         }).setOrigin(0.5);
 
         this.infoTextDefender = this.escena.add.text(width - sideWidth / 2, 300, 'Defiende', { // Equipo que defiende
@@ -43,6 +46,7 @@ export default class PanelLateral {
             fontFamily: 'Arial',
 
             fill: '#ffffffff',
+            wordWrap: { width: 300, useAdvancedWrap: true } 
         }).setOrigin(0.5);
 
         if (!this.escena.anims.exists('roll')) {
@@ -128,7 +132,7 @@ export default class PanelLateral {
     updateInfo(fichaDefiende, fichaAtaque, equipoAtaque, equipoDefensa, accion) {
 
         // Actualiza el título del panel
-        this.titleText.setText('CONFIRMA \nEL COMBATE');
+        this.titleText.setText('CONFIRMA EL COMBATE');
         // Actualiza la información del panel
         this.infoText.setText(fichaAtaque + ' de ' + equipoAtaque + ' ataca a ' + fichaDefiende + ' de ' + equipoDefensa);
         this.infoTextAttacker.setText('Ataca: ' + equipoAtaque);
