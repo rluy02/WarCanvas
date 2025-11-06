@@ -6,13 +6,16 @@ export default class TurnoGraficos {
         this.escena = escena;
         this.piezasMover = 3;
         this.accionesPieza = 0;
-        this.porcentajeJ1 = 0;
-        this.porcentajeJ2 = 0;
-
 
         EventBus.on(Eventos.CHANGE_TURN, () => {
             this.setAccionesTurno(3);
         })
+
+        EventBus.on(Eventos.CONQUER_CELL, (pJ1, pJ2) => {
+            this.setPorcentaje(pJ1, pJ2);
+        })
+
+        this.create();
     }
 
     create() {
@@ -37,12 +40,12 @@ export default class TurnoGraficos {
             fill: '#ffffff'
         });
 
-        this.porcentajeJ1Text = this.escena.add.text(400, height - 40, 'J1: ' + this.porcentajeJ1 + '%', { // Título
+        this.porcentajeJ1Text = this.escena.add.text(390, height - 40, 'J1: ' + 0 + '%', { // Título
             fontSize: '22px',
             fontFamily: 'Arial',
             fill: '#ffffff'
         });
-        this.porcentajeJ2Text = this.escena.add.text(500, height - 40, 'J2: ' + this.porcentajeJ2 + '%', { // Título
+        this.porcentajeJ2Text = this.escena.add.text(510, height - 40, 'J2: ' + 0 + '%', { // Título
             fontSize: '22px',
             fontFamily: 'Arial',
             fill: '#ff6666ff'
@@ -80,5 +83,10 @@ export default class TurnoGraficos {
 
     setTurnoJugador(jugador) {
         this.JugadorText.text = 'Turno ' + jugador;
+    }
+
+    setPorcentaje(pJ1, pJ2){
+        this.porcentajeJ1Text.text = 'J1: ' + pJ1 + '%';
+        this.porcentajeJ2Text.text = 'J1: ' + pJ2 + '%';
     }
 }

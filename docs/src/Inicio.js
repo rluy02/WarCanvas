@@ -94,7 +94,6 @@ export default class Inicio extends Phaser.Scene {
         });
 
         this.panel.create();
-        this.turnoGrafico.create();
     }
 
     // Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)

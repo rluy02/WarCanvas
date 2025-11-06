@@ -35,7 +35,7 @@ export default class Tablero {
 
         let celda = this.tablero[fil][col];
         let celdasSeleccionadas = [];
-        
+
         let pieza = celda.getPieza();
 
         // Si la pieza ya no puede actuar, no devuelvas casillas
@@ -55,12 +55,12 @@ export default class Tablero {
             { df: 0, dc: 1 }    // derecha
         ];
 
-        if (pieza.getTipo() != "Comandante"){ //solo el comandante puede moverse en diagonal
+        if (pieza.getTipo() != "Comandante") { //solo el comandante puede moverse en diagonal
             for (let dir of direcciones) {
-            const f = fil + dir.df;
-            const c = col + dir.dc;
-            // fuera de tablero → deja de mirar en esta dirección
-            if (f < 0 || c < 0 || f >= this.filas || c >= this.columnas) continue;
+                const f = fil + dir.df;
+                const c = col + dir.dc;
+                // fuera de tablero → deja de mirar en esta dirección
+                if (f < 0 || c < 0 || f >= this.filas || c >= this.columnas) continue;
 
                 const cel = this.tablero[f][c];
 
@@ -71,25 +71,25 @@ export default class Tablero {
                     // hay pieza: si es rival, puedes atacar esa casilla; en ambos casos paras
                     const esRival = cel.getPieza().getJugador() !== celda.getPieza().getJugador();
                     if (esRival) celdasSeleccionadas.push({ fil: f, col: c, tipo: "enemigo" });
-                    if ((f + dir.df > 0 || c + dir.dc > 0 || f + dir.df <= this.filas || c + dir.dc <= this.columnas) && pieza.getTipo() == "Caballeria" && pieza.getSaltoCaballeria() == true){
-                        if (this.tablero[f + dir.df][c + dir.dc].estaVacia()){
+                    if ((f + dir.df > 0 || c + dir.dc > 0 || f + dir.df <= this.filas || c + dir.dc <= this.columnas) && pieza.getTipo() == "Caballeria" && pieza.getSaltoCaballeria() == true) {
+                        if (this.tablero[f + dir.df][c + dir.dc].estaVacia()) {
                             console.log("se puede usar salto de caballeria");
                             celdasSeleccionadas.push({ fil: f + dir.df, col: c + dir.dc, tipo: "vacia" });
                         }
-                            
+
                     }
-                        
+
                 }
             }
         }
-        else{
+        else {
             for (let i = col - 1; i <= col + 1; i++) {
                 for (let j = fil - 1; j <= fil + 1; j++) {
                     // fuera de tablero → deja de mirar en esta dirección
                     if (j < 0 || i < 0 || j >= this.filas || i >= this.columnas) continue;
                     if (j == fil && i == col) continue; // saltar la casilla central
                     const cel = this.tablero[j][i];
-                     
+
                     if (cel.estaVacia()) {
                         // casilla libre: se puede mover; sigue mirando más lejos
                         celdasSeleccionadas.push({ fil: j, col: i, tipo: "vacia" });
@@ -101,8 +101,8 @@ export default class Tablero {
                 }
             }
         }
-       return celdasSeleccionadas;
-   }
+        return celdasSeleccionadas;
+    }
 
     // Mueve la pieza a fil, col
     moverPieza(fil, col) {
@@ -118,7 +118,7 @@ export default class Tablero {
         EventBus.emit(Eventos.PIECE_MOVED, this.piezaActiva);
     }
 
-        // Mueve la pieza a fil, col cuando gana un combate
+    // Mueve la pieza a fil, col cuando gana un combate
     moverPiezaCombate(fil, col, pieza) {
 
         //Limpia la celda de origen
@@ -141,11 +141,11 @@ export default class Tablero {
         EventBus.emit(Eventos.ENEMY_SELECTED, ataque, defensa); //Se recibe en Combate 
     }
 
-    getPiezaActiva(){
+    getPiezaActiva() {
         return this.piezaActiva;
     }
 
-    conquistarCelda(jugador, ocupada){
+    conquistarCelda(jugador, ocupada) {
         if (jugador == "J1") {
             this.celdasJ1++;
             if (ocupada) this.celdasJ2--;
@@ -154,6 +154,10 @@ export default class Tablero {
             this.celdasJ2++;
             if (ocupada) this.celdasJ1--;
         }
+        let j1Porcentaje = this.celdasJ1 * 100 / 80;
+        let j2Porcentaje = this.celdasJ2 * 100 / 80;
+
+        EventBus.emit(Eventos.CONQUER_CELL, j1Porcentaje, j2Porcentaje)
 
         if (this.celdasJ1 >= 64 || this.celdasJ2 >= 64) EventBus.emit(Eventos.END_GAME, this.piezaActiva);
     }

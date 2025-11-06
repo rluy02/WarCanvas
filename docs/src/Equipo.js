@@ -17,15 +17,15 @@ export default class Equipo {
 
     crearPiezasJ1() {
         const posicionesSoldadosJ1 = [
-            { x: 5, y: 5 }, { x: 6, y: 5 }, { x: 6, y: 3 },
-            { x: 1, y: 2 }, { x: 2, y: 0 }, { x: 2, y: 5 },
-            { x: 5, y: 0 }, { x: 4, y: 7 }
+            { x: 0, y: 2 }, { x: 1, y: 2 }, { x: 2, y: 2 },
+            { x: 3, y: 2 }, { x: 4, y: 2 }, { x: 5, y: 2 },
+            { x: 6, y: 2 }, { x: 7, y: 2 }
         ];
 
         const posicionesCaballeriasJ1 = [
-            { x: 7, y: 5 }, { x: 4, y: 1 }
+            { x: 5, y: 1 }, { x: 1, y: 1 }
         ];
-        const posicionComandanteJ1 = { x: 3, y: 3 };
+        const posicionComandanteJ1 = { x: 4, y: 0 };
 
         // Generamos las piezas para el equipo "J1" 
         for (let pos of posicionesSoldadosJ1) {
@@ -49,14 +49,14 @@ export default class Equipo {
 
     crearPiezasJ2() {
         const posicionesSoldadosJ2 = [
-            { x: 0, y: 0 }, { x: 0, y: 1 }
+            { x: 3, y: 7 }, { x: 4, y: 7 }
         ];
 
         const posicionesCaballeriasJ2 = [
             { x: 7, y: 7 }
         ];
 
-        const posicionComandanteJ2 = { x: 4, y: 4 };
+        const posicionComandanteJ2 = { x: 4, y: 8 };
 
 
         // Generamos las piezas para el equipo "J2" 
