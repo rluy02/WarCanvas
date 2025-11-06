@@ -6,6 +6,9 @@ export default class TurnoGraficos {
         this.escena = escena;
         this.piezasMover = 3;
         this.accionesPieza = 0;
+        this.porcentajeJ1 = 0;
+        this.porcentajeJ2 = 0;
+
 
         EventBus.on(Eventos.CHANGE_TURN, () => {
             this.setAccionesTurno(3);
@@ -16,25 +19,36 @@ export default class TurnoGraficos {
         const width = this.escena.scale.width;
         const height = this.escena.scale.height;
 
-        this.JugadorText = this.escena.add.text(40, height - 70, 'Turno J1', { // Título
+        this.JugadorText = this.escena.add.text(40, height - 75, 'Turno J1', { // Título
             fontSize: '22px',
             fontFamily: 'Arial',
             fill: '#ffffff'
         });
 
-        this.turnosText = this.escena.add.text(170, height - 70, 'Piezas a mover: ' + this.piezasMover, { // Título
+        this.turnosText = this.escena.add.text(170, height - 75, 'Piezas a mover: ' + this.piezasMover, { // Título
             fontSize: '22px',
             fontFamily: 'Arial',
             fill: '#ffffff'
         });
 
-        this.accionessText = this.escena.add.text(380, height - 70, 'Acciones de pieza: ' + this.accionesPieza, { // Título
+        this.accionessText = this.escena.add.text(380, height - 75, 'Acciones de pieza: ' + this.accionesPieza, { // Título
             fontSize: '22px',
             fontFamily: 'Arial',
             fill: '#ffffff'
         });
 
-        this.acabarText = this.escena.add.text(210, height - 40, 'Finalizar Movimiento', { // Título
+        this.porcentajeJ1Text = this.escena.add.text(400, height - 40, 'J1: ' + this.porcentajeJ1 + '%', { // Título
+            fontSize: '22px',
+            fontFamily: 'Arial',
+            fill: '#ffffff'
+        });
+        this.porcentajeJ2Text = this.escena.add.text(500, height - 40, 'J2: ' + this.porcentajeJ2 + '%', { // Título
+            fontSize: '22px',
+            fontFamily: 'Arial',
+            fill: '#ff6666ff'
+        });
+
+        this.acabarText = this.escena.add.text(90, height - 40, 'Finalizar Movimiento', { // Título
             fontSize: '22px',
             fontFamily: 'Arial',
             fill: '#ce2020ff'

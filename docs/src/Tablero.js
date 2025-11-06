@@ -10,6 +10,9 @@ export default class Tablero {
         this.piezaActiva = null;
 
         this.turnoActivo = null;
+
+        this.celdasJ1 = 0;
+        this.celdasJ2 = 0;
     }
 
     crearTablero() {
@@ -142,4 +145,16 @@ export default class Tablero {
         return this.piezaActiva;
     }
 
+    conquistarCelda(jugador, ocupada){
+        if (jugador == "J1") {
+            this.celdasJ1++;
+            if (ocupada) this.celdasJ2--;
+        }
+        else {
+            this.celdasJ2++;
+            if (ocupada) this.celdasJ1--;
+        }
+
+        if (this.celdasJ1 >= 64 || this.celdasJ2 >= 64) EventBus.emit(Eventos.END_GAME, this.piezaActiva);
+    }
 }

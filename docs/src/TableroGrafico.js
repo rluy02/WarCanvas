@@ -37,7 +37,7 @@ export default class TableroGrafico {
                 if (col < 3) {
                     this.dibujarFragmentoMapa(fila, col, "J1")
                 }
-                else if (col > 6){
+                else if (col > 6) {
                     this.dibujarFragmentoMapa(fila, col, "J2")
                 }
             }
@@ -211,7 +211,12 @@ export default class TableroGrafico {
         // Borra la imagen anterior si existe
         if (this.graficos[fila][col].imagen) {
             this.graficos[fila][col].imagen.destroy();
+
+            this.tablero.conquistarCelda(tipoJugador, true);
         }
+
+        this.tablero.conquistarCelda(tipoJugador, false);
+
 
         const zoom = 1.3;
         const renderSize = this.tamCasilla * zoom;
@@ -231,7 +236,7 @@ export default class TableroGrafico {
 
         this.graficos[fila][col].imagen = rt;
 
-        }
+    }
 
     restTablero() {
         this.moviendoPieza = false;
