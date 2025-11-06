@@ -142,9 +142,9 @@ El juego finaliza cuando un jugador conquista el 80% del tablero o si se derrota
 <img width="575" height="395" alt="MapaBocetos" src="https://github.com/user-attachments/assets/54e04e47-298a-44f9-91e7-354b41555b5b" />
 
 
-<img width="2048" height="2048" alt="equipo dibujado" src="https://github.com/user-attachments/assets/7d9575dd-83dc-490a-8257-52e4641749aa" />
+<img width="575" height="575" alt="equipo dibujado" src="https://github.com/user-attachments/assets/7d9575dd-83dc-490a-8257-52e4641749aa" />
 
-<img width="2048" height="2048" alt="equipo realista" src="https://github.com/user-attachments/assets/a0b2a356-affc-4bca-b071-030e4c96a325" />
+<img width="575" height="575" alt="equipo realista" src="https://github.com/user-attachments/assets/a0b2a356-affc-4bca-b071-030e4c96a325" />
 
 
 
