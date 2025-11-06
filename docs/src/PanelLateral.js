@@ -104,7 +104,7 @@ export default class PanelLateral {
         });
 
         EventBus.on(Eventos.CLEAN_SIDE_PANEL, () => {
-            this.updateInfoEsperandoAccion();
+            if(this.CombatInfo === false) this.updateInfoEsperandoAccion();
         });
     }
 
@@ -122,6 +122,7 @@ export default class PanelLateral {
 
         this.buttonTry.disableInteractive();
         this.buttonTry.setVisible(false);
+        this.CombatInfo = true;
     }
 
     updateInfo(fichaDefiende, fichaAtaque, equipoAtaque, equipoDefensa, accion) {
@@ -141,6 +142,8 @@ export default class PanelLateral {
         this.buttonTry.setInteractive({ useHandCursor: true });
         this.buttonTry.setText(accion);
         this.buttonTry.setVisible(true);
+        this.CombatInfo = false;
+
     }
 
     updateInfoEsperandoAccion() {
