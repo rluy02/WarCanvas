@@ -1,6 +1,7 @@
 import Soldado from "./Soldado.js";
 import Caballeria from "./Caballeria.js";
 import Comandante from "./Comandante.js";
+import Artilleria from "./Artilleria.js";
 
 export default class Equipo {
     constructor(equipo, tablero) {
@@ -27,6 +28,8 @@ export default class Equipo {
         ];
         const posicionComandanteJ1 = { x: 4, y: 0 };
 
+        const posicionArtilleria = {x:3, y:0};
+
         // Generamos las piezas para el equipo "J1" 
         for (let pos of posicionesSoldadosJ1) {
             let soldado = new Soldado(pos.x, pos.y, "J1");  // Crear soldado
@@ -45,6 +48,11 @@ export default class Equipo {
         let comandante = new Comandante(posicionComandanteJ1.x, posicionComandanteJ1.y, "J1");
         this.tablero.getCelda(posicionComandanteJ1.x, posicionComandanteJ1.y).setContenido(comandante);
         this.piezas.push(comandante);
+
+        //Crear artilleria
+        let artilleria = new Artilleria(posicionArtilleria.x, posicionArtilleria.y, "J1");
+        this.tablero.getCelda(posicionArtilleria.x, posicionArtilleria.y).setContenido(artilleria);
+        this.piezas.push(artilleria);
     }
 
     crearPiezasJ2() {
@@ -58,6 +66,7 @@ export default class Equipo {
 
         const posicionComandanteJ2 = { x: 4, y: 8 };
 
+        const posicionArtilleria = {x:5, y:7};
 
         // Generamos las piezas para el equipo "J2" 
         for (let pos of posicionesSoldadosJ2) {
@@ -76,6 +85,11 @@ export default class Equipo {
         let comandante = new Comandante(posicionComandanteJ2.x, posicionComandanteJ2.y, "J2");
         this.tablero.getCelda(posicionComandanteJ2.x, posicionComandanteJ2.y).setContenido(comandante);
         this.piezas.push(comandante);
+
+        //Crear artilleria
+        let artilleria = new Artilleria(posicionArtilleria.x, posicionArtilleria.y, "J1");
+        this.tablero.getCelda(posicionArtilleria.x, posicionArtilleria.y).setContenido(comandante);
+        this.piezas.push(artilleria);
 
     }
 }

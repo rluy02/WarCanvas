@@ -24,6 +24,10 @@ export default class PiezaGrafico {
         if (pieza.getJugador() == "J1") sprite = this.escena.add.image(x, y, 'comandante');
         else sprite = this.escena.add.image(x, y, 'comandante2');
     }
+    else if (pieza.getTipo() == 'Artilleria'){
+        if (pieza.getJugador() == "J1") sprite = this.escena.add.image(x, y, 'artilleria');
+        else sprite = this.escena.add.image(x, y, 'artilleria2');
+    }
     sprite.setDisplaySize(this.tamCasilla, this.tamCasilla);
     this.sprites.set(pieza, sprite);
   }

@@ -88,8 +88,28 @@ export default class TableroGrafico {
         else {
             // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
 
+            //Si es artilleria va aparte
+            if (this.tablero.getPiezaActiva().getTipo() === "Artilleria") {
+                const randomCell = Phaser.Math.Between(0, 4);
+                const direcciones = [
+                    {df: 0, dc: 0},     // centro
+                    { df: -1, dc: 0 },  // arriba
+                    { df: 1, dc: 0 },   // abajo
+                    { df: 0, dc: -1 },  // izquierda
+                    { df: 0, dc: 1 }    // derecha
+                ];
+
+                console.log("Apuntando a ", fila, " ", col);    
+                const filaProyectil = fila + direcciones[randomCell].df;
+                const colProyectil = col + direcciones[randomCell].dc;
+                this.tablero.getPiezaActiva().lanzarProyectil(filaProyectil, colProyectil);
+                
+                celda.play("explosion");
+
+                this.limpiarTablero();
+            }
             // Si es vacía se mueve
-            if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
+            else if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
                 //Dibuja la conquista
                 this.dibujarFragmentoMapa(fila, col, this.tablero.getPiezaActiva().getJugador())
 
@@ -100,7 +120,6 @@ export default class TableroGrafico {
                 //Se informa del movimiento de pieza
                 this.tablero.moverPieza(fila, col);
                 this.colorearRango(fila, col);
-
             }
             else if (this.esTipoCelda(fila, col, "enemigo") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
                 this.moviendoPieza = false;
@@ -217,7 +236,7 @@ export default class TableroGrafico {
         else if (!this.graficos[fila][col].imagen) {
             this.tablero.conquistarCelda(tipoJugador, false);
         }
-        
+
         const zoom = 1.3;
         const renderSize = this.tamCasilla * zoom;
 

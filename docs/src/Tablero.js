@@ -55,7 +55,38 @@ export default class Tablero {
             { df: 0, dc: 1 }    // derecha
         ];
 
-        if (pieza.getTipo() != "Comandante") { //solo el comandante puede moverse en diagonal
+        if (pieza.getTipo() == "Artilleria") {
+            const jugador = pieza.getJugador();
+
+            let iniCol;
+            let maxCol;
+            if (jugador === "J1") {
+                iniCol = pieza.getPosicion().col + 1; // La siguiente a la artilleria
+                maxCol = iniCol + 4;
+            }
+            else {
+                iniCol = pieza.getPosicion().col - 1; // La siguiente a la artilleria
+                maxCol = iniCol - 4;
+            }
+
+            for (let col = iniCol; col < maxCol; col++) {
+                for (let fil = 0; fil < this.filas; fil++) {
+                    let celda = this.tablero[fil][col];
+
+                    let esRival;
+                    if (!celda.estaVacia()) esRival = jugador !== celda.getPieza().getJugador();
+
+                    if (esRival) {
+                        celdasSeleccionadas.push({ fil: fil, col: col, tipo: "enemigo" });
+                    }
+                    else {
+                        celdasSeleccionadas.push({ fil: fil, col: col, tipo: "vacia" });
+                    }
+                }
+            }
+
+        }
+        else if (pieza.getTipo() != "Comandante") { //solo el comandante puede moverse en diagonal
             for (let dir of direcciones) {
                 const f = fil + dir.df;
                 const c = col + dir.dc;

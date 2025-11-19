@@ -21,22 +21,8 @@ export default class Inicio extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
-        this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
-
-        for (let i = 0; i <= 6; i++) {
-            this.load.image(`dice${i}`, `./imgs/dice/dice${i}.webp`);
-        }
-        for (let i = 0; i <= 6; i++) {
-            console.log(`dice${i}:`, this.textures.exists(`dice${i}`));
-        }
-
-        this.load.image('peon', './imgs/piezas/peon.webp');
-        this.load.image('peon2', './imgs/piezas/peon2.webp');
-        this.load.image('caballeria', './imgs/piezas/Caballeria.webp');
-        this.load.image('caballeria2', './imgs/piezas/Caballeria2.webp');
-        this.load.image('comandante', './imgs/piezas/Comandante.webp');
-        this.load.image('comandante2', './imgs/piezas/Comandante2.webp');
+        this.crearImagenes();
+        this.crearAnimaciones();
     }
 
     create() {
@@ -124,6 +110,38 @@ export default class Inicio extends Phaser.Scene {
 
         this.scene.stop();  // Detener la escena actual (que se destruya)
         this.scene.wake("Menu"); //Reactivamos la visibilidad del menu
+    }
+
+    crearAnimaciones() {
+        this.anims.create({
+            key: 'explosion',
+            frames: this.anims.generateFrameNumbers('explosion', { frames:[0,1,2,3,4,5,6,7]}),
+            frameRate: 10,
+            repeat: 0
+        });
+    }
+
+    crearImagenes(){
+        for (let i = 0; i <= 6; i++) {
+            this.load.image(`dice${i}`, `./imgs/dice/dice${i}.webp`);
+        }
+        for (let i = 0; i <= 6; i++) {
+            console.log(`dice${i}:`, this.textures.exists(`dice${i}`));
+        }
+
+        this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
+        this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
+
+        this.load.image('peon', './imgs/piezas/peon.webp');
+        this.load.image('peon2', './imgs/piezas/peon2.webp');
+        this.load.image('caballeria', './imgs/piezas/Caballeria.webp');
+        this.load.image('caballeria2', './imgs/piezas/Caballeria2.webp');
+        this.load.image('comandante', './imgs/piezas/Comandante.webp');
+        this.load.image('comandante2', './imgs/piezas/Comandante2.webp');
+        this.load.image('artilleria', './imgs/piezas/artilleriaJ1.webp');
+        this.load.image('artilleria2', './imgs/piezas/artilleriaJ1.webp');
+
+        this.load.spritesheet('explosion', './imgs/efectos/explosion.webp', {frameWidth: 144, frameHeight: 128});
     }
 
 }
