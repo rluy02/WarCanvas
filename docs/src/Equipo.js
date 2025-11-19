@@ -66,7 +66,7 @@ export default class Equipo {
 
         const posicionComandanteJ2 = { x: 4, y: 8 };
 
-        const posicionArtilleria = {x:5, y:7};
+        const posicionArtilleria = {x:2, y:7};
 
         // Generamos las piezas para el equipo "J2" 
         for (let pos of posicionesSoldadosJ2) {
@@ -87,8 +87,8 @@ export default class Equipo {
         this.piezas.push(comandante);
 
         //Crear artilleria
-        let artilleria = new Artilleria(posicionArtilleria.x, posicionArtilleria.y, "J1");
-        this.tablero.getCelda(posicionArtilleria.x, posicionArtilleria.y).setContenido(comandante);
+        let artilleria = new Artilleria(posicionArtilleria.x, posicionArtilleria.y, "J2");
+        this.tablero.getCelda(posicionArtilleria.x, posicionArtilleria.y).setContenido(artilleria);
         this.piezas.push(artilleria);
 
     }

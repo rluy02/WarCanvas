@@ -31,6 +31,7 @@ export default class PiezaGrafico {
     sprite.setDisplaySize(this.tamCasilla, this.tamCasilla);
     this.sprites.set(pieza, sprite);
   }
+  
   eliminarPieza(pieza) {
     // Buscar el sprite asociado
     const sprite = this.sprites.get(pieza);

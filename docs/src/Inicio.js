@@ -22,10 +22,11 @@ export default class Inicio extends Phaser.Scene {
 
     preload() {
         this.crearImagenes();
-        this.crearAnimaciones();
     }
 
     create() {
+        this.crearAnimaciones();
+
         this.piezas = [];
         this.panel = new PanelLateral(this);
         this.turnoGrafico = new TurnoGraficos(this);
@@ -114,7 +115,7 @@ export default class Inicio extends Phaser.Scene {
 
     crearAnimaciones() {
         this.anims.create({
-            key: 'explosion',
+            key: 'explotar',
             frames: this.anims.generateFrameNumbers('explosion', { frames:[0,1,2,3,4,5,6,7]}),
             frameRate: 10,
             repeat: 0
@@ -141,7 +142,8 @@ export default class Inicio extends Phaser.Scene {
         this.load.image('artilleria', './imgs/piezas/artilleriaJ1.webp');
         this.load.image('artilleria2', './imgs/piezas/artilleriaJ1.webp');
 
-        this.load.spritesheet('explosion', './imgs/efectos/explosion.webp', {frameWidth: 144, frameHeight: 128});
+        this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', {frameWidth: 144, frameHeight: 128});
+        console.log(this.textures.get('explosion').frameTotal);
     }
 
 }

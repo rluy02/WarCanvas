@@ -65,8 +65,9 @@ export default class Tablero {
                 maxCol = iniCol + 4;
             }
             else {
-                iniCol = pieza.getPosicion().col - 1; // La siguiente a la artilleria
-                maxCol = iniCol - 4;
+                iniCol = pieza.getPosicion().col - 4; // La siguiente a la artilleria
+                maxCol = pieza.getPosicion().col ;
+                console.log(iniCol, " ", maxCol);
             }
 
             for (let col = iniCol; col < maxCol; col++) {
@@ -174,6 +175,10 @@ export default class Tablero {
 
     getPiezaActiva() {
         return this.piezaActiva;
+    }
+
+    resetPiezaActiva(){
+        this.piezaActiva = null;
     }
 
     conquistarCelda(jugador, ocupada) {

@@ -87,26 +87,16 @@ export default class TableroGrafico {
         }
         else {
             // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
+            if (!this.tablero.getPiezaActiva()) return;
 
             //Si es artilleria va aparte
             if (this.tablero.getPiezaActiva().getTipo() === "Artilleria") {
-                const randomCell = Phaser.Math.Between(0, 4);
-                const direcciones = [
-                    {df: 0, dc: 0},     // centro
-                    { df: -1, dc: 0 },  // arriba
-                    { df: 1, dc: 0 },   // abajo
-                    { df: 0, dc: -1 },  // izquierda
-                    { df: 0, dc: 1 }    // derecha
-                ];
-
-                console.log("Apuntando a ", fila, " ", col);    
-                const filaProyectil = fila + direcciones[randomCell].df;
-                const colProyectil = col + direcciones[randomCell].dc;
-                this.tablero.getPiezaActiva().lanzarProyectil(filaProyectil, colProyectil);
                 
-                celda.play("explosion");
+                this.tablero.getPiezaActiva().lanzarProyectil(fila, col, this.escena);
+                EventBus.emit(Eventos.PIECE_MOVED, this.tablero.getPiezaActiva());
 
                 this.limpiarTablero();
+                this.tablero.resetPiezaActiva();
             }
             // Si es vacía se mueve
             else if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
