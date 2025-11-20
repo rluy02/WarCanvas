@@ -7,7 +7,7 @@ export default class Artilleria extends Pieza {
         this.explosion = null;
     }
 
-    lanzarProyectil(fil, col, escena, tamCasilla = 64) {
+    lanzarProyectil(fil, col, escena, tablero, tamCasilla = 64) {
         const randomCell = Phaser.Math.Between(0, 4);
         const direcciones = [
             { df: 0, dc: 0 },     // centro
@@ -32,5 +32,12 @@ export default class Artilleria extends Pieza {
         this.explosion.visible = true;
         this.explosion.setPosition(x, y);
         this.explosion.play('explotar');
+
+        let celda = tablero.getCelda(filaProyectil, colProyectil);
+        if (!celda.estaVacia()){
+            let pieza = celda.getPieza();
+            escena.eliminarPieza(pieza);
+            celda.limpiar();
+        }
     }
 }
