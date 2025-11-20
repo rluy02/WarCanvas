@@ -20,6 +20,12 @@ export default class Artilleria extends Pieza {
         const filaProyectil = fil + direcciones[randomCell].df;
         const colProyectil = col + direcciones[randomCell].dc;
 
+        while ((filaProyectil < 0 || filaProyectil > 7) || (colProyectil < 0 || colProyectil > 9)){
+            randomCell = Phaser.Math.Between(0, 4);
+            filaProyectil = fil + direcciones[randomCell].df;
+            colProyectil = col + direcciones[randomCell].df;
+        }
+
         const x = colProyectil * tamCasilla + tamCasilla / 2;
         const y = filaProyectil * tamCasilla + tamCasilla / 2;
         if (!this.explosion) {
@@ -27,6 +33,7 @@ export default class Artilleria extends Pieza {
             this.explosion.on('animationcomplete', () => {
                 this.explosion.visible = false;
             });
+            this.explosion.setDepth(999);
         }
 
         this.explosion.visible = true;
