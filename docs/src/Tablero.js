@@ -13,6 +13,10 @@ export default class Tablero {
 
         this.celdasJ1 = 0;
         this.celdasJ2 = 0;
+
+        EventBus.on(Eventos.CHANGE_TURN, () => {
+            this.piezaActiva = null;
+        });
     }
 
     crearTablero() {
@@ -103,13 +107,22 @@ export default class Tablero {
                     // hay pieza: si es rival, puedes atacar esa casilla; en ambos casos paras
                     const esRival = cel.getPieza().getJugador() !== celda.getPieza().getJugador();
                     if (esRival) celdasSeleccionadas.push({ fil: f, col: c, tipo: "enemigo" });
-                    if ((f + dir.df > 0 || c + dir.dc > 0 || f + dir.df <= this.filas || c + dir.dc <= this.columnas) && pieza.getTipo() == "Caballeria" && pieza.getSaltoCaballeria() == true) {
-                        if (this.tablero[f + dir.df][c + dir.dc].estaVacia()) {
-                            console.log("se puede usar salto de caballeria");
-                            celdasSeleccionadas.push({ fil: f + dir.df, col: c + dir.dc, tipo: "vacia" });
-                        }
+                    if (pieza.getTipo() == "Caballeria" && pieza.getSaltoCaballeria()) {
 
-                    }
+            const f2 = f + dir.df;
+            const c2 = c + dir.dc;
+
+            // Comprobar límites correctamente
+            if (f2 >= 0 && f2 < this.filas && c2 >= 0 && c2 < this.columnas) {
+
+                // Puede saltar solo si la casilla destino está vacía
+                if (this.tablero[f2][c2].estaVacia()) {
+                    console.log("se puede usar salto de caballeria");
+                    celdasSeleccionadas.push({ fil: f2, col: c2, tipo: "vacia" });
+                }
+            }
+        }
+
 
                 }
             }

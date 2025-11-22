@@ -135,7 +135,7 @@ export default class Inicio extends Phaser.Scene {
 
         this.load.image('peon', './imgs/piezas/peon.webp');
         this.load.image('peon2', './imgs/piezas/peon2.webp');
-        this.load.image('caballeria', './imgs/piezas/Caballeria.webp');
+        this.load.image('caballeria', './imgs/piezas/caballeria-dibujada.webp');
         this.load.image('caballeria2', './imgs/piezas/Caballeria2.webp');
         this.load.image('comandante', './imgs/piezas/Comandante.webp');
         this.load.image('comandante2', './imgs/piezas/Comandante2.webp');
