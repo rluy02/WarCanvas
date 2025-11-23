@@ -13,6 +13,7 @@ export default class PanelInfoPiezas {
         let panelFondo = this.escena.add.rectangle(width / 2, height / 2, width * margen, height * margen, 0x222222, 0.95);
         this.elementos.push(panelFondo);
 
+        // TEXTOS
         this.crearTexto("PIEZAS", 42, '#FFFFFF', 'bold', { x: 5, y: 5 });
         this.crearTexto("Soldado", 30, '#FFFFFF', 'bold', { x: 10, y: 130 });
         this.crearTexto("Caballeria", 30, '#FFFFFF', 'bold', { x: 10, y: 230 });
@@ -55,6 +56,12 @@ export default class PanelInfoPiezas {
 
         this.elementos.push(cerrarBoton);
 
+        // IMAGENES
+        this.cargarImagen('peon', {x: 710, y: 140}, 0.12);
+        this.cargarImagen('caballeria', {x: 710, y: 240}, 0.04);
+        this.cargarImagen('comandante', {x: 710, y: 340}, 0.1);
+        this.cargarImagen('artilleria', {x: 710, y: 440}, 0.15);
+
         this.cerrarPanel();
     }
 
@@ -67,6 +74,12 @@ export default class PanelInfoPiezas {
         });
 
         this.elementos.push(text);
+    }
+
+    cargarImagen(sprite, pos, size){
+        let img = this.escena.add.sprite(this.esquinaPanel.x + pos.x, this.esquinaPanel.y + pos.y, sprite);
+        img.setScale(size);
+        this.elementos.push(img);
     }
 
     cerrarPanel(){
