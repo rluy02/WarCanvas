@@ -9,6 +9,7 @@ import TurnoGraficos from "../Render/TurnoGrafico.js";
 import Combates from "../Logica/Combates.js";
 import Turno, { turnoJugador } from "../Logica/Turno.js";
 import Equipo from "../Logica/Equipo.js";
+import PanelInfoPiezas from "../Render/PanelInfoPiezas.js";
 
 
 export default class Inicio extends Phaser.Scene {
@@ -41,6 +42,7 @@ export default class Inicio extends Phaser.Scene {
 
         this.combates = new Combates(this.tab, this.tabGrafico, this.panel);
         this.turno = new Turno(3, this.turnoGrafico);
+
 
         // Creación del equipo 1 (jugador lo controla)
         this.equipoJ1 = new Equipo("J1", this.tab);
@@ -78,6 +80,9 @@ export default class Inicio extends Phaser.Scene {
         });
 
         this.panel.create();
+
+        this.panelInfo = new PanelInfoPiezas(this);
+
     }
 
     // Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
