@@ -2,7 +2,6 @@ export default class PanelInfoPiezas {
     constructor(escena) {
         this.escena = escena;
         this.elementos = [];
-        this.crearPanel();
     }
 
     crearPanel() {
@@ -55,6 +54,8 @@ export default class PanelInfoPiezas {
         })
 
         this.elementos.push(cerrarBoton);
+
+        this.cerrarPanel();
     }
 
     crearTexto(texto, size, color, style, pos) {

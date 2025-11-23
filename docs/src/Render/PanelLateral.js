@@ -2,8 +2,9 @@ import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
 
 export default class PanelLateral {
-    constructor(escena) {
+    constructor(escena, panelInfo) {
         this.escena = escena;
+        this.panelInfo = panelInfo;
         let atacante = null;
         let defensa = null;
         this.create();
@@ -47,6 +48,26 @@ export default class PanelLateral {
             fill: '#ffffffff',
             wordWrap: { width: 300, useAdvancedWrap: true } 
         }).setOrigin(0.5);
+
+        //Boton de abrir panel de informacion
+        let btInfo = this.escena.add.text(width - 100, 25, 'INFO', { // Título
+            fontSize: '22px',
+            fontFamily: 'Arial',
+            fontStyle: 'bold',
+            fill: '#000000ff',
+        }).setInteractive();
+
+        btInfo.on('pointerdown', () => {
+            this.panelInfo.abrirPanel();
+        })
+
+        btInfo.on('pointerover', () => {
+            btInfo.setColor('#ffffffff');
+        })
+
+        btInfo.on('pointerout', () => {
+            btInfo.setColor('#000000ff');
+        })
 
         if (!this.escena.anims.exists('roll')) {
             const frames = [

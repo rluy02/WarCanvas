@@ -29,7 +29,8 @@ export default class Inicio extends Phaser.Scene {
         this.crearAnimaciones();
 
         this.piezas = [];
-        this.panel = new PanelLateral(this);
+        this.panelInfo = new PanelInfoPiezas(this);
+        this.panel = new PanelLateral(this, this.panelInfo);
         this.turnoGrafico = new TurnoGraficos(this);
 
         //Creamos la instancia y la guardamos en tab
@@ -80,9 +81,7 @@ export default class Inicio extends Phaser.Scene {
         });
 
         this.panel.create();
-
-        this.panelInfo = new PanelInfoPiezas(this);
-
+        this.panelInfo.crearPanel();
     }
 
     // Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
