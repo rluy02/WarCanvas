@@ -1,14 +1,14 @@
-import { Eventos } from "./Events.js";
-import { EventBus } from "./EventBus.js";
+import { Eventos } from "../Events.js"
+import { EventBus } from "../EventBus.js";
 
-import PanelLateral from "./PanelLateral.js";
-import Tablero from "./Tablero.js";
-import TableroGrafico from "./TableroGrafico.js";
-import PiezaGrafico from "./PiezaGrafico.js";
-import TurnoGraficos from "./TurnoGrafico.js";
-import Combates from "./Combates.js";
-import Turno, { turnoJugador } from "./Turno.js";
-import Equipo from "./Equipo.js";
+import PanelLateral from "../Render/PanelLateral.js";
+import Tablero from "../Logica/Tablero.js";
+import TableroGrafico from "../Render/TableroGrafico.js";
+import PiezaGrafico from "../Render/PiezaGrafico.js";
+import TurnoGraficos from "../Render/TurnoGrafico.js";
+import Combates from "../Logica/Combates.js";
+import Turno, { turnoJugador } from "../Logica/Turno.js";
+import Equipo from "../Logica/Equipo.js";
 
 
 export default class Inicio extends Phaser.Scene {

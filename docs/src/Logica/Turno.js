@@ -1,5 +1,5 @@
-import { Eventos } from "./Events.js";
-import { EventBus } from "./EventBus.js";
+import { Eventos } from "../Events.js";
+import { EventBus } from "../EventBus.js";
 
 export let turnoJugador = "J1";
 

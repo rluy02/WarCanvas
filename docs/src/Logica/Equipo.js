@@ -1,7 +1,7 @@
-import Soldado from "./Soldado.js";
-import Caballeria from "./Caballeria.js";
-import Comandante from "./Comandante.js";
-import Artilleria from "./Artilleria.js";
+import Soldado from "./Piezas/Soldado.js";
+import Caballeria from "./Piezas/Caballeria.js";
+import Comandante from "./Piezas/Comandante.js";
+import Artilleria from "./Piezas/Artilleria.js";
 
 export default class Equipo {
     constructor(equipo, tablero) {

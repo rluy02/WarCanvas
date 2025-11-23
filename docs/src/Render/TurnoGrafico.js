@@ -1,5 +1,5 @@
-import { Eventos } from "./Events.js";
-import { EventBus } from "./EventBus.js";
+import { Eventos } from "../Events.js";
+import { EventBus } from "../EventBus.js";
 
 export default class TurnoGraficos {
     constructor(escena) {

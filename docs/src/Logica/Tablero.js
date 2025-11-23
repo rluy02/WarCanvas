@@ -1,6 +1,6 @@
 import Celda from "./Celda.js";
-import { Eventos } from "./Events.js";
-import { EventBus } from "./EventBus.js";
+import { Eventos } from "../Events.js";
+import { EventBus } from "../EventBus.js";
 
 export default class Tablero {
     constructor(_filas = 8, _columnas = 10) {

@@ -1,6 +1,5 @@
-import Celda from "./Celda.js";
-import { Eventos } from "./Events.js";
-import { EventBus } from "./EventBus.js";
+import { Eventos } from "../Events.js";
+import { EventBus } from "../EventBus.js";
 
 export default class PanelLateral {
     constructor(escena) {

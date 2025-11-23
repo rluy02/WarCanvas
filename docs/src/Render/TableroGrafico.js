@@ -1,6 +1,6 @@
-import { Eventos } from "./Events.js";
-import { EventBus } from "./EventBus.js";
-import { turnoJugador } from "./Turno.js";
+import { Eventos } from "../Events.js";
+import { EventBus } from "../EventBus.js";
+import { turnoJugador } from "../Logica/Turno.js";
 
 export default class TableroGrafico {
     constructor(escena, tablero, PanelLateral, tamCasilla = 64) {

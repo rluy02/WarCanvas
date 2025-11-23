@@ -1,6 +1,6 @@
 //Imports
-import Inicio from "./Inicio.js";
-import Menu from "./Menu.js";
+import Inicio from "./Escenas/Inicio.js";
+import Menu from "./Escenas/Menu.js";
 //Config
 let config = {
   type: Phaser.CANVAS,
