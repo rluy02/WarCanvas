@@ -52,6 +52,10 @@ export default class Artilleria extends Pieza {
         if (!celda.estaVacia()){
             let pieza = celda.getPieza();
             escena.eliminarPieza(pieza);
+
+            if (pieza.getTipo() == "Comandante"){
+                EventBus.emit(Eventos.END_GAME, this);
+            }
             celda.limpiar();
         }
 

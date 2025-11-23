@@ -41,7 +41,6 @@ export default class Tablero {
         let celdasSeleccionadas = [];
 
         let pieza = celda.getPieza();
-        if (pieza.getTipo() == "Artilleria" && !pieza.puedeDisparar()) return [];
 
         // Si la pieza ya no puede actuar, no devuelvas casillas
         if (!pieza || pieza.getMovida()) return [];
@@ -51,6 +50,8 @@ export default class Tablero {
             EventBus.emit(Eventos.PIECE_SELECTED, pieza);
             this.piezaActiva = pieza;
         }
+
+        if (pieza.getTipo() == "Artilleria" && !pieza.puedeDisparar()) return [];
 
         // Direcciones cardinales
         const direcciones = [

@@ -90,7 +90,7 @@ export default class TableroGrafico {
             if (!this.tablero.getPiezaActiva()) return;
 
             //Si es artilleria va aparte
-            if (this.tablero.getPiezaActiva().getTipo() === "Artilleria") {
+            if (this.tablero.getPiezaActiva().getTipo() === "Artilleria" && this.tablero.getPiezaActiva().puedeDisparar()) {
                 
                 this.tablero.getPiezaActiva().lanzarProyectil(fila, col, this.escena, this.tablero);
                 EventBus.emit(Eventos.PIECE_MOVED, this.tablero.getPiezaActiva());
