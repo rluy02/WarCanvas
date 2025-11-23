@@ -41,6 +41,7 @@ export default class Tablero {
         let celdasSeleccionadas = [];
 
         let pieza = celda.getPieza();
+        if (pieza.getTipo() == "Artilleria" && !pieza.puedeDisparar()) return [];
 
         // Si la pieza ya no puede actuar, no devuelvas casillas
         if (!pieza || pieza.getMovida()) return [];

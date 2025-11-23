@@ -1,4 +1,4 @@
-import Pieza from './Pieza.js';
+import Pieza from '../Pieza.js';
 
 export default class Soldado extends Pieza {
     constructor(fil, col, jugador) {

@@ -1,10 +1,18 @@
-import Pieza from './Pieza.js';
+import Pieza from '../Pieza.js';
+import { Eventos } from '../../Events.js';
+import { EventBus } from '../../EventBus.js';
 
 export default class Artilleria extends Pieza {
     constructor(fil, col, jugador) {
         super('Artilleria', fil, col, jugador, 1);
 
+        this.cooldown = 4;
+        this.turnosTranscurridos = 0;
+        this.utilizable = true;
+
         this.explosion = null;
+
+        EventBus.on(Eventos.CHANGE_TURN, (jugador) => { this.pasoTurno(jugador) });
     }
 
     lanzarProyectil(fil, col, escena, tablero, tamCasilla = 64) {
@@ -46,5 +54,21 @@ export default class Artilleria extends Pieza {
             escena.eliminarPieza(pieza);
             celda.limpiar();
         }
+
+        this.utilizable = false;
+    }
+
+    pasoTurno(jugador){
+        if (!this.utilizable && jugador == this.jugador){
+            this.turnosTranscurridos++;
+            if (this.turnosTranscurridos >= this.cooldown){
+                this.utilizable = true;
+                this.turnosTranscurridos = 0;
+            }
+        }
+    }
+
+    puedeDisparar() {
+        return this.utilizable;
     }
 }
