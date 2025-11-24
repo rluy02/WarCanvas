@@ -212,4 +212,8 @@ export default class Tablero {
 
         if (this.celdasJ1 >= 64 || this.celdasJ2 >= 64) EventBus.emit(Eventos.END_GAME, this.piezaActiva);
     }
+
+    size(){
+        return {fila: this.filas, col: this.columnas};
+    }
 }

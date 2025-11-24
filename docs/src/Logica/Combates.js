@@ -31,13 +31,37 @@ export default class Combates {
         let dadosDefensa2 = Phaser.Math.Between(1, 6);
 
         // Se suman los bonus
+        let atacaPieza = this.atacante.getPieza();
+        let defiendePieza = this.defensa.getPieza();
+
         let ataca = this.atacante.getPieza().getTipo();
         let defiende = this.defensa.getPieza().getTipo();
-        let bonusAtaca;
+        let bonusAtaca = 0;
         let bonusDefiende;
         let ganador;
 
-        if (ataca == 'Soldado') { bonusAtaca = 1; }
+        if (ataca == 'Soldado') { 
+            bonusAtaca = 1; 
+
+            let filSoldado = atacaPieza.getPosicion().fila;
+            let colSoldado = atacaPieza.getPosicion().col;
+
+            if (filSoldado == defiendePieza.getPosicion().fila){
+                let arriba = filSoldado - 1;
+                let abajo = filSoldado + 1;
+                
+                if (arriba >= 0 && this.tablero.getCelda(arriba, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
+                if (abajo < this.tablero.size().fila && this.tablero.getCelda(abajo, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
+            }
+            else {
+                let izquierda = colSoldado - 1;
+                let derecha = colSoldado + 1;
+                if (izquierda >= 0 && this.tablero.getCelda(filSoldado, izquierda).getTipo() == 'Soldado') bonusAtaca++;
+                if (derecha < this.tablero.size().fila && this.tablero.getCelda(filSoldado, derecha).getTipo() == 'Soldado') bonusAtaca++;
+            }
+
+            console.log("El soldado tiene de bonus: ", bonusAtaca)
+        }
         else if (ataca == 'Caballeria') { bonusAtaca = 2; }
         else if (ataca == 'Artilleria') { bonusAtaca = 3; }
         else if (ataca == 'Comandante') { bonusAtaca = 4; }

@@ -89,8 +89,9 @@ export default class TableroGrafico {
             // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
             if (!this.tablero.getPiezaActiva()) return;
 
+            console.log(this.esTipoCelda(fila, col));
             //Si es artilleria va aparte
-            if (this.tablero.getPiezaActiva().getTipo() === "Artilleria" && this.tablero.getPiezaActiva().puedeDisparar()) {
+            if (this.tablero.getPiezaActiva().getTipo() === "Artilleria" && this.tablero.getPiezaActiva().puedeDisparar() && this.esTipoCelda(fila, col)) {
                 
                 this.tablero.getPiezaActiva().lanzarProyectil(fila, col, this.escena, this.tablero);
                 EventBus.emit(Eventos.PIECE_MOVED, this.tablero.getPiezaActiva());
@@ -164,9 +165,14 @@ export default class TableroGrafico {
     }
 
     // Mira si la celda (fil,col) esta entre las seleccionadas, y ademas mira que el tipo sea correcto
-    esTipoCelda(fil, col, tipo) {
+    esTipoCelda(fil, col, tipo = "") {
         for (let celda of this.celdasColoreadas) {
-            if (celda.fil == fil && celda.col == col && celda.tipo == tipo) return true;
+            if (tipo == ""){
+                if (celda.fil == fil && celda.col == col) return true;
+            }
+            else {
+                if (celda.fil == fil && celda.col == col && celda.tipo == tipo) return true;
+            }
         }
 
         return false;

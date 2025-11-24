@@ -11,6 +11,7 @@ export default class PanelInfoPiezas {
         const margen = 0.9;
         this.esquinaPanel = { x: width * (1 - margen), y: height * (1 - margen) };
         let panelFondo = this.escena.add.rectangle(width / 2, height / 2, width * margen, height * margen, 0x222222, 0.95);
+        panelFondo.setDepth(1000);
         this.elementos.push(panelFondo);
 
         // TEXTOS
@@ -54,6 +55,8 @@ export default class PanelInfoPiezas {
             cerrarBoton.setColor('#ff0000ff');
         })
 
+        cerrarBoton.setDepth(1000);
+
         this.elementos.push(cerrarBoton);
 
         // IMAGENES
@@ -73,12 +76,14 @@ export default class PanelInfoPiezas {
             fill: color,
         });
 
+        text.setDepth(1000);
         this.elementos.push(text);
     }
 
     cargarImagen(sprite, pos, size){
         let img = this.escena.add.sprite(this.esquinaPanel.x + pos.x, this.esquinaPanel.y + pos.y, sprite);
         img.setScale(size);
+        img.setDepth(1000);
         this.elementos.push(img);
     }
 

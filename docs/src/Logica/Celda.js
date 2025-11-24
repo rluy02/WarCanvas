@@ -24,4 +24,11 @@ export default class Celda {
     getPosicion(){
         return {fila: this.fila, col: this.columna};
     }
+
+    getTipo(){
+        if (!this.estaVacia()){
+            return this.contenido.getTipo();
+        }
+        return "";
+    }
 }
