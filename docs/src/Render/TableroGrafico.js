@@ -22,7 +22,9 @@ export default class TableroGrafico {
         this.celdasColoreadas = []; // Las celdas a las que te puedes mover
         this.PanelLateral = PanelLateral;
 
-        this.casillasPintadas = [];
+        // Separar capas de selección/movimiento de capas de eventos
+        this.casillasPintadas = [];      // Para selección/movimiento (se limpian con limpiarTablero)
+        this.casillasEventos = [];       // Para eventos (persisten hasta limpiarEventos)
 
         //Si se esta moviendo
         this.moviendoPieza = false;
@@ -251,6 +253,29 @@ export default class TableroGrafico {
         rt.mapKey = key;
 
         this.graficos[fila][col].imagen = rt;
+    }
+
+    borrarFragmentoMapa(fila, col, jugadorAnterior) {
+        // Verificar que existe imagen
+        if (!this.graficos[fila][col].imagen) return;
+
+        // Destruir la imagen del mapa
+        this.graficos[fila][col].imagen.destroy();
+        this.graficos[fila][col].imagen = null;
+        this.tablero.borrarCelda(jugadorAnterior);
+    }
+
+    // Colorea una celda para eventos (persiste hasta limpiarEventos)
+    coloreaCelda(fila, col, color, alpha = 0.45) {
+        const capa = this.crearCapa(fila, col, color, alpha);
+        capa.setDepth(9); // Solo aquí usamos setDepth
+        this.casillasEventos.push({ capa, fila, col });
+    }
+
+    // Limpia todas las capas de eventos
+    limpiarEventos() {
+        this.casillasEventos.forEach(obj => obj.capa.destroy());
+        this.casillasEventos = [];
     }
 
     restTablero() {

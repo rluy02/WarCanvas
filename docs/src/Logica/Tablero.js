@@ -213,6 +213,19 @@ export default class Tablero {
         if (this.celdasJ1 >= 64 || this.celdasJ2 >= 64) EventBus.emit(Eventos.END_GAME, this.piezaActiva);
     }
 
+    borrarCelda(jugadorAnterior) {
+        if (jugadorAnterior === 'J1') {
+            this.celdasJ1--;
+        } else if (jugadorAnterior === 'J2') {
+            this.celdasJ2--;
+        }
+
+        let j1Porcentaje = this.celdasJ1 * 100 / 80;
+        let j2Porcentaje = this.celdasJ2 * 100 / 80;
+        EventBus.emit(Eventos.UPDATE_PERCENTAGES, j1Porcentaje, j2Porcentaje);
+    }
+    
+
     size(){
         return {fila: this.filas, col: this.columnas};
     }
