@@ -112,11 +112,7 @@ export default class Turno {
             this.piezasMovidas = [];
 
             EventBus.emit(Eventos.CHANGE_TURN, turnoJugador);
-            EventBus.emit(Eventos.RANDOM_EVENT); // Disparar evento aleatorio al cambiar de turno
         }
-    }
-    finTerremoto(){
-
     }
 
     //Al finalizar el juego nos aseguramos que si se inicia otra partida todo este por default

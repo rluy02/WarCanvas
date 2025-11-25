@@ -10,7 +10,5 @@ export const Eventos =  {
     STAR_NEW_MOVEMENT: "start_new_movement", // Se llama al empezar un nuevo movimiento con una 
     CHANGE_TURN: "change_turn",
     END_GAME: "end_game",
-    CONQUER_CELL: "conquer_cell", // Se lanza cuando se conquista una celda y se captura en turno gráfico para mostrar el texto
-    RANDOM_EVENT: "random_event", // Se lanza cuando ocurre un evento aleatorio
-    TERREMOTO: "terremoto" // Evento aleatorio de terremoto
+    CONQUER_CELL: "conquer_cell" // Se lanza cuando se conquista una celda y se captura en turno gráfico para mostrar el texto
 }
