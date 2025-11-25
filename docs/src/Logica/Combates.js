@@ -36,12 +36,13 @@ export default class Combates {
 
         let ataca = this.atacante.getPieza().getTipo();
         let defiende = this.defensa.getPieza().getTipo();
-        let bonusAtaca = 0;
+        let bonusAtaca;
         let bonusDefiende;
         let ganador;
 
+        bonusAtaca = atacaPieza.getBonusAtaque();
+
         if (ataca == 'Soldado') { 
-            bonusAtaca = 1; 
 
             let filSoldado = atacaPieza.getPosicion().fila;
             let colSoldado = atacaPieza.getPosicion().col;
@@ -62,14 +63,7 @@ export default class Combates {
 
             console.log("El soldado tiene de bonus: ", bonusAtaca)
         }
-        else if (ataca == 'Caballeria') { bonusAtaca = 2; }
-        else if (ataca == 'Artilleria') { bonusAtaca = 3; }
-        else if (ataca == 'Comandante') { bonusAtaca = 4; }
-
-        if (defiende == 'Soldado') { bonusDefiende = 1; }
-        else if (defiende == 'Caballeria') { bonusDefiende = 0; }
-        else if (defiende == 'Artilleria') { bonusDefiende = -1; }
-        else if (defiende == 'Comandante') { bonusDefiende = 5; }
+        bonusDefiende = defiendePieza.getBonusDefensa();
 
         let totalAtaque = dadosAtaque1 + dadosAtaque2 + bonusAtaca;
         let totalDefensa = dadosDefensa1 + dadosDefensa2 + bonusDefiende;

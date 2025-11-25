@@ -1,12 +1,14 @@
 export default class Pieza {
 
-    constructor(tipoPieza, fil, col, jugador, numMovimientos) {
+    constructor(tipoPieza, fil, col, jugador, numMovimientos, bonusAtaque, bonusDefensa) {
         this.tipoPieza = tipoPieza;
         this.fil = fil;
         this.col = col;
         this.jugador = jugador;
         this.numMovimientos = numMovimientos;
         this.movida = false;
+        this.bonusAtaque = bonusAtaque;
+        this.bonusDefensa = bonusDefensa;
       }
 
     moverse(fil, col) {
@@ -40,5 +42,13 @@ export default class Pieza {
 
     getMovida(){
       return this.movida;
+    }
+
+    getBonusAtaque() {
+      return this.bonusAtaque;
+    }
+
+    getBonusDefensa() {
+      return this.bonusDefensa;
     }
 }

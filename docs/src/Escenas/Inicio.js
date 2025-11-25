@@ -28,13 +28,13 @@ export default class Inicio extends Phaser.Scene {
     create() {
         this.crearAnimaciones();
 
-        this.piezas = [];
-        this.panelInfo = new PanelInfoPiezas(this);
-        this.panel = new PanelLateral(this, this.panelInfo);
-        this.turnoGrafico = new TurnoGraficos(this);
-
         //Creamos la instancia y la guardamos en tab
         this.tab = new Tablero();
+
+        this.piezas = [];
+        this.panelInfo = new PanelInfoPiezas(this);
+        this.panel = new PanelLateral(this, this.panelInfo, this.tab);
+        this.turnoGrafico = new TurnoGraficos(this);
 
         this.piezaGrafico = new PiezaGrafico(this, this.tab);
 

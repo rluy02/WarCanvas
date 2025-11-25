@@ -2,9 +2,10 @@ import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
 
 export default class PanelLateral {
-    constructor(escena, panelInfo) {
+    constructor(escena, panelInfo, tablero) {
         this.escena = escena;
         this.panelInfo = panelInfo;
+        this.tablero = tablero;
         let atacante = null;
         let defensa = null;
         this.create();
@@ -136,8 +137,8 @@ export default class PanelLateral {
         // Actualiza la información del panel
         this.titleText.setText('COMBATE');
         this.infoText.setText(`${mensaje}\n${resultado}`);
-        this.infoTextAttacker.setText(`Ataca ${atacante} = ${atacanteTirada1 + atacanteTirada2 + bonusAtaca} Bonus(${bonusAtaca})`);
-        this.infoTextDefender.setText(`Defiende ${defensa} = ${defensaTirada1 + defensaTirada2 + bonusDefiende} Bonus(${bonusDefiende})`);
+        this.infoTextAttacker.setText(`Ataca: ${atacante} = ${atacanteTirada1 + atacanteTirada2 + bonusAtaca} Bonus (${bonusAtaca})`);
+        this.infoTextDefender.setText(`Defiende: ${defensa} = ${defensaTirada1 + defensaTirada2 + bonusDefiende} Bonus (${bonusDefiende})`);
 
         this.diceImages.attacker[0].setTexture(`dice${atacanteTirada1}`);
         this.diceImages.attacker[1].setTexture(`dice${atacanteTirada2}`);
@@ -149,14 +150,18 @@ export default class PanelLateral {
         this.CombatInfo = true;
     }
 
-    updateInfo(fichaDefiende, fichaAtaque, equipoAtaque, equipoDefensa, accion) {
+    updateInfo(fichaDefiende, fichaAtaque, equipoAtaque, equipoDefensa, accion, casillaAtacante, casillaDefensa) {
+
+        let bonusAtaca = casillaDefensa.getPieza().getBonusAtaque();
+        bonusAtaca = this.bonus(bonusAtaca, casillaAtacante.getPieza(), casillaDefensa.getPieza());
+        let bonusDefiende = casillaDefensa.getPieza().getBonusDefensa();
 
         // Actualiza el título del panel
         this.titleText.setText('CONFIRMA EL COMBATE');
         // Actualiza la información del panel
         this.infoText.setText(fichaAtaque + ' de ' + equipoAtaque + ' ataca a ' + fichaDefiende + ' de ' + equipoDefensa);
-        this.infoTextAttacker.setText('Ataca: ' + equipoAtaque);
-        this.infoTextDefender.setText('Defiende: ' + equipoDefensa);
+        this.infoTextAttacker.setText(`Ataca: ${equipoAtaque} Bonus (${bonusAtaca})`);
+        this.infoTextDefender.setText(`Defiende: ${equipoDefensa} Bonus (${bonusDefiende})`);
 
         this.diceImages.attacker[0].setTexture(`dice${0}`);
         this.diceImages.attacker[1].setTexture(`dice${0}`);
@@ -178,6 +183,32 @@ export default class PanelLateral {
 
          this.buttonTry.disableInteractive();
          this.buttonTry.setVisible(false);
+    }
+
+    bonus(bonusAtaca, atacaPieza, defiendePieza) {
+        { 
+            if (atacaPieza.getTipo() == 'Soldado') {
+            let filSoldado = atacaPieza.getPosicion().fila;
+            let colSoldado = atacaPieza.getPosicion().col;
+
+            if (filSoldado == defiendePieza.getPosicion().fila){
+                let arriba = filSoldado - 1;
+                let abajo = filSoldado + 1;
+                
+                if (arriba >= 0 && this.tablero.getCelda(arriba, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
+                if (abajo < this.tablero.size().fila && this.tablero.getCelda(abajo, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
+            }
+            else {
+                let izquierda = colSoldado - 1;
+                let derecha = colSoldado + 1;
+                if (izquierda >= 0 && this.tablero.getCelda(filSoldado, izquierda).getTipo() == 'Soldado') bonusAtaca++;
+                if (derecha < this.tablero.size().fila && this.tablero.getCelda(filSoldado, derecha).getTipo() == 'Soldado') bonusAtaca++;
+            }
+
+            console.log("El soldado tiene de bonus: ", bonusAtaca)
+        }}
+
+        return bonusAtaca;
     }
 
 }
