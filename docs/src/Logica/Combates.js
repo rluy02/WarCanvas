@@ -80,15 +80,9 @@ export default class Combates {
         let ataca = this.atacante.getPieza();
         let defiende = this.defensa.getPieza();
 
-        // let resultado;
-        // if (ganador) {
-        // resultado = `Gana: ${ataca.getJugador()}, Muere ${defiende.getTipo()} de ${defiende.getJugador()}`;}
-        // else {
-        // resultado = `Gana: ${defiende.getJugador()}, Pierde ${ataca.getTipo()} de ${ataca.getJugador()}`;}
-
         let resultado = ganador
-            ? `Gana: ${ataca.getJugador()}, Muere ${defiende.getTipo()} de ${defiende.getJugador()}`
-            : `Gana: ${defiende.getJugador()}, Pierde ${ataca.getTipo()} de ${ataca.getJugador()}`;
+            ? `Gana ${ataca.getTipo()} de ${ataca.getJugador()}, Muere ${defiende.getTipo()} de ${defiende.getJugador()}`
+            : `Gana ${defiende.getTipo()} de ${defiende.getJugador()}, Pierde ${ataca.getTipo()} de ${ataca.getJugador()}`;
 
         let mensaje = `Ataca: ${ataca.getJugador()} Defiende: ${defiende.getJugador()}`;
 

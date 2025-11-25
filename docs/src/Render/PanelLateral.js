@@ -19,45 +19,18 @@ export default class PanelLateral {
         this.escena.add.rectangle(width - (sideWidth / 2), height / 2, sideWidth, height, 0xd4b37c);
 
         // Elementos del Panel
-        this.titleText = this.escena.add.text(width - sideWidth + 20, 20, 'COMBATE', { // Título
-            fontSize: '32px',
-            fontFamily: 'Arial',
-            fontStyle: 'bold',
-            fill: '#ffffff',
-            wordWrap: { width: 300, useAdvancedWrap: true } // Divide el texto si llega al borde (advancewrap - no divide palabras por la mitad)
-        });
+        this.titleText = this.createText(width - sideWidth + 20, 20, 'COMBATE', 300, 'bold', '32px', 0.0);
 
-        this.infoText = this.escena.add.text(width - sideWidth + 20, 100, 'Esperando acción...', { // Texto del combate (ej: Soldado vs Caballería)
-            fontSize: '18px',
-            fontFamily: 'Arial',
-            fill: '#ffffffff',
-            wordWrap: { width: 300, useAdvancedWrap: true } 
-        });
+        this.infoText = this.createText(width - sideWidth + 20, 100, 'Esperando acción...', 300, ' ', '18px', 0.0);
 
-        this.infoTextAttacker = this.escena.add.text(width - sideWidth / 2, 200, 'Ataca', { // Equipo que ataca
-            fontSize: '24px',
-            fontFamily: 'Arial',
+        this.infoTextAttacker = this.createText(width - sideWidth / 2, 200, 'Ataca', 300, ' ', '24px', 0.5);
 
-            fill: '#ffffffff',
-            wordWrap: { width: 300, useAdvancedWrap: true } 
-        }).setOrigin(0.5);
-
-        this.infoTextDefender = this.escena.add.text(width - sideWidth / 2, 300, 'Defiende', { // Equipo que defiende
-            fontSize: '24px',
-            fontFamily: 'Arial',
-
-            fill: '#ffffffff',
-            wordWrap: { width: 300, useAdvancedWrap: true } 
-        }).setOrigin(0.5);
+        this.infoTextDefender = this.createText(width - sideWidth / 2, 300, 'Defiende', 300, ' ', '24px', 0.5);
 
         //Boton de abrir panel de informacion
-        let btInfo = this.escena.add.text(width - 100, 25, 'INFO', { // Título
-            fontSize: '22px',
-            fontFamily: 'Arial',
-            fontStyle: 'bold',
-            fill: '#000000ff',
-        }).setInteractive();
-
+        let btInfo = this.createText(width - 100, 25, 'INFO', 0, 'bold', '22px', 0.0, '#000000ff');
+        btInfo.setInteractive();
+        
         btInfo.on('pointerdown', () => {
             this.panelInfo.abrirPanel();
         })
@@ -100,11 +73,8 @@ export default class PanelLateral {
 
         // Boton de Ataque / defensa
 
-        this.buttonTry = this.escena.add.text(width - sideWidth / 2, 500, ' ', {
-            color: '#ff0000',
-            fontFamily: 'Arial',
-            fontSize: '24px'
-        }).setOrigin(0.5).disableInteractive();
+        this.buttonTry = this.createText(width - sideWidth / 2, 500, ' ', 0, ' ', '24px', 0.5, '#ff0000');
+        this.buttonTry.disableInteractive();
 
         this.buttonTry.on('pointerdown', () => {
             // Se lanza el evento de ataque
@@ -133,6 +103,7 @@ export default class PanelLateral {
         });
     }
 
+    // Informacion del Combate
     updateCombatInfo(mensaje, resultado, atacante, defensa, atacanteTirada1, atacanteTirada2, defensaTirada1, defensaTirada2, bonusAtaca, bonusDefiende) {
         // Actualiza la información del panel
         this.titleText.setText('COMBATE');
@@ -150,6 +121,7 @@ export default class PanelLateral {
         this.CombatInfo = true;
     }
 
+    // Confirmar Ataque
     updateInfo(fichaDefiende, fichaAtaque, equipoAtaque, equipoDefensa, accion, casillaAtacante, casillaDefensa) {
 
         let bonusAtaca = casillaDefensa.getPieza().getBonusAtaque();
@@ -209,6 +181,16 @@ export default class PanelLateral {
         }}
 
         return bonusAtaca;
+    }
+
+    createText(width, height, text, wordWrapWidth, fontStyle, px, origin, fill = '#ffffffff') { 
+        return this.escena.add.text(width, height, text, { // Equipo que defiende
+            fontSize: px,
+            fontFamily: 'Arial',
+            fontStyle: fontStyle,
+            fill: fill,
+            wordWrap: { width: wordWrapWidth, useAdvancedWrap: true } 
+        }).setOrigin(origin);
     }
 
 }
