@@ -3,11 +3,12 @@ import { EventBus } from "../EventBus.js";
 import { turnoJugador } from "../Logica/Turno.js";
 
 export default class TableroGrafico {
-    constructor(escena, tablero, PanelLateral, tamCasilla = 64) {
+    constructor(escena, tablero, PanelLateral, tamCasilla, eventosAleatorios) {
         this.escena = escena;
         this.tablero = tablero;
         this.tamCasilla = tamCasilla;
         this.graficos = this.dibujarTablero(); //Este tablero visual esta lleno de "rects" //Phaser.GameObjects.Rectangle
+        this.eventosAleatorios = eventosAleatorios;
 
         this.mapaTopografico = this.escena.textures.get('mapaTopo').getSourceImage();
         this.mapaSatelital = this.escena.textures.get('mapaSat').getSourceImage();
@@ -83,6 +84,7 @@ export default class TableroGrafico {
         const jugador = pieza ? pieza.getJugador() : "";
 
         // Si no hay celda seleccionada y no esta vacía se marcan las oppciones de la pieza
+        if (pieza && this.eventosAleatorios?.piezaBloqueadaPorTerremoto(pieza)) return;
         if (pieza && this.celdaSeleccionada == null && !this.moviendoPieza && !pieza.getMovida() && jugador == turnoJugador) {
             // Si la celda contiene una pieza
             if (!celda.estaVacia()) {
