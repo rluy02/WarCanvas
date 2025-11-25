@@ -3,9 +3,10 @@ import { EventBus } from "../EventBus.js";
 import { turnoJugador } from "./Turno.js";
 
 export default class EventosAleatorios {
-    constructor(tablero, tableroGrafico) {
+    constructor(tablero, tableroGrafico, panelEventoAleatorio) {
         this.tablero = tablero;
         this.tableroGrafico = tableroGrafico;
+        this.panelEventoAleatorio = panelEventoAleatorio;
         this.piezasAfectadas = [];
         this.indiceEventoPrevio = null;
 
@@ -13,7 +14,8 @@ export default class EventosAleatorios {
         EventBus.on(Eventos.CHANGE_TURN, () => { this.resetEvents() });
         this.eventos = [{
             nombre: "Terremoto",
-            peso: 5,              // común
+            descripcion: "Un terremoto sacude el campo de batalla. Las piezas en las zonas afectadas no podrán moverse este turno.",
+            peso: 5,
             runEvent: () => {
                 console.log("Evento Terremoto activado");
                 let celdasAfectadas = [];
@@ -30,7 +32,7 @@ export default class EventosAleatorios {
                         celda.getPieza().setMovida(true);
                         this.piezasAfectadas.push(celda.getPieza());
                     }
-                    this.tableroGrafico.coloreaCelda(celda.fila, celda.columna, 0x0000ff, 0.3);
+                    this.tableroGrafico.coloreaCelda(celda.fila, celda.columna, 0x0000FF, 0.4);
                 }    
             },
             reset: () => {
@@ -43,7 +45,8 @@ export default class EventosAleatorios {
         }, 
         {
             nombre: "Fuerte Lluvia",
-            peso: 3,              // menos frecuente
+            descripcion: "Una fuerte lluvia erosiona el terreno conquistado, devolviendo algunas casillas a su estado neutral.",
+            peso: 2,
             runEvent: () => {
                 console.log("Evento Fuerte Lluvia activado");
                 let celdasAfectadas = [];
@@ -60,7 +63,6 @@ export default class EventosAleatorios {
                                 });
                             }
                         }
-                        
                     }
                 }
                 for (let celda of celdasAfectadas) {
@@ -72,7 +74,6 @@ export default class EventosAleatorios {
                 this.tableroGrafico.limpiarEventos();
             }
         }]; 
-            
     }
 
     resetEvents(){
@@ -81,6 +82,7 @@ export default class EventosAleatorios {
             this.indiceEventoPrevio = null;
         }
     }
+
     triggerEvent(){
         if (!this.eventos.length) return;
         const total = this.eventos.reduce((s,e)=> s + (e.peso || 1), 0);
@@ -89,7 +91,15 @@ export default class EventosAleatorios {
             r -= (this.eventos[i].peso || 1);
             if (r <= 0){
                 this.indiceEventoPrevio = i;
-                this.eventos[i].runEvent();
+                const evento = this.eventos[i];
+                
+                // Emitir evento para mostrar panel ANTES de ejecutar
+                this.panelEventoAleatorio.mostrar(evento.nombre, evento.descripcion);
+                
+                // Ejecutar después de un pequeño delay para que se vea el panel
+                setTimeout(() => {
+                    evento.runEvent();
+                }, 100);
                 return;
             }
         }

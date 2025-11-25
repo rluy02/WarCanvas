@@ -113,7 +113,7 @@ export default class Turno {
 
             EventBus.emit(Eventos.CHANGE_TURN, turnoJugador);
 
-            if (Math.random() < 0.25) {
+            if (Math.random() < 0.2) { // 20% de probabilidad de evento aleatorio
                 EventBus.emit(Eventos.RANDOM_EVENT);
             }
         }

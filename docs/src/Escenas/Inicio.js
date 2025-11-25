@@ -10,6 +10,8 @@ import Combates from "../Logica/Combates.js";
 import Turno, { turnoJugador } from "../Logica/Turno.js";
 import Equipo from "../Logica/Equipo.js";
 import PanelInfoPiezas from "../Render/PanelInfoPiezas.js";
+import EventosAleatorios from "../Logica/EventosAleatorios.js";
+import PanelEventoAleatorio from "../Render/PanelEventoAleatorio.js";
 
 
 export default class Inicio extends Phaser.Scene {
@@ -35,13 +37,14 @@ export default class Inicio extends Phaser.Scene {
         this.panelInfo = new PanelInfoPiezas(this);
         this.panel = new PanelLateral(this, this.panelInfo, this.tab);
         this.turnoGrafico = new TurnoGraficos(this);
+        this.panelEventoAleatorio = new PanelEventoAleatorio(this);
 
         this.piezaGrafico = new PiezaGrafico(this, this.tab);
 
         //Dibujamos el tablero
         this.tabGrafico = new TableroGrafico(this, this.tab, this.panel);
 
-        this.eventosAleatorios = new EventosAleatorios(this.tab, this.tabGrafico);
+        this.eventosAleatorios = new EventosAleatorios(this.tab, this.tabGrafico, this.panelEventoAleatorio);
 
 
         this.combates = new Combates(this.tab, this.tabGrafico, this.panel);
