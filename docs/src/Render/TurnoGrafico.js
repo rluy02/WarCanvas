@@ -15,6 +15,10 @@ export default class TurnoGraficos {
             this.setPorcentaje(pJ1, pJ2);
         })
 
+        EventBus.on(Eventos.UPDATE_PERCENTAGES, (pJ1, pJ2) => {
+            this.setPorcentaje(pJ1, pJ2);
+        })
+
         this.create();
     }
 

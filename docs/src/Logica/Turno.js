@@ -112,6 +112,10 @@ export default class Turno {
             this.piezasMovidas = [];
 
             EventBus.emit(Eventos.CHANGE_TURN, turnoJugador);
+
+            if (Math.random() < 0.25) {
+                EventBus.emit(Eventos.RANDOM_EVENT);
+            }
         }
     }
 

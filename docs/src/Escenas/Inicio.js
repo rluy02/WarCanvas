@@ -41,6 +41,9 @@ export default class Inicio extends Phaser.Scene {
         //Dibujamos el tablero
         this.tabGrafico = new TableroGrafico(this, this.tab, this.panel);
 
+        this.eventosAleatorios = new EventosAleatorios(this.tab, this.tabGrafico);
+
+
         this.combates = new Combates(this.tab, this.tabGrafico, this.panel);
         this.turno = new Turno(3, this.turnoGrafico);
 
@@ -58,7 +61,6 @@ export default class Inicio extends Phaser.Scene {
             this.piezaGrafico.dibujarPieza(pieza);
             this.piezas.push(pieza);
         }
-
         // Se añade un evento para cuando se mueve la pieza
         EventBus.on(Eventos.PIECE_MOVED, (pieza) => {
             this.moverPieza(pieza);

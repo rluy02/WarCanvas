@@ -11,4 +11,6 @@ export const Eventos =  {
     CHANGE_TURN: "change_turn",
     END_GAME: "end_game",
     CONQUER_CELL: "conquer_cell" // Se lanza cuando se conquista una celda y se captura en turno gráfico para mostrar el texto
-}
+    UPDATE_PERCENTAGES: "update_percentages", // Se lanza para actualizar los porcentajes de conquista en el panel lateral
+    RANDOM_EVENT: "random_event" // Se lanza cuando se produce un evento aleatorio
+	}
