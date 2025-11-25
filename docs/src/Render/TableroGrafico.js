@@ -3,12 +3,11 @@ import { EventBus } from "../EventBus.js";
 import { turnoJugador } from "../Logica/Turno.js";
 
 export default class TableroGrafico {
-    constructor(escena, tablero, PanelLateral, tamCasilla, eventosAleatorios) {
+    constructor(escena, tablero, PanelLateral, tamCasilla = 64) {
         this.escena = escena;
         this.tablero = tablero;
         this.tamCasilla = tamCasilla;
         this.graficos = this.dibujarTablero(); //Este tablero visual esta lleno de "rects" //Phaser.GameObjects.Rectangle
-        this.eventosAleatorios = eventosAleatorios;
 
         this.mapaTopografico = this.escena.textures.get('mapaTopo').getSourceImage();
         this.mapaSatelital = this.escena.textures.get('mapaSat').getSourceImage();
@@ -28,14 +27,9 @@ export default class TableroGrafico {
         //Si se esta moviendo
         this.moviendoPieza = false;
 
-        this.casillasTerremoto = [];
-        this.capasTerremoto = [];
-
         EventBus.on(Eventos.PIECE_END_ACTIONS, () => {
             this.restTablero();
         });
-        EventBus.on(Eventos.TERREMOTO, (celdas = []) => this.mostrarTerremoto(celdas));
-        EventBus.on(Eventos.CHANGE_TURN, () => this.restaurarTerremoto());
 
         for (let fila = 0; fila < this.tablero.filas; fila++) {
             for (let col = 0; col < this.tablero.columnas; col++) {
@@ -75,6 +69,7 @@ export default class TableroGrafico {
                 graficos[fila][col] = rect;
             }
         }
+
         return graficos;
     }
 
@@ -84,7 +79,6 @@ export default class TableroGrafico {
         const jugador = pieza ? pieza.getJugador() : "";
 
         // Si no hay celda seleccionada y no esta vacía se marcan las oppciones de la pieza
-        if (pieza && this.eventosAleatorios?.piezaBloqueadaPorTerremoto(pieza)) return;
         if (pieza && this.celdaSeleccionada == null && !this.moviendoPieza && !pieza.getMovida() && jugador == turnoJugador) {
             // Si la celda contiene una pieza
             if (!celda.estaVacia()) {
@@ -257,48 +251,6 @@ export default class TableroGrafico {
         rt.mapKey = key;
 
         this.graficos[fila][col].imagen = rt;
-    }
-
-    mostrarTerremoto(casillasAfectadas) {
-        if (!Array.isArray(casillasAfectadas) || !casillasAfectadas.length) return;
-        // Limpiar efecto previo
-        this.restaurarTerremoto();
-
-        this.casillasTerremoto = casillasAfectadas.map(c => ({ fila: c.fila, columna: c.columna }));
-        for (const celda of casillasAfectadas) {
-            const { fila, columna } = celda;
-            if (fila < 0 || columna < 0 || fila >= this.tablero.filas || columna >= this.tablero.columnas) continue;
-
-            const x = columna * this.tamCasilla + this.tamCasilla / 2;
-            const y = fila * this.tamCasilla + this.tamCasilla / 2;
-
-            const capa = this.escena.add.rectangle(x, y, this.tamCasilla, this.tamCasilla, 0x0000FF, 0.45)
-                .setDepth(9)
-                .setOrigin(0.5);
-            this.capasTerremoto.push(capa);
-
-            // Borde para distinguir
-            if (this.graficos && this.graficos[fila] && this.graficos[fila][columna]) {
-                this.graficos[fila][columna].setStrokeStyle(3, 0x555555);
-            }
-        }
-    }
-
-    restaurarTerremoto() {
-        if (!this.capasTerremoto.length) return;
-        this.capasTerremoto.forEach(r => r.destroy());
-        this.capasTerremoto = [];
-
-        for (const celda of this.casillasTerremoto) {
-            const { fila, columna } = celda;
-            if (fila < 0 || columna < 0 || fila >= this.tablero.filas || columna >= this.tablero.columnas) continue;
-            if (this.graficos && this.graficos[fila] && this.graficos[fila][columna]) {
-                const baseColor = ((fila + columna) % 2 === 0) ? 0xffffff : 0xcccccc;
-                this.graficos[fila][columna].setFillStyle(baseColor);
-                this.graficos[fila][columna].setStrokeStyle(1, 0x000000);
-            }
-        }
-        this.casillasTerremoto = [];
     }
 
     restTablero() {
