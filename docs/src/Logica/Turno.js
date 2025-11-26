@@ -4,7 +4,8 @@ import { EventBus } from "../EventBus.js";
 export let turnoJugador = "J1";
 
 export default class Turno {
-    constructor(acciones, turnoGrafico) {
+    constructor(escena, acciones, turnoGrafico) {
+        this.escena = escena;
         this.accionesTurno = acciones;
         this.acionActual = 0;
 
@@ -35,50 +36,50 @@ export default class Turno {
 
     restarAccion() {
 
-    if (!this.piezaActual) return;
+        if (!this.piezaActual) return;
 
-    const posAntes = this.posicionPieza; // posición guardada antes de mover
-    const posDespues = this.piezaActual.getPosicion();
+        const posAntes = this.posicionPieza; // posición guardada antes de mover
+        const posDespues = this.piezaActual.getPosicion();
 
-    const df = Math.abs(posDespues.fila - posAntes.fila);
-    const dc = Math.abs(posDespues.col - posAntes.col);
+        const df = Math.abs(posDespues.fila - posAntes.fila);
+        const dc = Math.abs(posDespues.col - posAntes.col);
 
-    const distancia = df + dc; // movimiento Manhattan
+        const distancia = df + dc; // movimiento Manhattan
 
-    if (this.piezaActual.getTipo() === "Caballeria" &&
-        this.piezaActual.getSaltoCaballeria() === true &&
-        distancia === 2) {
+        if (this.piezaActual.getTipo() === "Caballeria" &&
+            this.piezaActual.getSaltoCaballeria() === true &&
+            distancia === 2) {
 
-        // Se ha usado salto
-        this.movimientosPieza -= 2;
-        this.piezaActual.setSaltoCaballeria(false);
-        console.log("Se ha usado el salto de caballeria");
+            // Se ha usado salto
+            this.movimientosPieza -= 2;
+            this.piezaActual.setSaltoCaballeria(false);
+            console.log("Se ha usado el salto de caballeria");
 
-    } else {
+        } else {
 
-        // Movimiento normal
-        this.movimientosPieza -= 1;
+            // Movimiento normal
+            this.movimientosPieza -= 1;
+        }
+
+        // Actualizamos la posición guardada
+        this.posicionPieza = this.piezaActual.getPosicion();
+
+        // Evitar que el salto quede 'activo' sin usarlo
+        if (this.piezaActual.getTipo() === "Caballeria" &&
+            this.piezaActual.getSaltoCaballeria() === true &&
+            this.movimientosPieza < 2) {
+
+            this.piezaActual.setSaltoCaballeria(false);
+            console.log("no se ha usado el salto de caballeria");
+        }
+
+        this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
+
+        if (this.movimientosPieza <= 0) {
+            this.piezasMovidas.push(this.piezaActual);
+            EventBus.emit(Eventos.PIECE_END_ACTIONS);
+        }
     }
-
-    // Actualizamos la posición guardada
-    this.posicionPieza = this.piezaActual.getPosicion();
-
-    // Evitar que el salto quede 'activo' sin usarlo
-    if (this.piezaActual.getTipo() === "Caballeria" &&
-        this.piezaActual.getSaltoCaballeria() === true &&
-        this.movimientosPieza < 2) {
-
-        this.piezaActual.setSaltoCaballeria(false);
-        console.log("no se ha usado el salto de caballeria");
-    }
-
-    this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
-
-    if (this.movimientosPieza <= 0) {
-        this.piezasMovidas.push(this.piezaActual);
-        EventBus.emit(Eventos.PIECE_END_ACTIONS);
-    }
-}
 
 
     acabarMovimientos() {
@@ -113,7 +114,7 @@ export default class Turno {
 
             EventBus.emit(Eventos.CHANGE_TURN, turnoJugador);
 
-            if (Math.random() < 0.2) { // 20% de probabilidad de evento aleatorio
+            if (!this.escena.partidaTerminadaFlag && Math.random() < 0.2) { // 20% de probabilidad de evento aleatorio y que la partida no este terminada
                 EventBus.emit(Eventos.RANDOM_EVENT);
             }
         }

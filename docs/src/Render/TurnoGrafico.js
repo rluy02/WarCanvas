@@ -93,4 +93,8 @@ export default class TurnoGraficos {
         this.porcentajeJ1Text.text = 'J1: ' + pJ1 + '%';
         this.porcentajeJ2Text.text = 'J1: ' + pJ2 + '%';
     }
+
+    desactivarUI() {
+    if (this.acabarText) this.acabarText.disableInteractive();
+}
 }

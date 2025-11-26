@@ -2,7 +2,7 @@ import PanelColocarPiezas from "../Render/PanelColocarPiezas.js";
 import ColocarPiezas from "../Logica/ColocarPiezas.js";
 import TableroGraficoColocarPiezas from "../Render/TableroGaficoColocarPiezas.js";
 import PiezaGrafico from "../Render/PiezaGrafico.js";
-import PanelEventoAleatorio from "../Render/PanelEventoAleatorio.js";
+import PanelEventos from "../Render/PanelEventos.js";
 import Equipo from "../Logica/Equipo.js";
 import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
@@ -36,8 +36,8 @@ export default class EscenaColocarPiezas extends Phaser.Scene {
         this.tabGrafico = new TableroGraficoColocarPiezas(this.equipoJ1, this.equipoJ2, this, this.tab);
 
         this.panelElegirPiezas = new PanelColocarPiezas(this, this.tab, this.tabGrafico, this.equipoJ1, this.equipoJ2);
-        this.PanelEventoAleatorio = new PanelEventoAleatorio(this);
-        this.PanelEventoAleatorio.mostrar('Colocar el tablero', 'Para posicionar las piezas en el tablero, pulsa las casillas disponibles. Para modificar una pieza, pulsa sobre ella y selecciona su nueva posición.', 'WarCanvas');
+        this.PanelEventos = new PanelEventos(this);
+        this.PanelEventos.mostrar('Colocar el tablero', 'Para posicionar las piezas en el tablero, pulsa las casillas disponibles. Para modificar una pieza, pulsa sobre ella y selecciona su nueva posición.', 'WarCanvas');
 
          EventBus.on(Eventos.PIECE_POSITION, (pieza) => {
             this.piezaPosicionada(pieza); // Emit en ElegirPieza Tablero

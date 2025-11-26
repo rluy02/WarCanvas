@@ -1,7 +1,7 @@
 import { EventBus } from "../EventBus.js";
 import { Eventos } from "../Events.js";
 
-export default class PanelEventoAleatorio {
+export default class PanelEventos {
     constructor(escena) {
         this.escena = escena;
         this.contenedor = null;
@@ -9,7 +9,7 @@ export default class PanelEventoAleatorio {
         // ← YA NO escucha eventos
     }
 
-    mostrar(nombre, descripcion, textoTitulo='EVENTO ALEATORIO') {
+    mostrar(nombre, descripcion, textoTitulo = 'EVENTO ALEATORIO', textoBoton = 'ACEPTAR', onClose = null) {
         if (this.isVisible) return;
 
         this.isVisible = true;
@@ -77,7 +77,7 @@ export default class PanelEventoAleatorio {
 
         const botonTexto = this.escena.add.text(
             centerX, centerY + 90,
-            'ACEPTAR',
+            textoBoton,
             {
                 fontSize: '16px',
                 fontFamily: 'Arial',
@@ -122,6 +122,7 @@ export default class PanelEventoAleatorio {
 
         botonRect.on('pointerdown', () => {
             this.ocultar();
+            if (onClose) onClose(); //el callback
         });
 
         // Guardar referencias para destruir después
@@ -141,7 +142,7 @@ export default class PanelEventoAleatorio {
 
         // Guardar referencia local antes de que se vuelva null
         const elementos = this.contenedor;
-        
+
         // Marcar como no visible inmediatamente para prevenir llamadas duplicadas
         this.isVisible = false;
         this.contenedor = null;

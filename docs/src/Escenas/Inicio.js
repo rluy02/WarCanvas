@@ -11,21 +11,21 @@ import Turno, { turnoJugador } from "../Logica/Turno.js";
 import Equipo from "../Logica/Equipo.js";
 import PanelInfoPiezas from "../Render/PanelInfoPiezas.js";
 import EventosAleatorios from "../Logica/EventosAleatorios.js";
-import PanelEventoAleatorio from "../Render/PanelEventoAleatorio.js";
+import PanelEventos from "../Render/PanelEventos.js";
 
 
 export default class Inicio extends Phaser.Scene {
     constructor() {
-        super("Inicio"); 
-        console.log("Inicio constructor"); 
+        super("Inicio");
+        console.log("Inicio constructor");
     }
 
     init(datos) {
         console.log("INIT RECIBE:", datos);
         console.log("Equipo1:", datos.equipo1);
 
-        if(datos.equipo1) this.equipo1 = datos.equipo1;
-        if(datos.equipo2)this.equipo2 = datos.equipo2;
+        if (datos.equipo1) this.equipo1 = datos.equipo1;
+        if (datos.equipo2) this.equipo2 = datos.equipo2;
         console.log(this.equipo1);
     }
 
@@ -43,29 +43,29 @@ export default class Inicio extends Phaser.Scene {
         this.panelInfo = new PanelInfoPiezas(this);
         this.panel = new PanelLateral(this, this.panelInfo, this.tab);
         this.turnoGrafico = new TurnoGraficos(this);
-        this.panelEventoAleatorio = new PanelEventoAleatorio(this);
+        this.panelEventos = new PanelEventos(this);
 
         this.piezaGrafico = new PiezaGrafico(this, this.tab);
 
         //Dibujamos el tablero
         this.tabGrafico = new TableroGrafico(this, this.tab, this.panel);
 
-        this.eventosAleatorios = new EventosAleatorios(this.tab, this.tabGrafico, this.panelEventoAleatorio);
+        this.eventosAleatorios = new EventosAleatorios(this.tab, this.tabGrafico, this.panelEventos);
 
 
         this.combates = new Combates(this.tab, this.tabGrafico, this.panel);
-        this.turno = new Turno(3, this.turnoGrafico);
+        this.turno = new Turno(this, 3, this.turnoGrafico);
 
 
-        if(this.equipo1 == undefined) this.equipo1 = new Equipo("J1", this.tab, true);
-        if(this.equipo2 == undefined) this.equipo2 = new Equipo("J2", this.tab, true);
+        if (this.equipo1 == undefined) this.equipo1 = new Equipo("J1", this.tab, true);
+        if (this.equipo2 == undefined) this.equipo2 = new Equipo("J2", this.tab, true);
 
         console.log(this.equipo1);
 
         // Dibujamos las piezas
         for (let pieza of this.equipo1.piezas) {
             let pos = pieza.getPosicion();
-            this.tab.getCelda(pos.fila, pos.col).setContenido(pieza); 
+            this.tab.getCelda(pos.fila, pos.col).setContenido(pieza);
             this.piezaGrafico.dibujarPieza(pieza);
             this.piezas.push(pieza);
         }
@@ -88,16 +88,50 @@ export default class Inicio extends Phaser.Scene {
             this.tab.moverPiezaCombate(move.fila, move.col, ataca);
         });
 
+        this.partidaTerminadaFlag = false;
         //Finalizacion de la partida
-        EventBus.on(Eventos.END_GAME, (piezaGanadora) => {
-            console.log("Victoria para el jugador: " + piezaGanadora.getJugador());
-            //esperamos 1seg para que se vea la animacion de derrota del comandante
-            //esto luego podria interesar para animaciones o pantallas,botones,etc de victoria
-            this.time.delayedCall(1000, () => this.terminarPartida());
+        EventBus.on(Eventos.END_GAME, (info) => {
+            this.partidaTerminadaFlag = true;
+            this.partidaTerminada(info);
         });
 
         this.panel.create();
         this.panelInfo.crearPanel();
+    }
+
+    //Metodo que create el panel de finalizacion de partida y con boton que lleva al menu
+    partidaTerminada(info) {
+        this.bloquearInteraccion();
+        //2s de delay para visualizar el mapa tras la victoria/derrota
+        this.time.delayedCall(2000, () => {
+            let nombre = "";
+            let descripcion = "";
+            let titulo = "";
+
+            if (info.jugador === "J1") {
+                nombre = '¡El equipo dibujado vence!';
+                titulo = 'VICTORIA';
+                if (info.tipo === "COMBATE")
+                    descripcion = '¡Has conseguido derrotar al comandante rival!';
+                else
+                    descripcion = '¡Has logrado conquistar el territorio!'
+            } else {
+                nombre = 'El equipo realista vence';
+                titulo = 'DERROTA';
+                if (info.tipo === "COMBATE")
+                    descripcion = '¡Las fuerzas enemigas han derrotado a Drawful!';
+                else
+                    descripcion = '¡El enemigo ha logrado dominar el territorio!'
+            }
+
+            this.panelEventos.mostrar(
+                nombre,
+                descripcion,
+                titulo,          // Título
+                'IR AL MENÚ',         // Texto del botón
+                () => this.ResetInfoYcambiarEscena() // callback al cerrar
+            );
+        });
     }
 
     // Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
@@ -119,7 +153,7 @@ export default class Inicio extends Phaser.Scene {
     }
 
     //Metodo que finaliza la partida actual y envia al jugador a la pantalla del menu
-    terminarPartida() {
+    ResetInfoYcambiarEscena() {
         if (this.turno) {
             this.turno.reiniciarTurno();
             this.turno.destruirListeners();
@@ -136,16 +170,37 @@ export default class Inicio extends Phaser.Scene {
         this.scene.wake("Menu"); //Reactivamos la visibilidad del menu
     }
 
-    crearAnimaciones() {
-        if (!this.anims.exists('explotar')){this.anims.create({
-            key: 'explotar',
-            frames: this.anims.generateFrameNumbers('explosion', { frames:[0,1,2,3,4,5,6,7]}),
-            frameRate: 10,
-            repeat: 0
-        });}
+    bloquearInteraccion() {
+        // Bloquear tablero gráfico (si usa input propio)
+        if (this.tabGrafico) this.tabGrafico.desactivarTablero();
+
+        // Desactivar botón de pasar turno
+        if (this.turnoGrafico) this.turnoGrafico.desactivarUI();
+
+
+        //Desactivar el btn INFO de piezas
+        if (this.panel) this.panel.desactivarBtnInfo();
+
+
+        if (this.panelInfo) this.panelInfo.cerrarYbloquearPanel(); //si termina la partida con el panel abierto, fuerzo el cierre
+
+        //por si necesitamos seguir desactivando objetos tener en cuenta esto...
+        /* Text + .on() → Listener permanece incluso después de disableInteractive().
+           Sprite / Rect + .on() o EventBus → Listener suele ser removido o ignorado cuando desactivas input o destruyes objeto. */
     }
 
-    crearImagenes(){
+    crearAnimaciones() {
+        if (!this.anims.exists('explotar')) {
+            this.anims.create({
+                key: 'explotar',
+                frames: this.anims.generateFrameNumbers('explosion', { frames: [0, 1, 2, 3, 4, 5, 6, 7] }),
+                frameRate: 10,
+                repeat: 0
+            });
+        }
+    }
+
+    crearImagenes() {
         for (let i = 0; i <= 6; i++) {
             this.load.image(`dice${i}`, `./imgs/dice/dice${i}.webp`);
         }
@@ -165,7 +220,7 @@ export default class Inicio extends Phaser.Scene {
         this.load.image('artilleria', './imgs/piezas/artilleriaJ1.webp');
         this.load.image('artilleria2', './imgs/piezas/artilleriaJ1.webp');
 
-        this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', {frameWidth: 144, frameHeight: 128});
+        this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
         console.log(this.textures.get('explosion').frameTotal);
     }
 

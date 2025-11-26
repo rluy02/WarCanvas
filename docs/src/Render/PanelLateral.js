@@ -28,19 +28,20 @@ export default class PanelLateral {
         this.infoTextDefender = this.createText(width - sideWidth / 2, 300, 'Defiende', 300, ' ', '24px', 0.5);
 
         //Boton de abrir panel de informacion
-        let btInfo = this.createText(width - 100, 25, 'INFO', 0, 'bold', '22px', 0.0, '#000000ff');
-        btInfo.setInteractive();
-        
-        btInfo.on('pointerdown', () => {
+        this.btInfo = this.createText(width - 100, 25, 'INFO', 0, 'bold', '22px', 0.0, '#000000ff');
+        this.btInfo.setInteractive();
+
+
+        this.btInfo.on('pointerdown', () => {
             this.panelInfo.abrirPanel();
         })
 
-        btInfo.on('pointerover', () => {
-            btInfo.setColor('#ffffffff');
+        this.btInfo.on('pointerover', () => {
+            this.btInfo.setColor('#ffffffff');
         })
 
-        btInfo.on('pointerout', () => {
-            btInfo.setColor('#000000ff');
+        this.btInfo.on('pointerout', () => {
+            this.btInfo.setColor('#000000ff');
         })
 
         if (!this.escena.anims.exists('roll')) {
@@ -94,12 +95,12 @@ export default class PanelLateral {
             if (anim.key === 'roll') {
                 if (this.ataque == true)
                     EventBus.emit(Eventos.ATACK); // Se recibe en combate
-                    this.ataque = false;
+                this.ataque = false;
             }
         });
 
         EventBus.on(Eventos.CLEAN_SIDE_PANEL, () => {
-            if(this.CombatInfo === false) this.updateInfoEsperandoAccion();
+            if (this.CombatInfo === false) this.updateInfoEsperandoAccion();
         });
     }
 
@@ -148,49 +149,58 @@ export default class PanelLateral {
     }
 
     updateInfoEsperandoAccion() {
-         this.titleText.setText('COMBATE');
-         this.infoText.setText('Esperando acción...');
-         this.infoTextAttacker.setText('Ataca');
-         this.infoTextDefender.setText('Defiende');
+        this.titleText.setText('COMBATE');
+        this.infoText.setText('Esperando acción...');
+        this.infoTextAttacker.setText('Ataca');
+        this.infoTextDefender.setText('Defiende');
 
-         this.buttonTry.disableInteractive();
-         this.buttonTry.setVisible(false);
+        this.buttonTry.disableInteractive();
+        this.buttonTry.setVisible(false);
     }
 
     bonus(bonusAtaca, atacaPieza, defiendePieza) {
-        { 
+        {
             if (atacaPieza.getTipo() == 'Soldado') {
-            let filSoldado = atacaPieza.getPosicion().fila;
-            let colSoldado = atacaPieza.getPosicion().col;
+                let filSoldado = atacaPieza.getPosicion().fila;
+                let colSoldado = atacaPieza.getPosicion().col;
 
-            if (filSoldado == defiendePieza.getPosicion().fila){
-                let arriba = filSoldado - 1;
-                let abajo = filSoldado + 1;
-                
-                if (arriba >= 0 && this.tablero.getCelda(arriba, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
-                if (abajo < this.tablero.size().fila && this.tablero.getCelda(abajo, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
-            }
-            else {
-                let izquierda = colSoldado - 1;
-                let derecha = colSoldado + 1;
-                if (izquierda >= 0 && this.tablero.getCelda(filSoldado, izquierda).getTipo() == 'Soldado') bonusAtaca++;
-                if (derecha < this.tablero.size().fila && this.tablero.getCelda(filSoldado, derecha).getTipo() == 'Soldado') bonusAtaca++;
-            }
+                if (filSoldado == defiendePieza.getPosicion().fila) {
+                    let arriba = filSoldado - 1;
+                    let abajo = filSoldado + 1;
 
-            console.log("El soldado tiene de bonus: ", bonusAtaca)
-        }}
+                    if (arriba >= 0 && this.tablero.getCelda(arriba, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
+                    if (abajo < this.tablero.size().fila && this.tablero.getCelda(abajo, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
+                }
+                else {
+                    let izquierda = colSoldado - 1;
+                    let derecha = colSoldado + 1;
+                    if (izquierda >= 0 && this.tablero.getCelda(filSoldado, izquierda).getTipo() == 'Soldado') bonusAtaca++;
+                    if (derecha < this.tablero.size().fila && this.tablero.getCelda(filSoldado, derecha).getTipo() == 'Soldado') bonusAtaca++;
+                }
+
+                console.log("El soldado tiene de bonus: ", bonusAtaca)
+            }
+        }
 
         return bonusAtaca;
     }
 
-    createText(width, height, text, wordWrapWidth, fontStyle, px, origin, fill = '#ffffffff') { 
+    createText(width, height, text, wordWrapWidth, fontStyle, px, origin, fill = '#ffffffff') {
         return this.escena.add.text(width, height, text, { // Equipo que defiende
             fontSize: px,
             fontFamily: 'Arial',
             fontStyle: fontStyle,
             fill: fill,
-            wordWrap: { width: wordWrapWidth, useAdvancedWrap: true } 
+            wordWrap: { width: wordWrapWidth, useAdvancedWrap: true }
         }).setOrigin(origin);
+    }
+
+    desactivarBtnInfo() {
+        if (this.btInfo) {
+            this.btInfo.setVisible(false);
+            // this.btInfo.removeAllListeners(); //el pointer lo mantiene vivo con el .on y sigue pudiendo activarse su funciones (por eso lo fuerzo en abrir panel)
+            this.btInfo.disableInteractive();
+        }
     }
 
 }

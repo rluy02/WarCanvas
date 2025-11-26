@@ -94,7 +94,7 @@ export default class TableroGrafico {
             console.log(this.esTipoCelda(fila, col));
             //Si es artilleria va aparte
             if (this.tablero.getPiezaActiva().getTipo() === "Artilleria" && this.tablero.getPiezaActiva().puedeDisparar() && this.esTipoCelda(fila, col)) {
-                
+
                 this.tablero.getPiezaActiva().lanzarProyectil(fila, col, this.escena, this.tablero);
                 EventBus.emit(Eventos.PIECE_MOVED, this.tablero.getPiezaActiva());
 
@@ -169,7 +169,7 @@ export default class TableroGrafico {
     // Mira si la celda (fil,col) esta entre las seleccionadas, y ademas mira que el tipo sea correcto
     esTipoCelda(fil, col, tipo = "") {
         for (let celda of this.celdasColoreadas) {
-            if (tipo == ""){
+            if (tipo == "") {
                 if (celda.fil == fil && celda.col == col) return true;
             }
             else {
@@ -284,5 +284,13 @@ export default class TableroGrafico {
 
         this.limpiarTablero();
         this.celdaSeleccionada = null;
+    }
+
+    desactivarTablero() {
+        for (let fila = 0; fila < this.tablero.filas; fila++) {
+            for (let col = 0; col < this.tablero.columnas; col++) {
+                this.graficos[fila][col].disableInteractive();
+            }
+        }
     }
 }

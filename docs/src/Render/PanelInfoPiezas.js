@@ -2,6 +2,7 @@ export default class PanelInfoPiezas {
     constructor(escena) {
         this.escena = escena;
         this.elementos = [];
+        this.forceClose = false;
     }
 
     crearPanel() {
@@ -69,10 +70,10 @@ export default class PanelInfoPiezas {
         this.elementos.push(cerrarBoton);
 
         // IMAGENES
-        this.cargarImagen('peon', {x: 710, y: 140}, 0.12);
-        this.cargarImagen('caballeria', {x: 710, y: 240}, 0.04);
-        this.cargarImagen('comandante', {x: 710, y: 340}, 0.1);
-        this.cargarImagen('artilleria', {x: 710, y: 440}, 0.15);
+        this.cargarImagen('peon', { x: 710, y: 140 }, 0.12);
+        this.cargarImagen('caballeria', { x: 710, y: 240 }, 0.04);
+        this.cargarImagen('comandante', { x: 710, y: 340 }, 0.1);
+        this.cargarImagen('artilleria', { x: 710, y: 440 }, 0.15);
 
         this.cerrarPanel();
     }
@@ -89,24 +90,35 @@ export default class PanelInfoPiezas {
         this.elementos.push(text);
     }
 
-    cargarImagen(sprite, pos, size){
+    cargarImagen(sprite, pos, size) {
         let img = this.escena.add.sprite(this.esquinaPanel.x + pos.x, this.esquinaPanel.y + pos.y, sprite);
         img.setScale(size);
         img.setDepth(1000);
         this.elementos.push(img);
     }
 
-    cerrarPanel(){
-        for (let obj of this.elementos){
-            obj.setActive(false);
-            obj.setVisible(false);
+    cerrarPanel() {
+        for (let obj of this.elementos) {
+            if (obj.active) {
+                obj.setActive(false);
+                obj.setVisible(false);
+            }
+        }
+
+    }
+
+    abrirPanel() {
+        if (!this.forceClose) { //para evitar que se pueda abrir tras terminar la partida
+            for (let obj of this.elementos) {
+                obj.setActive(true);
+                obj.setVisible(true);
+            }
         }
     }
 
-    abrirPanel(){
-        for (let obj of this.elementos){
-            obj.setActive(true);
-            obj.setVisible(true);
-        }
+    cerrarYbloquearPanel() {
+        // Cerrar panel si estaba abierto
+        this.cerrarPanel();
+        this.forceClose = true;
     }
 }

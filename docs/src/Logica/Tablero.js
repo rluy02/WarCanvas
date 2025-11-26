@@ -72,7 +72,7 @@ export default class Tablero {
             }
             else {
                 iniCol = pieza.getPosicion().col - 4; // La siguiente a la artilleria
-                maxCol = pieza.getPosicion().col ;
+                maxCol = pieza.getPosicion().col;
                 console.log(iniCol, " ", maxCol);
             }
 
@@ -111,19 +111,19 @@ export default class Tablero {
                     if (esRival) celdasSeleccionadas.push({ fil: f, col: c, tipo: "enemigo" });
                     if (pieza.getTipo() == "Caballeria" && pieza.getSaltoCaballeria()) {
 
-            const f2 = f + dir.df;
-            const c2 = c + dir.dc;
+                        const f2 = f + dir.df;
+                        const c2 = c + dir.dc;
 
-            // Comprobar límites correctamente
-            if (f2 >= 0 && f2 < this.filas && c2 >= 0 && c2 < this.columnas) {
+                        // Comprobar límites correctamente
+                        if (f2 >= 0 && f2 < this.filas && c2 >= 0 && c2 < this.columnas) {
 
-                // Puede saltar solo si la casilla destino está vacía
-                if (this.tablero[f2][c2].estaVacia()) {
-                    console.log("se puede usar salto de caballeria");
-                    celdasSeleccionadas.push({ fil: f2, col: c2, tipo: "vacia" });
-                }
-            }
-        }
+                            // Puede saltar solo si la casilla destino está vacía
+                            if (this.tablero[f2][c2].estaVacia()) {
+                                console.log("se puede usar salto de caballeria");
+                                celdasSeleccionadas.push({ fil: f2, col: c2, tipo: "vacia" });
+                            }
+                        }
+                    }
 
 
                 }
@@ -192,7 +192,7 @@ export default class Tablero {
         return this.piezaActiva;
     }
 
-    resetPiezaActiva(){
+    resetPiezaActiva() {
         this.piezaActiva = null;
     }
 
@@ -210,7 +210,10 @@ export default class Tablero {
 
         EventBus.emit(Eventos.CONQUER_CELL, j1Porcentaje, j2Porcentaje)
 
-        if (this.celdasJ1 >= 64 || this.celdasJ2 >= 64) EventBus.emit(Eventos.END_GAME, this.piezaActiva);
+        if (this.celdasJ1 >= 64 || this.celdasJ2 >= 64) EventBus.emit(Eventos.END_GAME, {
+            jugador: this.piezaActiva.getJugador(),
+            tipo: "TERRITORIO"
+        });
     }
 
     borrarCelda(jugadorAnterior) {
@@ -224,9 +227,9 @@ export default class Tablero {
         let j2Porcentaje = this.celdasJ2 * 100 / 80;
         EventBus.emit(Eventos.UPDATE_PERCENTAGES, j1Porcentaje, j2Porcentaje);
     }
-    
 
-    size(){
-        return {fila: this.filas, col: this.columnas};
+
+    size() {
+        return { fila: this.filas, col: this.columnas };
     }
 }

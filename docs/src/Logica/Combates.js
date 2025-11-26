@@ -42,15 +42,15 @@ export default class Combates {
 
         bonusAtaca = atacaPieza.getBonusAtaque();
 
-        if (ataca == 'Soldado') { 
+        if (ataca == 'Soldado') {
 
             let filSoldado = atacaPieza.getPosicion().fila;
             let colSoldado = atacaPieza.getPosicion().col;
 
-            if (filSoldado == defiendePieza.getPosicion().fila){
+            if (filSoldado == defiendePieza.getPosicion().fila) {
                 let arriba = filSoldado - 1;
                 let abajo = filSoldado + 1;
-                
+
                 if (arriba >= 0 && this.tablero.getCelda(arriba, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
                 if (abajo < this.tablero.size().fila && this.tablero.getCelda(abajo, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
             }
@@ -93,7 +93,10 @@ export default class Combates {
         if (ganador) {
             EventBus.emit(Eventos.PIECE_ERASE, defiende, ataca); //Se captura en Inicio (hace la parte grafica)
             if (defiende.getTipo() === "Comandante") {
-                EventBus.emit(Eventos.END_GAME, ataca); //Acabamos la partida capturandolo en Inicio
+                EventBus.emit(Eventos.END_GAME, {
+                    jugador: ataca.getJugador(),
+                    tipo: "COMBATE"
+                }); //Acabamos la partida capturandolo en Inicio
             }
         }
     }
