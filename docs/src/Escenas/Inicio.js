@@ -16,11 +16,17 @@ import PanelEventoAleatorio from "../Render/PanelEventoAleatorio.js";
 
 export default class Inicio extends Phaser.Scene {
     constructor() {
-        super("Inicio")
+        super("Inicio"); 
+        console.log("Inicio constructor"); 
     }
 
-    init() {
-        console.log("prueba");
+    init(datos) {
+        console.log("INIT RECIBE:", datos);
+        console.log("Equipo1:", datos.equipo1);
+
+        if(datos.equipo1) this.equipo1 = datos.equipo1;
+        if(datos.equipo2)this.equipo2 = datos.equipo2;
+        console.log(this.equipo1);
     }
 
     preload() {
@@ -51,16 +57,21 @@ export default class Inicio extends Phaser.Scene {
         this.turno = new Turno(3, this.turnoGrafico);
 
 
-        // Creación del equipo 1 (jugador lo controla)
-        this.equipoJ1 = new Equipo("J1", this.tab);
-        this.equipoJ2 = new Equipo("J2", this.tab);
+        if(this.equipo1 == undefined) this.equipo1 = new Equipo("J1", this.tab, true);
+        if(this.equipo2 == undefined) this.equipo2 = new Equipo("J2", this.tab, true);
+
+        console.log(this.equipo1);
 
         // Dibujamos las piezas
-        for (let pieza of this.equipoJ1.piezas) {
+        for (let pieza of this.equipo1.piezas) {
+            let pos = pieza.getPosicion();
+            this.tab.getCelda(pos.fila, pos.col).setContenido(pieza); 
             this.piezaGrafico.dibujarPieza(pieza);
             this.piezas.push(pieza);
         }
-        for (let pieza of this.equipoJ2.piezas) {
+        for (let pieza of this.equipo2.piezas) {
+            let pos = pieza.getPosicion();
+            this.tab.getCelda(pos.fila, pos.col).setContenido(pieza);
             this.piezaGrafico.dibujarPieza(pieza);
             this.piezas.push(pieza);
         }
@@ -115,6 +126,9 @@ export default class Inicio extends Phaser.Scene {
         }
         console.log(turnoJugador);
 
+        this.equipo1 = undefined;
+        this.equipo2 = undefined;
+
         EventBus.removeAllListeners(); //Los listeners persisten entre escenas. Han de destruirse para que no apunten a viejos con memoria ya destruida
         /*-- Si luego requerimos de listeners que persistan !!--> solo destruiremos los de combates, panel, ui con el EB.off()*/
 
@@ -123,12 +137,12 @@ export default class Inicio extends Phaser.Scene {
     }
 
     crearAnimaciones() {
-        this.anims.create({
+        if (!this.anims.exists('explotar')){this.anims.create({
             key: 'explotar',
             frames: this.anims.generateFrameNumbers('explosion', { frames:[0,1,2,3,4,5,6,7]}),
             frameRate: 10,
             repeat: 0
-        });
+        });}
     }
 
     crearImagenes(){

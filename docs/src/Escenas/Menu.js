@@ -46,7 +46,7 @@ export default class Menu extends Phaser.Scene {
 
         //BOTON JUGAR
         botonInicio.on('pointerdown', () => {
-            this.scene.launch('Inicio'); //launch para evitar destruir la escena del menu
+            this.scene.launch('ElegirPiezas'); //launch para evitar destruir la escena del menu
 
             //desactivamos los botones para evitar doble clicks mientras dormimos la escena
             botonInicio.disableInteractive();
@@ -79,6 +79,24 @@ export default class Menu extends Phaser.Scene {
             creditosText.setColor('#ffffff');
             creditosText.setStroke('#7b0000ff');
         })
+
+        let defaultText = this.add.text(this.scale.width / 2, this.scale.height - 50, 'DEFAULT', {
+            fontSize: '20px',
+            color: '#ffffff',
+            stroke: '#7b0000ff',
+            strokeThickness: 10,
+            fontFamily: 'Arial',
+        }).setOrigin(0.5).setInteractive();
+
+        //BOTON DEFAULT
+        defaultText.on('pointerdown', () => {
+            this.scene.launch('Inicio', {}); //launch para evitar destruir la escena del menu
+
+            //desactivamos los botones para evitar doble clicks mientras dormimos la escena
+            botonInicio.disableInteractive();
+            botonCreditos.disableInteractive();
+            this.scene.sleep(); //ocultamos el menu
+        });
 
         //Listener para cuando se vuelva al menu
         this.events.on('wake', () => {

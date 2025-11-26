@@ -4,17 +4,24 @@ import Comandante from "./Piezas/Comandante.js";
 import Artilleria from "./Piezas/Artilleria.js";
 
 export default class Equipo {
-    constructor(equipo, tablero) {
+    constructor(equipo, tablero, generate=false) {
         this.equipo = equipo;
         this.tablero = tablero;
         this.piezas = [];  // Aquí guardamos las piezas del equipo
 
+        // El máximo de piezas de cada tipo 
+        this.Soldados = 8;
+        this.Caballeria = 6;
+        this.Artilleria = 3;
+        this.Comandante = 1;
+        
+        // Solamente se genera desde la lista si no se han colocado las piezas
+        if(generate) {
         if (this.equipo === "J1") {
             this.crearPiezasJ1();
-        } else this.crearPiezasJ2();
+        } else this.crearPiezasJ2();}
 
     }
-
 
     crearPiezasJ1() {
         const posicionesSoldadosJ1 = [
@@ -91,5 +98,61 @@ export default class Equipo {
         this.tablero.getCelda(posicionArtilleria.x, posicionArtilleria.y).setContenido(artilleria);
         this.piezas.push(artilleria);
 
+    }
+    eliminarPieza(p){
+        for (let i = 0; i < this.piezas.length; i++) {
+        if (this.piezas[i] === p) {
+            this.setPiezas(p.getTipo());
+            this.piezas.splice(i, 1);  // elimina 1 elemento en la posición i
+        }
+    }
+    }
+
+    setTablero(tab) {
+        this.tablero = tab;
+    }
+
+    setPiezas(tipo){
+        console.log(tipo);
+        if(tipo == 'Soldado') ++this.Soldados;
+        if(tipo == 'Caballeria') ++this.Caballeria;
+        if(tipo == 'Artilleria') ++this.Artilleria;
+        if(tipo == 'Comandante') ++this.Comandante;
+    }
+
+    getNombre() {
+        return this.equipo;
+    }
+
+
+    // GET Y SET - del numero de piezas maximo de cada tipo
+
+    getSoldados() {
+        return this.Soldados;
+    }
+    setSoldado(pieza) {
+        --this.Soldados;
+        this.piezas.push(pieza);
+    }
+    getCaballeria() {
+        return this.Caballeria;
+    }
+    setCaballeria(pieza) {
+        --this.Caballeria;
+        this.piezas.push(pieza);
+    }
+    getArtilleria() {
+        return this.Artilleria;
+    }
+    setArtilleria(pieza) {
+        --this.Artilleria;
+        this.piezas.push(pieza);
+    }
+    getComandante() {
+        return this.Comandante;
+    }
+    setComandante(pieza) {
+        --this.Comandante;
+        this.piezas.push(pieza);
     }
 }

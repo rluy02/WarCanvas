@@ -9,7 +9,7 @@ export default class PanelEventoAleatorio {
         // ← YA NO escucha eventos
     }
 
-    mostrar(nombre, descripcion) {
+    mostrar(nombre, descripcion, textoTitulo='EVENTO ALEATORIO') {
         if (this.isVisible) return;
 
         this.isVisible = true;
@@ -34,7 +34,7 @@ export default class PanelEventoAleatorio {
         // Título "EVENTO ALEATORIO"
         const titulo = this.escena.add.text(
             centerX, centerY - 80,
-            'EVENTO ALEATORIO',
+            textoTitulo,
             {
                 fontSize: '20px',
                 fontFamily: 'Arial',
