@@ -8,9 +8,18 @@ export default class PanelInfoPiezas {
         const width = this.escena.scale.width;
         const height = this.escena.scale.height;
 
+        // Fondo oscuro
+        const overlay = this.escena.add.rectangle(
+            0, 0,
+            this.escena.cameras.main.width,
+            this.escena.cameras.main.height,
+            0x000000
+        ).setOrigin(0).setDepth(100).setAlpha(0.5);
+        this.elementos.push(overlay);
+
         const margen = 0.9;
         this.esquinaPanel = { x: width * (1 - margen), y: height * (1 - margen) };
-        let panelFondo = this.escena.add.rectangle(width / 2, height / 2, width * margen, height * margen, 0x222222, 0.95);
+        let panelFondo = this.escena.add.rectangle(width / 2, height / 2, width * margen, height * margen, 0x2c3e50, 1).setStrokeStyle(3, 0xe74c3c);
         panelFondo.setDepth(1000);
         this.elementos.push(panelFondo);
 
