@@ -77,6 +77,7 @@ export default class PanelLateral {
         this.buttonTry = this.createText(width - sideWidth / 2, 500, ' ', 0, ' ', '24px', 0.5, '#ff0000');
         this.buttonTry.disableInteractive();
 
+
         this.buttonTry.on('pointerdown', () => {
             // Se lanza el evento de ataque
             this.ataque = true;
@@ -90,6 +91,31 @@ export default class PanelLateral {
             this.diceImages.defender[0].play('roll');
             this.diceImages.defender[1].play('roll');
         });
+
+        this.buttonTry.on('pointerover', () => {
+            this.buttonTry.setColor('#8f0000');
+        });
+        this.buttonTry.on('pointerout', () => {
+            this.buttonTry.setColor('#ff0000');
+        });
+
+        // Botón Cheat (+100 bonus)
+        this.buttonCheat = this.createText(width - sideWidth / 2, 540, 'CHEAT', 0, ' ', '16px', 0.5, '#523600');
+        this.buttonCheat.setVisible(false);
+        this.buttonCheat.disableInteractive();
+
+        // Emitirá un ataque especial
+        this.buttonCheat.on('pointerdown', () => {
+            EventBus.emit(Eventos.ATTACK_CHEAT);
+        });
+
+        this.buttonCheat.on('pointerover', () => {
+            this.buttonCheat.setColor('#ffffff');
+        });
+        this.buttonCheat.on('pointerout', () => {
+            this.buttonCheat.setColor('#523600');
+        });
+
 
         this.diceImages.attacker[0].on('animationcomplete', (anim) => {
             if (anim.key === 'roll') {
@@ -119,6 +145,9 @@ export default class PanelLateral {
 
         this.buttonTry.disableInteractive();
         this.buttonTry.setVisible(false);
+
+        this.buttonCheat.disableInteractive();
+        this.buttonCheat.setVisible(false);
         this.CombatInfo = true;
     }
 
@@ -144,6 +173,10 @@ export default class PanelLateral {
         this.buttonTry.setInteractive({ useHandCursor: true });
         this.buttonTry.setText(accion);
         this.buttonTry.setVisible(true);
+
+        this.buttonCheat.setVisible(true);
+        this.buttonCheat.setInteractive({ useHandCursor: true });
+
         this.CombatInfo = false;
 
     }

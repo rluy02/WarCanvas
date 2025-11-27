@@ -11,6 +11,7 @@ export default class Combates {
 
         EventBus.on(Eventos.ENEMY_SELECTED, (atacante, defensa) => { this.enemigoSeleccionado(atacante, defensa) }); // Se lanza desde Tablero.js ataque - que viene de onClick  enemigo 
         EventBus.on(Eventos.ATACK, () => { this.ataque() }); // Se lanza desde PanelLateral.js - al pulsar el boton atacar
+        EventBus.on(Eventos.ATTACK_CHEAT, () => { this.ataqueCheat(); });
     }
 
     enemigoSeleccionado(atacante, defensa) {
@@ -75,6 +76,32 @@ export default class Combates {
         // Restablecer resaltados/selección
         this.tableroGrafico.restTablero();
     }
+
+    ataqueCheat() {
+    // Dados normales
+    let dadosAtaque1 = Phaser.Math.Between(1, 6);
+    let dadosAtaque2 = Phaser.Math.Between(1, 6);
+    let dadosDefensa1 = Phaser.Math.Between(1, 6);
+    let dadosDefensa2 = Phaser.Math.Between(1, 6);
+
+    // Bonus cheat
+    let bonusAtaca = 100;
+    let bonusDefiende = this.defensa.getPieza().getBonusDefensa();
+
+    let totalAtaque = dadosAtaque1 + dadosAtaque2 + bonusAtaca;
+    let totalDefensa = dadosDefensa1 + dadosDefensa2 + bonusDefiende;
+
+    let ganador = true; // Siempre gana
+
+    this.actualizarPanelAtaque(
+        dadosAtaque1, dadosAtaque2,
+        dadosDefensa1, dadosDefensa2,
+        ganador,
+        bonusAtaca, bonusDefiende
+    );
+
+    this.tableroGrafico.restTablero();
+}
 
     actualizarPanelAtaque(dadosAtaque1, dadosAtaque2, dadosDefensa1, dadosDefensa2, ganador, bonusAtaca, bonusDefiende) {
         let ataca = this.atacante.getPieza();

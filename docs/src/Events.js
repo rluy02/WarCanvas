@@ -15,5 +15,6 @@ export const Eventos =  {
     RANDOM_EVENT: "random_event", // Se lanza cuando se produce un evento aleatorio
     PIECE_POSITION: "piece_position",
     PIECE_DELETE: "piece_delete",
-    CHANGE_TEAM_SET_PIECES: "change_team_set_pieces"
+    CHANGE_TEAM_SET_PIECES: "change_team_set_pieces",
+    ATTACK_CHEAT: 'attack_cheat'
 	}
