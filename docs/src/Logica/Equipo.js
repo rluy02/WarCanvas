@@ -10,9 +10,9 @@ export default class Equipo {
         this.piezas = [];  // Aquí guardamos las piezas del equipo
 
         // El máximo de piezas de cada tipo 
-        this.Soldados = 8;
+        this.Soldados = 16;
         this.Caballeria = 6;
-        this.Artilleria = 3;
+        this.Artilleria = 1;
         this.Comandante = 1;
         
         // Solamente se genera desde la lista si no se han colocado las piezas

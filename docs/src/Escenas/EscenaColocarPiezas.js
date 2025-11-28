@@ -22,6 +22,7 @@ export default class EscenaColocarPiezas extends Phaser.Scene {
 
     create() {
        // this.crearAnimaciones();
+       this.todasLasPiezas = true;
 
         this.equipoJ1 = new Equipo("J1");
         this.equipoJ2 = new Equipo("J2");
@@ -68,13 +69,21 @@ export default class EscenaColocarPiezas extends Phaser.Scene {
     }
 
     cambiarEscena() {
+        let e1 = this.equipoJ1.getSoldados() + this.equipoJ1.getCaballeria() + this.equipoJ1.getArtilleria() + this.equipoJ1.getComandante();
+        let e2 = this.equipoJ2.getSoldados() + this.equipoJ2.getCaballeria() + this.equipoJ2.getArtilleria() + this.equipoJ2.getComandante();
+        if(this.todasLasPiezas && (e1 > 0 || e2 > 0)) this.PanelEventos.mostrar('Colocar el tablero', 'Para continuar todas las piezas deben estar posicionadas.', 'Coloca todas las piezas');
+        else {
         EventBus.removeAllListeners();
         this.scene.start('Inicio', {
                 equipo1: this.equipoJ1,
                 equipo2: this.equipoJ2
         });
         this.equipoJ1 = undefined;
-        this.equipoJ2 = undefined;
+        this.equipoJ2 = undefined;}
+    }
+
+    Cheat() {
+        this.todasLasPiezas = !this.todasLasPiezas;
     }
 
 }

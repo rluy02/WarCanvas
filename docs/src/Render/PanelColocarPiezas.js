@@ -40,23 +40,39 @@ export default class PanelColocarPiezas {
         this.artilleriaImg = this.cargarImagen('artilleria', width - sideWidth + 50, 300, 0.105, 'Artilleria', this.Artilleria);
         this.comandanteImg = this.cargarImagen('comandante', width - sideWidth + 50, 350, 0.07, 'Comandante', this.Comandante);
 
-        this.SoldadosNum = this.createText(width - sideWidth / 2 + 80, 200, '+8', 300, ' ', '24px', 0.0);
-        this.CaballeriaNum = this.createText(width - sideWidth / 2 + 80, 250, '+6', 300, ' ', '24px', 0.0);
-        this.ArtilleriaNum = this.createText(width - sideWidth / 2 + 80, 300, '+3', 300, ' ', '24px', 0.0);
-        this.ComandanteNum = this.createText(width - sideWidth / 2 + 80, 350, '+1', 300, ' ', '24px', 0.0);
+        this.SoldadosNum = this.createText(width - sideWidth / 2 + 80, 200, '+' + this.equipoActual.getSoldados(), 300, ' ', '24px', 0.0);
+        this.CaballeriaNum = this.createText(width - sideWidth / 2 + 80, 250, '+' + this.equipoActual.getCaballeria(), 300, ' ', '24px', 0.0);
+        this.ArtilleriaNum = this.createText(width - sideWidth / 2 + 80, 300, '+' + this.equipoActual.getArtilleria(), 300, ' ', '24px', 0.0);
+        this.ComandanteNum = this.createText(width - sideWidth / 2 + 80, 350, '+' + this.equipoActual.getComandante(), 300, ' ', '24px', 0.0);
 
         this.buttonTry = this.createText(width - sideWidth / 2, 500, 'Iniciar', 0, ' ', '32px', 0.5, '#ffffffff');
-        this.buttonTry.setInteractive();
+        this.buttonTry.setInteractive({ useHandCursor: true });
 
         this.buttonTry.on('pointerdown', () => {
             this.escena.cambiarEscena();
         });
 
         this.buttonChange = this.createText(width - sideWidth / 2, 450, 'Cambiar de equipo', 0, ' ', '24px', 0.5, '#ff0000ff');
-        this.buttonChange.setInteractive();
+        this.buttonChange.setInteractive({ useHandCursor: true });
 
         this.buttonChange.on('pointerdown', () => {
             this.cambiarEquipos();
+        });
+
+        this.buttonCheat = this.createText(width - sideWidth / 2, 550, '(Pulsar para no poner todas las piezas)', 0, ' ', '16px', 0.5, '#ffffffff');
+        this.buttonCheat.setInteractive({ useHandCursor: true });
+
+        this.buttonCheat.on('pointerover', () => {
+            this.buttonCheat.setColor('#7b7b7bff');
+        });
+
+        this.buttonCheat.on('pointerout', () => {
+            this.buttonCheat.setColor('#ffffff');
+        });
+
+        this.buttonCheat.on('pointerdown', () => {
+            this.buttonCheat.setColor('#000000');
+            this.escena.Cheat();
         });
 
         EventBus.on(Eventos.PIECE_POSITION, (pieza) => {
