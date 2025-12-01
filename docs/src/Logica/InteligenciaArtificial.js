@@ -217,7 +217,7 @@ export default class InteligenciaArtificial {
         if (this.pathGraphics) this.pathGraphics.clear();
     }
 
-    _rectDeCelda(celda) {
+    rectDeCelda(celda) {
         const fila = celda.getPosicion().fila;
         const col  = celda.getPosicion().col;
 
