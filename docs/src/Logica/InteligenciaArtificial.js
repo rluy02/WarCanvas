@@ -37,9 +37,8 @@ export default class InteligenciaArtificial {
 
             let movimientoX = this.closestEnemy.getPosicion().col - pieza.getPosicion().col
             let movimientoY = this.closestEnemy.getPosicion().fila - pieza.getPosicion().fila
-            let celda = this.tablero.getCelda(pieza.getPosicion().fila, pieza.getPosicion().col)
-            let data = this.PathFinding(pieza, celda, celda, movimientoX, movimientoY)
-            console.log(data.celda, data.found)
+            let inicio = this.tablero.getCelda(pieza.getPosicion().fila, pieza.getPosicion().col)
+            const camino = this.PathFindingRecursivo(pieza, inicio, movimientoX, movimientoY, [])
         }
         
     }
@@ -61,11 +60,41 @@ export default class InteligenciaArtificial {
         }
     }
 
-    PathFinding(pieza, celda, prevCelda, movX, movY){
-        let celdas = [1]; 
-        celda[0] = this.tablero.getCelda(pieza.getPosicion().fila, pieza.getPosicion().col);
-        let found = false;
+    PathFindingRecursivo(pieza, celda, movX, movY, caminoActual, profundidad = 0){
+        const MAX_PROFUNDIDAD = 20;
+        if (movX == 0 && movY == 0){
+            return caminoActual;
+        }
 
-        return {celda: celda[0], found: found}
+        if (profundidad >= MAX_PROFUNDIDAD){
+            return [];
+        }
+
+        const colActual = celda.getPosicion().col;
+        const filaActual = celda.getPosicion().fila;
+        const opciones = [];
+
+        if (colActual > 0){
+            const celdaIzq = this.tablero.getCelda(filaActual, colActual - 1)
+            if (celdaIzq.estaVacia() && !this.estaEnCamino(celdaIzq, caminoActual)){
+                opciones.push({
+                    celda: celdaIzq,
+                    nuevoMovX: movX + 1,
+                    nuevoMovY: movY,
+                    distancia: Math.abs(movX + 1) + Math.abs(movY)
+                });
+            }
+        }
+
+        if (colActual < this.tablero.columnas - 1){
+            const celdaDcha = this.tablero.getCelda(filaActual, colActual - 1)
+        }
+    }
+
+    estaEnCamino(celda, camino) {
+        return camino.some(c => 
+            c.getPosicion().fila === celda.getPosicion().fila && 
+            c.getPosicion().col === celda.getPosicion().col
+        );
     }
 }
