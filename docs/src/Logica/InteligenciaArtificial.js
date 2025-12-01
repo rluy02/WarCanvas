@@ -15,7 +15,7 @@ export default class InteligenciaArtificial {
         this.pathGraphics.setDepth(9999);
 
         EventBus.on(Eventos.CHANGE_TURN, () => {
-            this.clearPathHighlight()
+            this.ClearPathHighlight()
             if (turnoJugador == 'J2')
                 this.TurnoIA();
         })
@@ -47,7 +47,7 @@ export default class InteligenciaArtificial {
             for (let i = 0; i < camino.length; i++) {
                 console.log(camino[i].getPosicion());
             }
-            this.drawPathHighlight(camino);
+            this.DrawPathHighlight(camino);
         }
 
     }
@@ -199,12 +199,12 @@ export default class InteligenciaArtificial {
         return [];
     }
 
-    drawPathHighlight(camino, color = 0x22ff66) {
+    DrawPathHighlight(camino, color = 0x22ff66) {
         this.pathGraphics.clear();
         if (!camino || camino.length === 0) return;
 
         for (const celda of camino) {
-            const r = this._rectDeCelda(celda);
+            const r = this.RectDeCelda(celda);
             if (!r) continue;
             this.pathGraphics.fillStyle(color, 0.30);
             this.pathGraphics.fillRect(r.x, r.y, r.w, r.h);
@@ -213,11 +213,11 @@ export default class InteligenciaArtificial {
         }
     }
 
-    clearPathHighlight() {
+    ClearPathHighlight() {
         if (this.pathGraphics) this.pathGraphics.clear();
     }
 
-    rectDeCelda(celda) {
+    RectDeCelda(celda) {
         const fila = celda.getPosicion().fila;
         const col  = celda.getPosicion().col;
 
