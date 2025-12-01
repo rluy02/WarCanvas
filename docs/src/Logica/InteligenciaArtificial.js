@@ -71,73 +71,6 @@ export default class InteligenciaArtificial {
 
     AStarPathFinding(pieza, celdaInicio, celdaDestino) {
         const MAX_PROFUNDIDAD = 20;
-
-        const DiagHeuristic = (a, b) => {
-            const pa = a.getPosicion();
-            const pb = b.getPosicion();
-            const dx = Math.abs(pa.fila - pb.fila);
-            const dy = Math.abs(pa.col - pb.col);
-            return Math.max(dx, dy);
-        };
-
-        const Heuristic = (a, b) => {
-            const pa = a.getPosicion();
-            const pb = b.getPosicion();
-            return Math.abs(pa.fila - pb.fila) + Math.abs(pa.col - pb.col);
-        };
-
-        const Transitable = (celda) => {
-            if (celda === celdaDestino) return true;
-            return celda.estaVacia();
-        };
-
-        const ReconstruirCamino = (cameFrom, actual) => {
-            const path = [];
-            let current = actual;
-            while (cameFrom.has(current)) {
-                path.push(current);
-                current = cameFrom.get(current);
-            }
-            path.reverse();
-            return path;
-        };
-
-        const Vecinos = (celda) => {
-            const pos = celda.getPosicion();
-            const fila = pos.fila;
-            const col = pos.col;
-            const res = [];
-
-            if (fila > 0) {
-                res.push(this.tablero.getCelda(fila - 1, col));
-            }
-            if (fila < this.tablero.filas - 1) {
-                res.push(this.tablero.getCelda(fila + 1, col));
-            }
-            if (col > 0) {
-                res.push(this.tablero.getCelda(fila, col - 1));
-            }
-            if (col < this.tablero.columnas - 1) {
-                res.push(this.tablero.getCelda(fila, col + 1));
-            }
-            if (pieza.getTipo() == 'Comandante') {
-                if (fila > 0 && col > 0) {
-                    res.push(this.tablero.getCelda(fila - 1, col - 1));
-                }
-                if (fila < 0 && col < this.tablero.columnas - 1) {
-                    res.push(this.tablero.getCelda(fila - 1, col + 1));
-                }
-                if (fila < this.tablero.filas - 1 && col > 0) {
-                    res.push(this.tablero.getCelda(fila + 1, col - 1));
-                }
-                if (fila < this.tablero.filas - 1 && col < this.tablero.columnas - 1) {
-                    res.push(this.tablero.getCelda(fila + 1, col + 1));
-                }
-            }
-
-            return res;
-        };
-
         const openSet = [];
         const closedSet = new Set();
         const cameFrom = new Map();
@@ -146,8 +79,8 @@ export default class InteligenciaArtificial {
         const fScore = new Map();
 
         gScore.set(celdaInicio, 0);
-        pieza.getTipo() == 'Comandante' ? fScore.set(celdaInicio, DiagHeuristic(celdaInicio, celdaDestino)) 
-        : fScore.set(celdaInicio, Heuristic(celdaInicio, celdaDestino));
+        pieza.getTipo() == 'Comandante' ? fScore.set(celdaInicio, this.DiagHeuristic(celdaInicio, celdaDestino))
+            : fScore.set(celdaInicio, this.Heuristic(celdaInicio, celdaDestino));
         openSet.push(celdaInicio);
 
         while (openSet.length > 0) {
@@ -165,7 +98,7 @@ export default class InteligenciaArtificial {
             }
 
             if (current === celdaDestino) {
-                return ReconstruirCamino(cameFrom, current);
+                return this.ReconstruirCamino(cameFrom, current);
             }
 
             openSet.splice(currentIndex, 1);
@@ -177,9 +110,9 @@ export default class InteligenciaArtificial {
                 continue;
             }
 
-            for (const vecino of Vecinos(current)) {
+            for (const vecino of this.GetVecinos(pieza, current)) {
                 if (closedSet.has(vecino)) continue;
-                if (!Transitable(vecino)) continue;
+                if (!this.Transitable(vecino, celdaDestino)) continue;
 
                 const expectedG = gActual + 1;
                 const gVecino = gScore.get(vecino)
@@ -188,7 +121,7 @@ export default class InteligenciaArtificial {
                     cameFrom.set(vecino, current);
                     gScore.set(vecino, expectedG);
 
-                    const h = pieza.getTipo() == 'Comandante' ? DiagHeuristic(vecino, celdaDestino) : Heuristic(vecino, celdaDestino)
+                    const h = pieza.getTipo() == 'Comandante' ? this.DiagHeuristic(vecino, celdaDestino) : this.Heuristic(vecino, celdaDestino)
                     fScore.set(vecino, expectedG + h);
 
                     if (!openSet.includes(vecino))
@@ -197,6 +130,72 @@ export default class InteligenciaArtificial {
             }
         }
         return [];
+    }
+
+    DiagHeuristic(a, b) {
+        const pa = a.getPosicion();
+        const pb = b.getPosicion();
+        const dx = Math.abs(pa.fila - pb.fila);
+        const dy = Math.abs(pa.col - pb.col);
+        return Math.max(dx, dy);
+    }
+
+    Heuristic(a, b) {
+        const pa = a.getPosicion();
+        const pb = b.getPosicion();
+        return Math.abs(pa.fila - pb.fila) + Math.abs(pa.col - pb.col);
+    }
+
+    Transitable(celda, celdaDestino) {
+        if (celda === celdaDestino) return true;
+        return celda.estaVacia();
+    }
+
+    ReconstruirCamino(cameFrom, actual) {
+        const path = [];
+        let current = actual;
+        while (cameFrom.has(current)) {
+            path.push(current);
+            current = cameFrom.get(current);
+        }
+        path.reverse();
+        return path;
+    }
+
+    GetVecinos(pieza, celda) {
+        const pos = celda.getPosicion();
+        const fila = pos.fila;
+        const col = pos.col;
+        const res = [];
+
+        if (fila > 0) {
+            res.push(this.tablero.getCelda(fila - 1, col));
+        }
+        if (fila < this.tablero.filas - 1) {
+            res.push(this.tablero.getCelda(fila + 1, col));
+        }
+        if (col > 0) {
+            res.push(this.tablero.getCelda(fila, col - 1));
+        }
+        if (col < this.tablero.columnas - 1) {
+            res.push(this.tablero.getCelda(fila, col + 1));
+        }
+        if (pieza.getTipo() == 'Comandante') {
+            if (fila > 0 && col > 0) {
+                res.push(this.tablero.getCelda(fila - 1, col - 1));
+            }
+            if (fila < 0 && col < this.tablero.columnas - 1) {
+                res.push(this.tablero.getCelda(fila - 1, col + 1));
+            }
+            if (fila < this.tablero.filas - 1 && col > 0) {
+                res.push(this.tablero.getCelda(fila + 1, col - 1));
+            }
+            if (fila < this.tablero.filas - 1 && col < this.tablero.columnas - 1) {
+                res.push(this.tablero.getCelda(fila + 1, col + 1));
+            }
+        }
+
+        return res;
     }
 
     DrawPathHighlight(camino, color = 0x22ff66) {
@@ -219,7 +218,7 @@ export default class InteligenciaArtificial {
 
     RectDeCelda(celda) {
         const fila = celda.getPosicion().fila;
-        const col  = celda.getPosicion().col;
+        const col = celda.getPosicion().col;
 
         const sprite = this.tableroGrafico?.getCeldaSprite?.(fila, col) || celda.getSprite?.();
         if (sprite && sprite.getBounds) {
@@ -227,10 +226,10 @@ export default class InteligenciaArtificial {
             return { x: b.x, y: b.y, w: b.width, h: b.height };
         }
 
-        const cellW = this.tableroGrafico?.tamCelda || this.tableroGrafico?.cellSize || 64; 
+        const cellW = this.tableroGrafico?.tamCelda || this.tableroGrafico?.cellSize || 64;
         const cellH = this.tableroGrafico?.tamCelda || this.tableroGrafico?.cellSize || 64;
-        const originX = this.tableroGrafico?.origenX || this.tableroGrafico?.offsetX || 0; 
-        const originY = this.tableroGrafico?.origenY || this.tableroGrafico?.offsetY || 0;  
+        const originX = this.tableroGrafico?.origenX || this.tableroGrafico?.offsetX || 0;
+        const originY = this.tableroGrafico?.origenY || this.tableroGrafico?.offsetY || 0;
 
         return {
             x: originX + col * cellW,
