@@ -11,51 +11,56 @@ export default class InteligenciaArtificial {
         this.acciones = acciones
         this.closestEnemy = null;
 
-        EventBus.on(Eventos.CHANGE_TURN, () =>{
+        this.pathGraphics = this.escena.add.graphics();
+        this.pathGraphics.setDepth(9999);
+
+        EventBus.on(Eventos.CHANGE_TURN, () => {
+            this.clearPathHighlight()
             if (turnoJugador == 'J2')
                 this.TurnoIA();
         })
     }
-    TurnoIA(){
-        for (let i = 0; i < this.acciones; i++){
+    TurnoIA() {
+        for (let i = 0; i < 1; i++) {
             let selected = false;
             let pieza = null;
-            while(!selected){
+            while (!selected) {
                 let indicePieza = Phaser.Math.Between(0, this.equipoIA.piezas.length - 1)
                 pieza = this.equipoIA.piezas[indicePieza];
-                if (!pieza.getMovida()){
+                if (!pieza.getMovida()) {
                     selected = true;
-                if (pieza.getTipo() == 'Artilleria' && !pieza.puedeDisparar())
-                    selected = false
-                }      
-            }   
+                    if (pieza.getTipo() == 'Artilleria' && !pieza.puedeDisparar())
+                        selected = false
+                }
+            }
             this.FindClosestEnemy(pieza)
             console.log(`Pieza IA: ${pieza.getTipo()}`)
             console.log(pieza.getPosicion())
 
+
             console.log(`Enemigo más cercana: ${this.closestEnemy.getTipo()}`)
             console.log(this.closestEnemy.getPosicion())
 
-            let movimientoX = this.closestEnemy.getPosicion().col - pieza.getPosicion().col
-            let movimientoY = this.closestEnemy.getPosicion().fila - pieza.getPosicion().fila
             let inicio = this.tablero.getCelda(pieza.getPosicion().fila, pieza.getPosicion().col)
-            const camino = this.PathFindingRecursivo(pieza, inicio, movimientoX, movimientoY, [])
-            for (let j = 0; j < camino.length; j++){
-                console.log(camino[j].getPosicion());
+            let destino = this.tablero.getCelda(this.closestEnemy.getPosicion().fila, this.closestEnemy.getPosicion().col)
+            const camino = this.AStarPathFinding(pieza, inicio, destino)
+            for (let i = 0; i < camino.length; i++) {
+                console.log(camino[i].getPosicion());
             }
+            this.drawPathHighlight(camino);
         }
-        
+
     }
 
     FindClosestEnemy(piezaIA) {
-        let minDistance = -1;
+        let minDistance = Infinity;
         for (let f = 0; f < this.tablero.filas; f++) {
             for (let c = 0; c < this.tablero.columnas; c++) {
                 let celda = this.tablero.getCelda(f, c);
                 let pieza = celda.getPieza();
-                if (pieza && pieza.jugador == 'J1'){
+                if (pieza && pieza.jugador == 'J1') {
                     let distance = Math.sqrt(Math.pow(piezaIA.getPosicion().col - pieza.getPosicion().col, 2) + Math.pow(piezaIA.getPosicion().fila - pieza.getPosicion().fila, 2));
-                    if (minDistance > distance || minDistance == -1){
+                    if (minDistance > distance) {
                         minDistance = distance
                         this.closestEnemy = pieza
                     }
@@ -64,113 +69,174 @@ export default class InteligenciaArtificial {
         }
     }
 
-    PathFindingRecursivo(pieza, celda, movX, movY, caminoActual, profundidad = 0){
+    AStarPathFinding(pieza, celdaInicio, celdaDestino) {
         const MAX_PROFUNDIDAD = 20;
 
-        if (movX === 0 && movY === 0){
-            return caminoActual;
-        }
+        const DiagHeuristic = (a, b) => {
+            const pa = a.getPosicion();
+            const pb = b.getPosicion();
+            const dx = Math.abs(pa.fila - pb.fila);
+            const dy = Math.abs(pa.col - pb.col);
+            return Math.max(dx, dy);
+        };
 
-        if (profundidad >= MAX_PROFUNDIDAD){
-            return [];
-        }
+        const Heuristic = (a, b) => {
+            const pa = a.getPosicion();
+            const pb = b.getPosicion();
+            return Math.abs(pa.fila - pb.fila) + Math.abs(pa.col - pb.col);
+        };
 
-        const colActual = celda.getPosicion().col;
-        const filaActual = celda.getPosicion().fila;
-        const opciones = [];
+        const Transitable = (celda) => {
+            if (celda === celdaDestino) return true;
+            return celda.estaVacia();
+        };
 
-
-        if (colActual > 0){
-            const celdaIzq = this.tablero.getCelda(filaActual, colActual - 1);
-            const nuevoMovX = movX + 1;
-            const nuevoMovY = movY;
-            const esDestino = (nuevoMovX === 0 && nuevoMovY === 0);
-            if ((celdaIzq.estaVacia() || esDestino) && !this.estaEnCamino(celdaIzq, caminoActual)){
-                opciones.push({
-                    celda: celdaIzq,
-                    nuevoMovX,
-                    nuevoMovY,
-                    distancia: Math.abs(nuevoMovX) + Math.abs(nuevoMovY)
-                });
+        const ReconstruirCamino = (cameFrom, actual) => {
+            const path = [];
+            let current = actual;
+            while (cameFrom.has(current)) {
+                path.push(current);
+                current = cameFrom.get(current);
             }
-        }
+            path.reverse();
+            return path;
+        };
 
+        const Vecinos = (celda) => {
+            const pos = celda.getPosicion();
+            const fila = pos.fila;
+            const col = pos.col;
+            const res = [];
 
-        if (colActual < this.tablero.columnas - 1){
-            const celdaDcha = this.tablero.getCelda(filaActual, colActual + 1);
-            const nuevoMovX = movX - 1;
-            const nuevoMovY = movY;
-            const esDestino = (nuevoMovX === 0 && nuevoMovY === 0);
-            if ((celdaDcha.estaVacia() || esDestino) && !this.estaEnCamino(celdaDcha, caminoActual)){
-                opciones.push({
-                    celda: celdaDcha,
-                    nuevoMovX,
-                    nuevoMovY,
-                    distancia: Math.abs(nuevoMovX) + Math.abs(nuevoMovY)
-                });
+            if (fila > 0) {
+                res.push(this.tablero.getCelda(fila - 1, col));
             }
-        }
-
-
-        if (filaActual > 0){
-            const celdaArriba = this.tablero.getCelda(filaActual - 1, colActual);
-            const nuevoMovX = movX;
-            const nuevoMovY = movY + 1;
-            const esDestino = (nuevoMovX === 0 && nuevoMovY === 0);
-            if ((celdaArriba.estaVacia() || esDestino) && !this.estaEnCamino(celdaArriba, caminoActual)){
-                opciones.push({
-                    celda: celdaArriba,
-                    nuevoMovX,
-                    nuevoMovY,
-                    distancia: Math.abs(nuevoMovX) + Math.abs(nuevoMovY)
-                });
-            }  
-        }
-
-
-        if (filaActual < this.tablero.filas - 1){
-            const celdaAbajo = this.tablero.getCelda(filaActual + 1, colActual);
-            const nuevoMovX = movX;
-            const nuevoMovY = movY - 1;
-            const esDestino = (nuevoMovX === 0 && nuevoMovY === 0);
-            if ((celdaAbajo.estaVacia() || esDestino) && !this.estaEnCamino(celdaAbajo, caminoActual)){
-                opciones.push({
-                    celda: celdaAbajo,
-                    nuevoMovX,
-                    nuevoMovY,
-                    distancia: Math.abs(nuevoMovX) + Math.abs(nuevoMovY)
-                });
+            if (fila < this.tablero.filas - 1) {
+                res.push(this.tablero.getCelda(fila + 1, col));
             }
-        }
+            if (col > 0) {
+                res.push(this.tablero.getCelda(fila, col - 1));
+            }
+            if (col < this.tablero.columnas - 1) {
+                res.push(this.tablero.getCelda(fila, col + 1));
+            }
+            if (pieza.getTipo() == 'Comandante') {
+                if (fila > 0 && col > 0) {
+                    res.push(this.tablero.getCelda(fila - 1, col - 1));
+                }
+                if (fila < 0 && col < this.tablero.columnas - 1) {
+                    res.push(this.tablero.getCelda(fila - 1, col + 1));
+                }
+                if (fila < this.tablero.filas - 1 && col > 0) {
+                    res.push(this.tablero.getCelda(fila + 1, col - 1));
+                }
+                if (fila < this.tablero.filas - 1 && col < this.tablero.columnas - 1) {
+                    res.push(this.tablero.getCelda(fila + 1, col + 1));
+                }
+            }
 
-        if (opciones.length === 0){
-            return [];
-        }
+            return res;
+        };
 
-        opciones.sort((a, b) => a.distancia - b.distancia);
+        const openSet = [];
+        const closedSet = new Set();
+        const cameFrom = new Map();
 
-        for (const opcion of opciones){
-            const nuevoCamino = [...caminoActual, opcion.celda];
-            const resultado = this.PathFindingRecursivo(
-                pieza,
-                opcion.celda,
-                opcion.nuevoMovX,
-                opcion.nuevoMovY,
-                nuevoCamino,
-                profundidad + 1
-            );
+        const gScore = new Map();
+        const fScore = new Map();
 
-            if (resultado.length > 0){
-                return resultado;
+        gScore.set(celdaInicio, 0);
+        pieza.getTipo() == 'Comandante' ? fScore.set(celdaInicio, DiagHeuristic(celdaInicio, celdaDestino)) 
+        : fScore.set(celdaInicio, Heuristic(celdaInicio, celdaDestino));
+        openSet.push(celdaInicio);
+
+        while (openSet.length > 0) {
+            let currentIndex = 0;
+            let current = openSet[0];
+
+            for (let i = 1; i < openSet.length; i++) {
+                const candidato = openSet[i];
+                const fCurr = fScore.get(current) ?? Infinity;
+                const fCand = fScore.get(candidato) ?? Infinity;
+                if (fCand < fCurr) {
+                    currentIndex = i
+                    current = candidato;
+                }
+            }
+
+            if (current === celdaDestino) {
+                return ReconstruirCamino(cameFrom, current);
+            }
+
+            openSet.splice(currentIndex, 1);
+            closedSet.add(current);
+
+            const gActual = gScore.get(current) ?? Infinity;
+
+            if (gActual > MAX_PROFUNDIDAD) {
+                continue;
+            }
+
+            for (const vecino of Vecinos(current)) {
+                if (closedSet.has(vecino)) continue;
+                if (!Transitable(vecino)) continue;
+
+                const expectedG = gActual + 1;
+                const gVecino = gScore.get(vecino)
+
+                if (gVecino === undefined || expectedG < gVecino) {
+                    cameFrom.set(vecino, current);
+                    gScore.set(vecino, expectedG);
+
+                    const h = pieza.getTipo() == 'Comandante' ? DiagHeuristic(vecino, celdaDestino) : Heuristic(vecino, celdaDestino)
+                    fScore.set(vecino, expectedG + h);
+
+                    if (!openSet.includes(vecino))
+                        openSet.push(vecino)
+                }
             }
         }
         return [];
     }
 
-    estaEnCamino(celda, camino) {
-        return camino.some(c => 
-            c.getPosicion().fila === celda.getPosicion().fila && 
-            c.getPosicion().col === celda.getPosicion().col
-        );
+    drawPathHighlight(camino, color = 0x22ff66) {
+        this.pathGraphics.clear();
+        if (!camino || camino.length === 0) return;
+
+        for (const celda of camino) {
+            const r = this._rectDeCelda(celda);
+            if (!r) continue;
+            this.pathGraphics.fillStyle(color, 0.30);
+            this.pathGraphics.fillRect(r.x, r.y, r.w, r.h);
+            this.pathGraphics.lineStyle(2, color, 0.85);
+            this.pathGraphics.strokeRect(r.x, r.y, r.w, r.h);
+        }
+    }
+
+    clearPathHighlight() {
+        if (this.pathGraphics) this.pathGraphics.clear();
+    }
+
+    _rectDeCelda(celda) {
+        const fila = celda.getPosicion().fila;
+        const col  = celda.getPosicion().col;
+
+        const sprite = this.tableroGrafico?.getCeldaSprite?.(fila, col) || celda.getSprite?.();
+        if (sprite && sprite.getBounds) {
+            const b = sprite.getBounds();
+            return { x: b.x, y: b.y, w: b.width, h: b.height };
+        }
+
+        const cellW = this.tableroGrafico?.tamCelda || this.tableroGrafico?.cellSize || 64; 
+        const cellH = this.tableroGrafico?.tamCelda || this.tableroGrafico?.cellSize || 64;
+        const originX = this.tableroGrafico?.origenX || this.tableroGrafico?.offsetX || 0; 
+        const originY = this.tableroGrafico?.origenY || this.tableroGrafico?.offsetY || 0;  
+
+        return {
+            x: originX + col * cellW,
+            y: originY + fila * cellH,
+            w: cellW,
+            h: cellH
+        };
     }
 }
