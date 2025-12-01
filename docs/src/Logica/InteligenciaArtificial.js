@@ -30,15 +30,19 @@ export default class InteligenciaArtificial {
                 }      
             }   
             this.FindClosestEnemy(pieza)
-            console.log(`tipo: ${pieza.getTipo()}`)
+            console.log(`Pieza IA: ${pieza.getTipo()}`)
             console.log(pieza.getPosicion())
-            console.log(`tipo: ${this.closestEnemy.getTipo()}`)
+
+            console.log(`Enemigo más cercana: ${this.closestEnemy.getTipo()}`)
             console.log(this.closestEnemy.getPosicion())
 
             let movimientoX = this.closestEnemy.getPosicion().col - pieza.getPosicion().col
             let movimientoY = this.closestEnemy.getPosicion().fila - pieza.getPosicion().fila
             let inicio = this.tablero.getCelda(pieza.getPosicion().fila, pieza.getPosicion().col)
             const camino = this.PathFindingRecursivo(pieza, inicio, movimientoX, movimientoY, [])
+            for (let j = 0; j < camino.length; j++){
+                console.log(camino[j].getPosicion());
+            }
         }
         
     }
@@ -62,7 +66,8 @@ export default class InteligenciaArtificial {
 
     PathFindingRecursivo(pieza, celda, movX, movY, caminoActual, profundidad = 0){
         const MAX_PROFUNDIDAD = 20;
-        if (movX == 0 && movY == 0){
+
+        if (movX === 0 && movY === 0){
             return caminoActual;
         }
 
@@ -74,21 +79,92 @@ export default class InteligenciaArtificial {
         const filaActual = celda.getPosicion().fila;
         const opciones = [];
 
+
         if (colActual > 0){
-            const celdaIzq = this.tablero.getCelda(filaActual, colActual - 1)
-            if (celdaIzq.estaVacia() && !this.estaEnCamino(celdaIzq, caminoActual)){
+            const celdaIzq = this.tablero.getCelda(filaActual, colActual - 1);
+            const nuevoMovX = movX + 1;
+            const nuevoMovY = movY;
+            const esDestino = (nuevoMovX === 0 && nuevoMovY === 0);
+            if ((celdaIzq.estaVacia() || esDestino) && !this.estaEnCamino(celdaIzq, caminoActual)){
                 opciones.push({
                     celda: celdaIzq,
-                    nuevoMovX: movX + 1,
-                    nuevoMovY: movY,
-                    distancia: Math.abs(movX + 1) + Math.abs(movY)
+                    nuevoMovX,
+                    nuevoMovY,
+                    distancia: Math.abs(nuevoMovX) + Math.abs(nuevoMovY)
                 });
             }
         }
 
+
         if (colActual < this.tablero.columnas - 1){
-            const celdaDcha = this.tablero.getCelda(filaActual, colActual - 1)
+            const celdaDcha = this.tablero.getCelda(filaActual, colActual + 1);
+            const nuevoMovX = movX - 1;
+            const nuevoMovY = movY;
+            const esDestino = (nuevoMovX === 0 && nuevoMovY === 0);
+            if ((celdaDcha.estaVacia() || esDestino) && !this.estaEnCamino(celdaDcha, caminoActual)){
+                opciones.push({
+                    celda: celdaDcha,
+                    nuevoMovX,
+                    nuevoMovY,
+                    distancia: Math.abs(nuevoMovX) + Math.abs(nuevoMovY)
+                });
+            }
         }
+
+
+        if (filaActual > 0){
+            const celdaArriba = this.tablero.getCelda(filaActual - 1, colActual);
+            const nuevoMovX = movX;
+            const nuevoMovY = movY + 1;
+            const esDestino = (nuevoMovX === 0 && nuevoMovY === 0);
+            if ((celdaArriba.estaVacia() || esDestino) && !this.estaEnCamino(celdaArriba, caminoActual)){
+                opciones.push({
+                    celda: celdaArriba,
+                    nuevoMovX,
+                    nuevoMovY,
+                    distancia: Math.abs(nuevoMovX) + Math.abs(nuevoMovY)
+                });
+            }  
+        }
+
+
+        if (filaActual < this.tablero.filas - 1){
+            const celdaAbajo = this.tablero.getCelda(filaActual + 1, colActual);
+            const nuevoMovX = movX;
+            const nuevoMovY = movY - 1;
+            const esDestino = (nuevoMovX === 0 && nuevoMovY === 0);
+            if ((celdaAbajo.estaVacia() || esDestino) && !this.estaEnCamino(celdaAbajo, caminoActual)){
+                opciones.push({
+                    celda: celdaAbajo,
+                    nuevoMovX,
+                    nuevoMovY,
+                    distancia: Math.abs(nuevoMovX) + Math.abs(nuevoMovY)
+                });
+            }
+        }
+
+        if (opciones.length === 0){
+            return [];
+        }
+
+        opciones.sort((a, b) => a.distancia - b.distancia);
+
+        for (const opcion of opciones){
+            const nuevoCamino = [...caminoActual, opcion.celda];
+            const resultado = this.PathFindingRecursivo(
+                pieza,
+                opcion.celda,
+                opcion.nuevoMovX,
+                opcion.nuevoMovY,
+                nuevoCamino,
+                profundidad + 1
+            );
+
+            if (resultado.length > 0){
+                return resultado;
+            }
+        }
+        return [];
     }
 
     estaEnCamino(celda, camino) {
