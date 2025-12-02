@@ -66,12 +66,14 @@ export default class Inicio extends Phaser.Scene {
 
         // Dibujamos las piezas
         for (let pieza of this.equipo1.piezas) {
+            pieza.setTablero(this.tab);
             let pos = pieza.getPosicion();
             this.tab.getCelda(pos.fila, pos.col).setContenido(pieza);
             this.piezaGrafico.dibujarPieza(pieza);
             this.piezas.push(pieza);
         }
         for (let pieza of this.equipo2.piezas) {
+            pieza.setTablero(this.tab);
             let pos = pieza.getPosicion();
             this.tab.getCelda(pos.fila, pos.col).setContenido(pieza);
             this.piezaGrafico.dibujarPieza(pieza);
