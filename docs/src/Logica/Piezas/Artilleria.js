@@ -3,14 +3,14 @@ import { Eventos } from '../../Events.js';
 import { EventBus } from '../../EventBus.js';
 
 export default class Artilleria extends Pieza {
-    constructor(fil, col, jugador) {
-        super('Artilleria', fil, col, jugador, 1, 3, -1);
+    constructor(tablero, fil, col, jugador) {
+        super(tablero, 'Artilleria', fil, col, jugador, 1, 3, -1);
 
         this.cooldown = 4;
         this.turnosTranscurridos = 0;
         this.utilizable = true;
 
-        this.explosion = null;
+        this.explosion = null;  
 
         EventBus.on(Eventos.CHANGE_TURN, (jugador) => { this.pasoTurno(jugador) });
     }
