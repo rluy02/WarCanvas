@@ -51,4 +51,8 @@ export default class Pieza {
     getBonusDefensa() {
       return this.bonusDefensa;
     }
+
+    setTablero(t) {
+      this.tablero = t;
+    }
 }
