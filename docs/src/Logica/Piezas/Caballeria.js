@@ -1,8 +1,8 @@
 import Pieza from '../Pieza.js';
 
 export default class Caballeria extends Pieza {
-    constructor(tablero, fil, col, jugador) {
-        super(tablero, 'Caballeria', fil, col, jugador, 3, 2 , 0);
+    constructor(fil, col, jugador) {
+        super('Caballeria', fil, col, jugador, 3, 2 , 0);
         this.saltoCaballeria = true;
     }
     setSaltoCaballeria(salto) {

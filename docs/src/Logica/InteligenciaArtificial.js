@@ -24,14 +24,21 @@ export default class InteligenciaArtificial {
         for (let i = 0; i < 1; i++) {
             let selected = false;
             let pieza = null;
-            while (!selected) {
-                let indicePieza = Phaser.Math.Between(0, this.equipoIA.piezas.length - 1)
+            // while (!selected) {
+            //     let indicePieza = Phaser.Math.Between(0, this.equipoIA.piezas.length - 1)
+            //     pieza = this.equipoIA.piezas[indicePieza];
+            //     if (!pieza.getMovida()) {
+            //         selected = true;
+            //         if (pieza.getTipo() == 'Artilleria' && !pieza.puedeDisparar())
+            //             selected = false
+            //     }
+            // }
+            let indicePieza = 0;
+            while (!selected && indicePieza < this.equipoIA.piezas.length) {
                 pieza = this.equipoIA.piezas[indicePieza];
-                if (!pieza.getMovida()) {
+                if (pieza.getTipo() == 'Artilleria')
                     selected = true;
-                    if (pieza.getTipo() == 'Artilleria' && !pieza.puedeDisparar())
-                        selected = false
-                }
+                indicePieza++;
             }
             this.FindClosestEnemy(pieza)
             console.log(`Pieza IA: ${pieza.getTipo()}`)

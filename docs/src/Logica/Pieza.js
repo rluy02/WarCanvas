@@ -1,7 +1,6 @@
 export default class Pieza {
 
-    constructor(tablero, tipoPieza, fil, col, jugador, numMovimientos, bonusAtaque, bonusDefensa) {
-        this.tablero = tablero;
+    constructor(tipoPieza, fil, col, jugador, numMovimientos, bonusAtaque, bonusDefensa) {
         this.tipoPieza = tipoPieza;
         this.fil = fil;
         this.col = col;
