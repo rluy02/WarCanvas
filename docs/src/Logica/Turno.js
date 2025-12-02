@@ -30,7 +30,6 @@ export default class Turno {
         this.movimientosPieza = pieza.getMovimientos();
         this.posicionPieza = pieza.getPosicion();
 
-        console.log(this.piezaActual);
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
     }
 
@@ -53,7 +52,6 @@ export default class Turno {
             // Se ha usado salto
             this.movimientosPieza -= 2;
             this.piezaActual.setSaltoCaballeria(false);
-            console.log("Se ha usado el salto de caballeria");
 
         } else {
 
@@ -70,7 +68,6 @@ export default class Turno {
             this.movimientosPieza < 2) {
 
             this.piezaActual.setSaltoCaballeria(false);
-            console.log("no se ha usado el salto de caballeria");
         }
 
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);

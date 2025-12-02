@@ -73,7 +73,6 @@ export default class Tablero {
             else {
                 iniCol = pieza.getPosicion().col - 4; // La siguiente a la artilleria
                 maxCol = pieza.getPosicion().col;
-                console.log(iniCol, " ", maxCol);
             }
 
             for (let col = iniCol; col < maxCol; col++) {
@@ -119,7 +118,6 @@ export default class Tablero {
 
                             // Puede saltar solo si la casilla destino está vacía
                             if (this.tablero[f2][c2].estaVacia()) {
-                                console.log("se puede usar salto de caballeria");
                                 celdasSeleccionadas.push({ fil: f2, col: c2, tipo: "vacia" });
                             }
                         }
@@ -175,9 +173,6 @@ export default class Tablero {
         //Añade la pieza a la celda de destino
         pieza.moverse(fil, col);
         this.tablero[fil][col].setContenido(pieza);
-        console.log(pieza.fil, pieza.col);
-        console.log(this.tablero[fil][col].contenido);
-        console.log(this.getCelda(fil, col).estaVacia());
         EventBus.emit(Eventos.PIECE_MOVED, pieza);
     }
 

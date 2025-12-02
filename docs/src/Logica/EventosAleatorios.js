@@ -17,7 +17,6 @@ export default class EventosAleatorios {
             descripcion: "Un terremoto sacude el campo de batalla. Las piezas en las zonas afectadas no podrán moverse este turno.",
             peso: 5,
             runEvent: () => {
-                console.log("Evento Terremoto activado");
                 let celdasAfectadas = [];
                 for (let f = 0; f < this.tablero.filas; f++) {
                     for (let c = 3; c < 7; c++) {
@@ -48,7 +47,6 @@ export default class EventosAleatorios {
             descripcion: "Una fuerte lluvia erosiona el terreno conquistado, devolviendo algunas casillas a su estado neutral.",
             peso: 2,
             runEvent: () => {
-                console.log("Evento Fuerte Lluvia activado");
                 let celdasAfectadas = [];
                 for (let f = 0; f < this.tablero.filas; f++) {
                     for (let c = 0; c < this.tablero.columnas; c++) {

@@ -71,7 +71,6 @@ export default class TableroGraficoColocarPiezas {
             colLimite = 3;
         }
         else if (this.equipoActual === this.equipo2) {
-            console.log('vvddv')
             c = 7;
             colLimite = this.tablero.columnas;
         }
@@ -117,6 +116,5 @@ export default class TableroGraficoColocarPiezas {
         this.limpiarTablero();
         if (this.equipoActual === this.equipo1) this.equipoActual = this.equipo2;
         else this.equipoActual = this.equipo1;
-        console.log(this.equipoActual);
     }
 }

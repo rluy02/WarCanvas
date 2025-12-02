@@ -55,8 +55,6 @@ export default class Inicio extends Phaser.Scene {
         if (this.equipo1 == undefined) this.equipo1 = new Equipo("J1", this.tab, true);
         if (this.equipo2 == undefined) this.equipo2 = new Equipo("J2", this.tab, true);
 
-        console.log(this.equipo1);
-
         // Dibujamos las piezas
         for (let pieza of this.equipo1.piezas) {
             let pos = pieza.getPosicion();
@@ -153,7 +151,6 @@ export default class Inicio extends Phaser.Scene {
             this.turno.reiniciarTurno();
             this.turno.destruirListeners();
         }
-        console.log(turnoJugador);
 
         this.equipo1 = undefined;
         this.equipo2 = undefined;
@@ -199,9 +196,6 @@ export default class Inicio extends Phaser.Scene {
         for (let i = 0; i <= 6; i++) {
             this.load.image(`dice${i}`, `./imgs/dice/dice${i}.webp`);
         }
-        for (let i = 0; i <= 6; i++) {
-            console.log(`dice${i}:`, this.textures.exists(`dice${i}`));
-        }
 
         this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
         this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
@@ -216,7 +210,6 @@ export default class Inicio extends Phaser.Scene {
         this.load.image('artilleria2', './imgs/piezas/artilleriaJ1.webp');
 
         this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
-        console.log(this.textures.get('explosion').frameTotal);
     }
 
 }

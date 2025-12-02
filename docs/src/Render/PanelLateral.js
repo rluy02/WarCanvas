@@ -81,7 +81,6 @@ export default class PanelLateral {
         this.buttonTry.on('pointerdown', () => {
             // Se lanza el evento de ataque
             this.ataque = true;
-            console.log(this.escena.anims.exists('roll'));
             this.diceImages.attacker[0].setTexture(`dice1`);
             this.diceImages.attacker[1].setTexture(`dice2`);
             this.diceImages.defender[0].setTexture(`dice3`);

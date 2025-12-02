@@ -41,7 +41,6 @@ export default class Equipo {
         for (let pos of posicionesSoldadosJ1) {
             let soldado = new Soldado(pos.x, pos.y, "J1");  // Crear soldado
             this.tablero.getCelda(pos.x, pos.y).setContenido(soldado);
-            //console.log(this.tablero.getCelda(pos.x, pos.y));
             this.piezas.push(soldado);
         }
 
