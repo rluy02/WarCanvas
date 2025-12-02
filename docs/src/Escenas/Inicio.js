@@ -37,7 +37,6 @@ export default class Inicio extends Phaser.Scene {
         this.piezas = [];
         this.panelInfo = new PanelInfoPiezas(this);
         this.panel = new PanelLateral(this, this.panelInfo, this.tab);
-        this.turnoGrafico = new TurnoGraficos(this);
         this.panelEventos = new PanelEventos(this);
 
         this.piezaGrafico = new PiezaGrafico(this, this.tab);
@@ -49,8 +48,12 @@ export default class Inicio extends Phaser.Scene {
 
 
         this.combates = new Combates(this.tab, this.tabGrafico, this.panel);
-        this.turno = new Turno(this, 3, this.turnoGrafico);
 
+        // Creamos el turno y su parte gráfica
+        this.turnoGrafico = new TurnoGraficos(this);
+        this.turno = new Turno(this, 3, this.turnoGrafico);
+        this.turnoGrafico.create(this.turno);
+        this.turno.crearListeners();
 
         if (this.equipo1 == undefined) this.equipo1 = new Equipo("J1", this.tab, true);
         if (this.equipo2 == undefined) this.equipo2 = new Equipo("J2", this.tab, true);

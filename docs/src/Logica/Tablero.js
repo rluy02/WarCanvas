@@ -160,7 +160,7 @@ export default class Tablero {
         this.piezaActiva.moverse(fil, col);
         this.tablero[fil][col].setContenido(this.piezaActiva);
 
-        EventBus.emit(Eventos.PIECE_MOVED, this.piezaActiva);
+        EventBus.emit(Eventos.PIECE_MOVED, this.piezaActiva, false);
     }
 
     // Mueve la pieza a fil, col cuando gana un combate
@@ -173,7 +173,7 @@ export default class Tablero {
         //Añade la pieza a la celda de destino
         pieza.moverse(fil, col);
         this.tablero[fil][col].setContenido(pieza);
-        EventBus.emit(Eventos.PIECE_MOVED, pieza);
+        EventBus.emit(Eventos.PIECE_MOVED, pieza, true);
     }
 
     ataque(fil, col) {

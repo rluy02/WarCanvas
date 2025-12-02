@@ -123,10 +123,6 @@ export default class PanelLateral {
                 this.ataque = false;
             }
         });
-
-        EventBus.on(Eventos.CLEAN_SIDE_PANEL, () => {
-            if (this.CombatInfo === false) this.updateInfoEsperandoAccion();
-        });
     }
 
     // Informacion del Combate

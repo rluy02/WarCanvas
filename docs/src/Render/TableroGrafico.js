@@ -95,7 +95,7 @@ export default class TableroGrafico {
             if (this.tablero.getPiezaActiva().getTipo() === "Artilleria" && this.tablero.getPiezaActiva().puedeDisparar() && this.esTipoCelda(fila, col)) {
 
                 this.tablero.getPiezaActiva().lanzarProyectil(fila, col, this.escena, this.tablero);
-                EventBus.emit(Eventos.PIECE_MOVED, this.tablero.getPiezaActiva());
+                EventBus.emit(Eventos.PIECE_MOVED, this.tablero.getPiezaActiva(), false);
 
                 this.limpiarTablero();
                 this.tablero.resetPiezaActiva();
@@ -198,7 +198,6 @@ export default class TableroGrafico {
         }
 
         this.celdasColoreadas = [];
-        EventBus.emit(Eventos.CLEAN_SIDE_PANEL);
     }
 
     confirmarAtaque(fila, columna, celdaSeleccionada) {

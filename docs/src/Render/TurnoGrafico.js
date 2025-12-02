@@ -1,7 +1,12 @@
 import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
+import Turno from "../Logica/Turno.js";
 
 export default class TurnoGraficos {
+    /**
+     * Constructor de TurnoGrafico
+     * @param {Phaser.Scene} escena 
+     */
     constructor(escena) {
         this.escena = escena;
         this.piezasMover = 3;
@@ -18,11 +23,13 @@ export default class TurnoGraficos {
         EventBus.on(Eventos.UPDATE_PERCENTAGES, (pJ1, pJ2) => {
             this.setPorcentaje(pJ1, pJ2);
         })
-
-        this.create();
     }
 
-    create() {
+    /**
+     * Crear los elementos gráficos del turno
+     * @param {Turno} turno
+     */
+    create(turno) {
         const width = this.escena.scale.width;
         const height = this.escena.scale.height;
 
@@ -62,7 +69,7 @@ export default class TurnoGraficos {
         }).setInteractive({ useHandCursor: true })
 
         this.acabarText.on('pointerdown', () => {
-            EventBus.emit(Eventos.PIECE_END_ACTIONS);
+            turno.acabarMovimientos();
         })
 
         this.acabarText.on('pointerover', () => {

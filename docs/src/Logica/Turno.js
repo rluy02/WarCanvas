@@ -15,11 +15,11 @@ export default class Turno {
         this.posicionPieza;
 
         this.turnoGrafico = turnoGrafico;
+    }
 
+    crearListeners() {
         EventBus.on(Eventos.PIECE_SELECTED, (pieza) => { this.setPieza(pieza) });
-        EventBus.on(Eventos.PIECE_MOVED, (pieza) => { this.restarAccion() })
-        EventBus.on(Eventos.ATACK, () => { this.acabarMovimientos() })
-        EventBus.on(Eventos.PIECE_END_ACTIONS, () => { this.acabarMovimientos() })
+        EventBus.on(Eventos.PIECE_MOVED, (pieza, ataque) => { this.restarAccion(ataque) })
         EventBus.on(Eventos.CHANGE_TURN, (turnoJugador) => {
             this.turnoGrafico.setTurnoJugador(turnoJugador);
         })
@@ -33,7 +33,12 @@ export default class Turno {
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
     }
 
-    restarAccion() {
+    /**
+     * Resta una acción a la pieza actual, si ataque es true, se finalliza el movimiento directamente
+     * @param {*} ataque 
+     * @returns 
+     */
+    restarAccion(ataque = false) {
 
         if (!this.piezaActual) return;
 
@@ -72,9 +77,9 @@ export default class Turno {
 
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
 
-        if (this.movimientosPieza <= 0) {
+        if (this.movimientosPieza <= 0 || ataque) {
             this.piezasMovidas.push(this.piezaActual);
-            EventBus.emit(Eventos.PIECE_END_ACTIONS);
+            this.acabarMovimientos();
         }
     }
 
@@ -115,6 +120,7 @@ export default class Turno {
                 EventBus.emit(Eventos.RANDOM_EVENT);
             }
         }
+        EventBus.emit(Eventos.PIECE_END_ACTIONS);
     }
 
     //Al finalizar el juego nos aseguramos que si se inicia otra partida todo este por default
