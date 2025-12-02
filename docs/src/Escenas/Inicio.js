@@ -12,6 +12,7 @@ import Equipo from "../Logica/Equipo.js";
 import PanelInfoPiezas from "../Render/PanelInfoPiezas.js";
 import EventosAleatorios from "../Logica/EventosAleatorios.js";
 import PanelEventos from "../Render/PanelEventos.js";
+import InteligenciaArtificial from "../Logica/InteligenciaArtificial.js";
 
 
 export default class Inicio extends Phaser.Scene {
@@ -35,6 +36,7 @@ export default class Inicio extends Phaser.Scene {
         this.tab = new Tablero();
 
         this.piezas = [];
+        this.acciones = 3;
         this.panelInfo = new PanelInfoPiezas(this);
         this.panel = new PanelLateral(this, this.panelInfo, this.tab);
         this.panelEventos = new PanelEventos(this);
@@ -51,12 +53,16 @@ export default class Inicio extends Phaser.Scene {
 
         // Creamos el turno y su parte gráfica
         this.turnoGrafico = new TurnoGraficos(this);
-        this.turno = new Turno(this, 3, this.turnoGrafico);
+        this.turno = new Turno(this, this.acciones, this.turnoGrafico);
         this.turnoGrafico.create(this.turno);
         this.turno.crearListeners();
 
         if (this.equipo1 == undefined) this.equipo1 = new Equipo("J1", this.tab, true);
         if (this.equipo2 == undefined) this.equipo2 = new Equipo("J2", this.tab, true);
+
+        this.inteligenciaArtificial = new InteligenciaArtificial(this.tab, this.tabGrafico, this.equipo2, this, this.acciones)
+
+        console.log(this.equipo1);
 
         // Dibujamos las piezas
         for (let pieza of this.equipo1.piezas) {
