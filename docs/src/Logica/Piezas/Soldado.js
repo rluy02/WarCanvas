@@ -40,9 +40,15 @@ export default class Soldado extends Pieza {
 
         // Analizar vecinos directos
         for (const vecino of celdasVecinas) {
-            peso += this.detectaTipo(vecino);
-            celdasVisitadas.add(vecino);
-
+            if (!celdasVisitadas.has(vecino)) {
+                console.log(`celda a comprobar: ${vecino.getPosicion().fila}, ${vecino.getPosicion().columna}`)
+                data = this.checkFormacion(vecino, celdasVisitadas)
+                peso += data.bonusPeso
+                if (!data.formacion) {
+                    peso += this.detectaTipo(vecino);
+                    celdasVisitadas.add(vecino);
+                }
+            }
             // Analizar vecinos de segundo nivel (distancia 2)
             const sigVecinos = this.GetVecinos(vecino, celdasVisitadas);
             for (const sigVecino of sigVecinos) {
@@ -106,14 +112,14 @@ export default class Soldado extends Pieza {
             res.push(this.tablero.getCelda(fila - 1, col));
         }
 
-        // Abajo
-        if (fila < this.tablero.filas - 1 && !celdasVisitadas.has(this.tablero.getCelda(fila + 1, col))) {
-            res.push(this.tablero.getCelda(fila + 1, col));
-        }
-
         // Izquierda
         if (col > 0 && !celdasVisitadas.has(this.tablero.getCelda(fila, col - 1))) {
             res.push(this.tablero.getCelda(fila, col - 1));
+        }
+
+        // Abajo
+        if (fila < this.tablero.filas - 1 && !celdasVisitadas.has(this.tablero.getCelda(fila + 1, col))) {
+            res.push(this.tablero.getCelda(fila + 1, col));
         }
 
         // Derecha
@@ -124,9 +130,9 @@ export default class Soldado extends Pieza {
         return res;
     }
 
-    checkFormacion(celda, celdaCentro) {
+    checkFormacion(celda, celdasVisitadas) {
         let cFil = celda.getPosicion().fila; cCol = celda.getPosicion().columna
-        let pFil = celdaCentro.getPosicion().fil; pCol = celdaCentro.getPosicion().col;
+        let pFil = this.getPosicion().fila; pCol = this.getPosicion().col;
 
         let maxBonus = 0;
         let formacion = false;
@@ -152,6 +158,8 @@ export default class Soldado extends Pieza {
                                 maxBonus = (4 > maxBonus) ? 4 : maxBonus;
                                 break;
                         }
+                        celdasVisitadas.add(celda)
+                        celdasVisitadas.add(terceraCelda)
                     }
                     if (celdaDcha && !celdaDcha.estaVacia() && celdaDcha.getPieza().getJugador() === 'J1') {
                         switch (celdaDcha.getPieza().getTipo()) {
@@ -168,11 +176,13 @@ export default class Soldado extends Pieza {
                                 maxBonus = (4 > maxBonus) ? 4 : maxBonus;
                                 break;
                         }
+                        celdasVisitadas.add(celda)
+                        celdasVisitadas.add(terceraCelda)
                     }
                 }
             }
         }
-        else if (cCol - pCol != 0){
+        else if (cCol - pCol != 0) {
             if (!celda.estaVacia() && celda.getPieza().getJugador() === 'J2' && celda.getPieza().getTipo() === 'Soldado') {
                 const terceraCelda = ((cCol - pCol < 0 && pCol + 1 < this.tablero.columnas) || (cCol - pCol > 0 && pCol - 1 >= 0)) ? this.tablero.getCelda(cFil, cCol + 2) : this.tablero.getCelda(cFil, cCol - 2)
                 if (!terceraCelda.estaVacia() && terceraCelda.getPieza().getJugador() === 'J2' && terceraCelda.getPieza().getTipo() === 'Soldado') {
@@ -214,6 +224,7 @@ export default class Soldado extends Pieza {
                 }
             }
         }
-        return {formacion: formacion, bonusPeso: maxBonus}
+        console.log(`Formacion: ${formacion}, bonusFormacion: ${maxBonus * 2}`)
+        return { formacion: formacion, bonusPeso: maxBonus * 2 }
     }
 }
