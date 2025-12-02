@@ -33,6 +33,7 @@ export default class Soldado extends Pieza {
     calculaPeso() {
         let modo = 0 // 0 = cerca; 1 = lejos
         let peso = this.pesoBase;
+        let formacionAtacaCelda = null;
         const celdasVisitadas = new Set();
 
         // Obtener celdas vecinas directas (distancia 1)
@@ -42,7 +43,7 @@ export default class Soldado extends Pieza {
         for (const vecino of celdasVecinas) {
             if (!celdasVisitadas.has(vecino)) {
                 console.log(`celda a comprobar: ${vecino.getPosicion().fila}, ${vecino.getPosicion().columna}`)
-                data = this.checkFormacion(vecino, celdasVisitadas)
+                let data = this.checkFormacion(vecino, celdasVisitadas)
                 peso += data.bonusPeso
                 if (!data.formacion) {
                     peso += this.detectaTipo(vecino);
@@ -131,100 +132,24 @@ export default class Soldado extends Pieza {
     }
 
     checkFormacion(celda, celdasVisitadas) {
-        let cFil = celda.getPosicion().fila; cCol = celda.getPosicion().columna
-        let pFil = this.getPosicion().fila; pCol = this.getPosicion().col;
 
-        let maxBonus = 0;
-        let formacion = false;
-        if (cFil - pFil != 0) {
-            if (!celda.estaVacia() && celda.getPieza().getJugador() === 'J2' && celda.getPieza().getTipo() === 'Soldado') {
-                const terceraCelda = ((cFil - pFil < 0 && pFil + 1 < this.tablero.filas) || (cFil - pFil > 0 && pFil - 1 >= 0)) ? this.tablero.getCelda(cFil + 2, cCol) : this.tablero.getCelda(cFil - 2, cCol)
-                if (!terceraCelda.estaVacia() && terceraCelda.getPieza().getJugador() === 'J2' && terceraCelda.getPieza().getTipo() === 'Soldado') {
-                    formacion = true;
-                    const celdaIzq = pCol - 1 >= 0 ? this.tablero.getCelda(pFil, pCol - 1) : null;
-                    const celdaDcha = pCol + 1 < this.tablero.columnas ? this.tablero.getCelda(pFil, pCol + 1) : null;
-                    if (celdaIzq && !celdaIzq.estaVacia() && celdaIzq.getPieza().getJugador() === 'J1') {
-                        switch (celdaIzq.getPieza().getTipo()) {
-                            case 'Soldado':
-                                maxBonus = (1 > maxBonus) ? 1 : maxBonus;
-                                break;
-                            case 'Caballeria':
-                                maxBonus = (2 > maxBonus) ? 2 : maxBonus;
-                                break;
-                            case 'Artilleria':
-                                maxBonus = (3 > maxBonus) ? 3 : maxBonus;
-                                break;
-                            case 'Comandante':
-                                maxBonus = (4 > maxBonus) ? 4 : maxBonus;
-                                break;
-                        }
-                        celdasVisitadas.add(celda)
-                        celdasVisitadas.add(terceraCelda)
-                    }
-                    if (celdaDcha && !celdaDcha.estaVacia() && celdaDcha.getPieza().getJugador() === 'J1') {
-                        switch (celdaDcha.getPieza().getTipo()) {
-                            case 'Soldado':
-                                maxBonus = (1 > maxBonus) ? 1 : maxBonus;
-                                break;
-                            case 'Caballeria':
-                                maxBonus = (2 > maxBonus) ? 2 : maxBonus;
-                                break;
-                            case 'Artilleria':
-                                maxBonus = (3 > maxBonus) ? 3 : maxBonus;
-                                break;
-                            case 'Comandante':
-                                maxBonus = (4 > maxBonus) ? 4 : maxBonus;
-                                break;
-                        }
-                        celdasVisitadas.add(celda)
-                        celdasVisitadas.add(terceraCelda)
-                    }
-                }
-            }
+
+        let filSoldado = this.getPosicion().fila;
+        let colSoldado = this.getPosicion().col;
+
+        if (filSoldado == defiendePieza.getPosicion().fila) {
+            let arriba = filSoldado - 1;
+            let abajo = filSoldado + 1;
+
+            if (arriba >= 0 && this.tablero.getCelda(arriba, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
+            if (abajo < this.tablero.size().fila && this.tablero.getCelda(abajo, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
         }
-        else if (cCol - pCol != 0) {
-            if (!celda.estaVacia() && celda.getPieza().getJugador() === 'J2' && celda.getPieza().getTipo() === 'Soldado') {
-                const terceraCelda = ((cCol - pCol < 0 && pCol + 1 < this.tablero.columnas) || (cCol - pCol > 0 && pCol - 1 >= 0)) ? this.tablero.getCelda(cFil, cCol + 2) : this.tablero.getCelda(cFil, cCol - 2)
-                if (!terceraCelda.estaVacia() && terceraCelda.getPieza().getJugador() === 'J2' && terceraCelda.getPieza().getTipo() === 'Soldado') {
-                    formacion = true;
-                    const celdaArriba = pFil - 1 >= 0 ? this.tablero.getCelda(pFil - 1, pCol) : null;
-                    const celdaAbajo = pFil + 1 < this.tablero.filas ? this.tablero.getCelda(pFil + 1, pCol) : null;
-                    if (celdaAbajo && !celdaAbajo.estaVacia() && celdaAbajoc.getPieza().getJugador() === 'J1') {
-                        switch (celdaAbajo.getPieza().getTipo()) {
-                            case 'Soldado':
-                                maxBonus = (1 > maxBonus) ? 1 : maxBonus;
-                                break;
-                            case 'Caballeria':
-                                maxBonus = (2 > maxBonus) ? 2 : maxBonus;
-                                break;
-                            case 'Artilleria':
-                                maxBonus = (3 > maxBonus) ? 3 : maxBonus;
-                                break;
-                            case 'Comandante':
-                                maxBonus = (4 > maxBonus) ? 4 : maxBonus;
-                                break;
-                        }
-                    }
-                    if (celdaArriba && !celdaArriba.estaVacia() && celdaArriba.getPieza().getJugador() === 'J1') {
-                        switch (celdaArriba.getPieza().getTipo()) {
-                            case 'Soldado':
-                                maxBonus = (1 > maxBonus) ? 1 : maxBonus;
-                                break;
-                            case 'Caballeria':
-                                maxBonus = (2 > maxBonus) ? 2 : maxBonus;
-                                break;
-                            case 'Artilleria':
-                                maxBonus = (3 > maxBonus) ? 3 : maxBonus;
-                                break;
-                            case 'Comandante':
-                                maxBonus = (4 > maxBonus) ? 4 : maxBonus;
-                                break;
-                        }
-                    }
-                }
-            }
+        else {
+            let izquierda = colSoldado - 1;
+            let derecha = colSoldado + 1;
+            if (izquierda >= 0 && this.tablero.getCelda(filSoldado, izquierda).getTipo() == 'Soldado') bonusAtaca++;
+            if (derecha < this.tablero.size().fila && this.tablero.getCelda(filSoldado, derecha).getTipo() == 'Soldado') bonusAtaca++;
         }
-        console.log(`Formacion: ${formacion}, bonusFormacion: ${maxBonus * 2}`)
-        return { formacion: formacion, bonusPeso: maxBonus * 2 }
+
     }
 }
