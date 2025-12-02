@@ -31,7 +31,7 @@ export default class Soldado extends Pieza {
      * @param {number} peso - Peso comienza siendo el peso base de la pieza y el cáclculo del peso final varía según el tipo de pieza
      */
     calculaPeso() {
-        let modo = { cerca: true, lejos: !cerca }
+        let modo = 0 // 0 = cerca; 1 = lejos
         let peso = this.pesoBase;
         const celdasVisitadas = new Set();
 
@@ -57,8 +57,8 @@ export default class Soldado extends Pieza {
             }
         }
         if (peso === this.pesoBase)
-            modo.cerca = false;
-        if (modo.lejos) {
+            modo = 1;
+        if (modo === 1) {
 
         }
 

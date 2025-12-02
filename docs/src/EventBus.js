@@ -10,13 +10,18 @@ const oldOn = EventBus.on;
  * @param  {...any} args 
  * @returns 
  */
+// EventBus.js
 EventBus.emit = function(event, ...args) {
     const stack = new Error().stack.split("\n").slice(2); // stack real del llamador
-    
-    console.log(`\n=== EVENTO EMITIDO: ${event} ===\nArgs: ${JSON.stringify(args)}\n\nLlamado desde: ${stack[0]}\n=================================`);
+
+    console.log(`\n=== EVENTO EMITIDO: ${event} ===`);
+    console.log('Args:', ...args);       // ← sin JSON.stringify
+    console.log(`Llamado desde: ${stack[0]}`);
+    console.log('=================================');
 
     return oldEmit.call(this, event, ...args);
 };
+
 
 EventBus.on = function(event, listener, context) {
     const stack = new Error().stack.split("\n").slice(2);
