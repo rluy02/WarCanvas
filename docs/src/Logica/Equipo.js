@@ -113,7 +113,6 @@ export default class Equipo {
     }
 
     setPiezas(tipo){
-        console.log(tipo);
         if(tipo == 'Soldado') ++this.Soldados;
         if(tipo == 'Caballeria') ++this.Caballeria;
         if(tipo == 'Artilleria') ++this.Artilleria;

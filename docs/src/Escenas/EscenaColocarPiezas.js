@@ -13,7 +13,6 @@ export default class EscenaColocarPiezas extends Phaser.Scene {
     }
 
     init() {
-        console.log("prueba");
     }
 
     preload() {

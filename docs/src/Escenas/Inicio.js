@@ -17,16 +17,11 @@ import PanelEventos from "../Render/PanelEventos.js";
 export default class Inicio extends Phaser.Scene {
     constructor() {
         super("Inicio");
-        console.log("Inicio constructor");
     }
 
     init(datos) {
-        console.log("INIT RECIBE:", datos);
-        console.log("Equipo1:", datos.equipo1);
-
         if (datos.equipo1) this.equipo1 = datos.equipo1;
         if (datos.equipo2) this.equipo2 = datos.equipo2;
-        console.log(this.equipo1);
     }
 
     preload() {

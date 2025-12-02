@@ -91,7 +91,6 @@ export default class TableroGrafico {
             // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
             if (!this.tablero.getPiezaActiva()) return;
 
-            console.log(this.esTipoCelda(fila, col));
             //Si es artilleria va aparte
             if (this.tablero.getPiezaActiva().getTipo() === "Artilleria" && this.tablero.getPiezaActiva().puedeDisparar() && this.esTipoCelda(fila, col)) {
 
@@ -229,7 +228,6 @@ export default class TableroGrafico {
         if (this.graficos[fila][col].imagen && this.graficos[fila][col].imagen.mapKey != key) {
             this.graficos[fila][col].imagen.destroy();
             this.tablero.conquistarCelda(tipoJugador, true);
-            console.log("cambiando")
         }
         else if (!this.graficos[fila][col].imagen) {
             this.tablero.conquistarCelda(tipoJugador, false);

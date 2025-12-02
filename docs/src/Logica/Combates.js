@@ -17,10 +17,6 @@ export default class Combates {
     enemigoSeleccionado(atacante, defensa) {
         this.atacante = atacante;
         this.defensa = defensa;
-
-        console.log('enemigo - Combate.js');
-        console.log(atacante);
-        console.log(defensa);
     }
 
     ataque() {
@@ -115,7 +111,7 @@ export default class Combates {
 
         this.panelLateral.updateCombatInfo(mensaje, resultado, ataca.getJugador(), defiende.getJugador(), dadosAtaque1, dadosAtaque2, dadosDefensa1, dadosDefensa2, bonusAtaca, bonusDefiende);
 
-        console.log('Panel ataque - Combate.js');
+        ('Panel ataque - Combate.js');
 
         if (ganador) {
             EventBus.emit(Eventos.PIECE_ERASE, defiende, ataca); //Se captura en Inicio (hace la parte grafica)
