@@ -1,30 +1,26 @@
-export const EventBus = new MyEventBus();
+export const EventBus = new Phaser.Events.EventEmitter();
+
+// Guardamos el método emit original
+const oldEmit = EventBus.emit;
 
 /**
- * Extiende Phaser.Events.EventEmitter para crear un bus de eventos global.
- * Permite emitir y escuchar eventos en toda la aplicación.
+ * Emitir un evento con logging para depuración
+ * @param {*} event 
+ * @param  {...any} args 
+ * @returns 
  */
-class MyEventBus extends Phaser.Events.EventEmitter {
-     constructor() {
-        super();
-    }
+EventBus.emit = function(event, ...args) {
+    const stack = new Error().stack.split("\n").slice(2); // stack real del llamador
+    
+    console.log(`\n=== EVENTO EMITIDO: ${event} ===`);
+    console.log("Args: ", args);
+    console.log("Llamado desde: ", stack[0]);
+    console.log("================================\n");
 
-    /**
-     * Lanza un evento con los argumentos proporcionados.
-     * @param {*} event 
-     * @param  {...any} args 
-     * @returns 
-     */
-    emit(event, ...args) {
-        console.log(`[EMIT] Evento: ${event}`, args);
-        return super.emit(event, ...args);
-    }
+    return oldEmit.call(this, event, ...args);
+};
 
-    on(event, listener, context) {
-        console.log(`[ON] Event: ${event}`);
-        return super.on(event, listener, context);
-    }
-}
+
 // Esto es para lanzar los eventos, como mover pieza, atacar, ganar... Es nativo de phaser, si eso no se lanza
 // Si quieres lanzar o emitir eventos necesitas importarlo asi
 // import { EventBus } from "./EventBus.js";
