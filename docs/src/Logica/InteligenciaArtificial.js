@@ -35,6 +35,7 @@ export default class InteligenciaArtificial {
             // }
             let indicePieza = 0;
             while (!selected && indicePieza < this.equipoIA.piezas.length) {
+                pieza = this.equipoIA.piezas[indicePieza];
                 if (pieza.getTipo() == 'Artilleria')
                     selected = true;
                 indicePieza++;
