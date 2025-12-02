@@ -209,8 +209,8 @@ export default class InteligenciaArtificial {
 
     algoritmoArtilleria(pieza) {
         let piezasEnRango = new Map();
-        for (let f = 0; f < this.tablero.filas - 1; f++) {
-            for (let c = pieza.getPosicion().col - 4; c < this.tablero.columnas - 1; c++) {
+        for (let f = 0; f < this.tablero.filas; f++) {
+            for (let c = pieza.getPosicion().col - 4; c < this.tablero.columnas; c++) {
                 let piezasEnemigas = 0;
                 let celda = this.tablero.getCelda(f, c);
                 if (!celda.estaVacia() && celda.getPieza().getJugador() === 'J1')
