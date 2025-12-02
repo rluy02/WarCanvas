@@ -50,9 +50,6 @@ export default class InteligenciaArtificial {
                 }
             }
             else {
-                if (pieza.getTipo() === 'Soldado'){
-                    let peso = pieza.calculaPeso()
-                }
                 let inicio = this.tablero.getCelda(pieza.getPosicion().fila, pieza.getPosicion().col)
                 let destino = this.tablero.getCelda(this.closestEnemy.getPosicion().fila, this.closestEnemy.getPosicion().col)
                 const camino = this.AStarPathFinding(pieza, inicio, destino)
