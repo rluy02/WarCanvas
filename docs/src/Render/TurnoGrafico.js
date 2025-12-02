@@ -82,26 +82,46 @@ export default class TurnoGraficos {
 
     }
 
+    /**
+     * Setear las acciones de la pieza
+     * @param {number} acciones 
+     */
     setAccionesPieza(acciones) {
         this.accionesPieza = acciones;
         this.accionessText.text = 'Acciones de pieza: ' + this.accionesPieza;
     }
 
+    /**
+     * Setar las acciones del turno
+     * @param {number} acciones 
+     */
     setAccionesTurno(acciones) {
         this.piezasMover = acciones;
         this.turnosText.text = 'Piezas a mover: ' + this.piezasMover;
     }
 
+    /**
+     * Setear el turno del jugador
+     * @param {Jugador} jugador 
+     */
     setTurnoJugador(jugador) {
         this.JugadorText.text = 'Turno ' + jugador;
     }
 
+    /**
+     * Establecer el porcentaje de control de cada jugador
+     * @param {number} pJ1 
+     * @param {number} pJ2 
+     */
     setPorcentaje(pJ1, pJ2){
         this.porcentajeJ1Text.text = 'J1: ' + pJ1 + '%';
         this.porcentajeJ2Text.text = 'J1: ' + pJ2 + '%';
     }
 
+    /**
+     * Desactivar la UI del turno
+     */
     desactivarUI() {
-    if (this.acabarText) this.acabarText.disableInteractive();
-}
+        if (this.acabarText) this.acabarText.disableInteractive();
+    }
 }

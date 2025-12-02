@@ -5,6 +5,9 @@ export default class PanelInfoPiezas {
         this.forceClose = false;
     }
 
+    /**
+     * Crear el panel de información de piezas
+     */
     crearPanel() {
         const width = this.escena.scale.width;
         const height = this.escena.scale.height;
@@ -78,6 +81,14 @@ export default class PanelInfoPiezas {
         this.cerrarPanel();
     }
 
+    /**
+     * Crear un texto en el panel
+     * @param {string} texto 
+     * @param {number} size 
+     * @param {string|number} color 
+     * @param {string} style 
+     * @param {{x:number, y:number}} pos 
+     */
     crearTexto(texto, size, color, style, pos) {
         let text = this.escena.add.text(this.esquinaPanel.x + pos.x, this.esquinaPanel.y + pos.y, texto, {
             fontSize: size,
@@ -90,6 +101,12 @@ export default class PanelInfoPiezas {
         this.elementos.push(text);
     }
 
+    /**
+     * Cargar una imagen en el panel
+     * @param {string} sprite 
+     * @param {{x:number, y:number}} pos 
+     * @param {number} size 
+     */
     cargarImagen(sprite, pos, size) {
         let img = this.escena.add.sprite(this.esquinaPanel.x + pos.x, this.esquinaPanel.y + pos.y, sprite);
         img.setScale(size);
@@ -97,6 +114,9 @@ export default class PanelInfoPiezas {
         this.elementos.push(img);
     }
 
+    /**
+     * Cerrar el panel de información de piezas
+     */
     cerrarPanel() {
         for (let obj of this.elementos) {
             if (obj.active) {
@@ -107,6 +127,9 @@ export default class PanelInfoPiezas {
 
     }
 
+    /**
+     * Abrir el panel de información de piezas
+     */
     abrirPanel() {
         if (!this.forceClose) { //para evitar que se pueda abrir tras terminar la partida
             for (let obj of this.elementos) {
@@ -116,6 +139,9 @@ export default class PanelInfoPiezas {
         }
     }
 
+    /**
+     * Cerrar y bloquear el panel de información de piezas
+     */
     cerrarYbloquearPanel() {
         // Cerrar panel si estaba abierto
         this.cerrarPanel();

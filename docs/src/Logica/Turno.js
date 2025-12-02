@@ -3,6 +3,9 @@ import { EventBus } from "../EventBus.js";
 
 export let turnoJugador = "J1";
 
+/**
+ * Clase que gestiona el turno de los jugadores
+ */
 export default class Turno {
     constructor(escena, acciones, turnoGrafico) {
         this.escena = escena;
@@ -17,6 +20,9 @@ export default class Turno {
         this.turnoGrafico = turnoGrafico;
     }
 
+    /**
+     * Crea los listeners necesarios para el turno
+     */
     crearListeners() {
         EventBus.on(Eventos.PIECE_SELECTED, (pieza) => { this.setPieza(pieza) });
         EventBus.on(Eventos.PIECE_MOVED, (pieza, ataque) => { this.restarAccion(ataque) })
@@ -25,6 +31,10 @@ export default class Turno {
         })
     }
 
+    /**
+     * Setea la pieza actual y sus movimientos
+     * @param {Pieza} pieza 
+     */
     setPieza(pieza) {
         this.piezaActual = pieza;
         this.movimientosPieza = pieza.getMovimientos();
@@ -36,10 +46,8 @@ export default class Turno {
     /**
      * Resta una acción a la pieza actual, si ataque es true, se finalliza el movimiento directamente
      * @param {*} ataque 
-     * @returns 
      */
     restarAccion(ataque = false) {
-
         if (!this.piezaActual) return;
 
         const posAntes = this.posicionPieza; // posición guardada antes de mover
@@ -48,8 +56,9 @@ export default class Turno {
         const df = Math.abs(posDespues.fila - posAntes.fila);
         const dc = Math.abs(posDespues.col - posAntes.col);
 
-        const distancia = df + dc; // movimiento Manhattan
+        const distancia = df + dc;
 
+        // Comprobamos si se ha usado salto de caballería
         if (this.piezaActual.getTipo() === "Caballeria" &&
             this.piezaActual.getSaltoCaballeria() === true &&
             distancia === 2) {
@@ -75,15 +84,19 @@ export default class Turno {
             this.piezaActual.setSaltoCaballeria(false);
         }
 
+        // Actualizamos la interfaz gráfica
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
 
+        // Si no quedan movimientos o se ha atacado, finalizamos los movimientos de la pieza
         if (this.movimientosPieza <= 0 || ataque) {
             this.piezasMovidas.push(this.piezaActual);
             this.acabarMovimientos();
         }
     }
 
-
+    /**
+     * Finaliza los movimientos de la pieza actual y actualiza el turno si es necesario
+     */
     acabarMovimientos() {
         if (!this.piezaActual) {
             console.log("La pieza al acabar movimientos es null")
@@ -123,7 +136,9 @@ export default class Turno {
         EventBus.emit(Eventos.PIECE_END_ACTIONS);
     }
 
-    //Al finalizar el juego nos aseguramos que si se inicia otra partida todo este por default
+    /**
+     * Reinicia el turno al estado inicial
+     */
     reiniciarTurno() {
         this.accionesTurno = 3;
         this.movimientosPieza = 0;
@@ -131,7 +146,10 @@ export default class Turno {
         this.piezasMovidas = [];
         turnoJugador = "J1";
     }
-    //Nos aseguramos de que no se registren llamadas mientras se esta acabando la partida
+    
+    /**
+     * Destruye los listeners creados por este objeto
+     */
     destruirListeners() {
         EventBus.off(Eventos.PIECE_SELECTED);
         EventBus.off(Eventos.PIECE_MOVED);
