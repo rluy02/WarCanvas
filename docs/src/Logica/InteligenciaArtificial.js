@@ -41,15 +41,24 @@ export default class InteligenciaArtificial {
             console.log(`Enemigo más cercana: ${this.closestEnemy.getTipo()}`)
             console.log(this.closestEnemy.getPosicion())
 
-            let inicio = this.tablero.getCelda(pieza.getPosicion().fila, pieza.getPosicion().col)
-            let destino = this.tablero.getCelda(this.closestEnemy.getPosicion().fila, this.closestEnemy.getPosicion().col)
-            const camino = this.AStarPathFinding(pieza, inicio, destino)
-            for (let i = 0; i < camino.length; i++) {
-                console.log(camino[i].getPosicion());
+            if (pieza.getTipo() == 'Artilleria') {
+                let celdaDestino = this.algoritmoArtilleria(pieza);
+                if (celdaDestino) {
+                    console.log(`Celda destino artillería: ${celdaDestino.getPosicion().fila}, ${celdaDestino.getPosicion().col}`);
+                } else {
+                    console.log('No se encontró celda destino para artillería');
+                }
             }
-            this.DrawPathHighlight(camino);
+            else {
+                let inicio = this.tablero.getCelda(pieza.getPosicion().fila, pieza.getPosicion().col)
+                let destino = this.tablero.getCelda(this.closestEnemy.getPosicion().fila, this.closestEnemy.getPosicion().col)
+                const camino = this.AStarPathFinding(pieza, inicio, destino)
+                for (let i = 0; i < camino.length; i++) {
+                    console.log(camino[i].getPosicion());
+                }
+                this.DrawPathHighlight(camino);
+            }
         }
-
     }
 
     FindClosestEnemy(piezaIA) {
@@ -196,6 +205,42 @@ export default class InteligenciaArtificial {
         }
 
         return res;
+    }
+
+    algoritmoArtilleria(pieza) {
+        let piezasEnRango = new Map();
+        for (let f = 0; f < this.tablero.filas - 1; f++) {
+            for (let c = pieza.getPosicion().col - 4; c < this.tablero.columnas - 1; c++) {
+                let piezasEnemigas = 0;
+                let celda = this.tablero.getCelda(f, c);
+                if (!celda.estaVacia() && celda.getPieza().getJugador() === 'J1')
+                    piezasEnemigas++;
+                let vecinos = this.GetVecinos(pieza, celda);
+                for (const vecino of vecinos) {
+                    if (!vecino.estaVacia() && vecino.getPieza().getJugador() === 'J1')
+                        piezasEnemigas++;
+                }
+                piezasEnRango.set(celda, piezasEnemigas);
+                console.log(`Celda analizada Artilleria: ${celda.getPosicion().fila}, ${celda.getPosicion().col} - Piezas enemigas: ${piezasEnemigas}`);
+            }
+        }
+        let maxKey = null;
+        let maxValue = -Infinity;
+        let celdasEmpatadas = [];
+
+        for (const [key, value] of piezasEnRango) {
+            if (value > maxValue) {
+                maxValue = value;
+                maxKey = key;
+                celdasEmpatadas.length = 0;
+                celdasEmpatadas.push(key);
+            }
+            else if (value === maxValue) {
+                celdasEmpatadas.push(key);
+            }
+        }
+        let randomIndex = Phaser.Math.Between(0, celdasEmpatadas.length - 1);
+        return celdasEmpatadas.length > 0 ? celdasEmpatadas[randomIndex] : maxKey;
     }
 
     DrawPathHighlight(camino, color = 0x22ff66) {
