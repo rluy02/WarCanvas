@@ -1,7 +1,12 @@
 import { EventBus } from "../EventBus.js";
 import { Eventos } from "../Events.js";
 
-export default class PanelEventos {
+/**
+ * Panel modal para mostrar eventos aleatorios al jugador.
+ * @class PanelEventos
+ * @memberof Render
+ */
+class PanelEventos {
     constructor(escena) {
         this.escena = escena;
         this.contenedor = null;
@@ -9,6 +14,14 @@ export default class PanelEventos {
         // ← YA NO escucha eventos
     }
 
+    /**
+     * Muestra el panel modal con la información del evento.
+     * @param {string} nombre - nombre del evento
+     * @param {string} descripcion - descripción del evento
+     * @param {string} [textoTitulo='EVENTO ALEATORIO'] - texto del título del panel
+     * @param {string} [textoBoton='ACEPTAR'] - texto del botón de cierre
+     * @param {Function|null} [onClose=null] - callback a ejecutar al cerrar
+     */
     mostrar(nombre, descripcion, textoTitulo = 'EVENTO ALEATORIO', textoBoton = 'ACEPTAR', onClose = null) {
         if (this.isVisible) return;
 
@@ -137,6 +150,9 @@ export default class PanelEventos {
         };
     }
 
+    /**
+     * Oculta y destruye el panel modal si está visible.
+     */
     ocultar() {
         if (!this.isVisible || !this.contenedor) return;
 
@@ -185,9 +201,14 @@ export default class PanelEventos {
         });
     }
 
+    /**
+     * Limpia y destruye el panel completamente.
+     */
     destruir() {
         if (this.contenedor) {
             this.ocultar();
         }
     }
 }
+
+export default PanelEventos;

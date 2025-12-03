@@ -5,8 +5,10 @@ export let turnoJugador = "J1";
 
 /**
  * Clase que gestiona el turno de los jugadores
+ * @class Turno
+ * @memberof Logica
  */
-export default class Turno {
+class Turno {
     constructor(escena, acciones, turnoGrafico) {
         this.escena = escena;
         this.accionesTurno = acciones;
@@ -158,3 +160,5 @@ export default class Turno {
         EventBus.off(Eventos.CHANGE_TURN);
     }
 }
+
+export default Turno;

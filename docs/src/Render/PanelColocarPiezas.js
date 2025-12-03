@@ -2,8 +2,22 @@ import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
 import Equipo from "../Logica/Equipo.js";
 
-
-export default class PanelColocarPiezas {
+/**
+ * Panel para colocar piezas antes de iniciar la partida.
+ * Muestra contadores, botones y controla la interacción para posicionar piezas.
+ * @class PanelColocarPiezas
+ * @memberof Render
+ */
+class PanelColocarPiezas {
+    /**
+     * Constructor del panel de colocación de piezas.
+     * @param {Phaser.Scene} escena - escena de Phaser donde se renderiza el panel
+     * @param {Tablero} tablero - lógica del tablero
+     * @param {TableroGrafico} tableroGrafico - representación gráfica del tablero
+     * @param {Equipo} equipo1 - primer equipo (J1)
+     * @param {Equipo} equipo2 - segundo equipo (J2)
+     * @constructor
+     */
     constructor(escena, tablero, tableroGrafico, equipo1, equipo2) {
         this.escena = escena;
         this.tablero = tablero;
@@ -17,6 +31,9 @@ export default class PanelColocarPiezas {
         this.create();
     }
 
+    /**
+     * Crea y posiciona los elementos visuales del panel (textos, imágenes y botones).
+     */
     create() {
         const width = this.escena.scale.width;
         const height = this.escena.scale.height;
@@ -84,6 +101,18 @@ export default class PanelColocarPiezas {
 
     }
 
+    /**
+     * Crea un objeto de texto en la escena con las propiedades especificadas.
+     * @param {number} width - posición X del texto
+     * @param {number} height - posición Y del texto
+     * @param {string} text - contenido del texto
+     * @param {number} wordWrapWidth - ancho para ajuste de líneas
+     * @param {string} fontStyle - estilo de fuente
+     * @param {string|number} px - tamaño de fuente (píxeles)
+     * @param {number} origin - origen horizontal (0-1)
+     * @param {string} [fill='#ffffffff'] - color de relleno en formato RGBA
+     * @returns {Phaser.GameObjects.Text} objeto de texto creado
+     */
     createText(width, height, text, wordWrapWidth, fontStyle, px, origin, fill = '#ffffffff') { 
         return this.escena.add.text(width, height, text, { // Equipo que defiende
             fontSize: px,
@@ -94,6 +123,16 @@ export default class PanelColocarPiezas {
         }).setOrigin(origin, 0.5);
     }
 
+    /**
+     * Carga y configura un sprite como botón interactivo para seleccionar tipo de pieza.
+     * @param {string} sprite - clave del sprite cargado en la escena
+     * @param {number} x - posición X del sprite
+     * @param {number} y - posición Y del sprite
+     * @param {number} size - escala del sprite
+     * @param {string} tipo - tipo de pieza asociado (p.ej. 'Soldado')
+     * @param {Phaser.GameObjects.Text} texto - texto que muestra el contador asociado
+     * @returns {Phaser.GameObjects.Sprite} sprite interactivo creado
+     */
     cargarImagen(sprite, x, y, size, tipo, texto){
         let img = this.escena.add.sprite(x, y, sprite);
         img.setScale(size);
@@ -111,9 +150,16 @@ export default class PanelColocarPiezas {
         return img;
     }
 
+    /**
+     * Solicita al tablero gráfico que coloree las casillas según el tipo seleccionado.
+     */
     pintarCasillas(){
         this.tableroGrafico.colorearRango();
     }
+    
+    /**
+     * Actualiza los contadores numéricos en el panel cuando una pieza es posicionada o eliminada.
+     */
     piezaPosicionada(){
         this.SoldadosNum.setText(`+${this.equipoActual.getSoldados()}`);
         this.CaballeriaNum.setText(`+${this.equipoActual.getCaballeria()}`);
@@ -121,6 +167,9 @@ export default class PanelColocarPiezas {
         this.ComandanteNum.setText(`+${this.equipoActual.getComandante()}`);
     }
 
+    /**
+     * Actualiza las texturas de los sprites del panel según el equipo activo.
+     */
     cambiarImagenes() {
          // IMAGENES
         if(this.equipoActual === this.equipo2){
@@ -136,7 +185,9 @@ export default class PanelColocarPiezas {
         }
     }
 
-    // Cambia el equipo que está colocando sus piezas
+    /**
+     * Cambia el equipo actual que está posicionando piezas y actualiza la UI.
+     */
     cambiarEquipos(){
         this.equipoActual = (this.equipoActual === this.equipo1) ? this.equipo2 : this.equipo1;
         this.titleEquipo.setText(this.equipoActual.getNombre());
@@ -146,5 +197,6 @@ export default class PanelColocarPiezas {
         EventBus.emit(Eventos.CHANGE_TEAM_SET_PIECES, this.equipoActual); // On ElegirPiezaEscena - Inicio
 
     }
-
 }
+
+export default PanelColocarPiezas;

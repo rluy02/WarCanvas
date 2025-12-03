@@ -1,8 +1,22 @@
 import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
 import { turnoJugador } from "../Logica/Turno.js";
+import Celda from "../Logica/Celda.js";
 
-export default class TableroGrafico {
+/**
+ * Gestión gráfica del tablero principal: crea rectángulos por casilla,
+ * pinta rangos de movimiento, fragmentos de mapa y gestiona interacciones.
+ * @class TableroGrafico
+ * @memberof Render
+ */
+class TableroGrafico {
+    /**
+     * Constructor de la capa gráfica del tablero.
+     * @param {Phaser.Scene} escena - escena de Phaser donde se dibuja
+     * @param {Tablero} tablero - instancia de la lógica del tablero
+     * @param {PanelLateral} PanelLateral - panel lateral para mostrar confirmaciones
+     * @param {number} [tamCasilla=64] - tamaño en píxeles de cada casilla
+     */
     constructor(escena, tablero, PanelLateral, tamCasilla = 64) {
         this.escena = escena;
         this.tablero = tablero;
@@ -46,6 +60,10 @@ export default class TableroGrafico {
         }
     }
 
+    /**
+     * Dibuja la malla gráfica del tablero: rectángulos interactivos por casilla.
+     * @returns {Array<Array<Phaser.GameObjects.Rectangle>>} matriz de rectángulos que representan las celdas
+     */
     dibujarTablero() {
         let graficos = [];
 
@@ -75,6 +93,12 @@ export default class TableroGrafico {
         return graficos;
     }
 
+    /**
+     * Manejador de clic en una celda gráfica.
+     * Determina acciones (seleccionar pieza, mover, atacar o disparar artillería).
+     * @param {number} fila - fila de la celda clicada
+     * @param {number} col - columna de la celda clicada
+     */
     onCeldaClick(fila, col) {
         const celda = this.tablero.getCelda(fila, col);
         const pieza = celda.getPieza();
@@ -128,7 +152,12 @@ export default class TableroGrafico {
         }
     }
 
-    // Colorea el rango de movimiento de la pieza
+    /**
+     * Colorea el rango de movimiento/ataque de la pieza situada en (fila,col).
+     * Marca la casilla de la pieza y añade capas para las celdas alcanzables.
+     * @param {number} fila - fila de la pieza seleccionada
+     * @param {number} col - columna de la pieza seleccionada
+     */
     colorearRango(fila, col) {
         let celda = this.tablero.getCelda(fila, col);
 
@@ -153,6 +182,14 @@ export default class TableroGrafico {
         this.celdaSeleccionada = celda;
     }
 
+    /**
+     * Crea una capa coloreada sobre una celda.
+     * @param {number} fila - fila
+     * @param {number} col - columna
+     * @param {number|string} color - color en formato hexadecimal (0x...)
+     * @param {number} transparencia - nivel de alfa (0.0 - 1.0)
+     * @returns {Phaser.GameObjects.Rectangle} la capa creada
+     */
     crearCapa(fila, col, color, transparencia) {
         const x = col * this.tamCasilla + this.tamCasilla / 2;
         const y = fila * this.tamCasilla + this.tamCasilla / 2;
@@ -160,12 +197,21 @@ export default class TableroGrafico {
         return capa;
     }
 
+    /**
+     * Limpia todas las capas coloreadas del tablero.
+     */
     limpiarCapas() {
         this.casillasPintadas.forEach(o => o.destroy());
         this.casillasPintadas = [];
     }
 
-    // Mira si la celda (fil,col) esta entre las seleccionadas, y ademas mira que el tipo sea correcto
+    /**
+     * Comprueba si una coordenada dada está entre las celdas coloreadas y, opcionalmente, si coincide el tipo.
+     * @param {number} fil - fila objetivo
+     * @param {number} col - columna objetivo
+     * @param {string} [tipo=""] - tipo de celda a comprobar ('vacia'|'enemigo')
+     * @returns {boolean} true si la celda coincide con alguna de las coloreadas
+     */
     esTipoCelda(fil, col, tipo = "") {
         for (let celda of this.celdasColoreadas) {
             if (tipo == "") {
@@ -179,7 +225,10 @@ export default class TableroGrafico {
         return false;
     }
 
-    // Resetea todas las casillas coloreadas y la seleccionada
+    /**
+     * Resetea las casillas coloreadas y elimina la selección actual.
+     * Restaura el estilo por defecto de las casillas afectadas.
+     */
     limpiarTablero() {
 
         this.limpiarCapas();
@@ -200,6 +249,12 @@ export default class TableroGrafico {
         this.celdasColoreadas = [];
     }
 
+    /**
+     * Confirma un ataque entre la pieza seleccionada y la celda objetivo.
+     * @param {number} fila - fila de la celda objetivo
+     * @param {number} columna - columna de la celda objetivo
+     * @param {Celda} celdaSeleccionada - celda de la pieza atacante
+     */
     confirmarAtaque(fila, columna, celdaSeleccionada) {
 
         let casillaAtacante = this.tablero.getCelda(celdaSeleccionada.fila, celdaSeleccionada.columna);
@@ -211,6 +266,12 @@ export default class TableroGrafico {
         this.PanelLateral.updateInfo(defensaPieza, atacantePieza, atacante, defensa, "Atacar", casillaAtacante, casillaDefensa);
     }
 
+    /**
+     * Dibuja un fragmento del mapa (topográfico o satelital) dentro de una celda.
+     * @param {number} fila - fila de la celda
+     * @param {number} col - columna de la celda
+     * @param {string} tipoJugador - 'J1' o 'J2' para elegir mapa
+     */
     dibujarFragmentoMapa(fila, col, tipoJugador) {
         // Determina qué mapa usar
         const key = tipoJugador === 'J1' ? 'mapaTopo' : 'mapaSat';
@@ -252,6 +313,13 @@ export default class TableroGrafico {
         this.graficos[fila][col].imagen = rt;
     }
 
+    /**
+     * Borra el fragmento de mapa renderizado en una celda y actualiza contadores.
+     * @param {number} fila - fila de la celda
+     * @param {number} col - columna de la celda
+     * @param {string} jugadorAnterior - 'J1' o 'J2' que había conquistado la casilla
+     * @returns {void}
+     */
     borrarFragmentoMapa(fila, col, jugadorAnterior) {
         // Verificar que existe imagen
         if (!this.graficos[fila][col].imagen) return;
@@ -262,19 +330,94 @@ export default class TableroGrafico {
         this.tablero.borrarCelda(jugadorAnterior);
     }
 
-    // Colorea una celda para eventos (persiste hasta limpiarEventos)
+    /**
+     * Dibuja un fragmento del mapa (topográfico o satelital) dentro de una celda.
+     * @param {number} fila - fila de la celda
+     * @param {number} col - columna de la celda
+     * @param {string} tipoJugador - 'J1' o 'J2' para elegir mapa
+     */
+    dibujarFragmentoMapa(fila, col, tipoJugador) {
+        // Determina qué mapa usar
+        const key = tipoJugador === 'J1' ? 'mapaTopo' : 'mapaSat';
+
+        const textura = this.escena.textures.get(key).getSourceImage();
+
+        const cropX = col * this.fragmentoAncho;
+        const cropY = fila * this.fragmentoAlto;
+
+        const x = col * this.tamCasilla + this.tamCasilla / 2;
+        const y = fila * this.tamCasilla + this.tamCasilla / 2;
+
+        // Borra la imagen anterior si existe
+        if (this.graficos[fila][col].imagen && this.graficos[fila][col].imagen.mapKey != key) {
+            this.graficos[fila][col].imagen.destroy();
+            this.tablero.conquistarCelda(tipoJugador, true);
+        }
+        else if (!this.graficos[fila][col].imagen) {
+            this.tablero.conquistarCelda(tipoJugador, false);
+        }
+
+        const zoom = 1.3;
+        const renderSize = this.tamCasilla * zoom;
+
+        // Crea un RenderTexture que actúa como "mini lienzo" para la celda
+        const rt = this.escena.add.renderTexture(x, y, renderSize, renderSize)
+            .setOrigin(0.5)
+            .setDepth(0);
+
+        // Escala proporcional al fragmento del mapa
+        const scaleX = renderSize / this.fragmentoAncho;
+        const scaleY = renderSize / this.fragmentoAlto;
+
+        // Dibuja el fragmento del mapa en el renderTexture escalado a la celda
+        rt.draw(key, -cropX * scaleX, -cropY * scaleY, key)
+            .setScale(scaleX, scaleY);
+        rt.mapKey = key;
+
+        this.graficos[fila][col].imagen = rt;
+    }
+
+    /**
+     * Borra el fragmento de mapa renderizado en una celda y actualiza contadores.
+     * @param {number} fila - fila de la celda
+     * @param {number} col - columna de la celda
+     * @param {string} jugadorAnterior - 'J1' o 'J2' que había conquistado la casilla
+     */
+    borrarFragmentoMapa(fila, col, jugadorAnterior) {
+        // Verificar que existe imagen
+        if (!this.graficos[fila][col].imagen) return;
+
+        // Destruir la imagen del mapa
+        this.graficos[fila][col].imagen.destroy();
+        this.graficos[fila][col].imagen = null;
+        this.tablero.borrarCelda(jugadorAnterior);
+    }
+
+    /**
+     * Colorea una celda específica con un color dado y nivel de alfa.
+     * @param {number} fila - fila de la celda
+     * @param {number} col - columna de la celda
+     * @param {number|string} color 
+     * @param {number} alpha 
+     */
     coloreaCelda(fila, col, color, alpha = 0.45) {
         const capa = this.crearCapa(fila, col, color, alpha);
         capa.setDepth(9); // Solo aquí usamos setDepth
         this.casillasEventos.push({ capa, fila, col });
     }
 
-    // Limpia todas las capas de eventos
+    /**
+     * Limpia los eventos gráficos asociados a las casillas.
+     */
     limpiarEventos() {
         this.casillasEventos.forEach(obj => obj.capa.destroy());
         this.casillasEventos = [];
     }
 
+    /**
+     * Resetea el estado del tablero gráfico.
+     * Desactiva movimientos y selecciones actuales.
+     */
     restTablero() {
         this.moviendoPieza = false;
         this.movimientoIniciado = false;
@@ -283,6 +426,9 @@ export default class TableroGrafico {
         this.celdaSeleccionada = null;
     }
 
+    /**
+     * Desactiva la interactividad de todas las casillas del tablero.
+     */
     desactivarTablero() {
         for (let fila = 0; fila < this.tablero.filas; fila++) {
             for (let col = 0; col < this.tablero.columnas; col++) {
@@ -291,3 +437,5 @@ export default class TableroGrafico {
         }
     }
 }
+
+export default TableroGrafico;

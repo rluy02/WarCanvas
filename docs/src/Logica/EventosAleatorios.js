@@ -1,8 +1,19 @@
 import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
-import { turnoJugador } from "./Turno.js";
 
-export default class EventosAleatorios {
+/**
+ * Clase que gestiona los eventos aleatorios durante el juego.
+ * @class EventosAleatorios
+ * @memberof Logica
+ */
+class EventosAleatorios {
+    /**
+     * Constructor de EventosAleatorios.
+     * @param {Tablero} tablero - el tablero del juego
+     * @param {TableroGrafico} tableroGrafico - representación gráfica del tablero
+     * @param {PanelEventos} panelEventoAleatorio - panel para mostrar eventos aleatorios
+     * @constructor
+     */
     constructor(tablero, tableroGrafico, panelEventoAleatorio) {
         this.tablero = tablero;
         this.tableroGrafico = tableroGrafico;
@@ -74,6 +85,10 @@ export default class EventosAleatorios {
         }]; 
     }
 
+    /**
+     * Reinicia el evento anterior ejecutando su función de reset.
+     * Limpia los efectos del evento que fue disparado en el turno anterior.
+     */
     resetEvents(){
         if (this.indiceEventoPrevio !== null){
             this.eventos[this.indiceEventoPrevio].reset();
@@ -81,6 +96,10 @@ export default class EventosAleatorios {
         }
     }
 
+    /**
+     * Dispara un evento aleatorio basado en los pesos definidos de cada evento.
+     * Selecciona aleatoriamente un evento, muestra su panel y ejecuta su lógica con un delay.
+     */
     triggerEvent(){
         if (!this.eventos.length) return;
         const total = this.eventos.reduce((s,e)=> s + (e.peso || 1), 0);
@@ -103,3 +122,5 @@ export default class EventosAleatorios {
         }
     }
 }
+
+export default EventosAleatorios;
