@@ -1,6 +1,6 @@
 import Pieza from '../Pieza.js';
 
-export default class Soldado extends Pieza {
+class Soldado extends Pieza {
     /**
      * Constructor del Soldado
      * @param {Tablero} tablero - Referencia al tablero de juego
@@ -8,9 +8,9 @@ export default class Soldado extends Pieza {
      * @param {number} col - Columna inicial del soldado
      * @param {string} jugador - Identificador del jugador ('J1' o 'J2')
      */
-    constructor(tablero, fil, col, jugador) {
+    constructor(fil, col, jugador) {
         // Llama al constructor padre con: tipo='Soldado', movimiento=2, ataque=1, defensa=1
-        super(tablero, 'Soldado', fil, col, jugador, 2, 1, 1);
+        super('Soldado', fil, col, jugador, 2, 1, 1);
 
         /**
          * Peso base del soldado (sin considerar enemigos cercanos)
@@ -197,3 +197,5 @@ export default class Soldado extends Pieza {
         return bonusPeso * 2;
     }
 }
+
+export default Soldado;

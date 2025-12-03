@@ -6,19 +6,35 @@ import PanelEventos from "../Render/PanelEventos.js";
 import Equipo from "../Logica/Equipo.js";
 import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
+import Pieza from "../Logica/Pieza.js";
 
-export default class EscenaColocarPiezas extends Phaser.Scene {
+/**
+ * Escena para colocar las piezas en el tablero antes de iniciar la partida.
+ * @class EscenaColocarPiezas
+ * @extends Phaser.Scene
+ * @memberof Escenas
+ */
+class EscenaColocarPiezas extends Phaser.Scene {
+    /**
+     * Constructor de la escena EscenaColocarPiezas.
+     * @constructor
+     */
     constructor() {
         super("ElegirPiezas")
     }
 
-    init() {
-    }
-
+    /**
+     * Método preload de la escena EscenaColocarPiezas.
+     * Carga las imágenes necesarias para la escena.
+     */
     preload() {
        this.crearImagenes();
     }
 
+    /**
+     * Método create de la escena EscenaColocarPiezas.
+     * Crea los elementos gráficos y lógicos necesarios para la escena.
+     */
     create() {
        // this.crearAnimaciones();
        this.todasLasPiezas = true;
@@ -49,6 +65,10 @@ export default class EscenaColocarPiezas extends Phaser.Scene {
         });
     }
 
+    /**
+     * Método crearImagenes de la escena EscenaColocarPiezas.
+     * Carga las imágenes necesarias para las piezas del juego.
+     */
     crearImagenes(){
         this.load.image('peon', './imgs/piezas/peon.webp');
         this.load.image('peon2', './imgs/piezas/peon2.webp');
@@ -60,13 +80,25 @@ export default class EscenaColocarPiezas extends Phaser.Scene {
         this.load.image('artilleria2', './imgs/piezas/artilleriaJ1.webp');
     }
 
+    /**
+     * Dibuja la pieza en la posición indicada.
+     * @param {Pieza} pieza 
+     */
     piezaPosicionada(pieza) {
         this.piezaGrafico.dibujarPieza(pieza);
     }
+
+    /**
+     * Elimina la pieza del tablero.
+     * @param {Pieza} pieza 
+     */
     piezaEliminada(pieza) {
         this.piezaGrafico.eliminarPieza(pieza)
     }
 
+    /**
+     * Cambia a la escena de inicio si todas las piezas están colocadas.
+     */
     cambiarEscena() {
         let e1 = this.equipoJ1.getSoldados() + this.equipoJ1.getCaballeria() + this.equipoJ1.getArtilleria() + this.equipoJ1.getComandante();
         let e2 = this.equipoJ2.getSoldados() + this.equipoJ2.getCaballeria() + this.equipoJ2.getArtilleria() + this.equipoJ2.getComandante();
@@ -81,8 +113,12 @@ export default class EscenaColocarPiezas extends Phaser.Scene {
         this.equipoJ2 = undefined;}
     }
 
+    /**
+     * Activa o desactiva el modo de colocar todas las piezas.
+     */
     Cheat() {
         this.todasLasPiezas = !this.todasLasPiezas;
     }
-
 }
+
+export default EscenaColocarPiezas;

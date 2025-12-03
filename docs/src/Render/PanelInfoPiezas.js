@@ -1,4 +1,16 @@
-export default class PanelInfoPiezas {
+/**
+ * Gestiona el panel lateral de información.
+ * @class
+ * @memberof Render
+ */
+class PanelInfoPiezas {
+    /**
+     * Constructor del panel de información de piezas
+     * @param {Phaser.Scene} escena - Escena de Phaser donde se mostrará el panel
+     * @example
+     * // Crear un nuevo panel de información de piezas
+     * const panelInfo = new PanelInfoPiezas(escena);
+     */
     constructor(escena) {
         this.escena = escena;
         this.elementos = [];
@@ -83,11 +95,14 @@ export default class PanelInfoPiezas {
 
     /**
      * Crear un texto en el panel
-     * @param {string} texto 
-     * @param {number} size 
-     * @param {string|number} color 
-     * @param {string} style 
-     * @param {{x:number, y:number}} pos 
+     * @param {string} texto - El texto a mostrar
+     * @param {number} size - Tamaño del texto
+     * @param {string|number} color - Color del texto
+     * @param {string} style - Estilo del texto (normal, bold, etc.)
+     * @param {{x:number, y:number}} pos - Posición relativa dentro del panel
+     * @example
+     * // Crear un texto en el panel
+     * crearTexto("Hola Mundo", 24, '#FFFFFF', 'bold', {x: 10, y: 10});
      */
     crearTexto(texto, size, color, style, pos) {
         let text = this.escena.add.text(this.esquinaPanel.x + pos.x, this.esquinaPanel.y + pos.y, texto, {
@@ -103,9 +118,12 @@ export default class PanelInfoPiezas {
 
     /**
      * Cargar una imagen en el panel
-     * @param {string} sprite 
-     * @param {{x:number, y:number}} pos 
-     * @param {number} size 
+     * @param {string} sprite - Nombre del sprite a cargar
+     * @param {{x:number, y:number}} pos - Posición relativa dentro del panel
+     * @param {number} size - Escala de la imagen
+     * @example
+     * // Cargar una imagen en el panel
+     * cargarImagen('miSprite', {x: 50, y: 50}, 0.5);
      */
     cargarImagen(sprite, pos, size) {
         let img = this.escena.add.sprite(this.esquinaPanel.x + pos.x, this.esquinaPanel.y + pos.y, sprite);
@@ -148,3 +166,5 @@ export default class PanelInfoPiezas {
         this.forceClose = true;
     }
 }
+
+export default PanelInfoPiezas;

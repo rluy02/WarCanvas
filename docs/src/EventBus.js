@@ -8,7 +8,7 @@ const oldOn = EventBus.on;
  * Emitir un evento con logging para depuración
  * @param {*} event 
  * @param  {...any} args 
- * @returns 
+ * @return {*}
  */
 // EventBus.js
 EventBus.emit = function(event, ...args) {

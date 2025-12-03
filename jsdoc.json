@@ -1,0 +1,59 @@
+{
+    "source": {
+        "include": [
+            "./docs/src",
+            "README.md"
+        ],
+        "includePattern": ".+\\.js(doc|x)?$"
+    },
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "opts": {
+        "encoding": "utf8",
+        "recurse": true,
+        "destination": "./docs/Documentacion",
+        "template": "node_modules/clean-jsdoc-theme",
+        "favicon": "./docs/imgs/logos/war-canvas.webp",
+        "theme_opts": {
+            "default_theme": "dark",
+            "search": true,
+            "title": "WarCanvas Docs",
+            "homepageTitle": "Inicio",
+            "sections": [
+                "Namespaces"
+            ],
+            "menu": [
+                {
+                    "title": "Repositorio",
+                    "link": "https://github.com/CapitanManzana/WarCanvas",
+                    "target": "_blank",
+                    "class": "menu-item",
+                    "id": "repository"
+                }
+            ],
+            "meta": [
+                {
+                    "name": "author",
+                    "content": "CapitanManzana"
+                }
+            ],
+            "footer": "© 2024 WarCanvas. Todos los derechos reservados."
+        }
+    },
+    "templates": {
+        "default": {
+            "outputSourceFiles": true,
+            "staticFiles": {
+                "include": [
+                    "./docs/imgs"
+                ],
+                "useStaticFileDirectory": false
+            }
+        }
+    },
+    "markdown": {
+        "hardwrap": false,
+        "idInHeadings": true
+    }
+}

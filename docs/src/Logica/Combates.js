@@ -1,7 +1,22 @@
 import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
+import Tablero from "./Tablero.js";
+import TableroGrafico from "../Render/TableroGrafico.js";
+import PanelLateral from "../Render/PanelLateral.js";
+import Pieza from "./Pieza.js";
 
-export default class Combates {
+/**
+ * Clase que gestiona los combates entre piezas.
+ * @class Combates
+ * @memberof Logica
+ */
+class Combates {
+    /**
+     * Constructor de la clase Combates.
+     * @param {Tablero} tablero - tablero lógico
+     * @param {TableroGrafico} tableroGrafico - tablero gráfico
+     * @param {PanelLateral} panelLateral - panel lateral gráfico
+     */
     constructor(tablero, tableroGrafico, panelLateral) {
         this.tablero = tablero;
         this.tableroGrafico = tableroGrafico;
@@ -14,11 +29,19 @@ export default class Combates {
         EventBus.on(Eventos.ATTACK_CHEAT, () => { this.ataqueCheat(); });
     }
 
+    /**
+     * Setea las piezas atacante y defensa.
+     * @param {Pieza} atacante - pieza atacante
+     * @param {Pieza} defensa - pieza defensa
+     */
     enemigoSeleccionado(atacante, defensa) {
         this.atacante = atacante;
         this.defensa = defensa;
     }
 
+    /**
+     * Realiza el ataque entre las piezas atacante y defensa.
+     */
     ataque() {
 
         // Dado s
@@ -73,32 +96,45 @@ export default class Combates {
         this.tableroGrafico.restTablero();
     }
 
+    /**
+     * Realiza un ataque con trampa garantizando la victoria del atacante.
+     */
     ataqueCheat() {
-    // Dados normales
-    let dadosAtaque1 = Phaser.Math.Between(1, 6);
-    let dadosAtaque2 = Phaser.Math.Between(1, 6);
-    let dadosDefensa1 = Phaser.Math.Between(1, 6);
-    let dadosDefensa2 = Phaser.Math.Between(1, 6);
+        // Dados normales
+        let dadosAtaque1 = Phaser.Math.Between(1, 6);
+        let dadosAtaque2 = Phaser.Math.Between(1, 6);
+        let dadosDefensa1 = Phaser.Math.Between(1, 6);
+        let dadosDefensa2 = Phaser.Math.Between(1, 6);
 
-    // Bonus cheat
-    let bonusAtaca = 100;
-    let bonusDefiende = this.defensa.getPieza().getBonusDefensa();
+        // Bonus cheat
+        let bonusAtaca = 100;
+        let bonusDefiende = this.defensa.getPieza().getBonusDefensa();
 
-    let totalAtaque = dadosAtaque1 + dadosAtaque2 + bonusAtaca;
-    let totalDefensa = dadosDefensa1 + dadosDefensa2 + bonusDefiende;
+        let totalAtaque = dadosAtaque1 + dadosAtaque2 + bonusAtaca;
+        let totalDefensa = dadosDefensa1 + dadosDefensa2 + bonusDefiende;
 
-    let ganador = true; // Siempre gana
+        let ganador = true; // Siempre gana
 
-    this.actualizarPanelAtaque(
-        dadosAtaque1, dadosAtaque2,
-        dadosDefensa1, dadosDefensa2,
-        ganador,
-        bonusAtaca, bonusDefiende
-    );
+        this.actualizarPanelAtaque(
+            dadosAtaque1, dadosAtaque2,
+            dadosDefensa1, dadosDefensa2,
+            ganador,
+            bonusAtaca, bonusDefiende
+        );
 
-    this.tableroGrafico.restTablero();
-}
+        this.tableroGrafico.restTablero();
+    }
 
+    /**
+     * Actualiza el panel lateral con la información del combate.
+     * @param {*} dadosAtaque1 
+     * @param {*} dadosAtaque2 
+     * @param {*} dadosDefensa1 
+     * @param {*} dadosDefensa2 
+     * @param {*} ganador 
+     * @param {*} bonusAtaca 
+     * @param {*} bonusDefiende 
+     */
     actualizarPanelAtaque(dadosAtaque1, dadosAtaque2, dadosDefensa1, dadosDefensa2, ganador, bonusAtaca, bonusDefiende) {
         let ataca = this.atacante.getPieza();
         let defiende = this.defensa.getPieza();
@@ -124,3 +160,5 @@ export default class Combates {
         }
     }
 }
+
+export default Combates;

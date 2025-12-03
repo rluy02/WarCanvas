@@ -13,22 +13,44 @@ import PanelInfoPiezas from "../Render/PanelInfoPiezas.js";
 import EventosAleatorios from "../Logica/EventosAleatorios.js";
 import PanelEventos from "../Render/PanelEventos.js";
 import InteligenciaArtificial from "../Logica/InteligenciaArtificial.js";
+import Pieza from "../Logica/Pieza.js";
 
-
-export default class Inicio extends Phaser.Scene {
+/**
+ * Escena de inicio del juego.
+ * @class Inicio
+ * @extends Phaser.Scene
+ * @memberof Escenas
+ */
+class Inicio extends Phaser.Scene {
+    /**
+     * Constructor de la escena Inicio.
+     * @constructor
+     */
     constructor() {
         super("Inicio");
     }
 
+    /**
+     * Inicializa la escena con los equipos proporcionados.
+     * @param {{equipo1: Equipo, equipo2: Equipo}} datos 
+     */
     init(datos) {
         if (datos.equipo1) this.equipo1 = datos.equipo1;
         if (datos.equipo2) this.equipo2 = datos.equipo2;
     }
 
+    /**
+     * Método preload de la escena Inicio.
+     * Carga las imágenes necesarias para la escena.
+     */
     preload() {
         this.crearImagenes();
     }
 
+    /**
+     * Método create de la escena Inicio.
+     * Crea los elementos gráficos y lógicos necesarios para la escena.
+     */
     create() {
         this.crearAnimaciones();
 
@@ -68,6 +90,7 @@ export default class Inicio extends Phaser.Scene {
         for (let pieza of this.equipo1.piezas) {
             pieza.setTablero(this.tab);
             let pos = pieza.getPosicion();
+            console.log(pos);
             this.tab.getCelda(pos.fila, pos.col).setContenido(pieza);
             this.piezaGrafico.dibujarPieza(pieza);
             this.piezas.push(pieza);
@@ -103,7 +126,11 @@ export default class Inicio extends Phaser.Scene {
         this.panelInfo.crearPanel();
     }
 
-    //Metodo que create el panel de finalizacion de partida y con boton que lleva al menu
+    /**
+     * Maneja la finalización de la partida.
+     * Muestra un panel con el resultado y desactiva la interacción.
+     * @param {*} info 
+     */
     partidaTerminada(info) {
         this.bloquearInteraccion();
         //2s de delay para visualizar el mapa tras la victoria/derrota
@@ -138,7 +165,10 @@ export default class Inicio extends Phaser.Scene {
         });
     }
 
-    // Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
+    /**
+     * Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
+     * @param {Pieza} pieza 
+     */
     moverPieza(pieza) {
         for (let p of this.piezas) {
             if (p == pieza) {
@@ -148,6 +178,10 @@ export default class Inicio extends Phaser.Scene {
         }
     }
 
+    /**
+     * Elimina la pieza del tablero y de la lista de piezas.
+     * @param {Pieza} pieza 
+     */
     eliminarPieza(pieza) {
         for (let p of this.piezas) {
             if (p == pieza) {
@@ -156,7 +190,9 @@ export default class Inicio extends Phaser.Scene {
         }
     }
 
-    //Metodo que finaliza la partida actual y envia al jugador a la pantalla del menu
+    /**
+     * Metodo que finaliza la partida actual y envia al jugador a la pantalla del menu
+     */
     ResetInfoYcambiarEscena() {
         if (this.turno) {
             this.turno.reiniciarTurno();
@@ -173,6 +209,9 @@ export default class Inicio extends Phaser.Scene {
         this.scene.wake("Menu"); //Reactivamos la visibilidad del menu
     }
 
+    /**
+     * Bloquea la interacción del jugador con el tablero y la UI.
+     */
     bloquearInteraccion() {
         // Bloquear tablero gráfico (si usa input propio)
         if (this.tabGrafico) this.tabGrafico.desactivarTablero();
@@ -192,6 +231,9 @@ export default class Inicio extends Phaser.Scene {
            Sprite / Rect + .on() o EventBus → Listener suele ser removido o ignorado cuando desactivas input o destruyes objeto. */
     }
 
+    /**
+     * Crea las animaciones necesarias para la escena.
+     */
     crearAnimaciones() {
         if (!this.anims.exists('explotar')) {
             this.anims.create({
@@ -203,6 +245,10 @@ export default class Inicio extends Phaser.Scene {
         }
     }
 
+    /**
+     * Método crearImagenes de la escena Inicio.
+     * Carga las imágenes necesarias para la escena.
+     */
     crearImagenes() {
         for (let i = 0; i <= 6; i++) {
             this.load.image(`dice${i}`, `./imgs/dice/dice${i}.webp`);
@@ -222,6 +268,6 @@ export default class Inicio extends Phaser.Scene {
 
         this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
     }
-
 }
 
+export default Inicio;
