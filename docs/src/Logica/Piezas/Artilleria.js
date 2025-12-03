@@ -12,13 +12,11 @@ import Tablero from '../Tablero.js';
 class Artilleria extends Pieza {
     /**
      * Constructor de la pieza Artillería.
+     * @param {Tablero} tablero - tablero al que pertenece la pieza
      * @param {number} fil - fila
      * @param {number} col - columna
      * @param {string} jugador - 'J1' o 'J2'
      */
-    constructor(fil, col, jugador) {
-        super('Artilleria', fil, col, jugador, 1, 3, -1);
-export default class Artilleria extends Pieza {
     constructor(tablero, fil, col, jugador) {
         super(tablero, 'Artilleria', fil, col, jugador, 1, 3, -1);
 

@@ -7,6 +7,7 @@ class Pieza {
 
     /**
      * Constructor de Pieza.
+     * @param {Tablero} tablero - tablero al que pertenece la pieza
      * @param {string} tipoPieza - tipo de pieza ('Soldado', 'Caballeria', 'Artilleria', 'Comandante')
      * @param {number} fil - fila inicial de la pieza
      * @param {number} col - columna inicial de la pieza
@@ -16,7 +17,6 @@ class Pieza {
      * @param {number} bonusDefensa - bonificación de defensa
      * @constructor
      */
-    constructor(tipoPieza, fil, col, jugador, numMovimientos, bonusAtaque, bonusDefensa) {
     constructor(tablero, tipoPieza, fil, col, jugador, numMovimientos, bonusAtaque, bonusDefensa) {
         this.tablero = tablero;
         this.tipoPieza = tipoPieza;
