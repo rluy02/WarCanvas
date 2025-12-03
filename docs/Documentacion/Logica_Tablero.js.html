@@ -14,22 +14,19 @@ class Tablero {
      * Constructor del tablero.
      * @param {number} _filas - número de filas del tablero (default: 8)
      * @param {number} _columnas - número de columnas del tablero (default: 10)
+     * @param {Phaser.Scene} escena - escena asociada al tablero
      * @constructor
      */
-    constructor(_filas = 8, _columnas = 10) {
+    constructor(_filas = 8, _columnas = 10, escena) {
         this.filas = _filas;
         this.columnas = _columnas;
         this.tablero = this.crearTablero(); //creamos el tablero lleno de celdas
         this.piezaActiva = null;
-
+        this.escena = escena;
         this.turnoActivo = null;
 
         this.celdasJ1 = 0;
         this.celdasJ2 = 0;
-
-        EventBus.on(Eventos.CHANGE_TURN, () => {
-            this.piezaActiva = null;
-        });
     }
 
     /**
@@ -294,6 +291,22 @@ class Tablero {
      */
     size() {
         return { fila: this.filas, col: this.columnas };
+    }
+
+    /**
+     * Devuelve la escena asociada al tablero.
+     * @returns {Phaser.Scene} escena asociada al tablero
+     */
+    getEscena() {
+        return this.escena;
+    }
+
+    /**
+     * Resetea la pieza activa (deselecciona).
+     */
+    resetPiezaActiva() {
+        console.log("Reset pieza activa en Tablero");
+        this.piezaActiva = null;
     }
 }
 
