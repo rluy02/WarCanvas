@@ -116,6 +116,7 @@ class Turno {
         this.accionesTurno--;
         this.turnoGrafico.setAccionesTurno(this.accionesTurno);
 
+        EventBus.emit(Eventos.PIECE_END_ACTIONS);
         //Ver si se cambia de jugador
         if (this.accionesTurno <= 0) {
             if (turnoJugador == "J1") turnoJugador = "J2"
@@ -135,7 +136,6 @@ class Turno {
                 EventBus.emit(Eventos.RANDOM_EVENT);
             }
         }
-        EventBus.emit(Eventos.PIECE_END_ACTIONS);
     }
 
     /**
