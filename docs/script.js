@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnReglas = document.getElementById('btn-reglas');
     const btnCreditos = document.getElementById('btn-creditos');
     const btnJuego = document.getElementById('btn-jugar');
-    const btnDocu = document.getElementById('btn-docu');
 
     // Secciones (objeto)
     const secciones = {
@@ -59,9 +58,5 @@ document.addEventListener('DOMContentLoaded', () => {
     btnJuego.addEventListener('click', e=> {
         e.preventDefault();
         mostrarSeccion(secciones.juego);
-    });
-    btnDocu.addEventListener('click', e => {
-        e.preventDefault();
-        //window.open('./Documentacion/index.html', '_blank');
     });
 });
