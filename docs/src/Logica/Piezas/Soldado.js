@@ -54,6 +54,7 @@ class Soldado extends Pieza {
                     if (bestPeso < this.detectaTipo(vecino)) {
                         bestPeso = this.detectaTipo(vecino);
                         celdasVisitadas.add(vecino);
+                        celdaAtacada = vecino;
                     }
                 }
             }
@@ -72,6 +73,7 @@ class Soldado extends Pieza {
                     // Actualizar el mejor peso si encontramos un enemigo más valioso
                     if (bestPeso < this.detectaTipo(sigVecino)) {
                         bestPeso = this.detectaTipo(sigVecino);
+                        celdaAtacada = sigVecino;
                     }
                     celdasVisitadas.add(sigVecino);
                 }
