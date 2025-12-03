@@ -75,7 +75,7 @@ class ColocarPiezas {
         if((this.equipoActual === this.equipo1 && col < 3) || (this.equipoActual === this.equipo2 && col < 10 && col > 6) ) {
         let pieza = null;
         if (this.tipo == 'Soldado' && this.equipoActual.getSoldados() > 0)  {
-            pieza =  new Soldado(this.tablerofil, col, nombre);
+            pieza =  new Soldado(this.tablero, fil, col, nombre);
             this.equipoActual.setSoldado(pieza);
         }
         else if (this.tipo == 'Artilleria' && this.equipoActual.getArtilleria() > 0) {
