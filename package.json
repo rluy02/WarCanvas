@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "docs": "jsdoc -c jsdoc.json"
+    "docs": "jsdoc --configure jsdoc.json --verbose"
   },
   "repository": {
     "type": "git",

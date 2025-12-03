@@ -12,9 +12,9 @@
     "opts": {
         "encoding": "utf8",
         "recurse": true,
-        "destination": "./Documentacion",
+        "destination": "./docs/Documentacion",
         "template": "node_modules/clean-jsdoc-theme",
-        
+        "favicon": "./docs/imgs/logos/war-canvas.webp",
         "theme_opts": {
             "default_theme": "dark",
             "search": true,
@@ -37,7 +37,8 @@
                     "name": "author",
                     "content": "CapitanManzana"
                 }
-            ]
+            ],
+            "footer": "© 2024 WarCanvas. Todos los derechos reservados."
         }
     },
     "templates": {
