@@ -70,8 +70,9 @@ export default class Soldado extends Pieza {
 
         }
         console.log(`Peso calculado para Soldado en (${this.fil}, ${this.col}): ${peso}`);
-        if (formacionAtacaCelda != null) { console.log(`Formación ataca a: ${formacionAtacaCelda.getPosicion().fila}, ${formacionAtacaCelda.getPosicion().col}`)
-}
+        if (formacionAtacaCelda != null) {
+            console.log(`Formación ataca a: ${formacionAtacaCelda.getPosicion().fila}, ${formacionAtacaCelda.getPosicion().col}`)
+        }
         return { peso: peso, formacionAtacaCelda: formacionAtacaCelda };
     }
 
