@@ -258,6 +258,8 @@ class Inicio extends Phaser.Scene {
         this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
 
         this.load.image('peon', './imgs/piezas/peon.webp');
+        this.load.image('peon-blanco', './imgs/piezas/white-pawn.webp');
+        this.load.image('peon-rojo', './imgs/piezas/red-pawn.webp');
         this.load.image('peon2', './imgs/piezas/peon2.webp');
         this.load.image('caballeria', './imgs/piezas/caballeria-dibujada.webp');
         this.load.image('caballeria2', './imgs/piezas/Caballeria2.webp');

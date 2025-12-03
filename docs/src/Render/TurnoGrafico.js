@@ -16,6 +16,7 @@ class TurnoGraficos {
         this.escena = escena;
         this.piezasMover = 3;
         this.accionesPieza = 0;
+        this.jugadorTurno = "J1"; //Default porque siempre es el que empieza
 
         EventBus.on(Eventos.CHANGE_TURN, () => {
             this.setAccionesTurno(3);
@@ -38,17 +39,20 @@ class TurnoGraficos {
         const width = this.escena.scale.width;
         const height = this.escena.scale.height;
 
-        this.JugadorText = this.escena.add.text(40, height - 75, 'Turno J1', { // Título
+        this.JugadorText = this.escena.add.text(40, height - 75, 'J1: ', { // Título
             fontSize: '22px',
             fontFamily: 'Arial',
             fill: '#ffffff'
         });
 
-        this.turnosText = this.escena.add.text(170, height - 75, 'Piezas a mover: ' + this.piezasMover, { // Título
-            fontSize: '22px',
-            fontFamily: 'Arial',
-            fill: '#ffffff'
-        });
+        //Imagenes de los movimientos restantes de cada jugador
+        this.procesarIconos();
+
+        // this.turnosText = this.escena.add.text(170, height - 75, 'Piezas a mover: ' + this.piezasMover, { // Título
+        //     fontSize: '22px',
+        //     fontFamily: 'Arial',
+        //     fill: '#ffffff'
+        // });
 
         this.accionessText = this.escena.add.text(380, height - 75, 'Acciones de pieza: ' + this.accionesPieza, { // Título
             fontSize: '22px',
@@ -102,7 +106,34 @@ class TurnoGraficos {
      */
     setAccionesTurno(acciones) {
         this.piezasMover = acciones;
-        this.turnosText.text = 'Piezas a mover: ' + this.piezasMover;
+        this.procesarIconos();
+    }
+
+    /**
+     * Crea la lista de iconos segun los movimientos restantes de cada jugador
+     * 
+     */
+    procesarIconos() {
+        // eliminar iconos y crearlos otra vez (Tras cada accion de cada jugador)
+        if (this.iconosAcciones) {
+            this.iconosAcciones.forEach(i => i.destroy());
+        }
+        this.iconosAcciones = [];
+
+        const startX = 110;
+        const y = this.escena.scale.height - 60;
+
+        for (let i = 0; i < this.piezasMover; i++) {
+            let icon = undefined;
+            if (this.jugadorTurno == "J1") {
+                icon = this.escena.add.image(startX + i * 50, y, 'peon-blanco');
+            } else {
+                icon = this.escena.add.image(startX + i * 50, y, 'peon-rojo');
+            }
+
+            icon.setDisplaySize(20, 34);
+            this.iconosAcciones.push(icon);
+        }
     }
 
     /**
@@ -110,7 +141,11 @@ class TurnoGraficos {
      * @param {Jugador} jugador 
      */
     setTurnoJugador(jugador) {
-        this.JugadorText.text = 'Turno ' + jugador;
+        this.JugadorText.text = jugador + ": ";
+        this.jugadorTurno = jugador;
+
+        // Redibujar iconos según el jugador (J1 o J2)
+        this.setAccionesTurno(this.piezasMover);
     }
 
     /**
@@ -118,7 +153,7 @@ class TurnoGraficos {
      * @param {number} pJ1 
      * @param {number} pJ2 
      */
-    setPorcentaje(pJ1, pJ2){
+    setPorcentaje(pJ1, pJ2) {
         this.porcentajeJ1Text.text = 'J1: ' + pJ1 + '%';
         this.porcentajeJ2Text.text = 'J1: ' + pJ2 + '%';
     }
