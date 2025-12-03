@@ -30,7 +30,7 @@ export default class Soldado extends Pieza {
         let modo = 0 // 0 = cerca; 1 = lejos
         let peso = this.pesoBase;
         let formacionAtacaCelda = null;
-        let bestFormacion = 0;
+        let bestPeso = 0;
         const celdasVisitadas = new Set();
 
         // Obtener celdas vecinas directas (distancia 1)
@@ -38,13 +38,13 @@ export default class Soldado extends Pieza {
         for (const vecino of celdasVecinas) {
             if (!vecino.estaVacia() && vecino.getPieza().getJugador() === 'J1') {
                 const resultado = this.checkFormacion(vecino, celdasVisitadas);
-                if (resultado > bestFormacion) {
-                    bestFormacion = resultado;
+                if (resultado > bestPeso) {
+                    bestPeso = resultado;
                     formacionAtacaCelda = vecino;
                     celdasVisitadas.add(vecino);
                 }
                 else {
-                    peso += this.detectaTipo(vecino);
+                    bestPeso += this.detectaTipo(vecino);
                     celdasVisitadas.add(vecino);
                 }
             }
@@ -52,7 +52,7 @@ export default class Soldado extends Pieza {
                 celdasVisitadas.add(vecino);
             }
         }
-        peso += bestFormacion;
+        peso += bestPeso;
         // Analizar vecinos directos
         for (const vecino of celdasVecinas) {
             if (!celdasVisitadas.has(vecino)) {
