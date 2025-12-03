@@ -4,7 +4,21 @@ import { turnoJugador } from "../Logica/Turno.js";
 
 // Clase para la escena Colocar Piezas, pinta el tablero y los rangos (Render)
 // ((es un tableroGrafico, pero mas sencilla))
-export default class TableroGraficoColocarPiezas {
+/**
+ * Representación gráfica simplificada del tablero para la escena de colocación de piezas.
+ * Gestiona la creación de rectángulos, coloreado de rangos y la interacción de clicks.
+ * @class TableroGraficoColocarPiezas
+ * @memberof Render
+ */
+class TableroGraficoColocarPiezas {
+    /**
+     * Constructor.
+     * @param {Equipo} equipoJ1 - instancia del equipo J1
+     * @param {Equipo} equipoJ2 - instancia del equipo J2
+     * @param {Phaser.Scene} escena - escena donde se renderiza el tablero
+     * @param {Tablero} tablero - lógica del tablero
+     * @param {number} [tamCasilla=64] - tamaño de cada casilla en px
+     */
     constructor(equipoJ1, equipoJ2, escena, tablero, tamCasilla = 64) {
         this.escena = escena;
         this.tablero = tablero;
@@ -24,6 +38,11 @@ export default class TableroGraficoColocarPiezas {
         });
     }
 
+    /**
+     * Crea la malla gráfica del tablero: rectángulos interactivos por casilla.
+     * Añade listeners de clic para cada rectángulo que delegan en `onCeldaClick`.
+     * @returns {Array<Array<Phaser.GameObjects.Rectangle>>} matriz de rectángulos que representan las celdas
+     */
     dibujarTablero() {
         let graficos = [];
 
@@ -53,15 +72,27 @@ export default class TableroGraficoColocarPiezas {
         return graficos;
     }
 
+    /**
+     * Manejador de clic sobre una celda gráfica.
+     * Si la celda está vacía solicita generar una pieza; si no, la elimina.
+     * @param {number} fila - fila de la celda clicada
+     * @param {number} col - columna de la celda clicada
+     * @returns {void}
+     */
     onCeldaClick(fila, col) {
-        if(this.tablero.getCelda(fila, col).estaVacia()){
+        if (this.tablero.getCelda(fila, col).estaVacia()) {
             this.limpiarTablero();
-            this.tablero.generarPieza(fila, col);}
-        else 
+            this.tablero.generarPieza(fila, col);
+        } else {
             this.tablero.eliminarPieza(fila, col, this.tablero.getCelda(fila, col).getPieza());
+        }
     }
 
-    // Colorea el rango donde se puede colocar las piezas
+    /**
+     * Colorea el rango donde el equipo actual puede colocar piezas.
+     * Pinta capas verdes para casillas vacías y naranjas para casillas ocupadas.
+     * @returns {void}
+     */
     colorearRango() {
         this.limpiarTablero();
 
@@ -89,6 +120,14 @@ export default class TableroGraficoColocarPiezas {
                 } } }
         }
 
+    /**
+     * Crea una capa semitransparente sobre una casilla para indicar estado.
+     * @param {number} fila - fila objetivo
+     * @param {number} col - columna objetivo
+     * @param {number} color - color en formato hexadecimal (0x...)
+     * @param {number} transparencia - nivel de alfa (0.0 - 1.0)
+     * @returns {Phaser.GameObjects.Rectangle} el rectángulo creado
+     */
     crearCapa(fila, col, color, transparencia) {
         const x = col * this.tamCasilla + this.tamCasilla / 2;
         const y = fila * this.tamCasilla + this.tamCasilla / 2;
@@ -96,7 +135,10 @@ export default class TableroGraficoColocarPiezas {
         return capa;
     }
 
-    // Resetea todas las casillas coloreadas y la seleccionada
+    /**
+     * Resetea todas las capas y restaura el estilo original de las casillas coloreadas.
+     * @returns {void}
+     */
     limpiarTablero() {
 
         this.casillasPintadas.forEach(o => o.destroy());
@@ -112,9 +154,14 @@ export default class TableroGraficoColocarPiezas {
     }
 
     // Cambia el equipo actual que coloca sus piezas
+    /**
+     * Alterna el equipo que está colocando piezas y limpia los marcadores gráficos.
+     */
     cambiarEquipo() {
         this.limpiarTablero();
         if (this.equipoActual === this.equipo1) this.equipoActual = this.equipo2;
         else this.equipoActual = this.equipo1;
     }
 }
+
+export default TableroGraficoColocarPiezas;

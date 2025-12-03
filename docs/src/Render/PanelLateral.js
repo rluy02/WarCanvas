@@ -1,7 +1,18 @@
 import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
 
-export default class PanelLateral {
+/**
+ * Panel lateral que muestra información y controles relacionados con el combate.
+ * @class PanelLateral
+ * @memberof Render
+ */
+class PanelLateral {
+    /**
+     * Constructor del panel lateral.
+     * @param {Phaser.Scene} escena - escena donde se renderiza el panel
+     * @param {PanelInfo} panelInfo - panel informativo a abrir desde el lateral
+     * @param {Tablero} tablero - lógica del tablero (para cálculos de bonificación)
+     */
     constructor(escena, panelInfo, tablero) {
         this.escena = escena;
         this.panelInfo = panelInfo;
@@ -11,6 +22,9 @@ export default class PanelLateral {
         this.create();
     }
 
+    /**
+     * Crea los elementos visuales del panel lateral (textos, botones y dados).
+     */
     create() {
         const width = this.escena.scale.width;
         const height = this.escena.scale.height;
@@ -125,7 +139,19 @@ export default class PanelLateral {
         });
     }
 
-    // Informacion del Combate
+    /**
+     * Actualiza el panel con la información resultante del combate.
+     * @param {string} mensaje - mensaje descriptivo del combate
+     * @param {string} resultado - resultado textual del combate
+     * @param {string} atacante - nombre o identificador del atacante
+     * @param {string} defensa - nombre o identificador del defensor
+     * @param {number} atacanteTirada1 - tirada 1 del atacante
+     * @param {number} atacanteTirada2 - tirada 2 del atacante
+     * @param {number} defensaTirada1 - tirada 1 del defensor
+     * @param {number} defensaTirada2 - tirada 2 del defensor
+     * @param {number} bonusAtaca - bonus total del atacante
+     * @param {number} bonusDefiende - bonus total del defensor
+     */
     updateCombatInfo(mensaje, resultado, atacante, defensa, atacanteTirada1, atacanteTirada2, defensaTirada1, defensaTirada2, bonusAtaca, bonusDefiende) {
         // Actualiza la información del panel
         this.titleText.setText('COMBATE');
@@ -146,7 +172,16 @@ export default class PanelLateral {
         this.CombatInfo = true;
     }
 
-    // Confirmar Ataque
+    /**
+     * Prepara y muestra la información para confirmar un ataque inminente.
+     * @param {string} fichaDefiende - tipo de pieza que defiende
+     * @param {string} fichaAtaque - tipo de pieza que ataca
+     * @param {string} equipoAtaque - identificador del equipo atacante
+     * @param {string} equipoDefensa - identificador del equipo defensor
+     * @param {string} accion - texto a mostrar en el botón de acción
+     * @param {Celda} casillaAtacante - celda de origen del ataque
+     * @param {Celda} casillaDefensa - celda objetivo del ataque
+     */
     updateInfo(fichaDefiende, fichaAtaque, equipoAtaque, equipoDefensa, accion, casillaAtacante, casillaDefensa) {
 
         let bonusAtaca = casillaDefensa.getPieza().getBonusAtaque();
@@ -176,6 +211,9 @@ export default class PanelLateral {
 
     }
 
+    /**
+     * Restaura el panel a su estado por defecto cuando no hay acción en curso.
+     */
     updateInfoEsperandoAccion() {
         this.titleText.setText('COMBATE');
         this.infoText.setText('Esperando acción...');
@@ -186,6 +224,13 @@ export default class PanelLateral {
         this.buttonTry.setVisible(false);
     }
 
+    /**
+     * Calcula bonificaciones adicionales para un atacante en función de piezas adyacentes.
+     * @param {number} bonusAtaca - bonificación base recibida
+     * @param {Pieza} atacaPieza - pieza atacante
+     * @param {Pieza} defiendePieza - pieza defensora
+     * @returns {number} bonificación resultante
+     */
     bonus(bonusAtaca, atacaPieza, defiendePieza) {
         {
             if (atacaPieza.getTipo() == 'Soldado') {
@@ -213,6 +258,18 @@ export default class PanelLateral {
         return bonusAtaca;
     }
 
+    /**
+     * Helper para crear objetos de texto en la escena con formato consistente.
+     * @param {number} width - posición X
+     * @param {number} height - posición Y
+     * @param {string} text - contenido del texto
+     * @param {number} wordWrapWidth - ancho de ajuste de líneas
+     * @param {string} fontStyle - estilo de fuente
+     * @param {string|number} px - tamaño de fuente
+     * @param {number} origin - origen horizontal
+     * @param {string} [fill='#ffffffff'] - color de relleno
+     * @returns {Phaser.GameObjects.Text} texto creado
+     */
     createText(width, height, text, wordWrapWidth, fontStyle, px, origin, fill = '#ffffffff') {
         return this.escena.add.text(width, height, text, { // Equipo que defiende
             fontSize: px,
@@ -223,6 +280,9 @@ export default class PanelLateral {
         }).setOrigin(origin);
     }
 
+    /**
+     * Desactiva el botón de información (oculta y deshabilita interacción).
+     */
     desactivarBtnInfo() {
         if (this.btInfo) {
             this.btInfo.setVisible(false);
@@ -232,3 +292,5 @@ export default class PanelLateral {
     }
 
 }
+
+export default PanelLateral;

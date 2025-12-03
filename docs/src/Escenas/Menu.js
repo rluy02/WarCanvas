@@ -1,13 +1,31 @@
-export default class Menu extends Phaser.Scene {
+/**
+ * Escena del menú principal del juego.
+ * @class Menu
+ * @extends Phaser.Scene
+ * @memberof Escenas
+ */
+class Menu extends Phaser.Scene {
+    /**
+     * Constructor de la escena Menu.
+     * @constructor
+     */
     constructor() {
         super("Menu");
     }
 
+    /**
+     * Método preload de la escena Menu.
+     * Carga las imágenes necesarias para la escena.
+     */
     preload() {
         this.load.image('fondo', 'imgs/menuJuego/FondoMenu.webp')
         this.load.image('boton', 'imgs/menuJuego/boton.webp')
     }
 
+    /**
+     * Método create de la escena Menu.
+     * Crea los elementos gráficos y lógicos necesarios para la escena.
+     */
     create() {
         this.add.image(400, 300, 'fondo').setOrigin(0.5)
         this.add.text(this.scale.width / 2, this.scale.height / 2 - 200, 'WAR CANVAS', {
@@ -110,3 +128,5 @@ export default class Menu extends Phaser.Scene {
         });
     }
 }
+
+export default Menu;

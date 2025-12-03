@@ -1,8 +1,21 @@
 import Pieza from '../Pieza.js';
 import { Eventos } from '../../Events.js';
 import { EventBus } from '../../EventBus.js';
+import Tablero from '../Tablero.js';
 
-export default class Artilleria extends Pieza {
+/**
+ * Clase que representa la pieza de Artillería en el juego.
+ * @class Artilleria
+ * @extends Pieza
+ * @memberof Logica
+ */
+class Artilleria extends Pieza {
+    /**
+     * Constructor de la pieza Artillería.
+     * @param {number} fil - fila
+     * @param {number} col - columna
+     * @param {string} jugador - 'J1' o 'J2'
+     */
     constructor(fil, col, jugador) {
         super('Artilleria', fil, col, jugador, 1, 3, -1);
 
@@ -15,6 +28,14 @@ export default class Artilleria extends Pieza {
         EventBus.on(Eventos.CHANGE_TURN, (jugador) => { this.pasoTurno(jugador) });
     }
 
+    /**
+     * Lanza un proyectil en una celda aleatoria dentro de un área de 3x3 centrada en (fil, col).
+     * @param {number} fil - fila
+     * @param {number} col - columna
+     * @param {Phaser.Scene} escena - escena actual
+     * @param {Tablero} tablero - tablero de juego
+     * @param {number} tamCasilla - tamaño de la casilla en píxeles
+     */
     lanzarProyectil(fil, col, escena, tablero, tamCasilla = 64) {
         const randomCell = Phaser.Math.Between(0, 4);
         const direcciones = [
@@ -62,6 +83,12 @@ export default class Artilleria extends Pieza {
         this.utilizable = false;
     }
 
+    /**
+     * Proceso de paso de turno para la pieza de artillería.
+     * Cuando es el turno del jugador de esta pieza, se incrementa el contador de turnos transcurridos.
+     * Si el contador alcanza el valor del cooldown, la pieza se vuelve utilizable nuevamente.
+     * @param {string} jugador - jugador actual 'J1' o 'J2'
+     */
     pasoTurno(jugador){
         if (!this.utilizable && jugador == this.jugador){
             this.turnosTranscurridos++;
@@ -72,7 +99,13 @@ export default class Artilleria extends Pieza {
         }
     }
 
+    /**
+     * Determina si la pieza de artillería puede disparar.
+     * @returns {boolean} - true si la pieza puede disparar, false en caso contrario
+     */
     puedeDisparar() {
         return this.utilizable;
     }
 }
+
+export default Artilleria;

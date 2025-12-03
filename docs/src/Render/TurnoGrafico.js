@@ -2,7 +2,12 @@ import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
 import Turno from "../Logica/Turno.js";
 
-export default class TurnoGraficos {
+/**
+ * Clase que gestiona la parte gráfica del turno 
+ * @class TurnoGraficos
+ * @memberof Render
+ */
+class TurnoGraficos {
     /**
      * Constructor de TurnoGrafico
      * @param {Phaser.Scene} escena 
@@ -125,3 +130,5 @@ export default class TurnoGraficos {
         if (this.acabarText) this.acabarText.disableInteractive();
     }
 }
+
+export default TurnoGraficos;

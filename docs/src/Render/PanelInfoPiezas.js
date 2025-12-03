@@ -1,4 +1,9 @@
-export default class PanelInfoPiezas {
+/**
+ * Gestiona el panel lateral de información.
+ * @class
+ * @memberof Render
+ */
+class PanelInfoPiezas {
     constructor(escena) {
         this.escena = escena;
         this.elementos = [];
@@ -148,3 +153,5 @@ export default class PanelInfoPiezas {
         this.forceClose = true;
     }
 }
+
+export default PanelInfoPiezas;

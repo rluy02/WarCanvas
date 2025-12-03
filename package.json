@@ -1,0 +1,30 @@
+{
+  "name": "warcanvas",
+  "version": "1.0.0",
+  "description": "Este videojuego ha sido desarrollado como parte de un **trabajo universitario** para la asignatura de *PROGRAMACIÓN DE VIDEOJUEGOS EN LENGUAJES INTERPRETADOS* en la *Universidad Complutense de Madrid*.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "docs": "jsdoc -c jsdoc.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CapitanManzana/WarCanvas.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/CapitanManzana/WarCanvas/issues"
+  },
+  "homepage": "https://github.com/CapitanManzana/WarCanvas#readme",
+  "devDependencies": {
+    "better-docs": "^2.7.3",
+    "clean-jsdoc-theme": "^4.3.0",
+    "docdash": "^2.0.2",
+    "docma": "^3.2.2"
+  }
+}
