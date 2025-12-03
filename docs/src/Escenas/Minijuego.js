@@ -19,7 +19,16 @@ class Minijuego extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, this.scale.width, this.scale.height);
         //para que el comandante se choque con los limites (es el canvas)
         this.comandante.setCollideWorldBounds(true);
+
+        const spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        spaceKey.on('down',()=>{
+            console.log("salta");
+            this.comandante.body.setAcceleration(0,-100);
+            this.comandante.body.setVelocity(0,-500);
+        });
+
     }
+
 
 }
 export default Minijuego;
