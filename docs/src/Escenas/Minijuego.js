@@ -20,9 +20,11 @@ class Minijuego extends Phaser.Scene {
      * Carga los recursos necesarios para la escena.
      */
     preload() {
+        //cuando esta escena venga de INICIO, no hara falta el preload
         this.load.image('Comandante', './imgs/piezas/Comandante.webp');
         this.load.image('ComandanteEnemigo', './imgs/piezas/Comandante2.webp');
         this.load.image('Granada', './imgs/minijuego/granada.webp');
+        this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
     }
 
     /**
@@ -31,6 +33,7 @@ class Minijuego extends Phaser.Scene {
     create() {
         //establecemos el limite del mundo del tamaño del canvas
         this.physics.world.setBounds(0, 0, this.scale.width, this.scale.height);
+
         this.createDrawFull();
         this.createComandanteEnemigo();
 
@@ -84,7 +87,7 @@ class Minijuego extends Phaser.Scene {
         this.comandante.setScale(0.1);
         //para que el comandante se choque con los limites (es el canvas)
         this.comandante.setCollideWorldBounds(true);
-
+        this.comandante.body.setImmovable(true);
         const spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         spaceKey.on('down', () => {
             console.log("salta");
@@ -107,6 +110,22 @@ class Minijuego extends Phaser.Scene {
         let randomX = Phaser.Math.Between(-700, -900);
         this.granada.setCollideWorldBounds(true);
         this.granada.body.setVelocity(randomX, randomY);
+        this.granada.body.setBounce(0.3);
+        this.physics.add.collider(this.granada, this.comandante, null, null , this);
+         
     }
+
+    crearAnimaciones() {
+        if (!this.anims.exists('explotar')) {
+            this.anims.create({
+                key: 'explotar',
+                frames: this.anims.generateFrameNumbers('explosion', { frames: [0, 1, 2, 3, 4, 5, 6, 7] }),
+                frameRate: 10,
+                repeat: 0
+            });
+        }
+    }
+
+
 }
 export default Minijuego; 
