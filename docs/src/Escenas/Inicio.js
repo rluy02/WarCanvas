@@ -268,6 +268,11 @@ class Inicio extends Phaser.Scene {
 
         this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
     }
+
+    lanzarMinijuego() {
+        this.scene.sleep();
+        this.scene.launch('Minijuego');
+    }
 }
 
 export default Inicio;
