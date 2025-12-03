@@ -8,9 +8,9 @@ class Soldado extends Pieza {
      * @param {number} col - Columna inicial del soldado
      * @param {string} jugador - Identificador del jugador ('J1' o 'J2')
      */
-    constructor(fil, col, jugador) {
+    constructor(tablero,fil, col, jugador) {
         // Llama al constructor padre con: tipo='Soldado', movimiento=2, ataque=1, defensa=1
-        super('Soldado', fil, col, jugador, 2, 1, 1);
+        super(tablero, 'Soldado', fil, col, jugador, 2, 1, 1);
 
         /**
          * Peso base del soldado (sin considerar enemigos cercanos)
