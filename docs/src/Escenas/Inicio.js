@@ -55,7 +55,7 @@ class Inicio extends Phaser.Scene {
         this.crearAnimaciones();
 
         //Creamos la instancia y la guardamos en tab
-        this.tab = new Tablero();
+        this.tab = new Tablero(8,10,this);
 
         this.piezas = [];
         this.acciones = 3;
@@ -102,7 +102,7 @@ class Inicio extends Phaser.Scene {
             this.piezaGrafico.dibujarPieza(pieza);
             this.piezas.push(pieza);
         }
-        // Se añade un evento para cuando se mueve la pieza
+        // Se añade un evento para cuando se mueve la pieza (once se ejecuta antes que on)
         EventBus.on(Eventos.PIECE_MOVED, (pieza) => {
             this.moverPieza(pieza);
         });
@@ -172,9 +172,9 @@ class Inicio extends Phaser.Scene {
     moverPieza(pieza) {
         for (let p of this.piezas) {
             if (p == pieza) {
-                this.piezaGrafico.eliminarPieza(pieza);
-                this.piezaGrafico.dibujarPieza(pieza);
-            }
+                let data =this.piezaGrafico.eliminarPieza(pieza);
+                this.piezaGrafico.dibujarPieza(pieza, data);
+           }
         }
     }
 
@@ -267,6 +267,14 @@ class Inicio extends Phaser.Scene {
         this.load.image('artilleria2', './imgs/piezas/artilleriaJ1.webp');
 
         this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
+    }
+
+    /**
+     * Devuelve la instancia de PiezaGrafico asociada a la escena.
+     * @returns {PiezaGrafico} - instancia de PiezaGrafico
+     */
+    getPiezaGrafico() {
+        return this.piezaGrafico;
     }
 }
 

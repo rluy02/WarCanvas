@@ -62,6 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     btnDocu.addEventListener('click', e => {
         e.preventDefault();
-        window.open('./Documentacion/index.html', '_blank');
+        //window.open('./Documentacion/index.html', '_blank');
     });
 });

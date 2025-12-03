@@ -27,7 +27,7 @@ class Pieza {
         this.movida = false;
         this.bonusAtaque = bonusAtaque;
         this.bonusDefensa = bonusDefensa;
-      }
+      } 
 
     /**
      * Mueve la pieza a una nueva posición.
@@ -73,16 +73,22 @@ class Pieza {
 
     /**
      * Marca la pieza como movida en este turno.
+     * Cambia la opacidad del sprite asociado para indicar visualmente el estado.
      */
     setMovida(){
       this.movida = true;
+      const escena = this.tablero.getEscena();
+      escena.getPiezaGrafico().getMapSprites().get(this).setAlpha(0.5); // Hacer la pieza semi-transparente al moverse
     }
 
     /**
      * Reinicia el estado de movimiento de la pieza para el próximo turno.
+     * 
      */
     resetMovida(){
       this.movida = false;
+      const escena = this.tablero.getEscena();
+      escena.getPiezaGrafico().getMapSprites().get(this).setAlpha(1); // Restaurar opacidad completa al resetear movimiento
     }
 
     /**

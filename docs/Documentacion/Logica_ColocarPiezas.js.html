@@ -77,19 +77,19 @@ class ColocarPiezas {
         if((this.equipoActual === this.equipo1 &amp;&amp; col &lt; 3) || (this.equipoActual === this.equipo2 &amp;&amp; col &lt; 10 &amp;&amp; col > 6) ) {
         let pieza = null;
         if (this.tipo == 'Soldado' &amp;&amp; this.equipoActual.getSoldados() > 0)  {
-            pieza =  new Soldado(fil, col, nombre);
+            pieza =  new Soldado(this.tablero, fil, col, nombre);
             this.equipoActual.setSoldado(pieza);
         }
         else if (this.tipo == 'Artilleria' &amp;&amp; this.equipoActual.getArtilleria() > 0) {
-            pieza = new Artilleria(fil, col, nombre);
+            pieza = new Artilleria(this.tablero, fil, col, nombre);
             this.equipoActual.setArtilleria(pieza);
         }
         else if (this.tipo == 'Caballeria' &amp;&amp; this.equipoActual.getCaballeria() > 0) {
-            pieza = new Caballeria(fil, col, nombre);
+            pieza = new Caballeria(this.tablero, fil, col, nombre);
             this.equipoActual.setCaballeria(pieza);
         }
         else if (this.tipo == 'Comandante' &amp;&amp; this.equipoActual.getComandante() > 0){
-            pieza = new Comandante(fil, col, nombre);
+            pieza = new Comandante(this.tablero, fil, col, nombre);
             this.equipoActual.setComandante(pieza);
         }
         this.tablero[fil][col].setContenido(pieza);

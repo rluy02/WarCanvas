@@ -41,12 +41,17 @@ class TableroGrafico {
         // Separar capas de selección/movimiento de capas de eventos
         this.casillasPintadas = [];      // Para selección/movimiento (se limpian con limpiarTablero)
         this.casillasEventos = [];       // Para eventos (persisten hasta limpiarEventos)
+        this.casillasFichasMovidas = []; // Para piezas movidas (persisten hasta resetear turno)
 
         //Si se esta moviendo
         this.moviendoPieza = false;
 
         EventBus.on(Eventos.PIECE_END_ACTIONS, () => {
             this.restTablero();
+        });
+
+        EventBus.on(Eventos.CHANGE_TURN, () => {
+            this.resetCasillasFichasMovidas();
         });
 
         for (let fila = 0; fila &lt; this.tablero.filas; fila++) {
@@ -425,6 +430,7 @@ class TableroGrafico {
         this.movimientoIniciado = false;
 
         this.limpiarTablero();
+        if (this.tablero.getPiezaActiva()) this.marcarCasillaMovida(this.tablero.getPiezaActiva().fil, this.tablero.getPiezaActiva().col);
         this.celdaSeleccionada = null;
     }
 
@@ -437,6 +443,26 @@ class TableroGrafico {
                 this.graficos[fila][col].disableInteractive();
             }
         }
+    }
+
+    /**
+     * Marca una casilla como movida, añadiendo una capa amarilla semi-transparente.
+     * @param {number} fila - fila
+     * @param {number} col - columna
+     */
+    marcarCasillaMovida(fila, col) {
+        const capa = this.crearCapa(fila, col, 0x3b3b3b3b, 0.5);
+        capa.setDepth(8);
+        this.casillasFichasMovidas.push({ capa, fila, col });
+    }
+
+    /**
+     * Resetea las casillas marcadas como movidas.
+     */
+    resetCasillasFichasMovidas() {
+        this.casillasFichasMovidas.forEach(obj => obj.capa.destroy());
+        this.casillasFichasMovidas = [];
+        this.tablero.resetPiezaActiva();
     }
 }
 
