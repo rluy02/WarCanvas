@@ -30,36 +30,49 @@ export default class Soldado extends Pieza {
         let modo = 0 // 0 = cerca; 1 = lejos
         let peso = this.pesoBase;
         let formacionAtacaCelda = null;
+        let bestFormacion = 0;
         const celdasVisitadas = new Set();
 
         // Obtener celdas vecinas directas (distancia 1)
         const celdasVecinas = this.GetVecinos(this.tablero.getCelda(this.fil, this.col), celdasVisitadas);
-
-        // Analizar vecinos directos
         for (const vecino of celdasVecinas) {
-            if (!celdasVisitadas.has(vecino)) {
-                console.log(`celda a comprobar: ${vecino.getPosicion().fila}, ${vecino.getPosicion().columna}`)
-                let data = this.checkFormacion(vecino, celdasVisitadas)
-                peso += data.bonusPeso
-                if (!data.formacion) {
+            if (!vecino.estaVacia() && vecino.getPieza().getJugador() === 'J1') {
+                const resultado = this.checkFormacion(vecino, celdasVisitadas);
+                if (resultado > bestFormacion) {
+                    bestFormacion = resultado;
+                    formacionAtacaCelda = vecino;
+                    celdasVisitadas.add(vecino);
+                }
+                else {
                     peso += this.detectaTipo(vecino);
                     celdasVisitadas.add(vecino);
                 }
             }
-            // Analizar vecinos de segundo nivel (distancia 2)
-            const sigVecinos = this.GetVecinos(vecino, celdasVisitadas);
-            for (const sigVecino of sigVecinos) {
-                peso += this.detectaTipo(sigVecino);
-                celdasVisitadas.add(sigVecino);
+            if (!vecino.estaVacia() && vecino.getPieza().getJugador() === 'J2') {
+                celdasVisitadas.add(vecino);
             }
+        }
+        peso += bestFormacion;
+        // Analizar vecinos directos
+        for (const vecino of celdasVecinas) {
+            if (!celdasVisitadas.has(vecino)) {
+                const sigVecinos = this.GetVecinos(vecino, celdasVisitadas);
+                for (const sigVecino of sigVecinos) {
+                    peso += this.detectaTipo(sigVecino);
+                    celdasVisitadas.add(sigVecino);
+                }
+            }
+            // Analizar vecinos de segundo nivel (distancia 2)
         }
         if (peso === this.pesoBase)
             modo = 1;
         if (modo === 1) {
 
         }
-
-        return peso;
+        console.log(`Peso calculado para Soldado en (${this.fil}, ${this.col}): ${peso}`);
+        if (formacionAtacaCelda != null) { console.log(`Formación ataca a: ${formacionAtacaCelda.getPosicion().fila}, ${formacionAtacaCelda.getPosicion().col}`)
+}
+        return { peso: peso, formacionAtacaCelda: formacionAtacaCelda };
     }
 
     /**
@@ -129,22 +142,58 @@ export default class Soldado extends Pieza {
 
     checkFormacion(celda, celdasVisitadas) {
 
-
         let filSoldado = this.getPosicion().fila;
         let colSoldado = this.getPosicion().col;
+        let bonusPeso = 0;
+        let formacion = false;
 
-        if (filSoldado == defiendePieza.getPosicion().fila) {
+        if (filSoldado == celda.getPosicion().fila) {
             let arriba = filSoldado - 1;
             let abajo = filSoldado + 1;
 
-            if (arriba >= 0 && this.tablero.getCelda(arriba, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
-            if (abajo < this.tablero.size().fila && this.tablero.getCelda(abajo, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
+            if (arriba >= 0 && this.tablero.getCelda(arriba, colSoldado).getTipo() == 'Soldado' && this.tablero.getCelda(arriba, colSoldado).getPieza().getJugador() == 'J2') {
+                bonusPeso++;
+                celdasVisitadas.add(this.tablero.getCelda(arriba, colSoldado));
+                formacion = true;
+            }
+            if (abajo < this.tablero.filas && this.tablero.getCelda(abajo, colSoldado).getTipo() == 'Soldado' && this.tablero.getCelda(abajo, colSoldado).getPieza().getJugador() == 'J2') {
+                bonusPeso++;
+                celdasVisitadas.add(this.tablero.getCelda(abajo, colSoldado));
+                formacion = true;
+            }
+
+
         }
         else {
             let izquierda = colSoldado - 1;
             let derecha = colSoldado + 1;
-            if (izquierda >= 0 && this.tablero.getCelda(filSoldado, izquierda).getTipo() == 'Soldado') bonusAtaca++;
-            if (derecha < this.tablero.size().fila && this.tablero.getCelda(filSoldado, derecha).getTipo() == 'Soldado') bonusAtaca++;
+            if (izquierda >= 0 && this.tablero.getCelda(filSoldado, izquierda).getTipo() == 'Soldado' && this.tablero.getCelda(filSoldado, izquierda).getPieza().getJugador() == 'J2') {
+                bonusPeso++;
+                celdasVisitadas.add(this.tablero.getCelda(filSoldado, izquierda));
+                formacion = true;
+            }
+            if (derecha < this.tablero.columnas && this.tablero.getCelda(filSoldado, derecha).getTipo() == 'Soldado' && this.tablero.getCelda(filSoldado, derecha).getPieza().getJugador() == 'J2') {
+                bonusPeso++;
+                celdasVisitadas.add(this.tablero.getCelda(filSoldado, derecha));
+                formacion = true;
+            }
         }
+        if (formacion) {
+            switch (celda.getTipo()) {
+                case 'Soldado':
+                    bonusPeso += 1;
+                    break;
+                case 'Caballeria':
+                    bonusPeso += 2;
+                    break;
+                case 'Artilleria':
+                    bonusPeso += 3;
+                    break;
+                case 'Comandante':
+                    bonusPeso += 4;
+                    break;
+            }
+        }
+        return bonusPeso * 2;
     }
 }

@@ -24,21 +24,14 @@ export default class InteligenciaArtificial {
         for (let i = 0; i < 1; i++) {
             let selected = false;
             let pieza = null;
-            // while (!selected) {
-            //     let indicePieza = Phaser.Math.Between(0, this.equipoIA.piezas.length - 1)
-            //     pieza = this.equipoIA.piezas[indicePieza];
-            //     if (!pieza.getMovida()) {
-            //         selected = true;
-            //         if (pieza.getTipo() == 'Artilleria' && !pieza.puedeDisparar())
-            //             selected = false
-            //     }
-            // }
-            let indicePieza = 0;
-            while (!selected && indicePieza < this.equipoIA.piezas.length) {
+            while (!selected) {
+                let indicePieza = Phaser.Math.Between(0, this.equipoIA.piezas.length - 1)
                 pieza = this.equipoIA.piezas[indicePieza];
-                if (pieza.getTipo() == 'Artilleria')
+                if (!pieza.getMovida()) {
                     selected = true;
-                indicePieza++;
+                    if (pieza.getTipo() == 'Artilleria' && !pieza.puedeDisparar())
+                        selected = false
+                }
             }
             this.FindClosestEnemy(pieza)
             console.log(`Pieza IA: ${pieza.getTipo()}`)
@@ -47,7 +40,9 @@ export default class InteligenciaArtificial {
 
             console.log(`Enemigo más cercana: ${this.closestEnemy.getTipo()}`)
             console.log(this.closestEnemy.getPosicion())
-
+            if (pieza.getTipo() === 'Soldado') {
+                pieza.calculaPeso();
+            }
             if (pieza.getTipo() == 'Artilleria') {
                 let celdaDestino = this.algoritmoArtilleria(pieza);
                 if (celdaDestino) {
