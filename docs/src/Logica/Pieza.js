@@ -17,6 +17,8 @@ class Pieza {
      * @constructor
      */
     constructor(tipoPieza, fil, col, jugador, numMovimientos, bonusAtaque, bonusDefensa) {
+    constructor(tablero, tipoPieza, fil, col, jugador, numMovimientos, bonusAtaque, bonusDefensa) {
+        this.tablero = tablero;
         this.tipoPieza = tipoPieza;
         this.fil = fil;
         this.col = col;

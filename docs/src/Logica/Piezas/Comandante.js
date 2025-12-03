@@ -15,6 +15,9 @@ class Comandante extends Pieza {
      */
     constructor(fil, col, jugador) {
         super('Comandante', fil, col, jugador, 4, 4, 5);
+export default class Comandante extends Pieza {
+    constructor(tablero, fil, col, jugador) {
+        super(tablero, 'Comandante', fil, col, jugador, 4, 4, 5);
     }
 }
 

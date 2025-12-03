@@ -18,6 +18,9 @@ class Artilleria extends Pieza {
      */
     constructor(fil, col, jugador) {
         super('Artilleria', fil, col, jugador, 1, 3, -1);
+export default class Artilleria extends Pieza {
+    constructor(tablero, fil, col, jugador) {
+        super(tablero, 'Artilleria', fil, col, jugador, 1, 3, -1);
 
         this.cooldown = 4;
         this.turnosTranscurridos = 0;

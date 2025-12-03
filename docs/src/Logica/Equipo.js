@@ -57,24 +57,24 @@ class Equipo {
 
         // Generamos las piezas para el equipo "J1" 
         for (let pos of posicionesSoldadosJ1) {
-            let soldado = new Soldado(pos.x, pos.y, "J1");  // Crear soldado
+            let soldado = new Soldado(this.tablero, pos.x, pos.y, "J1");  // Crear soldado
             this.tablero.getCelda(pos.x, pos.y).setContenido(soldado);
             this.piezas.push(soldado);
         }
 
         for (let pos of posicionesCaballeriasJ1) {
-            let caballeria = new Caballeria(pos.x, pos.y, "J1");  // Crear caballería
+            let caballeria = new Caballeria(this.tablero, pos.x, pos.y, "J1");  // Crear caballería
             this.tablero.getCelda(pos.x, pos.y).setContenido(caballeria)
             this.piezas.push(caballeria);
         }
 
         // Crear comandante
-        let comandante = new Comandante(posicionComandanteJ1.x, posicionComandanteJ1.y, "J1");
+        let comandante = new Comandante(this.tablero, posicionComandanteJ1.x, posicionComandanteJ1.y, "J1");
         this.tablero.getCelda(posicionComandanteJ1.x, posicionComandanteJ1.y).setContenido(comandante);
         this.piezas.push(comandante);
 
         //Crear artilleria
-        let artilleria = new Artilleria(posicionArtilleria.x, posicionArtilleria.y, "J1");
+        let artilleria = new Artilleria(this.tablero, posicionArtilleria.x, posicionArtilleria.y, "J1");
         this.tablero.getCelda(posicionArtilleria.x, posicionArtilleria.y).setContenido(artilleria);
         this.piezas.push(artilleria);
     }
@@ -97,24 +97,24 @@ class Equipo {
 
         // Generamos las piezas para el equipo "J2" 
         for (let pos of posicionesSoldadosJ2) {
-            let soldado = new Soldado(pos.x, pos.y, "J2");  // Crear soldado
+            let soldado = new Soldado(this.tablero, pos.x, pos.y, "J2");  // Crear soldado
             this.tablero.getCelda(pos.x, pos.y).setContenido(soldado);
             this.piezas.push(soldado);
         }
 
         for (let pos of posicionesCaballeriasJ2) {
-            let caballeria = new Caballeria(pos.x, pos.y, "J2");  // Crear caballería
+            let caballeria = new Caballeria(this.tablero, pos.x, pos.y, "J2");  // Crear caballería
             this.tablero.getCelda(pos.x, pos.y).setContenido(caballeria)
             this.piezas.push(caballeria);
         }
 
         // Crear comandante
-        let comandante = new Comandante(posicionComandanteJ2.x, posicionComandanteJ2.y, "J2");
+        let comandante = new Comandante(this.tablero, posicionComandanteJ2.x, posicionComandanteJ2.y, "J2");
         this.tablero.getCelda(posicionComandanteJ2.x, posicionComandanteJ2.y).setContenido(comandante);
         this.piezas.push(comandante);
 
         //Crear artilleria
-        let artilleria = new Artilleria(posicionArtilleria.x, posicionArtilleria.y, "J2");
+        let artilleria = new Artilleria(this.tablero, posicionArtilleria.x, posicionArtilleria.y, "J2");
         this.tablero.getCelda(posicionArtilleria.x, posicionArtilleria.y).setContenido(artilleria);
         this.piezas.push(artilleria);
 
