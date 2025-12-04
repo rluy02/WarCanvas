@@ -87,7 +87,7 @@ class Soldado extends Pieza {
             console.log(`Formación ataca a: ${celdaAtacada.getPosicion().fila}, ${celdaAtacada.getPosicion().col}`)
         }
 
-        return { peso: (bestPeso + this.pesoBase), formacionAtacaCelda: celdaAtacada };
+        return { peso: (bestPeso + this.pesoBase), celdaAtacada: celdaAtacada };
     }
 
     /**

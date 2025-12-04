@@ -48,31 +48,38 @@ class Caballeria extends Pieza {
 
         // Primera pasada: analizar vecinos directos en busca de enemigos y formaciones
         for (const vecino of celdasVecinas) {
-            celdasVisitadas.add(vecino.celda)
+            celdasVisitadas.add(vecino.celda);
+            
             if (!vecino.celda.estaVacia() && vecino.celda.getPieza().getJugador() === 'J1' && !vecino.salto) {
-                const result = this.detectaTipo(vecino.celda)
+                const result = this.detectaTipo(vecino.celda);
                 if (result > bestPeso) {
                     bestPeso = result;
                     celdaAtacada = vecino.celda;
                 }
             }
+            
             if (vecino.celda.estaVacia()) {
-                const segVecinos = this.getVecinos(vecino.celda, celdasVisitadas, true)
+                const segVecinos = this.getVecinos(vecino.celda, celdasVisitadas, true);
+                
                 for (const segVecino of segVecinos) {
-                    celdasVisitadas.add(segVecino.celda)
+                    celdasVisitadas.add(segVecino.celda);
+                    
                     if (!segVecino.celda.estaVacia() && segVecino.celda.getPieza().getJugador() === 'J1') {
-                        const segResult = this.detectaTipo(segVecino.celda)
+                        const segResult = this.detectaTipo(segVecino.celda);
                         if (segResult > bestPeso) {
                             bestPeso = segResult;
                             celdaAtacada = segVecino.celda;
                         }
                     }
+                    
                     if (vecino.salto === false) {
                         if (segVecino.celda.estaVacia()) {
-                            const terVecinos = this.getVecinos(segVecino.celda, celdasVisitadas, true)
+                            const terVecinos = this.getVecinos(segVecino.celda, celdasVisitadas, true);
+                            
                             for (const terVecino of terVecinos) {
-                                celdasVisitadas.add(terVecino.celda)
-                                const terResult = this.detectaTipo(vecino.celda)
+                                celdasVisitadas.add(terVecino.celda);
+                                
+                                const terResult = this.detectaTipo(terVecino.celda);
                                 if (terResult > bestPeso) {
                                     bestPeso = terResult;
                                     celdaAtacada = terVecino.celda;
@@ -84,10 +91,12 @@ class Caballeria extends Pieza {
             }
         }
 
+        // DEBUG: Pintar celdas comprobadas
+
         // Logs de depuración
         console.log(`Peso calculado para Caballería en (${this.fil}, ${this.col}): ${bestPeso + this.pesoBase}`);
         if (celdaAtacada != null) {
-            console.log(`Caballería ataca a: ${celdaAtacada.getPosicion().fila}, ${celdaAtacada.getPosicion().col}`)
+            console.log(`Caballería ataca a: ${celdaAtacada.getPosicion().fila}, ${celdaAtacada.getPosicion().col}`);
         }
 
         return { peso: (bestPeso + this.pesoBase), formacionAtacaCelda: celdaAtacada};
@@ -105,16 +114,16 @@ class Caballeria extends Pieza {
         if (!celda.estaVacia() && celda.getPieza().getJugador() === 'J1') {
             switch (celda.getPieza().getTipo()) {
                 case 'Soldado':
-                    peso += 1;
+                    peso = 1;
                     break;
                 case 'Caballeria':
-                    peso += 2;
+                    peso = 2;
                     break;
                 case 'Artilleria':
-                    peso += 3;
+                    peso = 3;
                     break;
                 case 'Comandante':
-                    peso += 4;
+                    peso = 4;
                     break;
                 
             }
@@ -134,7 +143,7 @@ class Caballeria extends Pieza {
         const fila = pos.fila;
         const col = pos.col;
         const res = [];
-        let haSaltado = salto;
+        let haSaltado = false;
 
         // Arriba
         if (fila > 0 && !celdasVisitadas.has(this.tablero.getCelda(fila - 1, col))) {
@@ -149,7 +158,7 @@ class Caballeria extends Pieza {
             }
             res.push({ celda: celdaArriba, salto: haSaltado });
         }
-
+        haSaltado = false;
         // Izquierda
         if (col > 0 && !celdasVisitadas.has(this.tablero.getCelda(fila, col - 1))) {
             let celdaIzquierda = this.tablero.getCelda(fila, col - 1);
@@ -163,7 +172,7 @@ class Caballeria extends Pieza {
             }
             res.push({ celda: celdaIzquierda, salto: haSaltado });
         }
-
+        haSaltado = false;
         // Abajo
         if (fila < this.tablero.filas - 1 && !celdasVisitadas.has(this.tablero.getCelda(fila + 1, col))) {
             let celdaAbajo = this.tablero.getCelda(fila + 1, col);
@@ -177,7 +186,7 @@ class Caballeria extends Pieza {
             }
             res.push({ celda: celdaAbajo, salto: haSaltado });
         }
-
+        haSaltado = false;
         // Derecha
         if (col < this.tablero.columnas - 1 && !celdasVisitadas.has(this.tablero.getCelda(fila, col + 1))) {
             let celdaDerecha = this.tablero.getCelda(fila, col + 1);
@@ -194,6 +203,7 @@ class Caballeria extends Pieza {
 
         return res;
     }
+
 }
 
 export default Caballeria;
