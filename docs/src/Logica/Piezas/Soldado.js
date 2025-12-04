@@ -34,10 +34,11 @@ class Soldado extends Pieza {
         let celdaAtacada = null; // Guarda la celda que será atacada por formación
         let bestPeso = 0; // Mejor peso encontrado durante el análisis
         const celdasVisitadas = new Set(); // Evita procesar la misma celda múltiples veces
+        celdasVecinas.add(this.tablero.getCelda(this.fil, this.col));
 
         // Obtener celdas vecinas directas (distancia 1: arriba, abajo, izquierda, derecha)
-        const celdasVecinas = this.GetVecinos(this.tablero.getCelda(this.fil, this.col), celdasVisitadas);
-        
+        const celdasVecinas = this.getVecinos(this.tablero.getCelda(this.fil, this.col), celdasVisitadas);
+
         // Primera pasada: analizar vecinos directos en busca de enemigos y formaciones
         for (const vecino of celdasVecinas) {
             // Si el vecino es un enemigo (J1)
@@ -63,12 +64,12 @@ class Soldado extends Pieza {
                 celdasVisitadas.add(vecino);
             }
         }
-        
+
         // Segunda pasada: analizar vecinos de segundo nivel (distancia 2)
         // Esto permite detectar amenazas que están a 2 movimientos de distancia
         for (const vecino of celdasVecinas) {
             if (!celdasVisitadas.has(vecino)) {
-                const sigVecinos = this.GetVecinos(vecino, celdasVisitadas);
+                const sigVecinos = this.getVecinos(vecino, celdasVisitadas);
                 for (const sigVecino of sigVecinos) {
                     // Actualizar el mejor peso si encontramos un enemigo más valioso
                     if (bestPeso < this.detectaTipo(sigVecino)) {
@@ -79,22 +80,22 @@ class Soldado extends Pieza {
                 }
             }
         }
-        
+
         // Logs de depuración
         console.log(`Peso calculado para Soldado en (${this.fil}, ${this.col}): ${bestPeso}`);
         if (celdaAtacada != null) {
             console.log(`Formación ataca a: ${celdaAtacada.getPosicion().fila}, ${celdaAtacada.getPosicion().col}`)
         }
-        
+
         return { peso: bestPeso + this.pesoBase, formacionAtacaCelda: celdaAtacada };
     }
 
     /**
-     * Detecta el tipo de pieza en una celda y devuelve su valor táctico
-     * Solo cuenta piezas del jugador 'J1' (enemigo)
-     * @param {Celda} celda - Celda a analizar
-     * @returns {number} Peso según tipo de pieza enemiga (0 si vacía o aliada)
-     */
+ * Detecta el tipo de pieza en una celda y devuelve su valor táctico
+ * Solo cuenta piezas del jugador 'J1' (enemigo)
+ * @param {Celda} celda - Celda a analizar
+ * @returns {number} Peso según tipo de pieza enemiga (0 si vacía o aliada)
+ */
     detectaTipo(celda) {
         let peso = 0;
 
@@ -125,7 +126,7 @@ class Soldado extends Pieza {
      * @param {Set<Celda>} celdasVisitadas - Set de celdas ya procesadas (evita repeticiones)
      * @returns {Array<Celda>} Array de celdas vecinas válidas
      */
-    GetVecinos(celda, celdasVisitadas) {
+    getVecinos(celda, celdasVisitadas) {
         const pos = celda.getPosicion();
         const fila = pos.fila;
         const col = pos.col;
@@ -133,22 +134,26 @@ class Soldado extends Pieza {
 
         // Arriba
         if (fila > 0 && !celdasVisitadas.has(this.tablero.getCelda(fila - 1, col))) {
-            res.push(this.tablero.getCelda(fila - 1, col));
+            let celdaArriba = this.tablero.getCelda(fila - 1, col);
+            res.push(celdaArriba);
         }
 
         // Izquierda
         if (col > 0 && !celdasVisitadas.has(this.tablero.getCelda(fila, col - 1))) {
-            res.push(this.tablero.getCelda(fila, col - 1));
+            let celdaIzquierda = this.tablero.getCelda(fila, col - 1);
+            res.push(celdaIzquierda);
         }
 
         // Abajo
         if (fila < this.tablero.filas - 1 && !celdasVisitadas.has(this.tablero.getCelda(fila + 1, col))) {
-            res.push(this.tablero.getCelda(fila + 1, col));
+            let celdaAbajo = this.tablero.getCelda(fila + 1, col);
+            res.push(celdaAbajo);
         }
 
         // Derecha
         if (col < this.tablero.columnas - 1 && !celdasVisitadas.has(this.tablero.getCelda(fila, col + 1))) {
-            res.push(this.tablero.getCelda(fila, col + 1));
+            let celdaDerecha = this.tablero.getCelda(fila, col + 1);
+            res.push(celdaDerecha);
         }
 
         return res;
@@ -185,7 +190,7 @@ class Soldado extends Pieza {
                 celdasVisitadas.add(this.tablero.getCelda(arriba, colSoldado));
                 formacion = true;
             }
-            
+
             // Verificar soldado aliado abajo
             if (abajo < this.tablero.filas && this.tablero.getCelda(abajo, colSoldado).getTipo() == 'Soldado' && this.tablero.getCelda(abajo, colSoldado).getPieza().getJugador() == 'J2') {
                 bonusPeso++;
@@ -198,14 +203,14 @@ class Soldado extends Pieza {
         else {
             let izquierda = colSoldado - 1;
             let derecha = colSoldado + 1;
-            
+
             // Verificar soldado aliado a la izquierda
             if (izquierda >= 0 && this.tablero.getCelda(filSoldado, izquierda).getTipo() == 'Soldado' && this.tablero.getCelda(filSoldado, izquierda).getPieza().getJugador() == 'J2') {
                 bonusPeso++;
                 celdasVisitadas.add(this.tablero.getCelda(filSoldado, izquierda));
                 formacion = true;
             }
-            
+
             // Verificar soldado aliado a la derecha
             if (derecha < this.tablero.columnas && this.tablero.getCelda(filSoldado, derecha).getTipo() == 'Soldado' && this.tablero.getCelda(filSoldado, derecha).getPieza().getJugador() == 'J2') {
                 bonusPeso++;
@@ -213,7 +218,7 @@ class Soldado extends Pieza {
                 formacion = true;
             }
         }
-        
+
         // Si hay formación, añadir peso según el tipo de enemigo atacado
         if (formacion) {
             switch (celda.getTipo()) {
@@ -231,7 +236,7 @@ class Soldado extends Pieza {
                     break;
             }
         }
-        
+
         // Multiplicar por 2 el bonus si existe formación (incentiva fuertemente las formaciones)
         return bonusPeso * 2;
     }
