@@ -17,7 +17,7 @@ class Caballeria extends Pieza {
     constructor(tablero, fil, col, jugador) {
         super(tablero, 'Caballeria', fil, col, jugador, 3, 2, 0);
         this.saltoCaballeria = true;
-
+        this.pesoBase = 2;
     }
 
     /**
@@ -40,7 +40,7 @@ class Caballeria extends Pieza {
         let celdaAtacada = null; // Guarda la celda que será atacada por formación
         let bestPeso = 0; // Mejor peso encontrado durante el análisis
         const celdasVisitadas = new Set(); // Evita procesar la misma celda múltiples veces
-        celdasVecinas.add(this.tablero.getCelda(this.fil, this.col));
+        celdasVisitadas.add(this.tablero.getCelda(this.fil, this.col));
 
 
         // Obtener celdas vecinas directas (distancia 1: arriba, abajo, izquierda, derecha)
@@ -49,33 +49,33 @@ class Caballeria extends Pieza {
         // Primera pasada: analizar vecinos directos en busca de enemigos y formaciones
         for (const vecino of celdasVecinas) {
             celdasVisitadas.add(vecino.celda)
-            if (!vecino.celda.estaVacia() && vecino.celda.getPieza().getJugador() === 'J1') {
+            if (!vecino.celda.estaVacia() && vecino.celda.getPieza().getJugador() === 'J1' && !vecino.salto) {
                 const result = this.detectaTipo(vecino.celda)
                 if (result > bestPeso) {
                     bestPeso = result;
-                    celdaAtacada = vecino;
+                    celdaAtacada = vecino.celda;
                 }
             }
             if (vecino.celda.estaVacia()) {
                 const segVecinos = this.getVecinos(vecino.celda, celdasVisitadas, true)
                 for (const segVecino of segVecinos) {
-                    celdasVisitadas.add(segVecino)
+                    celdasVisitadas.add(segVecino.celda)
                     if (!segVecino.celda.estaVacia() && segVecino.celda.getPieza().getJugador() === 'J1') {
                         const segResult = this.detectaTipo(segVecino.celda)
                         if (segResult > bestPeso) {
                             bestPeso = segResult;
-                            celdaAtacada = vecino;
+                            celdaAtacada = segVecino.celda;
                         }
                     }
                     if (vecino.salto === false) {
-                        if (segVecino.estaVacia()) {
+                        if (segVecino.celda.estaVacia()) {
                             const terVecinos = this.getVecinos(segVecino.celda, celdasVisitadas, true)
                             for (const terVecino of terVecinos) {
-                                celdasVisitadas.add(terVecino)
+                                celdasVisitadas.add(terVecino.celda)
                                 const terResult = this.detectaTipo(vecino.celda)
                                 if (terResult > bestPeso) {
                                     bestPeso = terResult;
-                                    celdaAtacada = vecino;
+                                    celdaAtacada = terVecino.celda;
                                 }
                             }
                         }
@@ -85,12 +85,12 @@ class Caballeria extends Pieza {
         }
 
         // Logs de depuración
-        console.log(`Peso calculado para Caballería en (${this.fil}, ${this.col}): ${bestPeso}`);
+        console.log(`Peso calculado para Caballería en (${this.fil}, ${this.col}): ${bestPeso + this.pesoBase}`);
         if (celdaAtacada != null) {
             console.log(`Caballería ataca a: ${celdaAtacada.getPosicion().fila}, ${celdaAtacada.getPosicion().col}`)
         }
 
-        return { peso: bestPeso + this.pesoBase, formacionAtacaCelda: celdaAtacada};
+        return { peso: (bestPeso + this.pesoBase), formacionAtacaCelda: celdaAtacada};
     }
 
     /**
@@ -110,12 +110,13 @@ class Caballeria extends Pieza {
                 case 'Caballeria':
                     peso += 2;
                     break;
-                case 'Comandante':
+                case 'Artilleria':
                     peso += 3;
                     break;
-                case 'Artilleria':
+                case 'Comandante':
                     peso += 4;
                     break;
+                
             }
         }
         return peso;

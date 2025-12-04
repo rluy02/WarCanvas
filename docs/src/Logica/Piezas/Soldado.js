@@ -34,7 +34,7 @@ class Soldado extends Pieza {
         let celdaAtacada = null; // Guarda la celda que será atacada por formación
         let bestPeso = 0; // Mejor peso encontrado durante el análisis
         const celdasVisitadas = new Set(); // Evita procesar la misma celda múltiples veces
-        celdasVecinas.add(this.tablero.getCelda(this.fil, this.col));
+        celdasVisitadas.add(this.tablero.getCelda(this.fil, this.col));
 
         // Obtener celdas vecinas directas (distancia 1: arriba, abajo, izquierda, derecha)
         const celdasVecinas = this.getVecinos(this.tablero.getCelda(this.fil, this.col), celdasVisitadas);
@@ -82,12 +82,12 @@ class Soldado extends Pieza {
         }
 
         // Logs de depuración
-        console.log(`Peso calculado para Soldado en (${this.fil}, ${this.col}): ${bestPeso}`);
+        console.log(`Peso calculado para Soldado en (${this.fil}, ${this.col}): ${bestPeso + this.pesoBase}`);
         if (celdaAtacada != null) {
             console.log(`Formación ataca a: ${celdaAtacada.getPosicion().fila}, ${celdaAtacada.getPosicion().col}`)
         }
 
-        return { peso: bestPeso + this.pesoBase, formacionAtacaCelda: celdaAtacada };
+        return { peso: (bestPeso + this.pesoBase), formacionAtacaCelda: celdaAtacada };
     }
 
     /**
