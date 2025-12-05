@@ -24,21 +24,21 @@ class Minijuego extends Phaser.Scene {
         this.load.image('Comandante', './imgs/piezas/Comandante.webp');
         this.load.image('ComandanteEnemigo', './imgs/piezas/Comandante2.webp');
         this.load.image('Granada', './imgs/minijuego/granada.webp');
-        this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
-
-        this.crearAnimaciones();
+        this.load.spritesheet('explosion', './imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 })
     }
 
     /**
      * Crea los elementos de la escena.
      */
     create() {
+        this.crearAnimaciones();
+
         // Se crea el sprite de explosion
-        this.explosion = this.add.sprite(0, 0   , 'explosion');
+        this.explosion = this.add.sprite(0, 0, 'explosion');
         this.explosion.visible = false;
         this.explosion.on('animationcomplete', () => {
-                this.explosion.visible = false;
-            });
+            this.explosion.visible = false;
+        });
         this.explosion.setDepth(999);
 
         //establecemos el limite del mundo del tamaño del canvas
@@ -94,16 +94,20 @@ class Minijuego extends Phaser.Scene {
     }
 
     explotaGranada(granada) {
-        if (!this.explosion) {
+        if (this.explosion && !granada.getData('flag')) {
             this.explosion.visible = true;
             this.explosion.setPosition(granada.x, granada.y);
             this.explosion.play('explotar');
+
+            granada.setData('flag', true);
         }
 
         granada.destroy();
     }
 
-
+    /**
+     * Crea al personaje que controla el jugador
+     */
     createDrawFull() {
         //agregamos la fisica y el sprite
         this.comandante = this.physics.add.sprite(100, this.scale.height - 100, 'Comandante');
@@ -121,6 +125,9 @@ class Minijuego extends Phaser.Scene {
 
         this.comandante.body.onCollide = true;
     }
+    /**
+     * Crea el comandante enemigo
+     */
     createComandanteEnemigo() {
         //agregamos la fisica y el sprite
         this.comandanteEnemigo = this.add.sprite(this.scale.width - 100, this.scale.height / 2, 'ComandanteEnemigo').setScale(0.1);
@@ -128,6 +135,9 @@ class Minijuego extends Phaser.Scene {
         //this.comandanteEnemigo.setScale(0.1);
     }
 
+    /**
+     * Crea una granada
+     */
     createGranada() {
         this.granada = this.physics.add.sprite(this.scale.width - 100, this.scale.height / 2, 'Granada').setScale(0.02);
         //para que el comandante se choque con los limites (es el canvas)
@@ -139,10 +149,16 @@ class Minijuego extends Phaser.Scene {
         this.granada.body.setBounce(0.3);
         this.physics.add.collider(this.granada, this.comandante, null, null, this);
 
+        //Activa el metodo onCollide
         this.granada.body.onCollide = true;
-
+        //Data para que no explote 2 veces
+        this.granada.setDataEnabled();
+        this.granada.setData('flag', false);
     }
 
+    /**
+     * Crea las animaciones
+     */
     crearAnimaciones() {
         if (!this.anims.exists('explotar')) {
             this.anims.create({
@@ -154,4 +170,5 @@ class Minijuego extends Phaser.Scene {
         }
     }
 }
+
 export default Minijuego; 
