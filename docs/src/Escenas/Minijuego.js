@@ -47,11 +47,21 @@ class Minijuego extends Phaser.Scene {
         this.createDrawFull();
         this.createComandanteEnemigo();
 
+        //zona
+        this.zona = this.add.zone(0, this.scale.height / 2, 10, this.scale.height);
+        this.physics.add.existing(this.zona, false);
+        this.zona.body.moves = false;
+
+
         this.tiempoInicial = 30; // Tiempo inicial en segundos
 
         this.cuentaAtrasTexto = this.add.text(this.scale.width / 2, 20, 'Tiempo: ' + this.tiempoInicial, { fontSize: '32px', fill: '#FFF' }).setOrigin(0.5);
 
         this.physics.world.on('collide', (go1, go2, b1, b2) => {
+
+            if((go1==this.granada && go2== this.comandante)||(go2==this.granada && go1== this.comandante) ){
+
+            }
             this.time.delayedCall(2000, () => {
                 this.explotaGranada(go1);
             });
@@ -124,6 +134,9 @@ class Minijuego extends Phaser.Scene {
         });
 
         this.comandante.body.onCollide = true;
+
+        //vidas del comandante
+        this.vidasComandante = 3;
     }
     /**
      * Crea el comandante enemigo
@@ -154,6 +167,12 @@ class Minijuego extends Phaser.Scene {
         //Data para que no explote 2 veces
         this.granada.setDataEnabled();
         this.granada.setData('flag', false);
+
+        this.physics.add.overlap(this.zona, this.granada, (zone, block) => {
+            this.explotaGranada(this.granada);
+            this.vidasComandante--;
+            console.log(this.vidasComandante);
+        });
     }
 
     /**
