@@ -25,12 +25,22 @@ class Minijuego extends Phaser.Scene {
         this.load.image('ComandanteEnemigo', './imgs/piezas/Comandante2.webp');
         this.load.image('Granada', './imgs/minijuego/granada.webp');
         this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
+
+        this.crearAnimaciones();
     }
 
     /**
      * Crea los elementos de la escena.
      */
     create() {
+        // Se crea el sprite de explosion
+        this.explosion = this.add.sprite(0, 0   , 'explosion');
+        this.explosion.visible = false;
+        this.explosion.on('animationcomplete', () => {
+                this.explosion.visible = false;
+            });
+        this.explosion.setDepth(999);
+
         //establecemos el limite del mundo del tamaño del canvas
         this.physics.world.setBounds(0, 0, this.scale.width, this.scale.height);
 
@@ -41,7 +51,11 @@ class Minijuego extends Phaser.Scene {
 
         this.cuentaAtrasTexto = this.add.text(this.scale.width / 2, 20, 'Tiempo: ' + this.tiempoInicial, { fontSize: '32px', fill: '#FFF' }).setOrigin(0.5);
 
-
+        this.physics.world.on('collide', (go1, go2, b1, b2) => {
+            this.time.delayedCall(2000, () => {
+                this.explotaGranada(go1);
+            });
+        });
 
         this.panelEventos = new PanelEventos(this);
         this.panelEventos.mostrar('Minijuego: Salta el comandante', 'Pulsa la barra espaciadora para que el comandante salte y esquive las granadas que se lanzan desde la derecha.', 'WarCanvas', 'Aceptar', () => {
@@ -51,7 +65,7 @@ class Minijuego extends Phaser.Scene {
                 callback: this.createGranada,
                 callbackScope: this,
                 loop: false,
-                repeat: 10
+                repeat: 9
             });
 
             this.time.addEvent({
@@ -79,6 +93,16 @@ class Minijuego extends Phaser.Scene {
         console.log("Fin del minijuego");
     }
 
+    explotaGranada(granada) {
+        if (!this.explosion) {
+            this.explosion.visible = true;
+            this.explosion.setPosition(granada.x, granada.y);
+            this.explosion.play('explotar');
+        }
+
+        granada.destroy();
+    }
+
 
     createDrawFull() {
         //agregamos la fisica y el sprite
@@ -94,6 +118,8 @@ class Minijuego extends Phaser.Scene {
             this.comandante.body.setAcceleration(0, -100);
             this.comandante.body.setVelocity(0, -400);
         });
+
+        this.comandante.body.onCollide = true;
     }
     createComandanteEnemigo() {
         //agregamos la fisica y el sprite
@@ -111,8 +137,10 @@ class Minijuego extends Phaser.Scene {
         this.granada.setCollideWorldBounds(true);
         this.granada.body.setVelocity(randomX, randomY);
         this.granada.body.setBounce(0.3);
-        this.physics.add.collider(this.granada, this.comandante, null, null , this);
-         
+        this.physics.add.collider(this.granada, this.comandante, null, null, this);
+
+        this.granada.body.onCollide = true;
+
     }
 
     crearAnimaciones() {
@@ -125,7 +153,5 @@ class Minijuego extends Phaser.Scene {
             });
         }
     }
-
-
 }
 export default Minijuego; 
