@@ -17,7 +17,7 @@ import PanelTutorial from "../Render/PanelTutorial.js";
  */
 class Tutorial extends Phaser.Scene {
     /**
-     * Constructor de la escena EscenaColocarPiezas.
+     * Constructor de la escena Tutorial.
      * @constructor
      */
     constructor() {
@@ -25,7 +25,7 @@ class Tutorial extends Phaser.Scene {
     }
 
     /**
-     * Método preload de la escena EscenaColocarPiezas.
+     * Método preload de la escena Tutorial.
      * Carga las imágenes necesarias para la escena.
      */
     preload() {
@@ -33,7 +33,7 @@ class Tutorial extends Phaser.Scene {
     }
 
     /**
-     * Método create de la escena EscenaColocarPiezas.
+     * Método create de la escena Tutorial.
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
     create() {
@@ -70,7 +70,7 @@ class Tutorial extends Phaser.Scene {
 
     }
 
-        /**
+    /**
      * Dibuja la pieza en la posición indicada.
      * @param {Pieza} pieza 
      */
@@ -119,14 +119,14 @@ class Tutorial extends Phaser.Scene {
     }
 
     /**
-     * Cambiar de escena
+     * Cambiar de escena -> elegir piezas
      */
     cambiarEscena() {
          this.scene.start('ElegirPiezas');
     }
 
     /**
-     * Método crearImagenes de la escena EscenaColocarPiezas.
+     * Método crearImagenes de la escena Tutorial.
      * Carga las imágenes necesarias para las piezas del juego.
      */
     crearImagenes(){

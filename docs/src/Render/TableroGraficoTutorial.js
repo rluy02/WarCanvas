@@ -2,12 +2,12 @@ import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
 import { turnoJugador } from "../Logica/Turno.js";
 
-// Clase para la escena Colocar Piezas, pinta el tablero y los rangos (Render)
-// ((es un tableroGrafico, pero mas sencilla))
+// Clase para la escena Tutorial, pinta el tablero y los rangos (Render)
+// ((es como un tableroGrafico, pero mas sencilla))
 /**
  * Representación gráfica simplificada del tablero para la escena de colocación de piezas.
  * Gestiona la creación de rectángulos, coloreado de rangos y la interacción de clicks.
- * @class TableroGraficoColocarPiezas
+ * @class TableroGraficoTutorial
  * @memberof Render
  */
 class TableroGraficoTutorial {
@@ -74,21 +74,15 @@ class TableroGraficoTutorial {
 
     /**
      * Manejador de clic sobre una celda gráfica.
-     * Si la celda está vacía solicita generar una pieza; si no, la elimina.
+     * Si la pieza es sobre la que se está realizando el tutorial, actua sobre ella
      * @param {number} fila - fila de la celda clicada
      * @param {number} col - columna de la celda clicada
      * @returns {void}
      */
     onCeldaClick(fila, col) {
-        // if (this.tablero.getCelda(fila, col).estaVacia()) {
-        //     this.limpiarTablero();
-        //     //this.tablero.generarPieza(fila, col);
-        // } 
         let celda = this.tablero.getCelda(fila, col)
         if (!celda.estaVacia() && celda.getPieza().getJugador() === 'J1') {
-            //this.tablero.eliminarPieza(fila, col, this.tablero.getCelda(fila, col).getPieza());
-            this.colorearRango(fila, col);
-
+                        this.colorearRango(fila, col);
         }
         else {
             // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos

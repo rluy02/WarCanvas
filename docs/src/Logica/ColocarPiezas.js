@@ -98,7 +98,7 @@ class ColocarPiezas {
         return pieza;
     }
 
-        /**
+    /**
      * Genera una pieza del tipo seleccionado / especificado en la posición (fil, col) - del equipo contrario
      * @param {number} fil - fila
      * @param {number} col - columna
@@ -144,6 +144,11 @@ class ColocarPiezas {
         return pieza;}
     }
 
+    /**
+     * Genera soldados en la cruz de ataque de la artilleria, empezando por la fila y columna especificadas (fil, col) - del equipo contrario
+     * @param {number} fil - fila
+     * @param {number} col - columna
+     */
     generarPiezaEnemigaArtilleria(fil, col) 
     {
         let nombre;
@@ -206,7 +211,7 @@ class ColocarPiezas {
         this.tipo = tipo;
     }
 
-        /**
+    /**
      * Obtiene la pieza actualmente seleccionada.
      * @returns {Pieza|null} pieza activa o null si ninguna está seleccionada
      */
