@@ -1,0 +1,229 @@
+import { Eventos } from "../Events.js";
+import { EventBus } from "../EventBus.js";
+import { turnoJugador } from "../Logica/Turno.js";
+
+// Clase para la escena Colocar Piezas, pinta el tablero y los rangos (Render)
+// ((es un tableroGrafico, pero mas sencilla))
+/**
+ * Representación gráfica simplificada del tablero para la escena de colocación de piezas.
+ * Gestiona la creación de rectángulos, coloreado de rangos y la interacción de clicks.
+ * @class TableroGraficoColocarPiezas
+ * @memberof Render
+ */
+class TableroGraficoTutorial {
+    /**
+     * Constructor.
+     * @param {Equipo} equipoJ1 - instancia del equipo J1
+     * @param {Equipo} equipoJ2 - instancia del equipo J2
+     * @param {Phaser.Scene} escena - escena donde se renderiza el tablero
+     * @param {Tablero} tablero - lógica del tablero
+     * @param {number} [tamCasilla=64] - tamaño de cada casilla en px
+     */
+    constructor(equipoJ1, equipoJ2, escena, tablero, tamCasilla = 64) {
+        this.escena = escena;
+        this.tablero = tablero;
+        this.tamCasilla = tamCasilla;
+        this.graficos = this.dibujarTablero(); 
+
+        this.equipo1 = equipoJ1;
+        this.equipo2 = equipoJ2;
+
+        this.equipoActual = this.equipo1;
+
+        this.celdasColoreadas = []; 
+        this.casillasPintadas = [];  
+
+        EventBus.on(Eventos.CHANGE_TEAM_SET_PIECES, ()=> {
+            this.cambiarEquipo();
+        });
+    }
+
+    /**
+     * Crea la malla gráfica del tablero: rectángulos interactivos por casilla.
+     * Añade listeners de clic para cada rectángulo que delegan en `onCeldaClick`.
+     * @returns {Array<Array<Phaser.GameObjects.Rectangle>>} matriz de rectángulos que representan las celdas
+     */
+    dibujarTablero() {
+        let graficos = [];
+
+        for (let fila = 0; fila < this.tablero.filas; fila++) {
+            graficos[fila] = [];
+            for (let col = 0; col < this.tablero.columnas; col++) {
+                const color = (fila + col) % 2 === 0 ? 0xffffff : 0xcccccc;
+                //los rectangulos se empiezan a dibujar desde el centro (por eso, +tamCasillas/2)
+                const x = col * this.tamCasilla + this.tamCasilla / 2;
+                const y = fila * this.tamCasilla + this.tamCasilla / 2;
+
+                // new Rectangle(scene, x, y, [width], [height], [fillColor], [fillAlpha])
+                const rect = this.escena.add.rectangle(
+                    x, y, this.tamCasilla, this.tamCasilla, color
+                ).setStrokeStyle(1, 0x000000)
+                    .setInteractive();
+
+                // Detectar click
+                rect.on('pointerdown', () => {
+
+                    this.onCeldaClick(fila, col);
+                });
+
+                graficos[fila][col] = rect;
+            }
+        }
+        return graficos;
+    }
+
+    /**
+     * Manejador de clic sobre una celda gráfica.
+     * Si la celda está vacía solicita generar una pieza; si no, la elimina.
+     * @param {number} fila - fila de la celda clicada
+     * @param {number} col - columna de la celda clicada
+     * @returns {void}
+     */
+    onCeldaClick(fila, col) {
+        // if (this.tablero.getCelda(fila, col).estaVacia()) {
+        //     this.limpiarTablero();
+        //     //this.tablero.generarPieza(fila, col);
+        // } 
+        let celda = this.tablero.getCelda(fila, col)
+        if (!celda.estaVacia() && celda.getPieza().getJugador() === 'J1') {
+            //this.tablero.eliminarPieza(fila, col, this.tablero.getCelda(fila, col).getPieza());
+            this.colorearRango(fila, col);
+
+        }
+        else {
+            // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
+            if (!this.tablero.getPiezaActiva()) return;
+
+            //Si es artilleria va aparte
+            if (this.tablero.getPiezaActiva().getTipo() === "Artilleria" && this.tablero.getPiezaActiva().puedeDisparar() && this.esTipoCelda(fila, col)) {
+
+                this.tablero.getPiezaActiva().lanzarProyectil(fila, col, this.escena, this.tablero);
+                EventBus.emit(Eventos.PIECE_MOVED, this.tablero.getPiezaActiva(), false);
+
+                this.limpiarTablero();
+                this.tablero.resetPiezaActiva();
+            }
+            // Si es vacía se mueve
+            else if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
+                //Dibuja la conquista
+                //this.dibujarFragmentoMapa(fila, col, this.tablero.getPiezaActiva().getJugador())
+
+                this.moviendoPieza = true;
+                //Se limpia el tablero
+                this.limpiarTablero();
+
+                //Se informa del movimiento de pieza
+                this.tablero.moverPieza(fila, col);
+                this.colorearRango(fila, col);
+            }
+            else if (this.esTipoCelda(fila, col, "enemigo") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
+                this.moviendoPieza = false;
+
+                // Combate
+                this.confirmarAtaque(fila, col, this.celdaSeleccionada);
+                // Posible Ataque si se confirma en el panel Lateral
+                this.tablero.ataque(fila, col);
+            }
+            else if (!this.moviendoPieza) {
+                this.limpiarTablero();
+                this.celdaSeleccionada = null;
+            }
+        }
+    }
+
+    /**
+     * Comprueba si una coordenada dada está entre las celdas coloreadas y, opcionalmente, si coincide el tipo.
+     * @param {number} fil - fila objetivo
+     * @param {number} col - columna objetivo
+     * @param {string} [tipo=""] - tipo de celda a comprobar ('vacia'|'enemigo')
+     * @returns {boolean} true si la celda coincide con alguna de las coloreadas
+     */
+    esTipoCelda(fil, col, tipo = "") {
+        for (let celda of this.celdasColoreadas) {
+            if (tipo == "") {
+                if (celda.fil == fil && celda.col == col) return true;
+            }
+            else {
+                if (celda.fil == fil && celda.col == col && celda.tipo == tipo) return true;
+            }
+        }
+
+        return false;
+    }
+
+ /**
+     * Colorea el rango de movimiento/ataque de la pieza situada en (fila,col).
+     * Marca la casilla de la pieza y añade capas para las celdas alcanzables.
+     * @param {number} fila - fila de la pieza seleccionada
+     * @param {number} col - columna de la pieza seleccionada
+     */
+    colorearRango(fila, col) {
+        let celda = this.tablero.getCelda(fila, col);
+
+        this.limpiarTablero();
+
+        this.celdasColoreadas = this.tablero.piezaSeleccionada(fila, col);
+        //La de la ficha actual
+        this.graficos[fila][col].setStrokeStyle(3, 0xf5a927);
+        this.casillasPintadas.push(this.crearCapa(fila, col, 0xffc107, 0.3));
+
+        for (let cel of this.celdasColoreadas) {
+            if (cel.tipo == "vacia") {
+                this.graficos[cel.fil][cel.col].setStrokeStyle(3, 0x69CF4E);
+                this.casillasPintadas.push(this.crearCapa(cel.fil, cel.col, 0x00ff00, 0.3));
+            }
+            else if (cel.tipo == "enemigo") {
+                this.graficos[cel.fil][cel.col].setStrokeStyle(3, 0xF23A1D);
+                this.casillasPintadas.push(this.crearCapa(cel.fil, cel.col, 0xff0000, 0.3));
+            }
+        }
+
+        this.celdaSeleccionada = celda;
+    }
+
+    /**
+     * Crea una capa semitransparente sobre una casilla para indicar estado.
+     * @param {number} fila - fila objetivo
+     * @param {number} col - columna objetivo
+     * @param {number} color - color en formato hexadecimal (0x...)
+     * @param {number} transparencia - nivel de alfa (0.0 - 1.0)
+     * @returns {Phaser.GameObjects.Rectangle} el rectángulo creado
+     */
+    crearCapa(fila, col, color, transparencia) {
+        const x = col * this.tamCasilla + this.tamCasilla / 2;
+        const y = fila * this.tamCasilla + this.tamCasilla / 2;
+        const capa = this.escena.add.rectangle(x, y, this.tamCasilla, this.tamCasilla, color, transparencia);
+        return capa;
+    }
+
+    /**
+     * Resetea todas las capas y restaura el estilo original de las casillas coloreadas.
+     * @returns {void}
+     */
+    limpiarTablero() {
+        this.casillasPintadas.forEach(o => o.destroy());
+        this.casillasPintadas = [];
+        let i = 0;
+        //Descolorear las anteriores
+        for (let i = 0; i < this.celdasColoreadas.length; i++) {
+            let f = this.celdasColoreadas[i].fil;
+            let c = this.celdasColoreadas[i].col;
+            this.graficos[f][c].setStrokeStyle(1, 0x000000);
+        }
+        if(this.celdaSeleccionada) this.graficos[this.celdaSeleccionada.fila][this.celdaSeleccionada.columna].setStrokeStyle(1, 0x000000);
+
+        this.celdasColoreadas = [];
+    }
+
+    // Cambia el equipo actual que coloca sus piezas
+    /**
+     * Alterna el equipo que está colocando piezas y limpia los marcadores gráficos.
+     */
+    cambiarEquipo() {
+        this.limpiarTablero();
+        if (this.equipoActual === this.equipo1) this.equipoActual = this.equipo2;
+        else this.equipoActual = this.equipo1;
+    }
+}
+
+export default TableroGraficoTutorial;
