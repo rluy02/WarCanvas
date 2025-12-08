@@ -148,21 +148,20 @@ class PanelTutorial {
         if(this.num === 0){
         this.tableroGrafico.limpiarTablero();
         this.piezaTutorial = this.tablero.generarPieza(2, 2);
-        console.log(this.piezaTutorial);
         this.num++;
     }
 
         if (tipo === this.Soldados) this.tutorialSoldado();
-        if (tipo == this.Artilleria) this.tutorialSoldado();
-        if (tipo == this.Comandante) this.tutorialSoldado();
-        if (tipo == this.Caballeria) this.tutorialSoldado();
+        if (tipo == this.Artilleria) this.tutorialArtilleria();
+        if (tipo == this.Comandante) this.tutorialComandante();
+        if (tipo == this.Caballeria) this.tutorialCaballo();
     }
 
     tutorialSoldado(){
         this.dialogo.visible = true;
         this.dialogoPersonaje.visible = true;
         this.dialogoText.visible = true;
-        if(this.num === 1) {this.dialogoText.setText('Pulsa el soldado para ver las posibilidades de movimiento');}
+        if(this.num === 1) {this.dialogoText.setText('Los soldados se mueven en cruz. Pulsa el soldado para ver las posibilidades de movimiento');}
         if(this.num === 2) {this.dialogoText.setText('Pulsa una casilla de movimiento para mover la pieza');}
         if(this.num === 3) 
         {this.dialogoText.setText('Cuando tengas una pieza enemiga para atacar a tu alcance, se marcará en rojo');
@@ -174,10 +173,97 @@ class PanelTutorial {
         if(this.num === 7) {this.dialogoText.setText('Tu tirada, más el bonus de tu pieza deben sumar más que tu ememigo');};
         if(this.num === 8) {this.dialogoText.setText('El bonus del soldado es +1 en el ataque y +1 en la defensa');};
         if(this.num === 9) {this.dialogoText.setText('Ya sabes como atacar con los soldados, ¡no te olvides del resto de piezas!');};
+        if(this.num === 10){
+            this.dialogoText.setText('Pulsa otra pieza para realizar el tutorial');
+            this.dialogoNext.visible = false;
+        }
 
         //this.tablero.generarPieza(2, 2);
         this.num++;
     }
+
+    tutorialCaballo(){
+        this.dialogo.visible = true;
+        this.dialogoPersonaje.visible = true;
+        this.dialogoText.visible = true;
+        if(this.num === 1) {this.dialogoText.setText('Los caballos se mueven en cruz, ¡y pueden saltar piezas!');}
+        if(this.num === 2) {this.dialogoText.setText('Pulsa el caballo para ver las posibilidades de movimiento');}
+        if(this.num === 3) {this.dialogoText.setText('En su turno, el caballo tiene 3 acciones posibles, 2 movimientos y 1 ataque. ¡Combinalos bien!');}
+        if(this.num === 4) {this.dialogoText.setText('Pulsa una casilla de movimiento para mover la pieza');}
+        if(this.num === 5) 
+        {this.dialogoText.setText('Cuando tengas una pieza cerca, podrás saltarla');
+            this.tablero.generarPiezaEnemiga(this.piezaTutorial.fil, this.piezaTutorial.col, 'Caballeria');
+        }
+        if(this.num === 6) {this.dialogoText.setText('Al pulsar sobre la pieza enemiga, podrás decidir si quieres realizar el combate');};
+        if(this.num === 7) {this.dialogoText.setText('En el panel lateral, se mostrará la información del combate');};
+        if(this.num === 8) {this.dialogoText.setText('Recuerda, para ganar un combate, necesitarás que los dados esten de tu parte.');};
+        if(this.num === 9) {this.dialogoText.setText('Tu tirada, más el bonus de tu pieza deben sumar más que tu ememigo');};
+        if(this.num === 10) {this.dialogoText.setText('El bonus del caballo es +2 en el ataque y +0 en la defensa');};
+        if(this.num === 11) {this.dialogoText.setText('Ya sabes como atacar con los caballos, ¡no te olvides del resto de piezas!');};
+        if(this.num === 12){
+            this.dialogoText.setText('Pulsa otra pieza para realizar el tutorial');
+            this.dialogoNext.visible = false;
+        }
+
+        //this.tablero.generarPieza(2, 2);
+        this.num++;
+    }
+
+    tutorialArtilleria(){
+        this.dialogo.visible = true;
+        this.dialogoPersonaje.visible = true;
+        this.dialogoText.visible = true;
+        if(this.num === 1) {this.dialogoText.setText('La artillería es una de las piezas más potentes');}
+        if(this.num === 2) {this.dialogoText.setText('Aunque no puede moverse, puede atacar a un amplio rango del tablero');}
+        if(this.num === 3) {this.dialogoText.setText('Puede atacar todas las casillas en un rango de 4 columnas. Pulsa sobre ella para ver su rango de ataque');};
+        if(this.num === 4) {this.dialogoText.setText('La artilleria puede atacar cualquier casilla dentro de su rango, pero no es muy precisa');};
+        if(this.num === 5) {this.dialogoText.setText('Atacará la casilla seleccionada o alguna de las adyacentes');};
+        if(this.num === 6) {this.dialogoText.setText('Al usar la artillería, no habrá un combate por dados');};
+        if(this.num === 7) 
+        {this.dialogoText.setText('Ten cuidado porque podrías atacar alguna de tus piezas');
+            console.log(this.piezaTutorial)
+            this.tablero.generarPiezaEnemigaArtilleria(this.piezaTutorial.fil, this.piezaTutorial.col+2, 'Soldado');
+        }
+        
+        if(this.num === 8) {this.dialogoText.setText('Una vez que has atacado con la artillería, tendrás que esperar 4 turnos para volver a usarla');};
+        if(this.num === 9) {this.dialogoText.setText('Es importante que protejas la artillería, porque tiene bonus de -1 al defenderse');};
+        if(this.num === 10) {this.dialogoText.setText('Ya sabes como atacar con la artillería, ¡no te olvides del resto de piezas!');};
+        if(this.num === 10){
+            this.dialogoText.setText('Pulsa otra pieza para realizar el tutorial');
+            this.dialogoNext.visible = false;
+        }
+
+        //this.tablero.generarPieza(2, 2);
+        this.num++;
+    }
+
+    tutorialComandante(){
+        this.dialogo.visible = true;
+        this.dialogoPersonaje.visible = true;
+        this.dialogoText.visible = true;
+        if(this.num === 1) {this.dialogoText.setText('El comandante es la pieza más importante, debes protegerla porque si se elimina, perderás la partida');}
+        if(this.num === 2) {this.dialogoText.setText('Puede moverse también en diagonal. Pulsa para ver su rango de movimiento');}
+        if(this.num === 3) {this.dialogoText.setText('En su turno, el comandante tiene 4 acciones posibles, 3 movimientos y 1 ataque. ¡Combinalas bien!');}
+        if(this.num === 4) {this.dialogoText.setText('Pulsa una casilla de movimiento para mover la pieza');}
+        if(this.num === 5) 
+        {this.dialogoText.setText('Cuando tengas una pieza enemiga para atacar a tu alcance, se marcará en rojo');
+            this.tablero.generarPiezaEnemiga(this.piezaTutorial.fil, this.piezaTutorial.col, 'Soldado');
+        }
+        if(this.num === 6) {this.dialogoText.setText('Al pulsar sobre la pieza enemiga, podrás decidir si quieres realizar el combate');};
+        if(this.num === 7) {this.dialogoText.setText('En el panel lateral, se mostrará la información del combate');};
+        if(this.num === 8) {this.dialogoText.setText('Recuerda, para ganar un combate, necesitarás que los dados esten de tu parte.');};
+        if(this.num === 9) {this.dialogoText.setText('Tu tirada, más el bonus de tu pieza deben sumar más que tu ememigo');};
+        if(this.num === 10) {this.dialogoText.setText('El bonus del comandante es +4 en el ataque y +5 en la defensa');};
+        if(this.num === 11) {this.dialogoText.setText('Ya sabes como atacar con el comandante, ¡utiliza sus habilidades, pero no te olvides de defenderlo!');};
+        if(this.num === 12){
+            this.dialogoText.setText('Pulsa otra pieza para realizar el tutorial');
+            this.dialogoNext.visible = false;
+        }
+
+        //this.tablero.generarPieza(2, 2);
+        this.num++;
+    }
+
 
 
     /**

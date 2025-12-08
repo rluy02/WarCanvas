@@ -123,29 +123,49 @@ class ColocarPiezas {
             console.log(i, fil, col);
             select = true;}
         }
-        console.log(fil, col);
-
+        if(this.tablero[fil][col].estaVacia()) {
         if(!p) tipo = this.tipo;
         else tipo = p;
         if (tipo == 'Soldado' && this.equipoActual.getSoldados() > 0)  {
             pieza =  new Soldado(this.tablero, fil, col, nombre);
-            this.equipoActual.setSoldado(pieza);
         }
         else if (tipo == 'Artilleria' && this.equipoActual.getArtilleria() > 0) {
             pieza = new Artilleria(this.tablero, fil, col, nombre);
-            this.equipoActual.setArtilleria(pieza);
         }
         else if (tipo == 'Caballeria' && this.equipoActual.getCaballeria() > 0) {
             pieza = new Caballeria(this.tablero, fil, col, nombre);
-            this.equipoActual.setCaballeria(pieza);
         }
         else if (tipo == 'Comandante' && this.equipoActual.getComandante() > 0){
             pieza = new Comandante(this.tablero, fil, col, nombre);
-            this.equipoActual.setComandante(pieza);
         }
         this.tablero[fil][col].setContenido(pieza);
-        if (pieza != null)EventBus.emit(Eventos.PIECE_POSITION, pieza); // On ElegirPiezaEscena - Inicio
-        return pieza;
+        if (pieza != null){EventBus.emit(Eventos.PIECE_POSITION, pieza); // On ElegirPiezaEscena - Inicio
+        ((this.equipoActual === this.equipo1)) ? this.equipo2.piezas.push(pieza) : this.equipo1.piezas.push(pieza);}
+        return pieza;}
+    }
+
+    generarPiezaEnemigaArtilleria(fil, col) 
+    {
+        let nombre;
+        nombre = ((this.equipoActual === this.equipo1)) ? this.equipo2.getNombre() : this.equipo1.getNombre();
+        const direcciones = [
+            { df: 0, dc: 0 },     // centro
+            { df: -1, dc: 0 },  // arriba
+            { df: 1, dc: 0 },   // abajo
+            { df: 0, dc: -1 },  // izquierda
+            { df: 0, dc: 1 }    // derecha
+        ];
+        let fila ;
+        let columna;
+        for(let i=0; i<5;i++){
+            fila = fil + direcciones[i].df;
+            columna = col + direcciones[i].dc;
+            let pieza = new Soldado(this.tablero, fila, columna, nombre);
+        this.tablero[fila][columna].setContenido(pieza);
+        if (pieza != null){EventBus.emit(Eventos.PIECE_POSITION, pieza); // On ElegirPiezaEscena - Inicio
+        ((this.equipoActual === this.equipo1)) ? this.equipo2.piezas.push(pieza) : this.equipo1.piezas.push(pieza);}   
+        }
+        
     }
 
     /**
@@ -165,14 +185,17 @@ class ColocarPiezas {
      * Elimina todas las piezas 
      */
     eliminarTodasLasPiezas(){
-        for(let pieza of this.equipo1.piezas) { 
+        for(let pieza of this.equipo1.piezas) 
+        { 
         EventBus.emit(Eventos.PIECE_DELETE, pieza); // On ElegirPiezaEscena - Inicio
         this.tablero[pieza.fil][pieza.col].setContenido(null);
-        this.equipoActual.eliminarPieza(pieza);}
+        this.equipo1.eliminarPieza(pieza);
+        }
         for(let pieza of this.equipo2.piezas) { 
         EventBus.emit(Eventos.PIECE_DELETE, pieza); // On ElegirPiezaEscena - Inicio
         this.tablero[pieza.fil][pieza.col].setContenido(null);
-        this.equipoActual.eliminarPieza(pieza);}
+        this.equipo2.eliminarPieza(pieza);
+    }
     }
     
     /**
@@ -189,6 +212,13 @@ class ColocarPiezas {
      */
     getPiezaActiva() {
         return this.piezaActiva;
+    }
+
+    /**
+     * Reinicia la pieza activa (deselecciona).
+     */
+    resetPiezaActiva() {
+        this.piezaActiva = null;
     }
 
     /**
@@ -222,7 +252,7 @@ class ColocarPiezas {
             this.piezaActiva = pieza;
         }
 
-        if (pieza.getTipo() == "Artilleria" && !pieza.puedeDisparar()) return [];
+        //if (pieza.getTipo() == "Artilleria" && !pieza.puedeDisparar()) return [];
 
         // Direcciones cardinales
         const direcciones = [

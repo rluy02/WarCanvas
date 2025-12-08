@@ -37,7 +37,7 @@ class Tutorial extends Phaser.Scene {
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
     create() {
-       // this.crearAnimaciones();
+       this.crearAnimaciones();
        this.todasLasPiezas = true;
 
         this.equipoJ1 = new Equipo("J1");
@@ -93,6 +93,18 @@ class Tutorial extends Phaser.Scene {
         this.piezaGrafico.eliminarPieza(pieza);
     }
 
+    /**
+     * Elimina la pieza del tablero y de la lista de piezas.
+     * @param {Pieza} pieza 
+     */
+    eliminarPieza(pieza) {
+        for (let p of this.piezas) {
+            if (p == pieza) {
+                this.piezaGrafico.eliminarPieza(pieza);
+            }
+        }
+    }
+
         /**
      * Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
      * @param {Pieza} pieza 
@@ -127,6 +139,22 @@ class Tutorial extends Phaser.Scene {
         this.load.image('artilleria', './imgs/piezas/artilleriaJ1.webp');
         this.load.image('artilleria2', './imgs/piezas/artilleriaJ1.webp');
         this.load.image('dialogo', './imgs/Tutorial/dialogue.webp');
+
+        this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
+
+    }    
+    /**
+     * Crea las animaciones necesarias para la escena.
+     */
+    crearAnimaciones() {
+        if (!this.anims.exists('explotar')) {
+            this.anims.create({
+                key: 'explotar',
+                frames: this.anims.generateFrameNumbers('explosion', { frames: [0, 1, 2, 3, 4, 5, 6, 7] }),
+                frameRate: 10,
+                repeat: 0
+            });
+        }
     }
 }
 
