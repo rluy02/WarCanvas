@@ -75,12 +75,14 @@ class Tutorial extends Phaser.Scene {
      * @param {Pieza} pieza 
      */
     piezaPosicionada(pieza) {
+        this.tabGrafico.dibujarFragmentoMapa(pieza.fil, pieza.col, pieza.getJugador());
         this.piezaGrafico.dibujarPieza(pieza);
         this.piezas.push(pieza);
         this.tabGrafico.limpiarTablero();
         let celda = this.tab.getPiezaActiva();
         if (celda) {let posicion = celda.getPosicion();
-        this.tabGrafico.onCeldaClick(posicion.fila, posicion.col);}
+        this.tabGrafico.onCeldaClick(posicion.fila, posicion.col);
+        }
     }
 
     /**
@@ -89,9 +91,9 @@ class Tutorial extends Phaser.Scene {
      */
     piezaEliminada(pieza) {
         //this.piezas.eliminarPieza(pieza);
+        this.tabGrafico.borrarFragmentoMapa(pieza.fil, pieza.col, pieza.getJugador())
         Phaser.Utils.Array.Remove(this.piezas, pieza);
-        this.piezaGrafico.eliminarPieza(pieza);
-    }
+        this.piezaGrafico.eliminarPieza(pieza);    }
 
     /**
      * Elimina la pieza del tablero y de la lista de piezas.
@@ -130,6 +132,10 @@ class Tutorial extends Phaser.Scene {
      * Carga las imágenes necesarias para las piezas del juego.
      */
     crearImagenes(){
+        
+        this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
+        this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
+
         this.load.image('peon', './imgs/piezas/peon.webp');
         this.load.image('peon2', './imgs/piezas/peon2.webp');
         this.load.image('caballeria', './imgs/piezas/caballeria-dibujada.webp');

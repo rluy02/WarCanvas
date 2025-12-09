@@ -31,6 +31,9 @@ class ColocarPiezas {
         this.equipo1 = equipo1;
         this.equipo2 = equipo2;
 
+        this.celdasJ1 = 0;
+        this.celdasJ2 = 0;
+
         this.equipoActual = this.equipo1;
 
         this.tipo;
@@ -372,6 +375,48 @@ class ColocarPiezas {
         this.tablero[fil][col].setContenido(this.piezaActiva);
 
         EventBus.emit(Eventos.PIECE_MOVED, this.piezaActiva, false);
+    }
+
+    /**
+     * Registra la conquista de una celda por un jugador.
+     * Actualiza los contadores de territorio y verifica condición de victoria.
+     * @param {string} jugador - identificador del jugador ('J1' o 'J2')
+     * @param {boolean} ocupada - indica si la celda estaba previamente ocupada por el enemigo
+     */
+    conquistarCelda(jugador, ocupada) {
+        if (jugador == "J1") {
+            this.celdasJ1++;
+            if (ocupada) this.celdasJ2--;
+        }
+        else {
+            this.celdasJ2++;
+            if (ocupada) this.celdasJ1--;
+        }
+        let j1Porcentaje = this.celdasJ1 * 100 / 80;
+        let j2Porcentaje = this.celdasJ2 * 100 / 80;
+
+        EventBus.emit(Eventos.CONQUER_CELL, j1Porcentaje, j2Porcentaje)
+
+        if (this.celdasJ1 >= 64 || this.celdasJ2 >= 64) EventBus.emit(Eventos.END_GAME, {
+            jugador: this.piezaActiva.getJugador(),
+            tipo: "TERRITORIO"
+        });
+    }
+
+    /**
+     * Elimina una celda conquistada por el jugador especificado (por lluvia).
+     * @param {string} jugadorAnterior - identificador del jugador anterior ('J1' o 'J2')
+     */
+    borrarCelda(jugadorAnterior) {
+        if (jugadorAnterior === 'J1') {
+            this.celdasJ1--;
+        } else if (jugadorAnterior === 'J2') {
+            this.celdasJ2--;
+        }
+
+        let j1Porcentaje = this.celdasJ1 * 100 / 80;
+        let j2Porcentaje = this.celdasJ2 * 100 / 80;
+        EventBus.emit(Eventos.UPDATE_PERCENTAGES, j1Porcentaje, j2Porcentaje);
     }
 
 

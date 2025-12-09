@@ -25,6 +25,15 @@ class TableroGraficoTutorial {
         this.tamCasilla = tamCasilla;
         this.graficos = this.dibujarTablero(); 
 
+        this.mapaTopografico = this.escena.textures.get('mapaTopo').getSourceImage();
+        this.mapaSatelital = this.escena.textures.get('mapaSat').getSourceImage();
+
+        this.mapaTopograficoWidth = this.mapaTopografico.width;
+        this.mapaTopograficoHeight = this.mapaTopografico.height;
+
+        this.fragmentoAncho = this.mapaTopograficoWidth / this.tablero.columnas;
+        this.fragmentoAlto = this.mapaTopograficoHeight / this.tablero.filas;
+
         this.equipo1 = equipoJ1;
         this.equipo2 = equipoJ2;
 
@@ -32,10 +41,6 @@ class TableroGraficoTutorial {
 
         this.celdasColoreadas = []; 
         this.casillasPintadas = [];  
-
-        EventBus.on(Eventos.CHANGE_TEAM_SET_PIECES, ()=> {
-            this.cambiarEquipo();
-        });
     }
 
     /**
@@ -54,7 +59,7 @@ class TableroGraficoTutorial {
                 const x = col * this.tamCasilla + this.tamCasilla / 2;
                 const y = fila * this.tamCasilla + this.tamCasilla / 2;
 
-                // new Rectangle(scene, x, y, [width], [height], [fillColor], [fillAlpha])
+                //new Rectangle(scene, x, y, [width], [height], [fillColor], [fillAlpha])
                 const rect = this.escena.add.rectangle(
                     x, y, this.tamCasilla, this.tamCasilla, color
                 ).setStrokeStyle(1, 0x000000)
@@ -100,7 +105,7 @@ class TableroGraficoTutorial {
             // Si es vacía se mueve
             else if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
                 //Dibuja la conquista
-                //this.dibujarFragmentoMapa(fila, col, this.tablero.getPiezaActiva().getJugador())
+                this.dibujarFragmentoMapa(fila, col, this.tablero.getPiezaActiva().getJugador())
 
                 this.moviendoPieza = true;
                 //Se limpia el tablero
@@ -204,9 +209,31 @@ class TableroGraficoTutorial {
             let c = this.celdasColoreadas[i].col;
             this.graficos[f][c].setStrokeStyle(1, 0x000000);
         }
+        // for (let fila=0; fila < this.graficos.length; fila++){
+        //     for (let col=0; col < this.graficos.length; col++){
+        //         if (this.graficos[fila][col].imagen){
+        //     // Destruir la imagen del mapa
+        // this.graficos[fila][col].imagen.destroy();
+        // this.graficos[fila][col].imagen = null;}
+        // //this.tablero.borrarCelda(jugadorAnterior);
+        // } }
         if(this.celdaSeleccionada) this.graficos[this.celdaSeleccionada.fila][this.celdaSeleccionada.columna].setStrokeStyle(1, 0x000000);
 
         this.celdasColoreadas = [];
+    }
+
+    /**
+     * Resetea todas las casillas conquistadas
+     */
+    limpiarMapas(){
+        for (let fila=0; fila < this.tablero.filas; fila++){
+                    for (let col=0; col < this.tablero.columnas; col++){
+                        if (this.graficos[fila][col].imagen){
+                    // Destruir la imagen del mapa
+                this.graficos[fila][col].imagen.destroy();
+                this.graficos[fila][col].imagen = null;}
+                //this.tablero.borrarCelda(jugadorAnterior);
+                } }
     }
 
     // Cambia el equipo actual que coloca sus piezas
@@ -217,6 +244,71 @@ class TableroGraficoTutorial {
         this.limpiarTablero();
         if (this.equipoActual === this.equipo1) this.equipoActual = this.equipo2;
         else this.equipoActual = this.equipo1;
+    }
+
+    /**
+     * Dibuja un fragmento del mapa (topográfico o satelital) dentro de una celda.
+     * @param {number} fila - fila de la celda
+     * @param {number} col - columna de la celda
+     * @param {string} tipoJugador - 'J1' o 'J2' para elegir mapa
+     */
+    dibujarFragmentoMapa(fila, col, tipoJugador) {
+        // Determina qué mapa usar   
+        const key = tipoJugador === 'J1' ? 'mapaTopo' : 'mapaSat';
+
+        const textura = this.escena.textures.get(key).getSourceImage();
+
+        const cropX = col * this.fragmentoAncho;
+        const cropY = fila * this.fragmentoAlto;
+
+        const x = col * this.tamCasilla + this.tamCasilla / 2;
+        const y = fila * this.tamCasilla + this.tamCasilla / 2;
+
+        // Borra la imagen anterior si existe
+        if (this.graficos[fila][col].imagen && this.graficos[fila][col].imagen.mapKey != key) {
+            this.graficos[fila][col].imagen.destroy();
+            this.tablero.conquistarCelda(tipoJugador, true);
+        }
+        else if (!this.graficos[fila][col].imagen) {
+            this.tablero.conquistarCelda(tipoJugador, false);
+        }
+        if ((this.graficos[fila][col].imagen && this.graficos[fila][col].imagen.mapKey != key) || !this.graficos[fila][col].imagen) {
+                    const zoom = 1.3;
+        const renderSize = this.tamCasilla * zoom;
+
+        // Crea un RenderTexture que actúa como "mini lienzo" para la celda
+        const rt = this.escena.add.renderTexture(x, y, renderSize, renderSize)
+            .setOrigin(0.5)
+            .setDepth(0);
+
+        // Escala proporcional al fragmento del mapa
+        const scaleX = renderSize / this.fragmentoAncho;
+        const scaleY = renderSize / this.fragmentoAlto;
+
+        // Dibuja el fragmento del mapa en el renderTexture escalado a la celda
+        rt.draw(key, -cropX * scaleX, -cropY * scaleY, key)
+            .setScale(scaleX, scaleY);
+        rt.mapKey = key;
+
+        this.graficos[fila][col].imagen = rt;
+        } // Si hay una capa del mismo mapa no la crea de nuevo
+    }
+
+    /**
+     * Borra el fragmento de mapa renderizado en una celda y actualiza contadores.
+     * @param {number} fila - fila de la celda
+     * @param {number} col - columna de la celda
+     * @param {string} jugadorAnterior - 'J1' o 'J2' que había conquistado la casilla
+     * @returns {void}
+     */
+    borrarFragmentoMapa(fila, col, jugadorAnterior) {
+        // Verificar que existe imagen
+        if (!this.graficos[fila][col].imagen) return;
+
+        // Destruir la imagen del mapa
+        this.graficos[fila][col].imagen.destroy();
+        this.graficos[fila][col].imagen = null;
+        this.tablero.borrarCelda(jugadorAnterior);
     }
 }
 
