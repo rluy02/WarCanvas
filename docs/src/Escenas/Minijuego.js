@@ -69,7 +69,7 @@ class Minijuego extends Phaser.Scene {
                 repeat: 9
             });
 
-            this.time.addEvent({
+            this.cuentaAtrasTimer =this.time.addEvent({
                 delay: 1000,
                 callback: this.updateCuentaAtras,
                 callbackScope: this,
@@ -126,9 +126,8 @@ class Minijuego extends Phaser.Scene {
         this.comandante.body.setImmovable(true);
         const spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         spaceKey.on('down', () => {
-            console.log("salta");
-            this.comandante.body.setAcceleration(0, -100);
-            this.comandante.body.setVelocity(0, -400);
+            this.comandante.body.setAcceleration(0, 100);
+            this.comandante.body.setVelocity(0, -500);
         });
 
         this.comandante.body.onCollide = true;
@@ -193,9 +192,12 @@ class Minijuego extends Phaser.Scene {
 
         //Choque de la granada con el comandante
         this.physics.add.collider(granada, this.comandante, () => {
-            this.time.delayedCall(2000, () => {
-                this.explotaGranada(granada)
-            });
+            // Guardamos el timer en cada granada
+            if (!granada.explosionTimer) {
+                granada.explosionTimer = this.time.delayedCall(2000, () => {
+                    this.explotaGranada(granada);
+                });
+            }
         }, null, this);
 
         //Entrada de la granada con la zona
@@ -212,13 +214,31 @@ class Minijuego extends Phaser.Scene {
     * Consecuencia de no repeler correctamente la granada con el Comandante
     */
     perderVidaPorGranada(zona, granada) {
+        // Cancelar cualquier timer pendiente de la granada (util cuando el jugador toca la granada pero aun asi se le pasa a la zona)
+        if (granada.explosionTimer) {
+            granada.explosionTimer.remove();
+            granada.explosionTimer = null;
+        }
+
         this.explotaGranada(granada);
         this.vidasComandante--;
         this.actualizarVidasComandante();
         if (this.vidasComandante <= 0) {
-            this.endMinijuego();
+            //nos aseguramos de detener la cuenta atras y la creacion de granadas
+            if (this.timer) this.timer.remove(false);
+            if (this.cuentaAtrasTimer) this.cuentaAtrasTimer.remove(false);
+
+            this.panelEventos.mostrar(
+                '¡Has perdido!',
+                'El comandante ha sido alcanzado. Fin del minijuego.',
+                'WarCanvas',
+                'Aceptar',
+                () => {
+                    this.endMinijuego();
+                });
         }
     }
+
 
     /**
      * Crea las animaciones
