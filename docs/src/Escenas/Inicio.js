@@ -278,6 +278,11 @@ class Inicio extends Phaser.Scene {
     getPiezaGrafico() {
         return this.piezaGrafico;
     }
+
+     lanzarMinijuego() {
+        this.scene.sleep();
+        this.scene.launch('Minijuego');
+     }
 }
 
 export default Inicio;

@@ -25,6 +25,7 @@
     "better-docs": "^2.7.3",
     "clean-jsdoc-theme": "^4.3.0",
     "docdash": "^2.0.2",
-    "docma": "^3.2.2"
+    "docma": "^3.2.2",
+    "phaser": "^3.90.0"
   }
 }
