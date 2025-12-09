@@ -65,8 +65,16 @@ class Menu extends Phaser.Scene {
         //BOTON MINIJUEGO
         let botonMinijuego = this.add.image(this.scale.width - 100, this.scale.height / 2, 'boton')
             .setOrigin(0.5)
-            .setScale(0.25)
+            .setScale(0.2)
             .setInteractive({ useHandCursor: true })
+
+        let minijuegoText = this.add.text(botonMinijuego.x,botonMinijuego.y, 'Minijuego',{
+            fontSize: '20px',
+            color: '#ffffff',
+            stroke: '#7b0000ff',
+            strokeThickness: 5,
+            fontFamily: 'Arial',
+        }).setOrigin(0.5);    
 
         botonMinijuego.on('pointerdown', () => {
             this.scene.launch('Minijuego'); //launch para evitar destruir la escena del menu

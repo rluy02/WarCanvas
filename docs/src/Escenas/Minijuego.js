@@ -20,11 +20,11 @@ class Minijuego extends Phaser.Scene {
      * Carga los recursos necesarios para la escena.
      */
     preload() {
-        //cuando esta escena venga de INICIO, no hara falta el preload
-        this.load.image('Comandante', './imgs/piezas/Comandante.webp');
-        this.load.image('ComandanteEnemigo', './imgs/piezas/Comandante2.webp');
-        this.load.image('Granada', './imgs/minijuego/granada.webp');
-        this.load.spritesheet('explosion', './imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 })
+        //cuando esta escena venga de INICIO, que no recargue las imagenes
+         if (!this.textures.exists('Comandante')) this.load.image('Comandante', './imgs/piezas/Comandante.webp');
+         if (!this.textures.exists('ComandanteEnemigo')) this.load.image('ComandanteEnemigo', './imgs/piezas/Comandante2.webp');
+         if (!this.textures.exists('Granada')) this.load.image('Granada', './imgs/minijuego/granada.webp');
+         if (!this.textures.exists('explosion'))this.load.spritesheet('explosion', './imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 })
     }
 
     /**
