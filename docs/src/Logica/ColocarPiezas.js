@@ -169,11 +169,11 @@ class ColocarPiezas {
             fila = fil + direcciones[i].df;
             columna = col + direcciones[i].dc;
             let pieza = new Soldado(this.tablero, fila, columna, nombre);
-        this.tablero[fila][columna].setContenido(pieza);
+            this.tablero[fila][columna].setContenido(pieza);
         if (pieza != null){EventBus.emit(Eventos.PIECE_POSITION, pieza); // On ElegirPiezaEscena - Inicio
-        ((this.equipoActual === this.equipo1)) ? this.equipo2.piezas.push(pieza) : this.equipo1.piezas.push(pieza);}   
+        ((this.equipoActual === this.equipo1)) ? this.equipo2.piezas.push(pieza) : this.equipo1.piezas.push(pieza);
+        }   
         }
-        
     }
 
     /**
@@ -193,17 +193,36 @@ class ColocarPiezas {
      * Elimina todas las piezas 
      */
     eliminarTodasLasPiezas(){
-        for(let pieza of this.equipo1.piezas) 
-        { 
-        EventBus.emit(Eventos.PIECE_DELETE, pieza); // On ElegirPiezaEscena - Inicio
-        this.tablero[pieza.fil][pieza.col].setContenido(null);
-        this.equipo1.eliminarPieza(pieza);
+        // for(let pieza of this.equipo1.piezas) 
+        // { 
+        // EventBus.emit(Eventos.PIECE_DELETE, pieza); // On ElegirPiezaEscena - Inicio
+        // this.tablero[pieza.fil][pieza.col].setContenido(null);
+        // this.equipo1.eliminarPieza(pieza);
+        // }
+        // for(let pieza of this.equipo2.piezas) { 
+        // EventBus.emit(Eventos.PIECE_DELETE, pieza); // On ElegirPiezaEscena - Inicio
+        // this.tablero[pieza.fil][pieza.col].setContenido(null);
+        // this.equipo2.eliminarPieza(pieza);}
+
+        // for(let celda of this.tablero) {
+        //     if (!celda.estaVacia()) {
+        //         let pieza = celda.getPieza();
+        //         EventBus.emit(Eventos.PIECE_DELETE, pieza); // On ElegirPiezaEscena - Inicio
+        //         this.tablero[pieza.fil][pieza.col].setContenido(null);
+        //         (pieza.getJugador == 'J2') ? this.equipo2.eliminarPieza(pieza) : this.equipo1.eliminarPieza(pieza);
+        //     }
+        // }
+
+        for (let i = 0; i < this.filas; i++) {
+            for (let j = 0; j < this.columnas; j++) {
+                if (!this.tablero[i][j].estaVacia()) {
+                let pieza = this.tablero[i][j].getPieza();
+                EventBus.emit(Eventos.PIECE_DELETE, pieza); // On ElegirPiezaEscena - Inicio
+                this.tablero[pieza.fil][pieza.col].setContenido(null);
+                (pieza.getJugador == 'J2') ? this.equipo2.eliminarPieza(pieza) : this.equipo1.eliminarPieza(pieza);
+            }}
         }
-        for(let pieza of this.equipo2.piezas) { 
-        EventBus.emit(Eventos.PIECE_DELETE, pieza); // On ElegirPiezaEscena - Inicio
-        this.tablero[pieza.fil][pieza.col].setContenido(null);
-        this.equipo2.eliminarPieza(pieza);
-    }
+        
     }
     
     /**

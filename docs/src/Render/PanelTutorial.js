@@ -237,7 +237,6 @@ class PanelTutorial {
         if(this.fase === 6) {this.dialogoText.setText('Al usar la artillería, no habrá un combate por dados');};
         if(this.fase === 7) 
         {this.dialogoText.setText('Ten cuidado porque podrías atacar alguna de tus piezas');
-            console.log(this.piezaTutorial)
             this.tablero.generarPiezaEnemigaArtilleria(this.piezaTutorial.fil, this.piezaTutorial.col+2, 'Soldado');
         }
         
