@@ -71,13 +71,13 @@ class EscenaColocarPiezas extends Phaser.Scene {
      */
     crearImagenes(){
         this.load.image('peon', './imgs/piezas/peon.webp');
-        this.load.image('peon2', './imgs/piezas/peon2.webp');
+        this.load.image('peon2', './imgs/piezas/soldado-realista.webp');
         this.load.image('caballeria', './imgs/piezas/caballeria-dibujada.webp');
-        this.load.image('caballeria2', './imgs/piezas/Caballeria2.webp');
+        this.load.image('caballeria2', './imgs/piezas/caballeria-realista.webp');
         this.load.image('comandante', './imgs/piezas/Comandante.webp');
-        this.load.image('comandante2', './imgs/piezas/Comandante2.webp');
+        this.load.image('comandante2', './imgs/piezas/comandante-realista.webp');
         this.load.image('artilleria', './imgs/piezas/artilleriaJ1.webp');
-        this.load.image('artilleria2', './imgs/piezas/artilleriaJ1.webp');
+        this.load.image('artilleria2', './imgs/piezas/artilleria-realista.webp');
     }
 
     /**
