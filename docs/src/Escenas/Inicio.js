@@ -257,7 +257,7 @@ class Inicio extends Phaser.Scene {
         this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
         this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
 
-        this.load.image('peon', './imgs/piezas/peon.webp');
+        this.load.image('peon', './imgs/piezas/soldado-dibujado.webp');
         this.load.image('peon-blanco', './imgs/piezas/white-pawn.webp');
         this.load.image('peon-rojo', './imgs/piezas/red-pawn.webp');
         this.load.image('peon2', './imgs/piezas/soldado-realista.webp');
@@ -265,7 +265,7 @@ class Inicio extends Phaser.Scene {
         this.load.image('caballeria2', './imgs/piezas/caballeria-realista.webp');
         this.load.image('comandante', './imgs/piezas/Comandante.webp');
         this.load.image('comandante2', './imgs/piezas/comandante-realista.webp');
-        this.load.image('artilleria', './imgs/piezas/artilleriaJ1.webp');
+        this.load.image('artilleria', './imgs/piezas/artilleria-dibujada.webp');
         this.load.image('artilleria2', './imgs/piezas/artilleria-realista.webp');
 
         this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });

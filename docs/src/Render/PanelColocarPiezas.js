@@ -190,6 +190,7 @@ class PanelColocarPiezas {
         else {
             this.soldadoImg.setTexture('peon');
             this.caballeriaImg.setTexture('caballeria');
+             this.caballeriaImg.setDisplaySize(50, 50);
             this.artilleriaImg.setTexture('artilleria');
             this.comandanteImg.setTexture('comandante');
         }
