@@ -21,14 +21,6 @@ class TurnoGraficos {
         EventBus.on(Eventos.CHANGE_TURN, () => {
             this.setAccionesTurno(3);
         })
-
-        EventBus.on(Eventos.CONQUER_CELL, (pJ1, pJ2) => {
-            this.setPorcentaje(pJ1, pJ2);
-        })
-
-        EventBus.on(Eventos.UPDATE_PERCENTAGES, (pJ1, pJ2) => {
-            this.setPorcentaje(pJ1, pJ2);
-        })
     }
 
     /**
@@ -48,27 +40,10 @@ class TurnoGraficos {
         //Imagenes de los movimientos restantes de cada jugador
         this.procesarIconos();
 
-        // this.turnosText = this.escena.add.text(170, height - 75, 'Piezas a mover: ' + this.piezasMover, { // Título
-        //     fontSize: '22px',
-        //     fontFamily: 'Arial',
-        //     fill: '#ffffff'
-        // });
-
         this.accionessText = this.escena.add.text(380, height - 75, 'Acciones de pieza: ' + this.accionesPieza, { // Título
             fontSize: '22px',
             fontFamily: 'Arial',
             fill: '#ffffff'
-        });
-
-        this.porcentajeJ1Text = this.escena.add.text(390, height - 40, 'J1: ' + 0 + '%', { // Título
-            fontSize: '22px',
-            fontFamily: 'Arial',
-            fill: '#ffffff'
-        });
-        this.porcentajeJ2Text = this.escena.add.text(510, height - 40, 'J2: ' + 0 + '%', { // Título
-            fontSize: '22px',
-            fontFamily: 'Arial',
-            fill: '#ff6666ff'
         });
 
         this.acabarText = this.escena.add.text(90, height - 40, 'Finalizar Movimiento', { // Título
@@ -146,16 +121,6 @@ class TurnoGraficos {
 
         // Redibujar iconos según el jugador (J1 o J2)
         this.setAccionesTurno(this.piezasMover);
-    }
-
-    /**
-     * Establecer el porcentaje de control de cada jugador
-     * @param {number} pJ1 
-     * @param {number} pJ2 
-     */
-    setPorcentaje(pJ1, pJ2) {
-        this.porcentajeJ1Text.text = 'J1: ' + pJ1 + '%';
-        this.porcentajeJ2Text.text = 'J1: ' + pJ2 + '%';
     }
 
     /**

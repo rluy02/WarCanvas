@@ -14,6 +14,7 @@ import EventosAleatorios from "../Logica/EventosAleatorios.js";
 import PanelEventos from "../Render/PanelEventos.js";
 import InteligenciaArtificial from "../Logica/InteligenciaArtificial.js";
 import Pieza from "../Logica/Pieza.js";
+import BarraTerritorio from "../Render/BarraTerritorio.js";
 
 /**
  * Escena de inicio del juego.
@@ -78,6 +79,7 @@ class Inicio extends Phaser.Scene {
         this.turno = new Turno(this, this.acciones, this.turnoGrafico);
         this.turnoGrafico.create(this.turno);
         this.turno.crearListeners();
+        this.marcoConquista = new BarraTerritorio(this);
 
         if (this.equipo1 == undefined) this.equipo1 = new Equipo("J1", this.tab, true);
         if (this.equipo2 == undefined) this.equipo2 = new Equipo("J2", this.tab, true);
@@ -292,6 +294,7 @@ class Inicio extends Phaser.Scene {
         this.load.image('comandante2', './imgs/piezas/comandante-realista.webp');
         this.load.image('artilleria', './imgs/piezas/artilleria-dibujada.webp');
         this.load.image('artilleria2', './imgs/piezas/artilleria-realista.webp');
+        this.load.image('marcoConquista', './imgs/ui/marcoTerrenoConquistado.webp');
 
         this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
     }

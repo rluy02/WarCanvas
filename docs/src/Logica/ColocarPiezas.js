@@ -417,9 +417,6 @@ class ColocarPiezas {
         let j2Porcentaje = this.celdasJ2 * 100 / 80;
         EventBus.emit(Eventos.UPDATE_PERCENTAGES, j1Porcentaje, j2Porcentaje);
     }
-
-
-    
 }
 
 export default ColocarPiezas;
