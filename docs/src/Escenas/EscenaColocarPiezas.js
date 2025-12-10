@@ -70,7 +70,9 @@ class EscenaColocarPiezas extends Phaser.Scene {
      * Carga las imágenes necesarias para las piezas del juego.
      */
     crearImagenes(){
-        this.load.image('peon', './imgs/piezas/soldado-dibujado.webp');
+       this.load.image('peon', './imgs/piezas/soldado-dibujado.webp');
+        this.load.image('peon-blanco', './imgs/piezas/white-pawn.webp');
+        this.load.image('peon-rojo', './imgs/piezas/red-pawn.webp');
         this.load.image('peon2', './imgs/piezas/soldado-realista.webp');
         this.load.image('caballeria', './imgs/piezas/caballeria-dibujada.webp');
         this.load.image('caballeria2', './imgs/piezas/caballeria-realista.webp');

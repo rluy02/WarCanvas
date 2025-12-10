@@ -46,10 +46,10 @@ class PanelTutorial {
         this.Comandante = this.createText(width - sideWidth + 100, 300, 'Comandante', 300, ' ', '20px', 0.0);
 
         // IMAGENES
-        this.soldadoImg = this.cargarImagen('peon', width - sideWidth + 50, 150, 0.07, 'Soldado', this.Soldados);
+        this.soldadoImg = this.cargarImagen('peon', width - sideWidth + 50, 150, 0.06, 'Soldado', this.Soldados);
         this.caballeriaImg = this.cargarImagen('caballeria',width - sideWidth + 50, 200, 0.028, 'Caballeria', this.Caballeria);
-        this.artilleriaImg = this.cargarImagen('artilleria', width - sideWidth + 50, 250, 0.105, 'Artilleria', this.Artilleria);
-        this.comandanteImg = this.cargarImagen('comandante', width - sideWidth + 50, 300, 0.07, 'Comandante', this.Comandante);
+        this.artilleriaImg = this.cargarImagen('artilleria', width - sideWidth + 50, 250, 0.06, 'Artilleria', this.Artilleria);
+        this.comandanteImg = this.cargarImagen('comandante', width - sideWidth + 50, 300, 0.06, 'Comandante', this.Comandante);
 
 
         this.dialogo = this.cargarImagen('dialogo', width - sideWidth/2, height- 150, 0.9, 'nofunc', null);
@@ -170,18 +170,20 @@ class PanelTutorial {
         if(this.fase === 2) {this.dialogoText.setText('Pulsa una casilla de movimiento para mover la pieza');}
         if(this.fase === 3) {this.dialogoText.setText('Cuando te muevas a una casilla vacia, ¡enhorabuena!, acabas de conquistar parte del terreno de juego');}
         if(this.fase === 4) {this.dialogoText.setText('Las casillas conquistadas se pintarán con el mapa de tu equipo');}
-        if(this.fase === 5) 
+        if(this.fase === 6) {this.dialogoText.setText('Si conquistas un 80% del terreno de juego, ganarás la partida');}
+        if(this.fase === 7) {this.dialogoText.setText('En su turno, el soldado tiene 2 acciones posibles, ¡combinalas bien!');}
+        if(this.fase === 8) 
         {this.dialogoText.setText('Cuando tengas una pieza enemiga para atacar a tu alcance, se marcará en rojo');
             this.tablero.generarPiezaEnemiga(this.piezaTutorial.fil, this.piezaTutorial.col, 'Soldado');
         }
-        if(this.fase === 6) {this.dialogoText.setText('Al pulsar sobre la pieza enemiga, podrás decidir si quieres realizar el combate');};
-        if(this.fase === 7) {this.dialogoText.setText('En el panel lateral, se mostrará la información del combate');};
-        if(this.fase === 8) {this.dialogoText.setText('Recuerda, para ganar un combate, necesitarás que los dados esten de tu parte.');};
-        if(this.fase === 9) {this.dialogoText.setText('Si ganas el combate, además de eliminar la pieza enemiga, conquistarás su casilla');}
-        if(this.fase === 10) {this.dialogoText.setText('Tu tirada, más el bonus de tu pieza deben sumar más que tu ememigo');};
-        if(this.fase === 11) {this.dialogoText.setText('El bonus del soldado es +1 en el ataque y +1 en la defensa');};
-        if(this.fase === 12) {this.dialogoText.setText('Ya sabes como atacar con los soldados, ¡no te olvides del resto de piezas!');};
-        if(this.fase === 13){
+        if(this.fase === 9) {this.dialogoText.setText('Al pulsar sobre la pieza enemiga, podrás decidir si quieres realizar el combate');};
+        if(this.fase === 10) {this.dialogoText.setText('En el panel lateral, se mostrará la información del combate');};
+        if(this.fase === 11) {this.dialogoText.setText('Recuerda, para ganar un combate, necesitarás que los dados esten de tu parte.');};
+        if(this.fase === 12) {this.dialogoText.setText('Si ganas el combate, además de eliminar la pieza enemiga, conquistarás su casilla');}
+        if(this.fase === 13) {this.dialogoText.setText('Tu tirada, más el bonus de tu pieza deben sumar más que tu ememigo');};
+        if(this.fase === 14) {this.dialogoText.setText('El bonus del soldado es +1 en el ataque y +1 en la defensa');};
+        if(this.fase === 15) {this.dialogoText.setText('Ya sabes como atacar con los soldados, ¡no te olvides del resto de piezas!');};
+        if(this.fase === 16){
             this.dialogoText.setText('Pulsa otra pieza para realizar el tutorial');
             this.dialogoNext.visible = false;
         }
@@ -200,21 +202,18 @@ class PanelTutorial {
         if(this.fase === 1) {this.dialogoText.setText('Los caballos se mueven en cruz, ¡y pueden saltar piezas!');}
         if(this.fase === 2) {this.dialogoText.setText('Pulsa el caballo para ver las posibilidades de movimiento');}
         if(this.fase === 3) {this.dialogoText.setText('Pulsa una casilla de movimiento para mover la pieza');}
-        if(this.fase === 4) {this.dialogoText.setText('Cuando te muevas a una casilla vacia, ¡enhorabuena!, acabas de conquistar parte del terreno de juego');}
-        if(this.fase === 5) {this.dialogoText.setText('Las casillas conquistadas se pintarán con el mapa de tu equipo');}
-        if(this.fase === 6) {this.dialogoText.setText('En su turno, el caballo tiene 3 acciones posibles, 2 movimientos y 1 ataque. ¡Combinalos bien!');}
-
-        if(this.fase === 7) 
+        if(this.fase === 4) {this.dialogoText.setText('En su turno, el caballo tiene 3 acciones posibles, ¡combinalas bien!');}
+        if(this.fase === 5) 
         {this.dialogoText.setText('Cuando tengas una pieza cerca, podrás saltarla');
             this.tablero.generarPiezaEnemiga(this.piezaTutorial.fil, this.piezaTutorial.col, 'Caballeria');
         }
-        if(this.fase === 8) {this.dialogoText.setText('Al pulsar sobre la pieza enemiga, podrás decidir si quieres realizar el combate');};
-        if(this.fase === 9) {this.dialogoText.setText('En el panel lateral, se mostrará la información del combate');};
-        if(this.fase === 10) {this.dialogoText.setText('Recuerda, para ganar un combate, necesitarás que los dados esten de tu parte.');};
-        if(this.fase === 11) {this.dialogoText.setText('Tu tirada, más el bonus de tu pieza deben sumar más que tu ememigo');};
-        if(this.fase === 12) {this.dialogoText.setText('El bonus del caballo es +2 en el ataque y +0 en la defensa');};
-        if(this.fase === 13) {this.dialogoText.setText('Ya sabes como atacar con los caballos, ¡no te olvides del resto de piezas!');};
-        if(this.fase === 14){
+        if(this.fase === 6) {this.dialogoText.setText('Al pulsar sobre la pieza enemiga, podrás decidir si quieres realizar el combate');};
+        if(this.fase === 7) {this.dialogoText.setText('En el panel lateral, se mostrará la información del combate');};
+        if(this.fase === 8) {this.dialogoText.setText('Recuerda, para ganar un combate, necesitarás que los dados esten de tu parte.');};
+        if(this.fase === 9) {this.dialogoText.setText('Tu tirada, más el bonus de tu pieza deben sumar más que tu ememigo');};
+        if(this.fase === 10) {this.dialogoText.setText('El bonus del caballo es +2 en el ataque y +0 en la defensa');};
+        if(this.fase === 11) {this.dialogoText.setText('Ya sabes como atacar con los caballos, ¡no te olvides del resto de piezas!');};
+        if(this.fase === 12){
             this.dialogoText.setText('Pulsa otra pieza para realizar el tutorial');
             this.dialogoNext.visible = false;
         }
@@ -244,7 +243,7 @@ class PanelTutorial {
         if(this.fase === 8) {this.dialogoText.setText('Una vez que has atacado con la artillería, tendrás que esperar 4 turnos para volver a usarla');};
         if(this.fase === 9) {this.dialogoText.setText('Es importante que protejas la artillería, porque tiene bonus de -1 al defenderse');};
         if(this.fase === 10) {this.dialogoText.setText('Ya sabes como atacar con la artillería, ¡no te olvides del resto de piezas!');};
-        if(this.fase === 10){
+        if(this.fase === 11){
             this.dialogoText.setText('Pulsa otra pieza para realizar el tutorial');
             this.dialogoNext.visible = false;
         }
@@ -263,10 +262,7 @@ class PanelTutorial {
         if(this.fase === 1) {this.dialogoText.setText('El comandante es la pieza más importante, debes protegerla porque si se elimina, perderás la partida');}
         if(this.fase === 2) {this.dialogoText.setText('Puede moverse también en diagonal. Pulsa para ver su rango de movimiento');}
         if(this.fase === 3) {this.dialogoText.setText('Pulsa una casilla de movimiento para mover la pieza');}
-        if(this.fase === 4) {this.dialogoText.setText('Cuando te muevas a una casilla vacia, ¡enhorabuena!, acabas de conquistar parte del terreno de juego');}
-        if(this.fase === 5) {this.dialogoText.setText('Las casillas conquistadas se pintarán con el mapa de tu equipo');}
-        if(this.fase === 6) {this.dialogoText.setText('Si conquistas un 80% del terreno de juego, ganarás la partida');}
-        if(this.fase === 7) {this.dialogoText.setText('En su turno, el comandante tiene 4 acciones posibles, 3 movimientos y 1 ataque. ¡Combinalas bien!');}
+        if(this.fase === 7) {this.dialogoText.setText('En su turno, el comandante tiene 4 acciones posibles, ¡combinalas bien!');}
         if(this.fase === 8) 
         {this.dialogoText.setText('Cuando tengas una pieza enemiga para atacar a tu alcance, se marcará en rojo');
             this.tablero.generarPiezaEnemiga(this.piezaTutorial.fil, this.piezaTutorial.col, 'Soldado');

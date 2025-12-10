@@ -18,7 +18,7 @@ class Artilleria extends Pieza {
      * @param {string} jugador - 'J1' o 'J2'
      */
     constructor(tablero, fil, col, jugador) {
-        super(tablero, 'Artilleria', fil, col, jugador, 1, 3, -1);
+        super(tablero, 'Artilleria', fil, col, jugador, 1, 0, -1);
 
         this.cooldown = 4;
         this.turnosTranscurridos = 0;
@@ -40,7 +40,7 @@ class Artilleria extends Pieza {
     lanzarProyectil(fil, col, escena, tablero, tamCasilla = 64) {
         const randomCell = Phaser.Math.Between(0, 4);
         const direcciones = [
-            { df: 0, dc: 0 },     // centro
+            { df: 0, dc: 0 },    // centro
             { df: -1, dc: 0 },  // arriba
             { df: 1, dc: 0 },   // abajo
             { df: 0, dc: -1 },  // izquierda
@@ -53,7 +53,7 @@ class Artilleria extends Pieza {
         while ((filaProyectil < 0 || filaProyectil > 7) || (colProyectil < 0 || colProyectil > 9)){
             randomCell = Phaser.Math.Between(0, 4);
             filaProyectil = fil + direcciones[randomCell].df;
-            colProyectil = col + direcciones[randomCell].df;
+            colProyectil = col + direcciones[randomCell].dc;
         }
 
         const x = colProyectil * tamCasilla + tamCasilla / 2;
@@ -76,7 +76,12 @@ class Artilleria extends Pieza {
             escena.eliminarPieza(pieza);
 
             if (pieza.getTipo() == "Comandante"){
-                EventBus.emit(Eventos.END_GAME, this);
+                let j = this.jugador;
+                if (this.jugador == pieza.getJugador() && this.jugador == 'J1') j = 'J2'; else j = 'J1';
+                EventBus.emit(Eventos.END_GAME, {
+                    jugador: j,
+                    tipo: "COMBATE"
+                });
             }
             celda.limpiar();
         }
