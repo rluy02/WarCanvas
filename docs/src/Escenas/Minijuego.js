@@ -21,10 +21,12 @@ class Minijuego extends Phaser.Scene {
      */
     preload() {
         //cuando esta escena venga de INICIO, que no recargue las imagenes
-        if (!this.textures.exists('Comandante')) this.load.image('Comandante', './imgs/piezas/Comandante.webp');
-        if (!this.textures.exists('ComandanteEnemigo')) this.load.image('ComandanteEnemigo', './imgs/piezas/Comandante2.webp');
+        if (!this.textures.exists('Comandante')) this.load.image('Comandante', './imgs/piezas/comandante.webp');
+        if (!this.textures.exists('ComandanteEnemigo')) this.load.image('ComandanteEnemigo', './imgs/piezas/comandante-realista.webp');
         if (!this.textures.exists('Granada')) this.load.image('Granada', './imgs/minijuego/granada.webp');
         if (!this.textures.exists('explosion')) this.load.spritesheet('explosion', './imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 })
+        if (!this.textures.exists('fondoMiniJuego')) this.load.image('fondoMiniJuego', './imgs/minijuego/miniJuegoFondo.webp');
+
     }
 
     /**
@@ -32,6 +34,7 @@ class Minijuego extends Phaser.Scene {
      */
     create() {
         this.crearAnimaciones();
+        this.add.image(500, 300, 'fondoMiniJuego').setOrigin(0.5).setScale(0.85).setAlpha(0.5);
 
         // Se crea el sprite de explosion
         this.explosion = this.add.sprite(0, 0, 'explosion');
@@ -57,7 +60,6 @@ class Minijuego extends Phaser.Scene {
         this.tiempoInicial = 30; // Tiempo inicial en segundos
         //Texto del tiempo
         this.cuentaAtrasTexto = this.add.text(this.scale.width / 2, 20, 'Tiempo: ' + this.tiempoInicial, { fontSize: '32px', fill: '#FFF' }).setOrigin(0.5);
-
         this.panelEventos = new PanelEventos(this);
         this.panelEventos.mostrar('Minijuego: Salta el comandante', 'Pulsa la barra espaciadora para que el comandante salte y esquive las granadas que se lanzan desde la derecha.', 'WarCanvas', 'Aceptar', () => {
             // Inicializar timer para crear granadas cada 3000ms
