@@ -252,6 +252,7 @@ class TableroGrafico {
         }
 
         this.celdasColoreadas = [];
+        EventBus.emit(Eventos.CLEAN_SIDE_PANEL);
     }
 
     /**

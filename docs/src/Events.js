@@ -16,5 +16,6 @@ export const Eventos =  {
     PIECE_POSITION: "piece_position",
     PIECE_DELETE: "piece_delete",
     CHANGE_TEAM_SET_PIECES: "change_team_set_pieces",
-    ATTACK_CHEAT: 'attack_cheat'
+    ATTACK_CHEAT: 'attack_cheat',
+    CLEAN_SIDE_PANEL: 'clean_side_panel'
 }
