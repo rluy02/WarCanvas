@@ -40,7 +40,7 @@ export default class InteligenciaArtificial {
 
             console.log(`Enemigo más cercana: ${this.closestEnemy.getTipo()}`)
             console.log(this.closestEnemy.getPosicion())
-            if (pieza.getTipo() === 'Soldado' || pieza.getTipo() === 'Caballeria') {
+            if (pieza.getTipo() === 'Soldado' || pieza.getTipo() === 'Caballeria' || pieza.getTipo() === 'Comandante') {
                 pieza.calculaPeso();
             }
             if (pieza.getTipo() == 'Artilleria') {
