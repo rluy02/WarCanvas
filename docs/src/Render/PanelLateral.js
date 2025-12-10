@@ -188,7 +188,7 @@ class PanelLateral {
      */
     updateInfo(fichaDefiende, fichaAtaque, equipoAtaque, equipoDefensa, accion, casillaAtacante, casillaDefensa) {
 
-        let bonusAtaca = casillaDefensa.getPieza().getBonusAtaque();
+        let bonusAtaca = casillaAtacante.getPieza().getBonusAtaque();
         bonusAtaca = this.bonus(bonusAtaca, casillaAtacante.getPieza(), casillaDefensa.getPieza());
         let bonusDefiende = casillaDefensa.getPieza().getBonusDefensa();
 
