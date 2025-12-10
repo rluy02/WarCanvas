@@ -28,7 +28,8 @@
     <div class="col-4 reglas-creditos">
       <button id="btn-inicio"><a href="#"><span class="texto-cab">INICIO</span></a></button>
       <button id="btn-reglas"><a href="#"><span class="texto-cab">REGLAS</span></a></button>
-      <button id="btn-docu"><a href="./Documentacion" target="_blank"><span class="texto-cab">DOCUMENTACIÓN</span></a></button>
+      <button id="btn-docu"><a href="./Documentacion" target="_blank"><span
+            class="texto-cab">DOCUMENTACIÓN</span></a></button>
       <button id="btn-creditos"><a href="#"><span class="texto-cab">CREDITOS</span></a></button>
     </div>
   </header>
@@ -49,19 +50,23 @@
       <div class="colp-12">
         <h2 class="titulos-inicio">Resumen</h2>
         <div>
-          <p>En este juego te conviertes en el búho de drawful, liderando un ejército en una batalla táctica contra un
+          <div class="texto-cajas">En este juego te conviertes en el búho de drawful, liderando un ejército en una batalla
+            táctica contra un
             comandante rival. A medida que avanzas por el tablero, conquistarás territorio, desplegarás unidades y
             tomarás decisiones clave para superar a tu enemigo y hacerte con la frontera.
-          </p>
+          </div>
         </div>
       </div>
       <div class="colp-12">
         <h2 class="titulos-inicio">Equipos</h2>
         <div class="col-6 info">
-        <img class="img-equipos" src="./imgs/equipos/equipo-dibujado.webp" alt="equipo dibujado"></div>
+          <img class="img-equipos" src="./imgs/equipos/equipo-dibujado.webp" alt="equipo dibujado">
+        </div>
         <div class="col-6 info">
-        <img class="img-equipos" src="./imgs/equipos/equipo-realista.webp" alt="equipo dibujado"></div>
+          <img class="img-equipos" src="./imgs/equipos/equipo-realista.webp" alt="equipo dibujado">
+        </div>
       </div>
+      <hr>
     </section>
 
     <!-- PAG SOBRE REGLAS -->
@@ -69,30 +74,31 @@
       <!-- Objetivo del juego -->
       <h2 class="titulos-reglas">🎯 Objetivo</h2>
       <div class="col-12 info">
-        <p>
+        <div class="texto-cajas">
           Gana la partida conquistando al menos el <strong>80% del tablero</strong> o eliminando al
           <strong>Comandante enemigo</strong>. Usa tus piezas estratégicamente: cada tipo tiene sus propias habilidades,
           movimiento y fuerza.
-        </p>
+        </div>
       </div>
       <hr>
       <!-- Normas e información -->
       <h2 class="titulos-reglas">¿Cómo jugar?</h2>
       <h3 class="info">🧮 Tablero</h3>
       <div class="col-12 info">
-        <p>
+        <div class="texto-cajas">
           El tablero tiene un tamaño de <strong>8x10 casillas</strong>, dividido en tres zonas:
-        </p>
-        <ul>
-          <li>Terreno del equipo A</li>
-          <li>Zona neutra</li>
-          <li>Terreno del equipo B</li>
-        </ul>
+
+          <ul>
+            <li><strong>Terreno del equipo A</strong></li>
+            <li><strong>Zona neutra</strong></li>
+            <li><strong>Terreno del equipo B</strong></li>
+          </ul>
+        </div>
       </div>
       <!-- Info Tipos de Piezas -->
       <h3 class="info">🧩 Tipos de Piezas</h3>
       <div class="col-12 info">
-        <p>Cada jugador cuenta con <strong>24 unidades</strong>:</p>
+        <div class="texto-cajas">Cada jugador cuenta con <strong>24 unidades</strong>:</div>
         <table>
           <thead>
             <tr>
@@ -115,7 +121,7 @@
             </tr>
             <tr>
               <td>💣 Artillería</td>
-              <td>3</td>
+              <td>1</td>
               <td>No se mueve, pero puede atacar a distancia</td>
               <td>1</td>
               <td>+3</td>
@@ -131,7 +137,7 @@
             </tr>
             <tr>
               <td>⚔️ Soldado</td>
-              <td>14</td>
+              <td>16</td>
               <td>Horizontal o vertical</td>
               <td>2</td>
               <td>+1</td>
@@ -144,7 +150,7 @@
         <!-- Info Turno y Acciones -->
         <div class="col-6 info">
           <h3 class="info">⚙️ Turnos y Acciones</h3>
-          <ul>
+          <ul class="texto-cajas">
             <li>En tu turno puedes mover hasta <strong>3 piezas</strong>.</li>
             <li>Cada pieza tiene un número máximo de <strong>acciones</strong> (mover y/o atacar).</li>
             <li>No puedes atacar dos veces con la misma pieza en un turno.</li>
@@ -153,7 +159,7 @@
         <!-- Info Ataques -->
         <div class="col-6 info">
           <h3 class="info">⚔️ Ataques</h3>
-          <ul>
+          <ul class="texto-cajas">
             <li>Para atacar, tira <strong>dos dados</strong> y suma el poder de ataque (bonus) de tu unidad.</li>
             <li>Solo puedes atacar casillas adyacentes, excepto la artillería (que ataca a distancia).</li>
             <li>Si el atacante gana, la pieza enemiga es eliminada.</li>
@@ -169,8 +175,7 @@
         <!-- Info Conquistar Terreno -->
         <div class="col-6 info">
           <h3 class="info">🏳️ Conquistar Casillas</h3>
-
-          <ul>
+          <ul class="texto-cajas">
             <li>Si entras en una casilla vacía, la conquistas automáticamente.</li>
             <li>Si hay un enemigo, se resuelve con un duelo. Si el atacante vence, conquista la casilla ocupada
               previamente por el rival</li>
@@ -178,12 +183,18 @@
         </div>
         <!-- Info Eventos Especiales -->
         <div class="col-6 info">
-          <h3 class="info">🌪️ Eventos Especiales (por definir)</h3>
-
-          <p>
-            Durante la partida pueden ocurrir <strong>eventos especiales</strong> como tormentas, niebla o inundaciones.
-            Estos activan <strong>minijuegos con físicas</strong> que afectan a las piezas de distintas formas.
-          </p>
+          <h3 class="info">🌪️ Eventos Especiales</h3>
+          <div class="texto-cajas">
+            Durante la partida pueden activarse <strong>eventos aleatorios</strong> que modifican el tablero y la
+            estrategia.
+            Entre ellos se incluyen:
+            <br>
+          <ul>
+            <li><strong>Terremotos:</strong> bloquean temporalmente piezas en casillas afectadas.</li>
+            <li><strong>Lluvia:</strong> algunas casillas conquistadas vuelven a ser neutras.</li>
+            <li><strong>Minijuego con físicas:</strong> controla a Drawfull y bloquea granadas durante 30 segundos.</li>
+          </ul>
+          </div>
         </div>
       </div>
       <hr>

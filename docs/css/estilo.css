@@ -73,6 +73,20 @@ body {
   color: #d1cea9;
 }
 
+.texto-cajas{
+  background: #f6f4e8;              
+  border: 2px solid #c7c3a4;         
+  border-radius: 12px;
+  padding: .5em .5em;
+  margin: .5em auto;
+  max-width: 900px;
+  color: #352f16;                    
+  font-size: 1rem;
+  line-height: 1.6;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
 /* Separador */
 hr {
   margin: 3px 0 1vh;
