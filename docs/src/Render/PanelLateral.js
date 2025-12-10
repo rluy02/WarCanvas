@@ -27,7 +27,7 @@ class PanelLateral {
      */
     create() {
         const width = this.escena.scale.width;
-        const height = this.escena.scale.height;
+        const height = this.escena.scale.height - 88;
 
         const sideWidth = 355; // Tamaño del panel
         this.escena.add.rectangle(width - (sideWidth / 2), height / 2, sideWidth, height, 0xd4b37c);
@@ -88,7 +88,7 @@ class PanelLateral {
 
         // Boton de Ataque / defensa
 
-        this.buttonTry = this.createText(width - sideWidth / 2, 500, ' ', 0, ' ', '24px', 0.5, '#ff0000');
+        this.buttonTry = this.createText(width - sideWidth / 2, 430, ' ', 0, ' ', '24px', 0.5, '#ff0000');
         this.buttonTry.disableInteractive();
 
 
@@ -113,7 +113,7 @@ class PanelLateral {
         });
 
         // Botón Cheat (+100 bonus)
-        this.buttonCheat = this.createText(width - sideWidth / 2, 540, 'CHEAT', 0, ' ', '16px', 0.5, '#523600');
+        this.buttonCheat = this.createText(width - sideWidth / 2, 470, 'CHEAT', 0, ' ', '16px', 0.5, '#523600');
         this.buttonCheat.setVisible(false);
         this.buttonCheat.disableInteractive();
 

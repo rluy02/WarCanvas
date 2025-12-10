@@ -31,26 +31,26 @@ class TurnoGraficos {
         const width = this.escena.scale.width;
         const height = this.escena.scale.height;
 
-        this.JugadorText = this.escena.add.text(40, height - 75, 'J1: ', { // Título
-            fontSize: '22px',
+        this.JugadorText = this.escena.add.text(50, height - 45, 'J1: ', { // Título
+            fontSize: '32px',
             fontFamily: 'Arial',
             fill: '#ffffff'
-        });
+        }).setOrigin(0.5);
 
         //Imagenes de los movimientos restantes de cada jugador
         this.procesarIconos();
 
-        this.accionessText = this.escena.add.text(380, height - 75, 'Acciones de pieza: ' + this.accionesPieza, { // Título
-            fontSize: '22px',
+        this.accionessText = this.escena.add.text(width / 2, height - 60, 'Acciones de pieza: ' + this.accionesPieza, { // Título
+            fontSize: '28px',
             fontFamily: 'Arial',
             fill: '#ffffff'
-        });
+        }).setOrigin(0.5);
 
-        this.acabarText = this.escena.add.text(90, height - 40, 'Finalizar Movimiento', { // Título
+        this.acabarText = this.escena.add.text(width/2, height - 30, 'Finalizar Movimiento', { // Título
             fontSize: '22px',
             fontFamily: 'Arial',
             fill: '#ce2020ff'
-        }).setInteractive({ useHandCursor: true })
+        }).setInteractive({ useHandCursor: true }).setOrigin(0.5);
 
         this.acabarText.on('pointerdown', () => {
             turno.acabarMovimientos();
@@ -96,17 +96,16 @@ class TurnoGraficos {
         this.iconosAcciones = [];
 
         const startX = 110;
-        const y = this.escena.scale.height - 60;
+        const y = this.escena.scale.height - 45;
 
         for (let i = 0; i < this.piezasMover; i++) {
             let icon = undefined;
             if (this.jugadorTurno == "J1") {
-                icon = this.escena.add.image(startX + i * 50, y, 'peon-blanco');
+                icon = this.escena.add.sprite(startX + i * 70, y, 'peon').setScale(0.08);
             } else {
-                icon = this.escena.add.image(startX + i * 50, y, 'peon-rojo');
+                icon = this.escena.add.sprite(startX + i * 70, y, 'peon2').setScale(0.08);
             }
 
-            icon.setDisplaySize(20, 34);
             this.iconosAcciones.push(icon);
         }
     }

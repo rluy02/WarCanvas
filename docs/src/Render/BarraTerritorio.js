@@ -12,7 +12,7 @@ class BarraTerritorio {
         this.porcentajeJ1;
         this.porcentajeJ2;
 
-        this.marco = escena.add.sprite(390, escena.scale.height - 75, 'marcoConquista').setOrigin(0.5);
+        this.marco = escena.add.sprite(escena.scale.width - 180, escena.scale.height - 44, 'marcoConquista').setOrigin(0.5).setScale(0.23);
     }
 }
 
