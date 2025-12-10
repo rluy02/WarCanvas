@@ -21,7 +21,7 @@ class Minijuego extends Phaser.Scene {
      */
     preload() {
         //cuando esta escena venga de INICIO, que no recargue las imagenes
-        if (!this.textures.exists('Comandante')) this.load.image('Comandante', './imgs/piezas/comandante.webp');
+        if (!this.textures.exists('Comandante')) this.load.image('Comandante', './imgs/piezas/Comandante.webp');
         if (!this.textures.exists('ComandanteEnemigo')) this.load.image('ComandanteEnemigo', './imgs/piezas/comandante-realista.webp');
         if (!this.textures.exists('Granada')) this.load.image('Granada', './imgs/minijuego/granada.webp');
         if (!this.textures.exists('explosion')) this.load.spritesheet('explosion', './imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 })
