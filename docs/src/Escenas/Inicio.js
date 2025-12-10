@@ -55,7 +55,7 @@ class Inicio extends Phaser.Scene {
         this.crearAnimaciones();
 
         //Creamos la instancia y la guardamos en tab
-        this.tab = new Tablero(8,10,this);
+        this.tab = new Tablero(8, 10, this);
 
         this.piezas = [];
         this.acciones = 3;
@@ -139,6 +139,31 @@ class Inicio extends Phaser.Scene {
             let descripcion = "";
             let titulo = "";
 
+            //Caso especial: auto-eliminación del Comandante
+            if (info.autoEliminacion === true) {
+
+                if (info.jugador === "J1") {
+                    nombre = "¡Buena Suerte!";
+                    titulo = "VICTORIA";
+                    descripcion = "El enemigo cometió un grave error y destruyó a su propio comandante.";
+                } else {
+                    nombre = "Derrota inesperada";
+                    titulo = "DERROTA";
+                    descripcion = "Por eso hay que aprobar métodos matemáticos, has causado la pérdida del nuestro comandante.";
+                }
+
+                this.panelEventos.mostrar(
+                    nombre,
+                    descripcion,
+                    titulo,
+                    "IR AL MENÚ",
+                    () => this.ResetInfoYcambiarEscena()
+                );
+
+                return; //evitar que siga al bloque normal
+            }
+
+            //Flujo normal del juego
             if (info.jugador === "J1") {
                 nombre = '¡El equipo dibujado vence!';
                 titulo = 'VICTORIA';
@@ -172,9 +197,9 @@ class Inicio extends Phaser.Scene {
     moverPieza(pieza) {
         for (let p of this.piezas) {
             if (p == pieza) {
-                let data =this.piezaGrafico.eliminarPieza(pieza);
+                let data = this.piezaGrafico.eliminarPieza(pieza);
                 this.piezaGrafico.dibujarPieza(pieza, data);
-           }
+            }
         }
     }
 
@@ -279,10 +304,10 @@ class Inicio extends Phaser.Scene {
         return this.piezaGrafico;
     }
 
-     lanzarMinijuego() {
+    lanzarMinijuego() {
         this.scene.sleep();
         this.scene.launch('Minijuego');
-     }
+    }
 }
 
 export default Inicio;

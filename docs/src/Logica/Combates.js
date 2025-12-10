@@ -110,9 +110,6 @@ class Combates {
         let bonusAtaca = 100;
         let bonusDefiende = this.defensa.getPieza().getBonusDefensa();
 
-        let totalAtaque = dadosAtaque1 + dadosAtaque2 + bonusAtaca;
-        let totalDefensa = dadosDefensa1 + dadosDefensa2 + bonusDefiende;
-
         let ganador = true; // Siempre gana
 
         this.actualizarPanelAtaque(

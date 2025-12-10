@@ -50,7 +50,7 @@ class Artilleria extends Pieza {
         const filaProyectil = fil + direcciones[randomCell].df;
         const colProyectil = col + direcciones[randomCell].dc;
 
-        while ((filaProyectil < 0 || filaProyectil > 7) || (colProyectil < 0 || colProyectil > 9)){
+        while ((filaProyectil < 0 || filaProyectil > 7) || (colProyectil < 0 || colProyectil > 9)) {
             randomCell = Phaser.Math.Between(0, 4);
             filaProyectil = fil + direcciones[randomCell].df;
             colProyectil = col + direcciones[randomCell].dc;
@@ -71,16 +71,30 @@ class Artilleria extends Pieza {
         this.explosion.play('explotar');
 
         let celda = tablero.getCelda(filaProyectil, colProyectil);
-        if (!celda.estaVacia()){
+        if (!celda.estaVacia()) {
             let pieza = celda.getPieza();
             escena.eliminarPieza(pieza);
 
-            if (pieza.getTipo() == "Comandante"){
-                let j = this.jugador;
-                if (this.jugador == pieza.getJugador() && this.jugador == 'J1') j = 'J2'; else j = 'J1';
+            if (pieza.getTipo() == "Comandante") {
+                const atacanteJugador = this.jugador; // La artillería pertenece a alguien
+                const defensorJugador = pieza.getJugador();
+
+                let ganadorFinal;
+                let autoEliminacion = false;
+                // Si un jugador mata a SU PROPIO comandante, pierde
+                if (atacanteJugador === defensorJugador) {
+                    autoEliminacion = true;
+                    ganadorFinal = atacanteJugador === "J1" ? "J2" : "J1";
+                }
+                // Si mata al comandante enemigo, gana
+                else {
+                    ganadorFinal = atacanteJugador;
+                }
+
                 EventBus.emit(Eventos.END_GAME, {
-                    jugador: j,
-                    tipo: "COMBATE"
+                    jugador: ganadorFinal,
+                    tipo: "COMBATE",
+                    autoEliminacion: autoEliminacion //info extra
                 });
             }
             celda.limpiar();
@@ -95,10 +109,10 @@ class Artilleria extends Pieza {
      * Si el contador alcanza el valor del cooldown, la pieza se vuelve utilizable nuevamente.
      * @param {string} jugador - jugador actual 'J1' o 'J2'
      */
-    pasoTurno(jugador){
-        if (!this.utilizable && jugador == this.jugador){
+    pasoTurno(jugador) {
+        if (!this.utilizable && jugador == this.jugador) {
             this.turnosTranscurridos++;
-            if (this.turnosTranscurridos >= this.cooldown){
+            if (this.turnosTranscurridos >= this.cooldown) {
                 this.utilizable = true;
                 this.turnosTranscurridos = 0;
             }
