@@ -87,7 +87,7 @@ class Menu extends Phaser.Scene {
 
         //BOTON JUGAR
         botonInicio.on('pointerdown', () => {
-            this.scene.launch('ElegirPiezas'); //launch para evitar destruir la escena del menu
+            this.scene.launch('Tutorial'); //launch para evitar destruir la escena del menu
 
             //desactivamos los botones para evitar doble clicks mientras dormimos la escena
             botonInicio.disableInteractive();

@@ -1,6 +1,6 @@
 import PanelColocarPiezas from "../Render/PanelColocarPiezas.js";
 import ColocarPiezas from "../Logica/ColocarPiezas.js";
-import TableroGraficoColocarPiezas from "../Render/TableroGaficoColocarPiezas.js";
+import TableroGraficoColocarPiezas from "../Render/TableroGraficoColocarPiezas.js";
 import PiezaGrafico from "../Render/PiezaGrafico.js";
 import PanelEventos from "../Render/PanelEventos.js";
 import Equipo from "../Logica/Equipo.js";
