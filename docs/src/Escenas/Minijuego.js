@@ -126,6 +126,7 @@ class Minijuego extends Phaser.Scene {
         //para que el comandante se choque con los limites (es el canvas)
         this.comandante.setCollideWorldBounds(true);
         this.comandante.body.setImmovable(true);
+       this.comandante.body.setSize(this.comandante.width-200, this.comandante.height-200); 
         const spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         spaceKey.on('down', () => {
             this.comandante.body.setAcceleration(0, 100);
@@ -178,7 +179,7 @@ class Minijuego extends Phaser.Scene {
      */
     createGranada() {
         //se crean varias granadas asi que mejor procesarlas como elementos temporales
-        let granada = this.physics.add.sprite(this.scale.width - 100, this.scale.height / 2, 'Granada').setScale(0.02);
+        let granada = this.physics.add.sprite(this.scale.width - 100, this.scale.height / 2, 'Granada').setScale(0.035);
         //para que el comandante se choque con los limites (es el canvas)
         granada.setGravityY(-300);
         let randomY = Phaser.Math.Between(-500, 0);
@@ -186,6 +187,7 @@ class Minijuego extends Phaser.Scene {
         granada.setCollideWorldBounds(true);
         granada.body.setVelocity(randomX, randomY);
         granada.body.setBounce(0.3);
+        granada.body.setSize(granada.width-500, granada.height-500);
         //Activa el metodo onCollide
         granada.body.onCollide = true;
         //Data para que no explote 2 veces
