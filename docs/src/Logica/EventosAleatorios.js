@@ -14,12 +14,15 @@ class EventosAleatorios {
      * @param {PanelEventos} panelEventoAleatorio - panel para mostrar eventos aleatorios
      * @constructor
      */
-    constructor(tablero, tableroGrafico, panelEventoAleatorio) {
+    constructor(escena, tablero, tableroGrafico, panelEventoAleatorio) {
+        this.escena = escena;
         this.tablero = tablero;
         this.tableroGrafico = tableroGrafico;
         this.panelEventoAleatorio = panelEventoAleatorio;
         this.piezasAfectadas = [];
         this.indiceEventoPrevio = null;
+        this.miniJuego = this.escena.ia
+        this.evento;
 
         EventBus.on(Eventos.RANDOM_EVENT, () => { this.triggerEvent() });
         EventBus.on(Eventos.CHANGE_TURN, () => { this.resetEvents() });
@@ -27,23 +30,8 @@ class EventosAleatorios {
             nombre: "Terremoto",
             descripcion: "Un terremoto sacude el campo de batalla. Las piezas en las zonas afectadas no podrán moverse este turno.",
             peso: 5,
-            runEvent: () => {
-                let celdasAfectadas = [];
-                for (let f = 0; f < this.tablero.filas; f++) {
-                    for (let c = 3; c < 7; c++) {
-                        let celda = this.tablero.getCelda(f, c);
-                        if (Math.random() < 0.25)
-                            celdasAfectadas.push(celda);
-                    }
-                }
-
-                for (let celda of celdasAfectadas) {
-                    if (celda.getPieza()) {
-                        celda.getPieza().setMovida(true);
-                        this.piezasAfectadas.push(celda.getPieza());
-                    }
-                    this.tableroGrafico.coloreaCelda(celda.fila, celda.columna, 0x0000FF, 0.4);
-                }    
+            runEvent: (jugador) => {
+                this.terremotoRun(jugador);   
             },
             reset: () => {
                 for (let pieza of this.piezasAfectadas) {
@@ -56,34 +44,90 @@ class EventosAleatorios {
         {
             nombre: "Fuerte Lluvia",
             descripcion: "Una fuerte lluvia erosiona el terreno conquistado, devolviendo algunas casillas a su estado neutral.",
-            peso: 2,
-            runEvent: () => {
-                let celdasAfectadas = [];
-                for (let f = 0; f < this.tablero.filas; f++) {
-                    for (let c = 0; c < this.tablero.columnas; c++) {
-                        if (this.tablero.getCelda(f, c).getPieza() == null) { 
-                            const grafico = this.tableroGrafico.graficos[f][c];
-                            // Solo afecta casillas conquistadas (con mapa) con 15% probabilidad
-                            if (grafico.imagen && Math.random() < 0.15) {
-                                celdasAfectadas.push({
-                                    fila: f,
-                                    columna: c,
-                                    jugadorAnterior: grafico.imagen.mapKey === 'mapaTopo' ? 'J1' : 'J2'
-                                });
-                            }
-                        }
-                    }
-                }
-                for (let celda of celdasAfectadas) {
-                    this.tableroGrafico.borrarFragmentoMapa(celda.fila, celda.columna, celda.jugadorAnterior);
-                    this.tableroGrafico.coloreaCelda(celda.fila, celda.columna, 0x0000ff, 0.3);
-                }
+            peso: 3,
+            runEvent: (jugador) => {
+                this.lluviaRun(jugador);
             },
             reset: () => {
                 this.tableroGrafico.limpiarEventos();
             }
         }]; 
     }
+
+    /**
+     * Realiza el evento terremoto, si el minijuego se ha realizado antes, al ganador no le afecta
+     * @param {*String} jugador // Jugador Ganador
+     */
+    terremotoRun(jugador){
+        let celdasAfectadas = [];
+                for (let f = 0; f < this.tablero.filas; f++) {
+                    for (let c = 3; c < 7; c++) {
+                        let celda = this.tablero.getCelda(f, c);
+                        if (this.miniJuego) { // No afecta al ganador
+                            if (Math.random() < 0.4 ) {
+                               if(!celda.estaVacia()){
+                                let pieza = celda.getPieza();
+                                if (!(pieza.getJugador() == jugador)) celdasAfectadas.push(celda);
+                               }
+                               else celdasAfectadas.push(celda);
+                            }
+                            }
+                        else { // Normal
+                        if (Math.random() < 0.25)
+                            celdasAfectadas.push(celda);}
+                    }
+                }
+
+                for (let celda of celdasAfectadas) {
+                    if (celda.getPieza()) {
+                        celda.getPieza().setMovida(true);
+                        this.piezasAfectadas.push(celda.getPieza());
+                    }
+                    this.tableroGrafico.coloreaCelda(celda.fila, celda.columna, 0x0000FF, 0.4);
+                } 
+    }
+
+    /**
+     * Ejecuta el evento de lluvia
+     * @param {*String} jugador // Jugador Ganador
+     */
+    lluviaRun(jugador){
+
+        const key = (jugador === 'J1') ? 'mapaTopo' : 'mapaSat';
+
+        let celdasAfectadas = [];
+        for (let f = 0; f < this.tablero.filas; f++) {
+        for (let c = 0; c < this.tablero.columnas; c++) {
+            if (this.tablero.getCelda(f, c).getPieza() == null) { // Solo afecta casillas conquistadas (con mapa) con 15% probabilidad
+            const grafico = this.tableroGrafico.graficos[f][c];
+                    
+                    if (this.miniJuego){ // No afecta al ganador
+                        if (grafico.imagen && Math.random() < 0.3) {
+                            if (!(grafico.imagen.mapKey === key)){ // (Si la casilla es del ganador no le afecta)
+                                    celdasAfectadas.push({
+                                    fila: f,
+                                    columna: c,
+                                    jugadorAnterior: grafico.imagen.mapKey == 'mapaTopo' ? 'J1' : 'J2'
+                                    });
+                    }}}
+
+                    else { // Normal
+                    if (grafico.imagen && Math.random() < 0.15) {
+                        celdasAfectadas.push({
+                            fila: f,
+                            columna: c,
+                            jugadorAnterior: grafico.imagen.mapKey === 'mapaTopo' ? 'J1' : 'J2'
+                        });
+                    }}
+        }
+    }}
+
+    for (let celda of celdasAfectadas) {
+        this.tableroGrafico.borrarFragmentoMapa(celda.fila, celda.columna, celda.jugadorAnterior);
+        this.tableroGrafico.coloreaCelda(celda.fila, celda.columna, 0x0000ff, 0.3);
+    }
+}
+
 
     /**
      * Reinicia el evento anterior ejecutando su función de reset.
@@ -94,6 +138,16 @@ class EventosAleatorios {
             this.eventos[this.indiceEventoPrevio].reset();
             this.indiceEventoPrevio = null;
         }
+    }
+
+    /**
+     * Emite el evento actual despues del miniJuego
+     * @param {*String} jugador 
+     */
+    runEventoActual(jugador){
+        this.panelEventoAleatorio.mostrar(this.evento.nombre, this.evento.descripcion, 'Evento Aleatorio' , 'ACEPTAR', ()=>{
+            this.evento.runEvent(jugador);
+        } ); 
     }
 
     /**
@@ -108,15 +162,17 @@ class EventosAleatorios {
             r -= (this.eventos[i].peso || 1);
             if (r <= 0){
                 this.indiceEventoPrevio = i;
-                const evento = this.eventos[i];
+                this.evento = this.eventos[i];
                 
+                if (this.miniJuego){
                 // Emitir evento para mostrar panel ANTES de ejecutar
-                this.panelEventoAleatorio.mostrar(evento.nombre, evento.descripcion);
-                
-                // Ejecutar después de un pequeño delay para que se vea el panel
-                setTimeout(() => {
-                    evento.runEvent();
-                }, 100);
+                this.panelEventoAleatorio.mostrar(this.evento.nombre, 'Para decidir a quien afecta el evento, preparate para un miniJuego ', 'EVENTO ALEATORIO' , 'ACEPTAR', () => {
+                    this.escena.lanzarMinijuego();
+                });}
+                else this.panelEventoAleatorio.mostrar(this.evento.nombre, this.evento.descripcion, 'Evento Aleatorio' , 'ACEPTAR', () => {
+                    this.evento.runEvent();
+                });
+            //this.panelEventoAleatorio.mostrar(this.evento.evento.nombre, this.evento.evento.descripcion, 'Ha ganado' , 'ACEPTAR' );
                 return;
             }
         }

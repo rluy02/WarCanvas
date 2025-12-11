@@ -107,9 +107,10 @@ class EscenaColocarPiezas extends Phaser.Scene {
         if(this.todasLasPiezas && (e1 > 0 || e2 > 0)) this.PanelEventos.mostrar('Colocar el tablero', 'Para continuar todas las piezas deben estar posicionadas.', 'Coloca todas las piezas');
         else {
         EventBus.removeAllListeners();
-        this.scene.start('Inicio', {
+        this.scene.start('Inicio', { // Le pasamos los equipos y si se utiliza la IA o no
                 equipo1: this.equipoJ1,
-                equipo2: this.equipoJ2
+                equipo2: this.equipoJ2,
+                ia: false 
         });
         this.equipoJ1 = undefined;
         this.equipoJ2 = undefined;}

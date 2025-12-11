@@ -22,7 +22,7 @@ class PanelEventos {
      * @param {string} [textoBoton='ACEPTAR'] - texto del botón de cierre
      * @param {Function|null} [onClose=null] - callback a ejecutar al cerrar
      */
-    mostrar(nombre, descripcion, textoTitulo = 'EVENTO ALEATORIO', textoBoton = 'ACEPTAR', onClose = null) {
+    mostrar(nombre, descripcion, textoTitulo = 'Evento Aleatorio', textoBoton = 'ACEPTAR', onClose = null) {
         if (this.isVisible) return;
 
         this.isVisible = true;

@@ -61,7 +61,7 @@ class Minijuego extends Phaser.Scene {
         //Texto del tiempo
         this.cuentaAtrasTexto = this.add.text(this.scale.width / 2, 20, 'Tiempo: ' + this.tiempoInicial, { fontSize: '32px', fill: '#FFF' }).setOrigin(0.5);
         this.panelEventos = new PanelEventos(this);
-        this.panelEventos.mostrar('Minijuego: Salta el comandante', 'Pulsa la barra espaciadora para que el comandante salte y esquive las granadas que se lanzan desde la derecha.', 'WarCanvas', 'Aceptar', () => {
+        this.panelEventos.mostrar('Minijuego: Salta el comandante', 'Pulsa la barra espaciadora para que el comandante salte y esquive las granadas que se lanzan desde la derecha.', 'WarCanvas', 'ACEPTAR', () => {
             // Inicializar timer para crear granadas cada 3000ms
             this.timer = this.time.addEvent({
                 delay: 3000, // ms
@@ -89,16 +89,28 @@ class Minijuego extends Phaser.Scene {
         this.cuentaAtrasTexto.setText("Tiempo: " + this.tiempoInicial);
 
         if (this.tiempoInicial <= 0) {
-            this.endMinijuego();
+            this.panelEventos.mostrar(
+                '¡Has ganado!',
+                'El comandante ha logrado sobrevivir. Fin del minijuego.',
+                'WarCanvas',
+                'ACEPTAR',
+                () => {
+                    this.endMinijuego('J1');
+                });
         }
-    }
+        }
     /**
-     * Finaliza el minijuego
+     * Finaliza el minijuego, recarga la escena load pasandole los parametros del miniJuego
      */
-    endMinijuego() {
-        this.scene.stop();
-        this.scene.launch('Inicio');
+    endMinijuego(data) {
+
+        if (this.scene.isSleeping('Inicio')) {
+            this.scene.get('Inicio').dataWake = data;
+            this.scene.wake('Inicio');
+        } 
+        else this.scene.launch('Inicio');
         console.log("Fin del minijuego");
+        this.scene.stop();
     }
 
     /**
@@ -236,9 +248,9 @@ class Minijuego extends Phaser.Scene {
                 '¡Has perdido!',
                 'El comandante ha sido alcanzado. Fin del minijuego.',
                 'WarCanvas',
-                'Aceptar',
+                'ACEPTAR',
                 () => {
-                    this.endMinijuego();
+                    this.endMinijuego('J2');
                 });
         }
     }

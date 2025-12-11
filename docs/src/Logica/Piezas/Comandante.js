@@ -15,7 +15,7 @@ class Comandante extends Pieza {
      * @param {string} jugador - 'J1' o 'J2'
      */
     constructor(tablero, fil, col, jugador) {
-        super(tablero, 'Comandante', fil, col, jugador, 4, 4, 5);
+        super(tablero, 'Comandante', fil, col, jugador, 4, 3, 5);
         
         /**
          * Peso base del comandante (sin considerar amenazas o aliados)

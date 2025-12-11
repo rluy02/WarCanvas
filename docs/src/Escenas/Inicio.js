@@ -38,6 +38,7 @@ class Inicio extends Phaser.Scene {
     init(datos) {
         if (datos.equipo1) this.equipo1 = datos.equipo1;
         if (datos.equipo2) this.equipo2 = datos.equipo2;
+        this.ia = datos.ia; // si la ia esta activa o no
     }
 
     /**
@@ -46,6 +47,22 @@ class Inicio extends Phaser.Scene {
      */
     preload() {
         this.crearImagenes();
+    }
+
+    /**
+     * Se llama a este metodo cuando se despierta la escena
+     */
+    wake() {
+        const data = this.dataWake;
+        console.log("Juego Inicio", data);
+        let name, nameEnemy;
+        name = (data == 'J1') ? 'Drawful' : 'el equipo Realista'
+        nameEnemy = (data == 'J2') ? 'Drawful' : 'el equipo Realista'
+        // Aquí restauras lógica, reinicias inputs, etc.
+        //let infoEvento = this.eventosAleatorios.infoEventoActual();
+        this.panelEventos.mostrar('MiniJuego Terminado', `El ganador del miniJuego es ${name}, el evento no le afectará`, 'Drawful', 'ACEPTAR', ()=>{
+            this.eventosAleatorios.runEventoActual(data);
+        });
     }
 
     /**
@@ -69,7 +86,7 @@ class Inicio extends Phaser.Scene {
         //Dibujamos el tablero
         this.tabGrafico = new TableroGrafico(this, this.tab, this.panel);
 
-        this.eventosAleatorios = new EventosAleatorios(this.tab, this.tabGrafico, this.panelEventos);
+        this.eventosAleatorios = new EventosAleatorios(this, this.tab, this.tabGrafico, this.panelEventos);
 
 
         this.combates = new Combates(this.tab, this.tabGrafico, this.panel);
@@ -84,7 +101,7 @@ class Inicio extends Phaser.Scene {
         if (this.equipo1 == undefined) this.equipo1 = new Equipo("J1", this.tab, true);
         if (this.equipo2 == undefined) this.equipo2 = new Equipo("J2", this.tab, true);
 
-        this.inteligenciaArtificial = new InteligenciaArtificial(this.tab, this.tabGrafico, this.equipo2, this, this.acciones)
+        if (this.ia) this.inteligenciaArtificial = new InteligenciaArtificial(this.tab, this.tabGrafico, this.equipo2, this, this.acciones)
 
         console.log(this.equipo1);
 
@@ -122,6 +139,10 @@ class Inicio extends Phaser.Scene {
         EventBus.on(Eventos.END_GAME, (info) => {
             this.partidaTerminadaFlag = true;
             this.partidaTerminada(info);
+        });
+
+        this.events.on('wake', (data) => { // Evento que se llama al despertar la escena (data -> ganador MiniJuego)
+            this.wake();
         });
 
         this.panel.create();
@@ -308,7 +329,7 @@ class Inicio extends Phaser.Scene {
     }
 
     lanzarMinijuego() {
-        this.scene.sleep();
+        this.scene.sleep('Inicio');
         this.scene.launch('Minijuego');
     }
 }

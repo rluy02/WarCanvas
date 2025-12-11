@@ -121,7 +121,7 @@ class Menu extends Phaser.Scene {
             creditosText.setStroke('#7b0000ff');
         })
 
-        let defaultText = this.add.text(this.scale.width / 2, this.scale.height - 50, 'DEFAULT', {
+        let defaultText = this.add.text(this.scale.width / 2, this.scale.height - 50, 'DEFAULT(IA)', {
             fontSize: '20px',
             color: '#ffffff',
             stroke: '#7b0000ff',
@@ -131,7 +131,9 @@ class Menu extends Phaser.Scene {
 
         //BOTON DEFAULT
         defaultText.on('pointerdown', () => {
-            this.scene.launch('Inicio', {}); //launch para evitar destruir la escena del menu
+            this.scene.launch('Inicio', { 
+                ia: true
+            }); //launch para evitar destruir la escena del menu
 
             //desactivamos los botones para evitar doble clicks mientras dormimos la escena
             botonInicio.disableInteractive();
