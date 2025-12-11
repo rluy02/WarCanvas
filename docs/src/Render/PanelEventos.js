@@ -46,11 +46,11 @@ class PanelEventos {
 
         // Título "EVENTO ALEATORIO"
         const titulo = this.escena.add.text(
-            centerX, centerY - 80,
+            centerX, centerY - 90,
             textoTitulo,
             {
-                fontSize: '20px',
-                fontFamily: 'Arial',
+                fontSize: '26px',
+                fontFamily: 'Kotton',
                 color: '#e74c3c',
                 fontStyle: 'bold'
             }
@@ -58,11 +58,11 @@ class PanelEventos {
 
         // Nombre del evento
         const textoNombre = this.escena.add.text(
-            centerX, centerY - 40,
+            centerX, centerY - 60,
             nombre,
             {
-                fontSize: '24px',
-                fontFamily: 'Arial',
+                fontSize: '30px',
+                fontFamily: 'Kotton',
                 color: '#ecf0f1',
                 fontStyle: 'bold'
             }
@@ -73,8 +73,8 @@ class PanelEventos {
             centerX, centerY + 10,
             descripcion,
             {
-                fontSize: '14px',
-                fontFamily: 'Arial',
+                fontSize: '20px',
+                fontFamily: 'Kotton',
                 color: '#bdc3c7',
                 align: 'center',
                 wordWrap: { width: 350 }
@@ -92,8 +92,8 @@ class PanelEventos {
             centerX, centerY + 90,
             textoBoton,
             {
-                fontSize: '16px',
-                fontFamily: 'Arial',
+                fontSize: '20px',
+                fontFamily: 'Kotton',
                 color: '#ffffff',
                 fontStyle: 'bold'
             }

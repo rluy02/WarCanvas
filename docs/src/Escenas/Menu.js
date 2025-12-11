@@ -20,6 +20,7 @@ class Menu extends Phaser.Scene {
     preload() {
         this.load.image('fondo', 'imgs/menuJuego/FondoMenu.webp')
         this.load.image('boton', 'imgs/menuJuego/boton.webp')
+        this.load.font('Kotton', 'font/Kotton.ttf')
     }
 
     /**
@@ -33,7 +34,7 @@ class Menu extends Phaser.Scene {
             color: '#ffffff',
             stroke: '#000000',
             strokeThickness: 10,
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
         }).setOrigin(0.5);
 
         let botonInicio = this.add.image(this.scale.width / 2, this.scale.height / 2 - 80, 'boton')
@@ -47,19 +48,19 @@ class Menu extends Phaser.Scene {
             .setInteractive({ useHandCursor: true }) // Se vuelve interactuable y muestra el cursor como una mano
 
         let buttonText = this.add.text(botonInicio.x, botonInicio.y, 'JUGAR', {
-            fontSize: '30px',
+            fontSize: '36px',
             color: '#ffffff',
             stroke: '#7b0000ff',
             strokeThickness: 10,
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
         }).setOrigin(0.5);
 
         let creditosText = this.add.text(botonCreditos.x, botonCreditos.y, 'CRÉDITOS', {
-            fontSize: '20px',
+            fontSize: '26px',
             color: '#ffffff',
             stroke: '#7b0000ff',
             strokeThickness: 10,
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
         }).setOrigin(0.5);
 
         //BOTON MINIJUEGO
@@ -69,11 +70,11 @@ class Menu extends Phaser.Scene {
             .setInteractive({ useHandCursor: true })
 
         let minijuegoText = this.add.text(botonMinijuego.x,botonMinijuego.y, 'Minijuego',{
-            fontSize: '20px',
+            fontSize: '26px',
             color: '#ffffff',
             stroke: '#7b0000ff',
             strokeThickness: 5,
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
         }).setOrigin(0.5);    
 
         botonMinijuego.on('pointerdown', () => {
@@ -122,11 +123,11 @@ class Menu extends Phaser.Scene {
         })
 
         let defaultText = this.add.text(this.scale.width / 2, this.scale.height - 50, 'DEFAULT(IA)', {
-            fontSize: '20px',
+            fontSize: '26px',
             color: '#ffffff',
             stroke: '#7b0000ff',
             strokeThickness: 10,
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
         }).setOrigin(0.5).setInteractive();
 
         //BOTON DEFAULT

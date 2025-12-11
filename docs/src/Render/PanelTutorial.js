@@ -91,7 +91,7 @@ class PanelTutorial {
     createText(width, height, text, wordWrapWidth, fontStyle, px, origin, fill = '#ffffffff') { 
         return this.escena.add.text(width, height, text, { // Equipo que defiende
             fontSize: px,
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
             fontStyle: fontStyle,
             fill: fill,
             wordWrap: { width: wordWrapWidth, useAdvancedWrap: true } 

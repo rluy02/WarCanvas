@@ -18,6 +18,9 @@ let config = {
       debug: true // true para ver info
     }
   },
+  render:{
+    pixelArt: true
+  },
   scene: [Menu, Inicio, EscenaColocarPiezas, Minijuego, Tutorial],
 };
 

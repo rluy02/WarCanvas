@@ -59,7 +59,7 @@ class Minijuego extends Phaser.Scene {
 
         this.tiempoInicial = 30; // Tiempo inicial en segundos
         //Texto del tiempo
-        this.cuentaAtrasTexto = this.add.text(this.scale.width / 2, 20, 'Tiempo: ' + this.tiempoInicial, { fontSize: '32px', fill: '#FFF' }).setOrigin(0.5);
+        this.cuentaAtrasTexto = this.add.text(this.scale.width / 2, 20, 'Tiempo: ' + this.tiempoInicial, { fontSize: '32px', fill: '#FFF', fontFamily: 'Kotton' }).setOrigin(0.5);
         this.panelEventos = new PanelEventos(this);
         this.panelEventos.mostrar('Minijuego: Salta el comandante', 'Pulsa la barra espaciadora para que el comandante salte y esquive las granadas que se lanzan desde la derecha.', 'WarCanvas', 'ACEPTAR', () => {
             // Inicializar timer para crear granadas cada 3000ms
@@ -165,7 +165,7 @@ class Minijuego extends Phaser.Scene {
             this.textoVidasComandante.destroy();
         }
 
-        this.textoVidasComandante = this.add.text(this.scale.width / 2 - 70, 70, 'Vidas: ', { fontSize: '32px', fill: '#FFF' }).setOrigin(0.5);
+        this.textoVidasComandante = this.add.text(this.scale.width / 2 - 70, 70, 'Vidas: ', { fontSize: '32px', fill: '#FFF', fontFamily: 'Kotton' }).setOrigin(0.5);
         const startX = this.scale.width / 2;
         const y = 70;
         this.iconosVida = [];

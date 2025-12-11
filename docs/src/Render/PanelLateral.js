@@ -42,7 +42,7 @@ class PanelLateral {
         this.infoTextDefender = this.createText(width - sideWidth / 2, 300, 'Defiende', 300, ' ', '24px', 0.5);
 
         //Boton de abrir panel de informacion
-        this.btInfo = this.createText(width - 100, 25, 'INFO', 0, 'bold', '22px', 0.0, '#000000ff');
+        this.btInfo = this.createText(width - 70, 25, 'INFO', 0, 'bold', '22px', 0.0, '#000000ff');
         this.btInfo.setInteractive();
 
 
@@ -193,7 +193,7 @@ class PanelLateral {
         let bonusDefiende = casillaDefensa.getPieza().getBonusDefensa();
 
         // Actualiza el título del panel
-        this.titleText.setText('CONFIRMA EL COMBATE');
+        this.titleText.setText('CONFIRMA COMBATE');
         // Actualiza la información del panel
         this.infoText.setText(fichaAtaque + ' de ' + equipoAtaque + ' ataca a ' + fichaDefiende + ' de ' + equipoDefensa);
         this.infoTextAttacker.setText(`Ataca: ${equipoAtaque} Bonus (${bonusAtaca})`);
@@ -277,7 +277,7 @@ class PanelLateral {
     createText(width, height, text, wordWrapWidth, fontStyle, px, origin, fill = '#ffffffff') {
         return this.escena.add.text(width, height, text, { // Equipo que defiende
             fontSize: px,
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
             fontStyle: fontStyle,
             fill: fill,
             wordWrap: { width: wordWrapWidth, useAdvancedWrap: true }

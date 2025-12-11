@@ -31,9 +31,11 @@ class TurnoGraficos {
         const width = this.escena.scale.width;
         const height = this.escena.scale.height;
 
+        this.escena.add.rectangle(0, height - 83, width, 83, 0x402200).setOrigin(0,0);
+
         this.JugadorText = this.escena.add.text(50, height - 45, 'J1: ', { // Título
             fontSize: '32px',
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
             fill: '#ffffff'
         }).setOrigin(0.5);
 
@@ -42,13 +44,13 @@ class TurnoGraficos {
 
         this.accionessText = this.escena.add.text(width / 2, height - 60, 'Acciones de pieza: ' + this.accionesPieza, { // Título
             fontSize: '28px',
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
             fill: '#ffffff'
         }).setOrigin(0.5);
 
         this.acabarText = this.escena.add.text(width/2, height - 30, 'Finalizar Movimiento', { // Título
             fontSize: '22px',
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
             fill: '#ce2020ff'
         }).setInteractive({ useHandCursor: true }).setOrigin(0.5);
 
