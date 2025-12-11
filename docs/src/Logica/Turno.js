@@ -20,6 +20,9 @@ class Turno {
         this.posicionPieza;
 
         this.turnoGrafico = turnoGrafico;
+
+        // Es una bandera para ver si en esta iteracion ya se han acabado los movimientos
+        this.acabadoMovimientos = false;
     }
 
     /**
@@ -27,7 +30,10 @@ class Turno {
      */
     crearListeners() {
         EventBus.on(Eventos.PIECE_SELECTED, (pieza) => { this.setPieza(pieza) });
-        EventBus.on(Eventos.PIECE_MOVED, (pieza, ataque) => { this.restarAccion(ataque) })
+        EventBus.on(Eventos.ATACK, () => {
+            this.acabarMovimientos();
+        })
+        EventBus.on(Eventos.PIECE_MOVED, () => { this.restarAccion() })
         EventBus.on(Eventos.CHANGE_TURN, (turnoJugador) => {
             this.turnoGrafico.setTurnoJugador(turnoJugador);
         })
@@ -49,8 +55,12 @@ class Turno {
      * Resta una acción a la pieza actual, si ataque es true, se finalliza el movimiento directamente
      * @param {*} ataque 
      */
-    restarAccion(ataque = false) {
+    restarAccion() {
         if (!this.piezaActual) return;
+        // Si se han acabado ya lo resetea y vuelve
+        if (this.acabadoMovimientos){
+            this.acabadoMovimientos = false;
+        }
 
         const posAntes = this.posicionPieza; // posición guardada antes de mover
         const posDespues = this.piezaActual.getPosicion();
@@ -89,10 +99,12 @@ class Turno {
         // Actualizamos la interfaz gráfica
         this.turnoGrafico.setAccionesPieza(this.movimientosPieza);
 
-        // Si no quedan movimientos o se ha atacado, finalizamos los movimientos de la pieza
-        if (this.movimientosPieza <= 0 || ataque) {
+        // Si no quedan movimientos
+        if (this.movimientosPieza <= 0) {
             this.piezasMovidas.push(this.piezaActual);
             this.acabarMovimientos();
+
+            this.acabadoMovimientos = true;
         }
     }
 
@@ -100,6 +112,12 @@ class Turno {
      * Finaliza los movimientos de la pieza actual y actualiza el turno si es necesario
      */
     acabarMovimientos() {
+        // Si se han acabado ya lo resetea y vuelve
+        if (this.acabadoMovimientos){
+            this.acabadoMovimientos = false;
+            return;
+        }
+
         if (!this.piezaActual) {
             console.log("La pieza al acabar movimientos es null")
         }

@@ -64,59 +64,59 @@ class Combates {
 
         if (ataca == 'Soldado') {
 
-    let fil = atacaPieza.getPosicion().fila;
-    let col = atacaPieza.getPosicion().col;
+            let fil = atacaPieza.getPosicion().fila;
+            let col = atacaPieza.getPosicion().col;
 
-    // ATAQUE HORIZONTAL
-    if (fil == defiendePieza.getPosicion().fila) {
+            // ATAQUE HORIZONTAL
+            if (fil == defiendePieza.getPosicion().fila) {
 
-        // Arriba
-        let arriba = fil - 1;
-        if (arriba >= 0) {
-            let piezaArriba = this.tablero.getCelda(arriba, col).getPieza();
-            if (piezaArriba && piezaArriba.getTipo() === 'Soldado' &&
-                piezaArriba.getJugador() === atacaPieza.getJugador()) {
-                bonusAtaca++;
+                // Arriba
+                let arriba = fil - 1;
+                if (arriba >= 0) {
+                    let piezaArriba = this.tablero.getCelda(arriba, col).getPieza();
+                    if (piezaArriba && piezaArriba.getTipo() === 'Soldado' &&
+                        piezaArriba.getJugador() === atacaPieza.getJugador()) {
+                        bonusAtaca++;
+                    }
+                }
+
+                // Abajo
+                let abajo = fil + 1;
+                if (abajo < this.tablero.size().fila) {
+                    let piezaAbajo = this.tablero.getCelda(abajo, col).getPieza();
+                    if (piezaAbajo && piezaAbajo.getTipo() === 'Soldado' &&
+                        piezaAbajo.getJugador() === atacaPieza.getJugador()) {
+                        bonusAtaca++;
+                    }
+                }
             }
-        }
 
-        // Abajo
-        let abajo = fil + 1;
-        if (abajo < this.tablero.size().fila) {
-            let piezaAbajo = this.tablero.getCelda(abajo, col).getPieza();
-            if (piezaAbajo && piezaAbajo.getTipo() === 'Soldado' &&
-                piezaAbajo.getJugador() === atacaPieza.getJugador()) {
-                bonusAtaca++;
+            // ATAQUE VERTICAL
+            else {
+
+                // Izquierda
+                let izquierda = col - 1;
+                if (izquierda >= 0) {
+                    let piezaIzq = this.tablero.getCelda(fil, izquierda).getPieza();
+                    if (piezaIzq && piezaIzq.getTipo() === 'Soldado' &&
+                        piezaIzq.getJugador() === atacaPieza.getJugador()) {
+                        bonusAtaca++;
+                    }
+                }
+
+                // Derecha
+                let derecha = col + 1;
+                if (derecha < this.tablero.size().col) {
+                    let piezaDer = this.tablero.getCelda(fil, derecha).getPieza();
+                    if (piezaDer && piezaDer.getTipo() === 'Soldado' &&
+                        piezaDer.getJugador() === atacaPieza.getJugador()) {
+                        bonusAtaca++;
+                    }
+                }
             }
+
+            console.log("El soldado tiene bonus:", bonusAtaca);
         }
-    }
-
-    // ATAQUE VERTICAL
-    else {
-
-        // Izquierda
-        let izquierda = col - 1;
-        if (izquierda >= 0) {
-            let piezaIzq = this.tablero.getCelda(fil, izquierda).getPieza();
-            if (piezaIzq && piezaIzq.getTipo() === 'Soldado' &&
-                piezaIzq.getJugador() === atacaPieza.getJugador()) {
-                bonusAtaca++;
-            }
-        }
-
-        // Derecha
-        let derecha = col + 1;
-        if (derecha < this.tablero.size().col) {
-            let piezaDer = this.tablero.getCelda(fil, derecha).getPieza();
-            if (piezaDer && piezaDer.getTipo() === 'Soldado' &&
-                piezaDer.getJugador() === atacaPieza.getJugador()) {
-                bonusAtaca++;
-            }
-        }
-    }
-
-    console.log("El soldado tiene bonus:", bonusAtaca);
-}
         bonusDefiende = defiendePieza.getBonusDefensa();
 
         let totalAtaque = dadosAtaque1 + dadosAtaque2 + bonusAtaca;
