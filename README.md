@@ -23,17 +23,18 @@ El objetivo es **conquistar el 80% del tablero o derrotar al Comandante enemigo*
 ---
 
 ## 📸 Capturas del Juego
-
-<img width="1299" height="780" alt="Menu" src="https://github.com/user-attachments/assets/a3c569c0-a583-4894-8245-a575fd05806f" />
-
-<img width="1302" height="779" alt="Tablero" src="https://github.com/user-attachments/assets/123c917a-a362-4915-91d8-1caece44f786" />
-
-<img width="1301" height="778" alt="Movimiento" src="https://github.com/user-attachments/assets/ce289aa2-683c-44e0-bfb4-af844fbb1b81" />
-
-<img width="1296" height="776" alt="ConfirmarCombate" src="https://github.com/user-attachments/assets/8ba25ae8-7e3d-41cb-a914-b21e65bfc764" />
-
-<img width="1303" height="776" alt="Combate" src="https://github.com/user-attachments/assets/4d72e0ba-3953-460e-bfe1-24511132d029" />
-
+🧭 Menú Principal
+<p align="center"> <img width="1200" height="780" alt="Menu" src="https://github.com/user-attachments/assets/273ac54e-f344-4ec1-b200-3991ee263772"/> </p>
+📘 Tutorial Interactivo
+<p align="center"> <img width="1200" height="780" alt="Tutorial" src="https://github.com/user-attachments/assets/ed7e596d-0b07-4dfb-a723-5d9b197fe8be"/> </p>
+🎨 Fase de Preparación — Colocación de Unidades
+<p align="center"> <img width="1200" height="780" alt="SetupPiezas" src="https://github.com/user-attachments/assets/6aa98dd0-7fad-462a-920b-46b0ba574db6"/> </p>
+⚔️ Comienzo de la Partida — Primer Turno
+<p align="center"> <img width="1200" height="780" alt="inicioPartida" src="https://github.com/user-attachments/assets/953d930c-6e0a-40b0-98f1-63165c15b3b3"/> </p>
+🎲 Minijuegos y Eventos Aleatorios
+<p align="center"> <img width="500" height="340" alt="minijuego" src="https://github.com/user-attachments/assets/133ff794-9087-476f-bd0d-0e2cef678a41"/> <img width="500" height="340" alt="terremoto" src="https://github.com/user-attachments/assets/3ed94cfe-297d-499a-81ee-f65247f57320"/> </p>
+📑 Paneles Informativos del Juego
+<p align="center"> <img width="330" height="200" alt="panel" src="https://github.com/user-attachments/assets/ee5b130f-e8b9-4b15-90a6-a02ae46defbe"/> <img width="330" height="200" alt="panel2" src="https://github.com/user-attachments/assets/f73e66a1-6bd5-4989-b548-99542a1467a1"/> <img width="330" height="200" alt="panel3" src="https://github.com/user-attachments/assets/ce081c1f-535e-426a-89f3-077f30452dc8"/> </p>
 
 ---
 
@@ -73,7 +74,7 @@ El estilo visual sigue una estética **estratégica**, con diseños contrastados
 ---
 
 ## ⚖️ Uso de *placeholders*
-> Algunos elementos gráficos (mapas, sprites y piezas) son *placeholders temporales* empleados con fines académicos.  
+> Algunos elementos gráficos (mapa e iconos) son *placeholders temporales* empleados con fines académicos.  
 > No se reclaman derechos de autor sobre ellos y serán reemplazados por material original o libre de derechos en futuras versiones.
 
 ---
