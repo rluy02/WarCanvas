@@ -84,7 +84,7 @@ class Inicio extends Phaser.Scene {
         this.piezaGrafico = new PiezaGrafico(this, this.tab);
 
         //Dibujamos el tablero
-        this.tabGrafico = new TableroGrafico(this, this.tab, this.panel);
+        this.tabGrafico = new TableroGrafico(this, this.tab, this.panel, this.panelEventos);
 
         this.eventosAleatorios = new EventosAleatorios(this, this.tab, this.tabGrafico, this.panelEventos);
 

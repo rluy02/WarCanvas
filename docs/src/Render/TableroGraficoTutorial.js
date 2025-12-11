@@ -19,7 +19,7 @@ class TableroGraficoTutorial {
      * @param {Tablero} tablero - lógica del tablero
      * @param {number} [tamCasilla=64] - tamaño de cada casilla en px
      */
-    constructor(equipoJ1, equipoJ2, escena, tablero, tamCasilla = 64) {
+    constructor(equipoJ1, equipoJ2, escena, tablero, PanelEventos, tamCasilla = 64) {
         this.escena = escena;
         this.tablero = tablero;
         this.tamCasilla = tamCasilla;
@@ -33,6 +33,8 @@ class TableroGraficoTutorial {
 
         this.fragmentoAncho = this.mapaTopograficoWidth / this.tablero.columnas;
         this.fragmentoAlto = this.mapaTopograficoHeight / this.tablero.filas;
+
+        this.panelEventos = PanelEventos;
 
         this.equipo1 = equipoJ1;
         this.equipo2 = equipoJ2;
@@ -85,6 +87,7 @@ class TableroGraficoTutorial {
      * @returns {void}
      */
     onCeldaClick(fila, col) {
+        if(this.panelEventos.getInput()){
         let celda = this.tablero.getCelda(fila, col)
         if (!celda.estaVacia() && celda.getPieza().getJugador() === 'J1') {
                         this.colorearRango(fila, col);
@@ -127,7 +130,7 @@ class TableroGraficoTutorial {
                 this.limpiarTablero();
                 this.celdaSeleccionada = null;
             }
-        }
+        }}
     }
 
     /**

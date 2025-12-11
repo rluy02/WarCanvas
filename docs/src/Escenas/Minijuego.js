@@ -34,6 +34,7 @@ class Minijuego extends Phaser.Scene {
      */
     create() {
         this.crearAnimaciones();
+        this.panelEventos = new PanelEventos(this);
         this.add.image(500, 300, 'fondoMiniJuego').setOrigin(0.5).setScale(0.85).setAlpha(0.5);
 
         // Se crea el sprite de explosion
@@ -60,7 +61,6 @@ class Minijuego extends Phaser.Scene {
         this.tiempoInicial = 30; // Tiempo inicial en segundos
         //Texto del tiempo
         this.cuentaAtrasTexto = this.add.text(this.scale.width / 2, 20, 'Tiempo: ' + this.tiempoInicial, { fontSize: '32px', fill: '#FFF', fontFamily: 'Kotton' }).setOrigin(0.5);
-        this.panelEventos = new PanelEventos(this);
         this.panelEventos.mostrar('Minijuego: Salta el comandante', 'Pulsa la barra espaciadora para que el comandante salte y esquive las granadas que se lanzan desde la derecha.', 'WarCanvas', 'ACEPTAR', () => {
             // Inicializar timer para crear granadas cada 3000ms
             this.timer = this.time.addEvent({
@@ -141,8 +141,11 @@ class Minijuego extends Phaser.Scene {
        this.comandante.body.setSize(this.comandante.width-200, this.comandante.height-200); 
         const spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         spaceKey.on('down', () => {
+            if (this.panelEventos.getInput()){
             this.comandante.body.setAcceleration(0, 100);
             this.comandante.body.setVelocity(0, -500);
+            }
+
         });
 
         this.comandante.body.onCollide = true;

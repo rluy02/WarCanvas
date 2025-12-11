@@ -226,6 +226,8 @@ class PanelLateral {
 
         this.buttonTry.disableInteractive();
         this.buttonTry.setVisible(false);
+        this.buttonCheat.disableInteractive();
+        this.buttonCheat.setVisible(false);
     }
 
     /**
@@ -245,7 +247,7 @@ class PanelLateral {
                     let arriba = filSoldado - 1;
                     let abajo = filSoldado + 1;
 
-                    if (arriba >= 0 && this.tablero.getCelda(arriba, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
+                    if (arriba >= 0 && this.tablero.getCelda(arriba, colSoldado).getTipo() == 'Soldado' && this.tablero.getCelda(arriba, colSoldado).getTipo()) bonusAtaca++;
                     if (abajo < this.tablero.size().fila && this.tablero.getCelda(abajo, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
                 }
                 else {

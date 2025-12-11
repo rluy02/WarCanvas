@@ -48,11 +48,12 @@ class EscenaColocarPiezas extends Phaser.Scene {
         this.piezas = [];
         this.piezaGrafico = new PiezaGrafico(this, this.tab);
 
-        //Dibujamos el tablero
-        this.tabGrafico = new TableroGraficoColocarPiezas(this.equipoJ1, this.equipoJ2, this, this.tab);
-
-        this.panelElegirPiezas = new PanelColocarPiezas(this, this.tab, this.tabGrafico, this.equipoJ1, this.equipoJ2);
         this.PanelEventos = new PanelEventos(this);
+
+        //Dibujamos el tablero
+        this.tabGrafico = new TableroGraficoColocarPiezas(this.equipoJ1, this.equipoJ2, this, this.tab, this.PanelEventos);
+
+        this.panelElegirPiezas = new PanelColocarPiezas(this, this.tab, this.tabGrafico, this.equipoJ1, this.equipoJ2, this.PanelEventos);
         this.PanelEventos.mostrar('Colocar el tablero', 'Para posicionar las piezas en el tablero, pulsa las casillas disponibles. Para modificar una pieza, pulsa sobre ella y selecciona su nueva posición.', 'WarCanvas');
 
          EventBus.on(Eventos.PIECE_POSITION, (pieza) => {

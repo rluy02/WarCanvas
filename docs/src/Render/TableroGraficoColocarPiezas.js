@@ -19,7 +19,7 @@ class TableroGraficoColocarPiezas {
      * @param {Tablero} tablero - lógica del tablero
      * @param {number} [tamCasilla=64] - tamaño de cada casilla en px
      */
-    constructor(equipoJ1, equipoJ2, escena, tablero, tamCasilla = 64) {
+    constructor(equipoJ1, equipoJ2, escena, tablero, PanelEventos, tamCasilla = 64) {
         this.escena = escena;
         this.tablero = tablero;
         this.tamCasilla = tamCasilla;
@@ -27,6 +27,8 @@ class TableroGraficoColocarPiezas {
 
         this.equipo1 = equipoJ1;
         this.equipo2 = equipoJ2;
+
+        this.panelEventos = PanelEventos;
 
         this.equipoActual = this.equipo1;
 
@@ -80,12 +82,13 @@ class TableroGraficoColocarPiezas {
      * @returns {void}
      */
     onCeldaClick(fila, col) {
+        if(this.panelEventos.getInput()){
         if (this.tablero.getCelda(fila, col).estaVacia()) {
             this.limpiarTablero();
             this.tablero.generarPieza(fila, col);
         } else {
             this.tablero.eliminarPieza(fila, col, this.tablero.getCelda(fila, col).getPieza());
-        }
+        }}
     }
 
     /**

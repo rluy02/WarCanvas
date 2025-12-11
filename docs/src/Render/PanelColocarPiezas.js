@@ -18,7 +18,7 @@ class PanelColocarPiezas {
      * @param {Equipo} equipo2 - segundo equipo (J2)
      * @constructor
      */
-    constructor(escena, tablero, tableroGrafico, equipo1, equipo2) {
+    constructor(escena, tablero, tableroGrafico, equipo1, equipo2, panelEventos) {
         this.escena = escena;
         this.tablero = tablero;
         this.tableroGrafico = tableroGrafico;
@@ -26,6 +26,8 @@ class PanelColocarPiezas {
         this.equipo2 = equipo2;
 
         this.piezaSeleccionada = null;
+
+        this.panelEventos = panelEventos;
 
         this.equipoActual = equipo1;
         this.create();
@@ -71,14 +73,15 @@ class PanelColocarPiezas {
         this.buttonTry.setInteractive({ useHandCursor: true });
 
         this.buttonTry.on('pointerdown', () => {
-            this.escena.cambiarEscena();
+            if(this.panelEventos.getInput()){
+            this.escena.cambiarEscena();}
         });
 
         this.buttonChange = this.createText(width - sideWidth / 2, 490, 'Cambiar de equipo', 0, ' ', '24px', 0.5, '#ff0000ff');
         this.buttonChange.setInteractive({ useHandCursor: true });
 
         this.buttonChange.on('pointerdown', () => {
-            this.cambiarEquipos();
+            if(this.panelEventos.getInput()) this.cambiarEquipos();
         });
 
         this.buttonCheat = this.createText(width - sideWidth / 2, 550, '(Pulsar para no poner todas las piezas)', 0, ' ', '16px', 0.5, '#ffffffff');
@@ -93,8 +96,9 @@ class PanelColocarPiezas {
         });
 
         this.buttonCheat.on('pointerdown', () => {
+            if(this.panelEventos.getInput()){
             this.buttonCheat.setColor('#000000');
-            this.escena.Cheat();
+            this.escena.Cheat();}
         });
 
         EventBus.on(Eventos.PIECE_POSITION, (pieza) => {
@@ -148,11 +152,12 @@ class PanelColocarPiezas {
         console.log(img)
 
         img.on('pointerdown', () => {
+            if(this.panelEventos.getInput()){
             if (this.piezaSeleccionada) this.piezaSeleccionada.setColor('#ffffffff');
             this.piezaSeleccionada = texto;
             this.pintarCasillas();
             this.tablero.setTipo(tipo);
-            texto.setColor('#000000ff');
+            texto.setColor('#000000ff');}
         })
 
         return img;

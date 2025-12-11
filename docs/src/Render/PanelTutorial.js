@@ -16,13 +16,14 @@ class PanelTutorial {
      * @param {TableroGrafico} tableroGrafico - representación gráfica del tablero
      * @constructor
      */
-    constructor(escena, tablero, tableroGrafico) {
+    constructor(escena, tablero, tableroGrafico, panelEventos) {
         this.escena = escena;
         this.tablero = tablero;
         this.tableroGrafico = tableroGrafico;
         this.piezaSeleccionada; // Pieza actualmente seleccionada
         this.piezaTutorial; // Pieza sobre la que se realiza el tutorial
         this.fase; // Fase del tutorial
+        this.panelEventos = panelEventos;
         this.create();
     }
 
@@ -62,6 +63,7 @@ class PanelTutorial {
         this.dialogoNext = this.createText(width - sideWidth/2, height - 70, 'Siguiente >', 300, ' ', '14px', 0.5, '#000000ff');
         this.dialogoNext.setInteractive({ useHandCursor: true });
         this.dialogoNext.on('pointerdown', () => {
+            if(this.panelEventos.getInput())
             this.tutorial(this.piezaSeleccionada);
         });
         this.dialogoNext.visible = false;
@@ -71,6 +73,7 @@ class PanelTutorial {
         this.buttonTry.setInteractive({ useHandCursor: true });
 
         this.buttonTry.on('pointerdown', () => {
+            if(this.panelEventos.getInput())
             this.escena.cambiarEscena();
         });
 
@@ -115,6 +118,7 @@ class PanelTutorial {
         img.setInteractive();
 
         img.on('pointerdown', () => {
+            if(this.panelEventos.getInput()){
             if(!(tipo == 'nofunc')){
             if(this.piezaSeleccionada)this.piezaSeleccionada.setColor('#ffffffff');
             this.piezaSeleccionada = texto;
@@ -123,7 +127,7 @@ class PanelTutorial {
             texto.setColor('#000000ff');
             this.tablero.eliminarTodasLasPiezas();
             this.tableroGrafico.limpiarTablero();
-             this.tableroGrafico.limpiarMapas();
+             this.tableroGrafico.limpiarMapas();}
         }
         })
 

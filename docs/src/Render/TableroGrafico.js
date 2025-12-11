@@ -17,7 +17,7 @@ class TableroGrafico {
      * @param {PanelLateral} PanelLateral - panel lateral para mostrar confirmaciones
      * @param {number} [tamCasilla=64] - tamaño en píxeles de cada casilla
      */
-    constructor(escena, tablero, PanelLateral, tamCasilla = 64) {
+    constructor(escena, tablero, PanelLateral, PanelEventos, tamCasilla = 64) {
         this.escena = escena;
         this.tablero = tablero;
         this.tamCasilla = tamCasilla;
@@ -35,6 +35,7 @@ class TableroGrafico {
         this.celdaSeleccionada = null; // La celda que estas seleccionando
         this.celdasColoreadas = []; // Las celdas a las que te puedes mover
         this.PanelLateral = PanelLateral;
+        this.panelEventos = PanelEventos;
 
         // Separar capas de selección/movimiento de capas de eventos
         this.casillasPintadas = [];      // Para selección/movimiento (se limpian con limpiarTablero)
@@ -62,7 +63,7 @@ class TableroGrafico {
                     this.dibujarFragmentoMapa(fila, col, "J2")
                 }
             }
-        }
+        }        
     }
 
     /**
@@ -105,6 +106,7 @@ class TableroGrafico {
      * @param {number} col - columna de la celda clicada
      */
     onCeldaClick(fila, col) {
+        if(this.panelEventos.getInput()){
         const celda = this.tablero.getCelda(fila, col);
         const pieza = celda.getPieza();
         const jugador = pieza ? pieza.getJugador() : "";
@@ -155,6 +157,7 @@ class TableroGrafico {
                 this.celdaSeleccionada = null;
             }
         }
+    }
     }
 
     /**

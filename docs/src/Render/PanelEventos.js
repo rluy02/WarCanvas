@@ -11,6 +11,7 @@ class PanelEventos {
         this.escena = escena;
         this.contenedor = null;
         this.isVisible = false;
+        this.input = true;
         // ← YA NO escucha eventos
     }
 
@@ -24,6 +25,8 @@ class PanelEventos {
      */
     mostrar(nombre, descripcion, textoTitulo = 'Evento Aleatorio', textoBoton = 'ACEPTAR', onClose = null) {
         if (this.isVisible) return;
+
+        this.input = false;
 
         this.isVisible = true;
         const centerX = this.escena.cameras.main.width / 2;
@@ -135,6 +138,7 @@ class PanelEventos {
 
         botonRect.on('pointerdown', () => {
             this.ocultar();
+            this.input = true;
             if (onClose) onClose(); //el callback
         });
 
@@ -208,6 +212,10 @@ class PanelEventos {
         if (this.contenedor) {
             this.ocultar();
         }
+    }
+
+    getInput(){
+        return this.input;
     }
 }
 

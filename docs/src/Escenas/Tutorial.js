@@ -49,12 +49,12 @@ class Tutorial extends Phaser.Scene {
         this.piezas = [];
         this.piezaGrafico = new PiezaGrafico(this, this.tab);
 
-        //Dibujamos el tablero
-        this.tabGrafico = new TableroGraficoTutorial(this.equipoJ1, this.equipoJ2, this, this.tab);
         this.PanelEventos = new PanelEventos(this);
+        //Dibujamos el tablero
+        this.tabGrafico = new TableroGraficoTutorial(this.equipoJ1, this.equipoJ2, this, this.tab, this.PanelEventos);
         this.PanelEventos.mostrar('Tutorial', 'Pulsa Aceptar y empieza a jugar', 'WarCanvas');
 
-        this.tutorial = new PanelTutorial(this, this.tab, this.tabGrafico);
+        this.tutorial = new PanelTutorial(this, this.tab, this.tabGrafico, this.PanelEventos);
          EventBus.on(Eventos.PIECE_POSITION, (pieza) => {
             this.piezaPosicionada(pieza); // Emit en ElegirPieza Tablero
             //this.tabGrafico.colorearRango();
