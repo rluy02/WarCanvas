@@ -211,6 +211,9 @@ export default class InteligenciaArtificial {
                     let destino = siguienteCelda.getPosicion();
                     let origenActual = bestPieza.getPosicion();
 
+                    // Dibujar conquista de territorio
+                    this.tableroGrafico.dibujarFragmentoMapa(destino.fila, destino.col, bestPieza.getJugador());
+
                     // Limpiar celda de origen
                     this.tablero.getCelda(origenActual.fila, origenActual.col).limpiar();
 
