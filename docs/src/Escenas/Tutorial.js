@@ -146,7 +146,7 @@ class Tutorial extends Phaser.Scene {
         this.load.image('comandante2', './imgs/piezas/comandante-realista.webp');
         this.load.image('artilleria', './imgs/piezas/artilleria-dibujada.webp');
         this.load.image('artilleria2', './imgs/piezas/artilleria-realista.webp');
-        this.load.image('dialogo', './imgs/Tutorial/dialogue.webp');
+        this.load.image('dialogo', './imgs/Tutorial/Dialogue.webp');
 
         this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
 
