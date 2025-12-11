@@ -84,8 +84,9 @@ class TableroGraficoColocarPiezas {
     onCeldaClick(fila, col) {
         if(this.panelEventos.getInput()){
         if (this.tablero.getCelda(fila, col).estaVacia()) {
+            if(this.equipoActual == this.equipo1 && col <3 ||this.equipoActual == this.equipo2 && col > 6 ) {
             this.limpiarTablero();
-            this.tablero.generarPieza(fila, col);
+            this.tablero.generarPieza(fila, col);}
         } else {
             this.tablero.eliminarPieza(fila, col, this.tablero.getCelda(fila, col).getPieza());
         }}
