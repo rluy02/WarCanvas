@@ -53,10 +53,10 @@ class Soldado extends Pieza {
                 else {
                     // Si no hay formación, calcular peso base según tipo de enemigo
                     if (bestPeso < this.detectaTipo(vecino)) {
-                        bestPeso = this.detectaTipo(vecino);
-                        celdasVisitadas.add(vecino);
+                        bestPeso = this.detectaTipo(vecino); 
                         bestCelda = vecino;
                     }
+                    celdasVisitadas.add(vecino);
                 }
             }
             // Marcar soldados aliados como visitados para evitar recalcularlos
@@ -81,6 +81,7 @@ class Soldado extends Pieza {
             }
         }
 
+        console.log(`la mejor celda para el soldado en (${this.fil},${this.col}) es: (${bestCelda ? bestCelda.getPosicion().fila : 'N/A'},${bestCelda ? bestCelda.getPosicion().col : 'N/A'}) con peso ${bestPeso}`);
         return { peso: (bestPeso + this.pesoBase), bestCelda: bestCelda};
     }
 

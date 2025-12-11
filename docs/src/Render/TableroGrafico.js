@@ -63,7 +63,7 @@ class TableroGrafico {
                     this.dibujarFragmentoMapa(fila, col, "J2")
                 }
             }
-        }        
+        }
     }
 
     /**
@@ -106,58 +106,60 @@ class TableroGrafico {
      * @param {number} col - columna de la celda clicada
      */
     onCeldaClick(fila, col) {
-        if(this.panelEventos.getInput()){
-        const celda = this.tablero.getCelda(fila, col);
-        const pieza = celda.getPieza();
-        const jugador = pieza ? pieza.getJugador() : "";
+        if (this.panelEventos.getInput()) {
+            const celda = this.tablero.getCelda(fila, col);
+            const pieza = celda.getPieza();
+            const jugador = pieza ? pieza.getJugador() : "";
 
-        // Si no hay celda seleccionada y no esta vacía se marcan las oppciones de la pieza
-        if (pieza && this.celdaSeleccionada == null && !this.moviendoPieza && !pieza.getMovida() && jugador == turnoJugador) {
-            // Si la celda contiene una pieza
-            if (!celda.estaVacia()) {
-                this.colorearRango(fila, col);
+            // Si no hay celda seleccionada y no esta vacía se marcan las oppciones de la pieza
+            if (pieza && this.celdaSeleccionada == null && !this.moviendoPieza && !pieza.getMovida() && jugador == turnoJugador) {
+                // Si la celda contiene una pieza
+                if (!celda.estaVacia()) {
+                    this.colorearRango(fila, col);
+                }
+            }
+            else {
+                // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
+                if (!this.tablero.getPiezaActiva()) return;
+
+                //Si es artilleria va aparte
+                if (this.tablero.getPiezaActiva().getTipo() === "Artilleria" && this.tablero.getPiezaActiva().puedeDisparar() && this.esTipoCelda(fila, col)) {
+
+                    this.tablero.getPiezaActiva().lanzarProyectil(fila, col, this.escena, this.tablero);
+                    EventBus.emit(Eventos.PIECE_MOVED, this.tablero.getPiezaActiva(), false);
+
+                    this.limpiarTablero();
+                    this.tablero.resetPiezaActiva();
+                }
+                // Si es vacía se mueve
+                else if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
+                    //Dibuja la conquista
+                    this.dibujarFragmentoMapa(fila, col, this.tablero.getPiezaActiva().getJugador())
+
+                    this.moviendoPieza = true;
+                    //Se limpia el tablero
+                    this.limpiarTablero();
+
+                    //Se informa del movimiento de pieza
+                    this.tablero.moverPieza(fila, col);
+                    if (this.tablero.getPiezaActiva() && !this.tablero.getPiezaActiva().getMovida()) {
+                        this.colorearRango(fila, col);
+                    }
+                }
+                else if (this.esTipoCelda(fila, col, "enemigo") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
+                    this.moviendoPieza = false;
+
+                    // Combate
+                    this.confirmarAtaque(fila, col, this.celdaSeleccionada);
+                    // Posible Ataque si se confirma en el panel Lateral
+                    this.tablero.ataque(fila, col);
+                }
+                else if (!this.moviendoPieza) {
+                    this.limpiarTablero();
+                    this.celdaSeleccionada = null;
+                }
             }
         }
-        else {
-            // Como ya hay una celda seleccionada, vemos si la nueva celda es vacía o enemigo, para ver si movemos o atacamos
-            if (!this.tablero.getPiezaActiva()) return;
-
-            //Si es artilleria va aparte
-            if (this.tablero.getPiezaActiva().getTipo() === "Artilleria" && this.tablero.getPiezaActiva().puedeDisparar() && this.esTipoCelda(fila, col)) {
-
-                this.tablero.getPiezaActiva().lanzarProyectil(fila, col, this.escena, this.tablero);
-                EventBus.emit(Eventos.PIECE_MOVED, this.tablero.getPiezaActiva(), false);
-
-                this.limpiarTablero();
-                this.tablero.resetPiezaActiva();
-            }
-            // Si es vacía se mueve
-            else if (this.esTipoCelda(fila, col, "vacia") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
-                //Dibuja la conquista
-                this.dibujarFragmentoMapa(fila, col, this.tablero.getPiezaActiva().getJugador())
-
-                this.moviendoPieza = true;
-                //Se limpia el tablero
-                this.limpiarTablero();
-
-                //Se informa del movimiento de pieza
-                this.tablero.moverPieza(fila, col);
-                this.colorearRango(fila, col);
-            }
-            else if (this.esTipoCelda(fila, col, "enemigo") && !this.tablero.getPiezaActiva().getMovida() && this.tablero.getPiezaActiva().getJugador() == turnoJugador) {
-                this.moviendoPieza = false;
-
-                // Combate
-                this.confirmarAtaque(fila, col, this.celdaSeleccionada);
-                // Posible Ataque si se confirma en el panel Lateral
-                this.tablero.ataque(fila, col);
-            }
-            else if (!this.moviendoPieza) {
-                this.limpiarTablero();
-                this.celdaSeleccionada = null;
-            }
-        }
-    }
     }
 
     /**
@@ -273,70 +275,6 @@ class TableroGrafico {
         let atacantePieza = this.tablero.getCelda(celdaSeleccionada.fila, celdaSeleccionada.columna).getPieza().getTipo();
         let defensaPieza = this.tablero.getCelda(fila, columna).getPieza().getTipo();
         this.PanelLateral.updateInfo(defensaPieza, atacantePieza, atacante, defensa, "Atacar", casillaAtacante, casillaDefensa);
-    }
-
-    /**
-     * Dibuja un fragmento del mapa (topográfico o satelital) dentro de una celda.
-     * @param {number} fila - fila de la celda
-     * @param {number} col - columna de la celda
-     * @param {string} tipoJugador - 'J1' o 'J2' para elegir mapa
-     */
-    dibujarFragmentoMapa(fila, col, tipoJugador) {
-        // Determina qué mapa usar
-        const key = tipoJugador === 'J1' ? 'mapaTopo' : 'mapaSat';
-
-        const textura = this.escena.textures.get(key).getSourceImage();
-
-        const cropX = col * this.fragmentoAncho;
-        const cropY = fila * this.fragmentoAlto;
-
-        const x = col * this.tamCasilla + this.tamCasilla / 2;
-        const y = fila * this.tamCasilla + this.tamCasilla / 2;
-
-        // Borra la imagen anterior si existe
-        if (this.graficos[fila][col].imagen && this.graficos[fila][col].imagen.mapKey != key) {
-            this.graficos[fila][col].imagen.destroy();
-            this.tablero.conquistarCelda(tipoJugador, true);
-        }
-        else if (!this.graficos[fila][col].imagen) {
-            this.tablero.conquistarCelda(tipoJugador, false);
-        }
-
-        const zoom = 1.3;
-        const renderSize = this.tamCasilla * zoom;
-
-        // Crea un RenderTexture que actúa como "mini lienzo" para la celda
-        const rt = this.escena.add.renderTexture(x, y, renderSize, renderSize)
-            .setOrigin(0.5)
-            .setDepth(0);
-
-        // Escala proporcional al fragmento del mapa
-        const scaleX = renderSize / this.fragmentoAncho;
-        const scaleY = renderSize / this.fragmentoAlto;
-
-        // Dibuja el fragmento del mapa en el renderTexture escalado a la celda
-        rt.draw(key, -cropX * scaleX, -cropY * scaleY, key)
-            .setScale(scaleX, scaleY);
-        rt.mapKey = key;
-
-        this.graficos[fila][col].imagen = rt;
-    }
-
-    /**
-     * Borra el fragmento de mapa renderizado en una celda y actualiza contadores.
-     * @param {number} fila - fila de la celda
-     * @param {number} col - columna de la celda
-     * @param {string} jugadorAnterior - 'J1' o 'J2' que había conquistado la casilla
-     * @returns {void}
-     */
-    borrarFragmentoMapa(fila, col, jugadorAnterior) {
-        // Verificar que existe imagen
-        if (!this.graficos[fila][col].imagen) return;
-
-        // Destruir la imagen del mapa
-        this.graficos[fila][col].imagen.destroy();
-        this.graficos[fila][col].imagen = null;
-        this.tablero.borrarCelda(jugadorAnterior);
     }
 
     /**

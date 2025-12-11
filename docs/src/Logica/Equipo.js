@@ -44,7 +44,7 @@ class Equipo {
     crearPiezasJ1() {
         const posicionesSoldadosJ1 = [
             // Columna 0 (primera)
-            { x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 3, y: 0 },
+            { x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 3, y: 2 },
             { x: 4, y: 0 }, { x: 5, y: 0 }, { x: 6, y: 0 }, { x: 7, y: 0 },
             // Columna 1 (segunda)
             { x: 0, y: 1 }, { x: 2, y: 1 }, { x: 3, y: 1 }, { x: 5, y: 1 },
@@ -54,12 +54,12 @@ class Equipo {
         ];
 
         const posicionesCaballeriasJ1 = [
-            { x: 1, y: 1 }, { x: 4, y: 1 }, // Columna 1
+            { x: 1, y: 1 }, { x: 4, y: 2 }, // Caballería reemplaza donde estaba comandante
             { x: 0, y: 2 }, { x: 2, y: 2 }, { x: 5, y: 2 }, { x: 7, y: 2 } // Columna 2
         ];
         
-        const posicionComandanteJ1 = { x: 4, y: 2 }; // Columna 2, centro
-        const posicionArtilleria = { x: 3, y: 2 }; // Columna 2
+        const posicionComandanteJ1 = { x: 3, y: 0 }; // Columna 2 (más atrás) - reemplaza artillería
+        const posicionArtilleria = { x: 4, y: 1 }; // Columna 1 (medio) - reemplaza caballería
 
         // Generamos las piezas para el equipo "J1" 
         for (let pos of posicionesSoldadosJ1) {
@@ -91,7 +91,7 @@ class Equipo {
     crearPiezasJ2() {
         const posicionesSoldadosJ2 = [
             // Columna 9 (última)
-            { x: 0, y: 9 }, { x: 1, y: 9 }, { x: 2, y: 9 }, { x: 3, y: 9 },
+            { x: 0, y: 9 }, { x: 1, y: 9 }, { x: 2, y: 9 }, { x: 3, y: 7 },
             { x: 4, y: 9 }, { x: 5, y: 9 }, { x: 6, y: 9 }, { x: 7, y: 9 },
             // Columna 8 (antepenúltima)
             { x: 0, y: 8 }, { x: 2, y: 8 }, { x: 3, y: 8 }, { x: 5, y: 8 },
@@ -101,12 +101,12 @@ class Equipo {
         ];
 
         const posicionesCaballeriasJ2 = [
-            { x: 1, y: 8 }, { x: 4, y: 8 }, // Columna 8
+            { x: 1, y: 8 }, { x: 4, y: 7 }, // Caballería reemplaza donde estaba comandante
             { x: 0, y: 7 }, { x: 2, y: 7 }, { x: 5, y: 7 }, { x: 7, y: 7 } // Columna 7
         ];
 
-        const posicionComandanteJ2 = { x: 4, y: 7 }; // Columna 7, centro
-        const posicionArtilleria = { x: 3, y: 7 }; // Columna 7
+        const posicionComandanteJ2 = { x: 3, y: 9 }; // Columna 7 (más atrás) - reemplaza artillería
+        const posicionArtilleria = { x: 4, y: 8 }; // Columna 8 (medio) - reemplaza caballería
 
         // Generamos las piezas para el equipo "J2" 
         for (let pos of posicionesSoldadosJ2) {
