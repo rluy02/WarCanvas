@@ -95,12 +95,12 @@ class Comandante extends Pieza {
      * 
      * @returns {Object} Objeto con dos propiedades:
      *   - peso {number}: Peso total calculado
-     *   - celdaAtacada {Celda|null}: Celda objetivo seleccionada
+     *   - bestCelda {Celda|null}: Celda objetivo seleccionada
      */
     calculaPeso() {
         const modo = this.calculaModo();
         let bestCelda = null;
-        let bestPeso = 0;
+        let bestPeso = -Infinity;
 
         const celdaInicial = this.tablero.getCelda(this.fil, this.col);
 
@@ -142,15 +142,18 @@ class Comandante extends Pieza {
                     // Evaluar valor defensivo de esta posición
                     const pesoCelda = this.evaluarDefensa(destino);
 
+                    console.log(`   Evaluando (${pos.fila}, ${pos.col}): peso = ${pesoCelda}`);
+
                     if (pesoCelda > bestPeso) {
                         bestPeso = pesoCelda;
                         bestCelda = destino;
+                        console.log(`   ✅ NUEVA MEJOR: (${pos.fila}, ${pos.col}) con peso ${pesoCelda}`);
                     }
                 }
             }
 
-            // Aplicar multiplicador al peso defensivo
-            bestPeso *= 2;
+            const finalPos = bestCelda.getPosicion();
+            console.log(`   🎯 MEJOR CELDA: (${finalPos.fila}, ${finalPos.col}) con peso ${bestPeso}`);
         }
 
         if (modo === 'ATAQUE') {
@@ -181,14 +184,8 @@ class Comandante extends Pieza {
             }
         }
 
-        console.log(`modo comandante: ${modo}`);
-        console.log(`Peso calculado para Comandante en (${this.fil}, ${this.col}): ${bestPeso + this.pesoBase}`);
-        if (bestCelda != null) {
-            const pos = bestCelda.getPosicion();
-            console.log(`Comandante elige como mejor casilla: ${pos.fila}, ${pos.col}`);
-        }
-
-        return { peso: (bestPeso + this.pesoBase), celdaAtacada: bestCelda };
+        console.log(`Comandante (${this.fil}, ${this.col}) en modo ${modo} elige celda objetivo: ${bestCelda ? `(${bestCelda.getPosicion().fila}, ${bestCelda.getPosicion().col})` : 'Ninguna'} con peso ${bestPeso + this.pesoBase}`);
+        return { peso: (bestPeso + this.pesoBase), bestCelda: bestCelda };
     }
 
     /**
@@ -218,6 +215,7 @@ class Comandante extends Pieza {
                         peso += 3;
                         break;
                     case 'Comandante':
+                        if (jugadorObjetivo === 'J1')
                         peso += 4;
                         break;
                 }
@@ -259,11 +257,10 @@ class Comandante extends Pieza {
     }
 
     /**
-     * Evalúa el valor defensivo de una celda contando aliados cercanos (positivo) 
-     * y enemigos cercanos (negativo).
+     * Evalúa el valor defensivo de una celda sumando el valor de todas las piezas aliadas vecinas.
      * 
      * @param {Celda} celda - Celda a evaluar
-     * @returns {number} Valor defensivo (aliados - enemigos)
+     * @returns {number} Suma del valor de todas las piezas aliadas vecinas menos el valor de las enemigas
      */
     evaluarDefensa(celda) {
         let peso = 0;

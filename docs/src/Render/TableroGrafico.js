@@ -448,6 +448,28 @@ class TableroGrafico {
     }
 
     /**
+     * Desactiva la interacción con el tablero (para turno de IA)
+     */
+    desactivarInteraccion() {
+        for (let fila = 0; fila < this.tablero.filas; fila++) {
+            for (let col = 0; col < this.tablero.columnas; col++) {
+                this.graficos[fila][col].disableInteractive();
+            }
+        }
+    }
+
+    /**
+     * Activa la interacción con el tablero (para turno de jugador)
+     */
+    activarInteraccion() {
+        for (let fila = 0; fila < this.tablero.filas; fila++) {
+            for (let col = 0; col < this.tablero.columnas; col++) {
+                this.graficos[fila][col].setInteractive();
+            }
+        }
+    }
+
+    /**
      * Marca una casilla como movida, añadiendo una capa amarilla semi-transparente.
      * @param {number} fila - fila
      * @param {number} col - columna

@@ -219,10 +219,15 @@ class Tablero {
      * @param {number} col - columna del enemigo objetivo
      */
     ataque(fil, col) {
-        let defensa = this.getCelda(fil, col)
-        let origen = this.piezaActiva.getPosicion()
-        let ataque = this.getCelda(origen.fila, origen.col)
-        EventBus.emit(Eventos.ENEMY_SELECTED, ataque, defensa); //Se recibe en Combate 
+        if (!this.piezaActiva) {
+            console.error('Error: No hay pieza activa para atacar');
+            return;
+        }
+        
+        let defensa = this.getCelda(fil, col);
+        let origen = this.piezaActiva.getPosicion();
+        let ataque = this.getCelda(origen.fila, origen.col);
+        EventBus.emit(Eventos.ENEMY_SELECTED, ataque, defensa);
     }
 
     /**
