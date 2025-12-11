@@ -31,7 +31,7 @@ class Soldado extends Pieza {
      *   - formacionAtacaCelda {Celda|null}: Celda enemiga atacada por formación (si existe)
      */
     calculaPeso() {
-        let celdaAtacada = null; // Guarda la celda que será atacada por formación
+        let bestCelda = null; // Guarda la celda que será atacada por formación
         let bestPeso = 0; // Mejor peso encontrado durante el análisis
         const celdasVisitadas = new Set(); // Evita procesar la misma celda múltiples veces
         celdasVisitadas.add(this.tablero.getCelda(this.fil, this.col));
@@ -47,16 +47,16 @@ class Soldado extends Pieza {
                 const resultado = this.checkFormacion(vecino, celdasVisitadas);
                 if (resultado > bestPeso) {
                     bestPeso = resultado;
-                    celdaAtacada = vecino; // Marcar esta celda como objetivo de formación
+                    bestCelda = vecino; // Marcar esta celda como objetivo de formación
                     celdasVisitadas.add(vecino);
                 }
                 else {
                     // Si no hay formación, calcular peso base según tipo de enemigo
                     if (bestPeso < this.detectaTipo(vecino)) {
-                        bestPeso = this.detectaTipo(vecino);
-                        celdasVisitadas.add(vecino);
-                        celdaAtacada = vecino;
+                        bestPeso = this.detectaTipo(vecino); 
+                        bestCelda = vecino;
                     }
+                    celdasVisitadas.add(vecino);
                 }
             }
             // Marcar soldados aliados como visitados para evitar recalcularlos
@@ -74,20 +74,15 @@ class Soldado extends Pieza {
                     // Actualizar el mejor peso si encontramos un enemigo más valioso
                     if (bestPeso < this.detectaTipo(sigVecino)) {
                         bestPeso = this.detectaTipo(sigVecino);
-                        celdaAtacada = sigVecino;
+                        bestCelda = sigVecino;
                     }
                     celdasVisitadas.add(sigVecino);
                 }
             }
         }
 
-        // Logs de depuración
-        console.log(`Peso calculado para Soldado en (${this.fil}, ${this.col}): ${bestPeso + this.pesoBase}`);
-        if (celdaAtacada != null) {
-            console.log(`Formación ataca a: ${celdaAtacada.getPosicion().fila}, ${celdaAtacada.getPosicion().col}`)
-        }
-
-        return { peso: (bestPeso + this.pesoBase), celdaAtacada: celdaAtacada };
+        console.log(`la mejor celda para el soldado en (${this.fil},${this.col}) es: (${bestCelda ? bestCelda.getPosicion().fila : 'N/A'},${bestCelda ? bestCelda.getPosicion().col : 'N/A'}) con peso ${bestPeso}`);
+        return { peso: (bestPeso + this.pesoBase), bestCelda: bestCelda};
     }
 
     /**

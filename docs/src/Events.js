@@ -7,7 +7,7 @@ export const Eventos =  {
     PIECE_DEAD: "piece_dead",
     PIECE_ERASE: "piece_erase",
     PIECE_END_ACTIONS: "piece_end_actions", // Se llama cuando las accines de una pieza se han acabado, o se acaban manualmente
-    STAR_NEW_MOVEMENT: "start_new_movement", // Se llama al empezar un nuevo movimiento con una 
+    START_NEW_MOVEMENT: "start_new_movement", // Se llama al empezar un nuevo movimiento con una 
     CHANGE_TURN: "change_turn",
     END_GAME: "end_game",
     CONQUER_CELL: "conquer_cell", // Se lanza cuando se conquista una celda y se captura en barraTerritorio para mostrar el porcentaje

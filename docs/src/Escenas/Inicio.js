@@ -101,7 +101,7 @@ class Inicio extends Phaser.Scene {
         if (this.equipo1 == undefined) this.equipo1 = new Equipo("J1", this.tab, true);
         if (this.equipo2 == undefined) this.equipo2 = new Equipo("J2", this.tab, true);
 
-        if (this.ia) this.inteligenciaArtificial = new InteligenciaArtificial(this.tab, this.tabGrafico, this.equipo2, this, this.acciones)
+        if (this.ia) this.inteligenciaArtificial = new InteligenciaArtificial(this.tab, this.tabGrafico, this.equipo2, this, this.acciones, this.turno)
 
         console.log(this.equipo1);
 
@@ -235,6 +235,13 @@ class Inicio extends Phaser.Scene {
             if (p == pieza) {
                 this.piezaGrafico.eliminarPieza(pieza);
             }
+        }
+        
+        // Eliminar la pieza del equipo correspondiente
+        if (pieza.getJugador() === 'J1') {
+            this.equipo1.eliminarPieza(pieza);
+        } else {
+            this.equipo2.eliminarPieza(pieza);
         }
     }
 

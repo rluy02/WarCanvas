@@ -31,7 +31,7 @@ class TurnoGraficos {
         const width = this.escena.scale.width;
         const height = this.escena.scale.height;
 
-        this.escena.add.rectangle(0, height - 83, width, 83, 0x402200).setOrigin(0,0);
+        this.escena.add.rectangle(0, height - 83, width, 83, 0x402200).setOrigin(0, 0);
 
         this.JugadorText = this.escena.add.text(50, height - 45, 'J1: ', { // Título
             fontSize: '32px',
@@ -48,7 +48,7 @@ class TurnoGraficos {
             fill: '#ffffff'
         }).setOrigin(0.5);
 
-        this.acabarText = this.escena.add.text(width/2, height - 30, 'Finalizar Movimiento', { // Título
+        this.acabarText = this.escena.add.text(width / 2, height - 30, 'Finalizar Movimiento', { // Título
             fontSize: '22px',
             fontFamily: 'Kotton',
             fill: '#ce2020ff'
@@ -122,6 +122,26 @@ class TurnoGraficos {
 
         // Redibujar iconos según el jugador (J1 o J2)
         this.setAccionesTurno(this.piezasMover);
+    }
+
+    /**
+    * Desactiva el botón "Finalizar Movimiento" durante el turno de la IA
+    */
+    desactivarBotonFinalizar() {
+        if (this.acabarText) {
+            this.acabarText.setAlpha(0.5);
+            this.acabarText.disableInteractive();
+        }
+    }
+
+    /**
+     * Activa el botón "Finalizar Movimiento" durante el turno del jugador
+     */
+    activarBotonFinalizar() {
+        if (this.acabarText) {
+            this.acabarText.setAlpha(1);
+            this.acabarText.setInteractive({ useHandCursor: true });
+        }
     }
 
     /**

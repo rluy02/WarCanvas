@@ -37,7 +37,7 @@ class Caballeria extends Pieza {
     }
 
     calculaPeso() {
-        let celdaAtacada = null; // Guarda la celda que será atacada por formación
+        let bestCelda = null; // Guarda la celda que será atacada por formación
         let bestPeso = 0; // Mejor peso encontrado durante el análisis
         const celdasVisitadas = new Set(); // Evita procesar la misma celda múltiples veces
         celdasVisitadas.add(this.tablero.getCelda(this.fil, this.col));
@@ -54,7 +54,7 @@ class Caballeria extends Pieza {
                 const result = this.detectaTipo(vecino.celda);
                 if (result > bestPeso) {
                     bestPeso = result;
-                    celdaAtacada = vecino.celda;
+                    bestCelda = vecino.celda;
                 }
             }
             
@@ -68,7 +68,7 @@ class Caballeria extends Pieza {
                         const segResult = this.detectaTipo(segVecino.celda);
                         if (segResult > bestPeso) {
                             bestPeso = segResult;
-                            celdaAtacada = segVecino.celda;
+                            bestCelda = segVecino.celda;
                         }
                     }
                     
@@ -82,7 +82,7 @@ class Caballeria extends Pieza {
                                 const terResult = this.detectaTipo(terVecino.celda);
                                 if (terResult > bestPeso) {
                                     bestPeso = terResult;
-                                    celdaAtacada = terVecino.celda;
+                                    bestCelda = terVecino.celda;
                                 }
                             }
                         }
@@ -93,13 +93,7 @@ class Caballeria extends Pieza {
 
         // DEBUG: Pintar celdas comprobadas
 
-        // Logs de depuración
-        console.log(`Peso calculado para Caballería en (${this.fil}, ${this.col}): ${bestPeso + this.pesoBase}`);
-        if (celdaAtacada != null) {
-            console.log(`Caballería ataca a: ${celdaAtacada.getPosicion().fila}, ${celdaAtacada.getPosicion().col}`);
-        }
-
-        return { peso: (bestPeso + this.pesoBase), formacionAtacaCelda: celdaAtacada};
+        return { peso: (bestPeso + this.pesoBase), bestCelda: bestCelda};
     }
 
     /**

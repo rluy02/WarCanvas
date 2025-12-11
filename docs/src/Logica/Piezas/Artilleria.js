@@ -26,6 +26,8 @@ class Artilleria extends Pieza {
 
         this.explosion = null;
 
+        this.pesoBase = 3;
+
         EventBus.on(Eventos.CHANGE_TURN, (jugador) => { this.pasoTurno(jugador) });
     }
 
@@ -38,7 +40,7 @@ class Artilleria extends Pieza {
      * @param {number} tamCasilla - tamaño de la casilla en píxeles
      */
     lanzarProyectil(fil, col, escena, tablero, tamCasilla = 64) {
-        const randomCell = Phaser.Math.Between(0, 4);
+        let randomCell = Phaser.Math.Between(0, 4);
         const direcciones = [
             { df: 0, dc: 0 },    // centro
             { df: -1, dc: 0 },  // arriba
@@ -47,8 +49,8 @@ class Artilleria extends Pieza {
             { df: 0, dc: 1 }    // derecha
         ];
 
-        const filaProyectil = fil + direcciones[randomCell].df;
-        const colProyectil = col + direcciones[randomCell].dc;
+        let filaProyectil = fil + direcciones[randomCell].df;
+        let colProyectil = col + direcciones[randomCell].dc;
 
         while ((filaProyectil < 0 || filaProyectil > 7) || (colProyectil < 0 || colProyectil > 9)) {
             randomCell = Phaser.Math.Between(0, 4);
@@ -103,6 +105,41 @@ class Artilleria extends Pieza {
         this.utilizable = false;
     }
 
+    calculaPeso() {
+        let bestCelda = null;
+        let bestPeso = -Infinity;
+        for (let f = 0; f < this.tablero.filas - 1; f++) {
+            for (let c = this.col - 4; c < this.tablero.columnas - 1; c++) {
+                let celda = this.tablero.getCelda(f, c);
+                let pesoTmp = 0;
+
+                if (!celda.estaVacia() && celda.getPieza().getJugador() === 'J1') {
+                    pesoTmp += this.detectaTipo(celda)
+                }
+                else if (!celda.estaVacia() && celda.getPieza().getJugador() === 'J2') {
+                    pesoTmp -= this.detectaTipo(celda)
+                }
+
+                let vecinos = this.getVecinos(celda);
+                
+                for (const vecino of vecinos) {
+                    if (!vecino.estaVacia() && vecino.getPieza().getJugador() === 'J1') {
+                        pesoTmp += this.detectaTipo(vecino)
+                    }
+                    else if (!vecino.estaVacia() && vecino.getPieza().getJugador() === 'J2') {
+                        pesoTmp -= this.detectaTipo(vecino)
+                    }
+                }
+                if (pesoTmp > bestPeso){
+                    bestPeso = pesoTmp
+                    bestCelda = celda
+                }
+            }
+        }
+
+        return {peso: (bestPeso + this.pesoBase), bestCelda: bestCelda};
+    }
+
     /**
      * Proceso de paso de turno para la pieza de artillería.
      * Cuando es el turno del jugador de esta pieza, se incrementa el contador de turnos transcurridos.
@@ -125,6 +162,55 @@ class Artilleria extends Pieza {
      */
     puedeDisparar() {
         return this.utilizable;
+    }
+
+    detectaTipo(celda) {
+        // Solo contabiliza piezas enemigas del jugador J1
+        if (!celda.estaVacia()) {
+            switch (celda.getPieza().getTipo()) {
+                case 'Soldado':
+                    return 2;
+                case 'Caballeria':
+                    return 3;
+                case 'Comandante':
+                    return 5;
+                default:
+                    return 0;
+            }
+        }
+    }
+
+    getVecinos(celda) {
+        const pos = celda.getPosicion();
+        const fila = pos.fila;
+        const col = pos.col;
+        const res = [];
+
+        // Arriba
+        if (fila > 0) {
+            let celdaArriba = this.tablero.getCelda(fila - 1, col);
+            res.push(celdaArriba);
+        }
+
+        // Izquierda
+        if (col > 0) {
+            let celdaIzquierda = this.tablero.getCelda(fila, col - 1);
+            res.push(celdaIzquierda);
+        }
+
+        // Abajo
+        if (fila < this.tablero.filas - 1) {
+            let celdaAbajo = this.tablero.getCelda(fila + 1, col);
+            res.push(celdaAbajo);
+        }
+
+        // Derecha
+        if (col < this.tablero.columnas - 1) {
+            let celdaDerecha = this.tablero.getCelda(fila, col + 1);
+            res.push(celdaDerecha);
+        }
+
+        return res;
     }
 }
 
