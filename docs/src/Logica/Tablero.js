@@ -191,7 +191,7 @@ class Tablero {
         this.piezaActiva.moverse(fil, col);
         this.tablero[fil][col].setContenido(this.piezaActiva);
 
-        EventBus.emit(Eventos.PIECE_MOVED, this.piezaActiva, false);
+        EventBus.emit(Eventos.PIECE_MOVED, this.piezaActiva);
     }
 
     // Mueve la pieza a fil, col cuando gana un combate
@@ -210,7 +210,7 @@ class Tablero {
         //Añade la pieza a la celda de destino
         pieza.moverse(fil, col);
         this.tablero[fil][col].setContenido(pieza);
-        EventBus.emit(Eventos.PIECE_MOVED, pieza, true);
+        EventBus.emit(Eventos.PIECE_MOVED, pieza);
     }
 
     /**
