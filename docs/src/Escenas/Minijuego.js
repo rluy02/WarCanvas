@@ -61,7 +61,7 @@ class Minijuego extends Phaser.Scene {
         this.tiempoInicial = 30; // Tiempo inicial en segundos
         //Texto del tiempo
         this.cuentaAtrasTexto = this.add.text(this.scale.width / 2, 20, 'Tiempo: ' + this.tiempoInicial, { fontSize: '32px', fill: '#FFF', fontFamily: 'Kotton' }).setOrigin(0.5);
-        this.panelEventos.mostrar('Minijuego: Salta el comandante', 'Pulsa la barra espaciadora para que el comandante salte y esquive las granadas que se lanzan desde la derecha.', 'WarCanvas', 'ACEPTAR', () => {
+        this.panelEventos.mostrar('Minijuego: Salta el comandante', 'Pulsa la barra espaciadora para saltar con Drawful y bloquear las granadas del enemigo hasta que se acabe el tiempo.', 'WarCanvas', 'ACEPTAR', () => {
             // Inicializar timer para crear granadas cada 3000ms
             this.timer = this.time.addEvent({
                 delay: 3000, // ms
@@ -249,7 +249,7 @@ class Minijuego extends Phaser.Scene {
 
             this.panelEventos.mostrar(
                 '¡Has perdido!',
-                'El comandante ha sido alcanzado. Fin del minijuego.',
+                'El comandante no ha logrado defender su territorio. Fin del minijuego.',
                 'WarCanvas',
                 'ACEPTAR',
                 () => {
