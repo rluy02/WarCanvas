@@ -63,7 +63,7 @@ class Artilleria extends Pieza {
             this.explosion.on('animationcomplete', () => {
                 this.explosion.visible = false;
             });
-            this.explosion.setDepth(999);
+            this.explosion.setDepth(99);
         }
 
         this.explosion.visible = true;
