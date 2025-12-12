@@ -158,6 +158,11 @@ class Combates {
             bonusAtaca, bonusDefiende
         );
 
+        // NUEVO: Marcar la pieza atacante como movida siempre (gane o pierda)
+        // Esto asegura que se reste una acción del turno
+        atacaPieza.setMovida(true);
+        EventBus.emit(Eventos.ATACK)//, atacaPieza, true)
+
         this.tableroGrafico.restTablero();
     }
 
