@@ -117,7 +117,8 @@ Después de realizar un ataque, deben transcurrir 4 turnos propios antes de que 
 
 ## Combinar ataques
 
-Los soldados al ser la pieza más débil tendrán la oportunidad de agruparse hasta con dos soldados más que se encuentren a los lados del soldado atacante, formando una linea ( derecha e izquierda | arriba y abajo ). Cada soldado extra sumará +1 a la tirada de ataque. Siendo 3 la puntuación máxima. 
+Los soldados al ser la pieza más débil tendrán la oportunidad de agruparse hasta con dos soldados aliados que estén justo a su lado, formando una línea recta horizontal o vertical.
+Se puede sumar como máximo 1 soldado por cada lado del atacante (izquierda y derecha, o arriba y abajo). Cada soldado extra sumará +1 a la tirada de ataque. Siendo 3 la puntuación máxima. 
 
 En este ejemplo los soldados se podrían combinar para atacar a la caballería enemiga.
 
@@ -137,11 +138,11 @@ Al comenzar el juego cada jugador coloca las piezas de forma estratégica en su 
 
 En tu turno puedes mover hasta 3 piezas, primero siempre gastando todas las acciones de una pieza o descartando las acciones innecesarias antes de pasar a la siguiente.
 
-### 3.3 Eventos Especiales
+### 3.3 Eventos Aleatorios
 
 Durante la partida se incluirán eventos aleatorios que afecten a las diferentes piezas del juego. Algunos de estos eventos son:  tormentas, inundaciones y un minijuego. Cada uno de los eventos estará relacionado con formas de afectar el tablero y tendrán diferentes efectos a la partida.
 
-<u> Eventos especiales: </u>
+<u> Eventos Aleatorios: </u>
 - Terremoto: Un terremoto arrasa el terreno de juego, y se bloquean las piezas que están sobre las zonas afectadas durante un turno.
     - Casillas afectadas: las casillas afectadas son aleatorias, cada casilla tiene un 25% de probabilidad de ser afectada. Y aproximadamente 8 casillas son afectadas por cada terremoto (varía en cada terremoto).
   
