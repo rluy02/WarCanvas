@@ -53,6 +53,12 @@ El objetivo es **conquistar el 80% del tablero o derrotar al Comandante enemigo*
 
 ---
 
+## 📋 Arquitectura
+
+El diagrama de Arquitectura del Proyecto: [Diagrama de Arquitectura](https://github.com/CapitanManzana/WarCanvas/blob/main/DiagramaArquitectura.pdf))
+
+---
+
 ## 📂 Assets y referencias
 
 🖼️ Recursos visuales
