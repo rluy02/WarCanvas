@@ -37,11 +37,28 @@ class EventosAleatorios {
             reset: () => {
                 if (this.terremotoCounter < 1) {
                     this.terremotoCounter++;
+                    // Volver a marcar como movidas las piezas afectadas durante el segundo turno del terremoto
+                    for (let pieza of this.piezasAfectadas) {
+                        if (pieza && pieza.getPosicion) {
+                            const pos = pieza.getPosicion();
+                            const celda = this.tablero.getCelda(pos.fila, pos.col);
+                            if (celda && celda.getPieza() === pieza) {
+                                pieza.setMovida(true);
+                            }
+                        }
+                    }
                     return;
                 }
                 for (let pieza of this.piezasAfectadas) {
-                    if (pieza)
-                    pieza.resetMovida();
+                    // Verificar que la pieza aún existe en el tablero
+                    if (pieza && pieza.getPosicion) {
+                        const pos = pieza.getPosicion();
+                        const celda = this.tablero.getCelda(pos.fila, pos.col);
+                        // Solo resetear si la pieza sigue en el tablero
+                        if (celda && celda.getPieza() === pieza) {
+                            pieza.resetMovida();
+                        }
+                    }
                 }
                 this.tableroGrafico.limpiarEventos();
                 this.piezasAfectadas = [];
