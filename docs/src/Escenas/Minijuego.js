@@ -58,17 +58,17 @@ class Minijuego extends Phaser.Scene {
         this.zona.body.moves = false;
 
 
-        this.tiempoInicial = 30; // Tiempo inicial en segundos
+        this.tiempoInicial = 20; // Tiempo inicial en segundos
         //Texto del tiempo
         this.cuentaAtrasTexto = this.add.text(this.scale.width / 2, 20, 'Tiempo: ' + this.tiempoInicial, { fontSize: '32px', fill: '#FFF', fontFamily: 'Kotton' }).setOrigin(0.5);
         this.panelEventos.mostrar('Minijuego: Salta el comandante', 'Pulsa la barra espaciadora para saltar con Drawful y bloquear las granadas del enemigo hasta que se acabe el tiempo.', 'WarCanvas', 'ACEPTAR', () => {
-            // Inicializar timer para crear granadas cada 3000ms
+            // Inicializar timer para crear granadas cada 3 segundos
             this.timer = this.time.addEvent({
                 delay: 3000, // ms
                 callback: this.createGranada,
                 callbackScope: this,
                 loop: false,
-                repeat: 9
+                repeat: 5
             });
 
             this.cuentaAtrasTimer =this.time.addEvent({
@@ -89,6 +89,9 @@ class Minijuego extends Phaser.Scene {
         this.cuentaAtrasTexto.setText("Tiempo: " + this.tiempoInicial);
 
         if (this.tiempoInicial <= 0) {
+            //nos aseguramos de detener la cuenta atras y la creacion de granadas
+            if (this.timer) this.timer.remove(false);
+            if (this.cuentaAtrasTimer) this.cuentaAtrasTimer.remove(false);
             this.panelEventos.mostrar(
                 '¡Has ganado!',
                 'El comandante ha logrado sobrevivir. Fin del minijuego.',
