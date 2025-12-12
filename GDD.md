@@ -181,9 +181,6 @@ El juego finaliza cuando un jugador conquista el 80% del tablero o si alguno de 
 
 ### 5.1 Flujos de Input
 
-![Uploading image.png…]()
-
-
 Cuando el jugador seleccione una pieza con el click, la casilla contenedora se resalta en amarillo y se previsualiza la siguiente acción. Entre ellas: movimiento, finalizar turno y si se pudiese, ataque.
 Tipo de previsualización.
 
@@ -193,7 +190,7 @@ Tipo de previsualización.
 
 ### 5.2 Interfaz
 
-## Escena Principal
+#### Escena Principal
 
 La interfaz de la pantalla principal se compone del tablero, el panel lateral, el panel de información, el panel de turnos y los avisos.
 
