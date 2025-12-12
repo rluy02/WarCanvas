@@ -11,7 +11,7 @@
 - Diego Jimenez García
 - Julia Vera Ruiz
 
-***07/11/2025 - Hito 2***
+***12/12/2025 - Hito 2***
 
 ## 1 Resumen
 
@@ -34,18 +34,18 @@ El tablero de juego tiene un tamaño de 8x10 casillas. Al comenzar el juego el t
 <img width="309" height="378" alt="Tablero" src="https://github.com/user-attachments/assets/217fea9c-d54c-4dad-947d-f45953e022bd" />
 
 
-### 2.2 Personajes
+### 2.2 Piezas
 
-Cada jugador cuenta con 24 personajes:
+Cada jugador cuenta con 24 piezas:
 
 - 1 Comandante
-- 3 Artillerías
+- 1 Artillerías
 - 6 Caballerías
-- 14 Soldados
+- 16 Soldados
 
 ### 2.3 Moverse por el tablero:
 
-Cada personaje puede moverse de manera diferente.
+Cada pieza puede moverse de manera diferente.
 
 **Comandante:**
 
@@ -58,13 +58,13 @@ Puede moverse en cualquier dirección, tanto en horizontal y vertical como en di
 <img width="153" height="191" alt="Artillería" src="https://github.com/user-attachments/assets/109c4e79-d633-4122-bf81-255855a0461c" />
 
 
-La artillería no puede moverse desde que se coloca en el tablero, sin embargo puede atacar a cualquier casilla de la zona neutra y de la zona de su propio equipo, el ataque caerá aleatoriamente en una de las 5 casillas seleccionadas.
+La artillería no puede moverse desde que se coloca en el tablero, sin embargo puede atacar a cualquier casilla en un rango de alcance de 4 columnas. Solamente se puede posicionar en la zona inicial, su alcance máximo nunca sobrepasa de la zona neutra.
 
 **Caballería:**
 
 <img width="154" height="189" alt="Caballería" src="https://github.com/user-attachments/assets/dd2fcc4d-dc95-4307-87e6-0938279da282" />
 
-Puede moverse en horizontal o vertical, no en diagonal. Es el único personaje que puede saltar por encima de otros personajes.
+Puede moverse en horizontal o vertical, no en diagonal. Es la única pieza que puede saltar por encima de otras piezas.
 
 Soldados:
 
@@ -91,25 +91,33 @@ Cada pieza tiene un número de acciones máximas que puede hacer en su turno. Ya
 ## 2.4 Conquistar casillas:
 
 Una casilla vacía: Automáticamente la conquistas al posicionarse sobre ella
-Una casilla con personaje: Los jugadores tendrán que usar el ataque (mecánica de dados)
+Una casilla con pieza: Los jugadores tendrán que usar el ataque (mecánica de dados)
 
 ### 2.5 Ataque
 
 Para atacar el jugador tira dos dados, a los puntos del dado se le suma los puntos de cada pieza dependiendo si es ataque o defensa.
-Cada personaje tiene un ataque y una defensa distinta. Solo se puede atacar a casillas adyacentes, excepto la artillería.
+Cada pieza tiene un ataque y una defensa distinta. Solo se puede atacar a casillas adyacentes, excepto la artillería.
 
 Si el jugador que ataca pierde, no pasa nada, en cambio si gana, muere la pieza del defensor. En caso de empate la defensa siempre gana.
 
 | Fichas | Ataque | Defensa |
 | --- | --- | --- |
 | Comandante | +4 | +5 |
-| Artillería | +3 | -1 |
+| Artillería | NO | -1 |
 | Caballería | +2 | 0 |
 | Soldado | +1 | +1 |
 
+## Ataque de la Artillería
+
+La artillería tiene un ataque distinto a las demás piezas, ya que no se realiza un combate por dados. Para atacar, se selecciona la casilla objetivo y, al hacer clic, el proyectil puede impactar en dicha casilla o en una de las casillas adyacentes en forma de cruz. Cada casilla tiene un 20% de probabilidad de recibir el impacto.
+
+Si en la casilla donde cae el proyectil hay una pieza, esta muere de manera inmediata, sin importar si es aliada o enemiga.
+
+Después de realizar un ataque, deben transcurrir 4 turnos propios antes de que la artillería pueda volver a utilizarse.
+
 ## Combinar ataques
 
-Los soldados al ser la pieza más débil tendrán la oportunidad de agruparse hasta con dos soldados más que se encuentren a la derecha e izquierda del soldado atacante, cada soldado extra sumará +1 a la tirada de ataque.
+Los soldados al ser la pieza más débil tendrán la oportunidad de agruparse hasta con dos soldados más que se encuentren a los lados del soldado atacante, formando una linea ( derecha e izquierda | arriba y abajo ). Cada soldado extra sumará +1 a la tirada de ataque. Siendo 3 la puntuación máxima. 
 
 En este ejemplo los soldados se podrían combinar para atacar a la caballería enemiga.
 
@@ -121,9 +129,9 @@ En este ejemplo los soldados se podrían combinar para atacar a la caballería e
 
 ## 3 Dinámicas
 
-### 3.1 Inicio del Juego (Colocar los Personajes):
+### 3.1 Inicio del Juego (Colocar las Piezas):
 
-Al comenzar el juego cada jugador coloca los personajes de forma estratégica en su terreno inicial, que son las primeras 3 filas de su lado.
+Al comenzar el juego cada jugador coloca las piezas de forma estratégica en su terreno inicial, que son las primeras 3 filas de su lado.
 
 ### 3.2 Transcurso de la partida
 
@@ -131,11 +139,28 @@ En tu turno puedes mover hasta 3 piezas, primero siempre gastando todas las acci
 
 ### 3.3 Eventos Especiales
 
-Durante la partida se incluirán eventos especiales que afecten a las diferentes piezas del juego. Estos eventos especiales tendrán minijuegos con físicas. Por ejemplo fenómenos meteorológicos como tormentas, inundaciones o niebla. Cada uno de los minijuegos estará relacionado con uno de los eventos y tendrán mecánicas y temáticas diferentes.
+Durante la partida se incluirán eventos aleatorios que afecten a las diferentes piezas del juego. Algunos de estos eventos son:  tormentas, inundaciones y un minijuego. Cada uno de los eventos estará relacionado con formas de afectar el tablero y tendrán diferentes efectos a la partida.
+
+<u> Eventos especiales: </u>
+- Terremoto: Un terremoto arrasa el terreno de juego, y se bloquean las piezas que están sobre las zonas afectadas durante un turno.
+    - Casillas afectadas: las casillas afectadas son aleatorias, cada casilla tiene un 25% de probabilidad de ser afectada. Y aproximadamente 8 casillas son afectadas por cada terremoto (varía en cada terremoto).
+  
+- Lluvia: La lluvia afecta a un porcentaje de las casillas conquistadas y las convierte en zona neutra.
+    -Casillas afectadas: La lluvia afecta a las casillas conquistadas y sin pieza, las casillas que cumplen estas condiciones tienen un 15% de probabilidad de ser afectadas por la lluvia. Es decir un 15% del tablero conquistado vuelve a su estado neutral si ocurre este evento.
+  
+- Minijuego (con físicas): El jugador se convierte en Drawfull y ha de defender su retaguardia bloqueando la máxima cantidad de granadas posibles durante 20 segundos. Si Drawfull pierde 3 vidas o consigue mantenerse en pie durante el tiempo restante acaba el minijuego.
+    - En caso de victoria: El evento de terremoto o lluvia solo le afecta al equipo realista y zonas neutras.
+    - En caso de derrota: El evento de terremoto o lluvia solo le afecta al equipo dibujado y zonas neutras. 
+
+Probabilidades de cada evento: 
+En cada turno hay un 20% de probabilidad de que ocurra el minijuego para decidir el evento aleatorio. Cuando hay un evento:
+- Probabilidad de que sea lluvia = 10%.
+- Probabilidad de que sea terremoto = 25%.
+
 
 ### 3.4 Fin del Juego
 
-El juego finaliza cuando un jugador conquista el 80% del tablero o si se derrota al comandante del otro equipo.
+El juego finaliza cuando un jugador conquista el 80% del tablero o si alguno de los 2 comandantes cae en batalla.
 
 ## 4 Estética
 
@@ -167,6 +192,15 @@ Tipo de previsualización.
 
 ### 5.2 Interfaz
 
+## Escena Principal
+
+La interfaz de la pantalla principal se compone del tablero, el panel lateral, el panel de información, el panel de turnos y los avisos.
+
+- *Panel Lateral:* Controla los enfrentamientos. Se utiliza para confirmar los ataques y mostrar los resultados de los combates.
+- *Panel de Información:* Un panel que se despliega, sirve de acceso rápido a los bonus de cada pieza (botón situado en el panel lateral).
+- *Panel de turnos:* Controla los turnos y el terreno conquistado. Se muestra el turno actual y el porcentaje de terreno conquistado por cada equipo.
+- *Panel de avisos:* Un panel (tipo Pop-up) que se muestra cuando ocurre un evento aleatorio, se accede al tutorial o se finaliza partida y su respectiva descripción.
+
 ## 6 Referencias
 
 ### 6.1 Stratego
@@ -191,4 +225,5 @@ Profundizando a más detalle con ejemplos concretos:
 
 - Respecto al Stratego y al Ajedrez, el diseño del tablero, piezas con diferentes movimientos y diferentes rangos.
 - Respecto al Risk, la mecánica de ataque con dados.
-- Respecto al Drawful, inspira la estética de los personajes del bando dibujo
+- Respecto al Drawful, inspiración para la estética de las piezas del equipo dibujo
+
