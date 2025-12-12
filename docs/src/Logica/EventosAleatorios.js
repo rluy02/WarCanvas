@@ -40,6 +40,7 @@ class EventosAleatorios {
                     return;
                 }
                 for (let pieza of this.piezasAfectadas) {
+                    if (pieza)
                     pieza.resetMovida();
                 }
                 this.tableroGrafico.limpiarEventos();
