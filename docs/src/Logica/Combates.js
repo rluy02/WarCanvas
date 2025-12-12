@@ -149,6 +149,10 @@ class Combates {
         let bonusAtaca = 100;
         let bonusDefiende = this.defensa.getPieza().getBonusDefensa();
 
+         // Se suman los bonus
+        let atacaPieza = this.atacante.getPieza();
+        //let defiendePieza = this.defensa.getPieza();
+
         let ganador = true; // Siempre gana
 
         this.actualizarPanelAtaque(
@@ -158,6 +162,12 @@ class Combates {
             bonusAtaca, bonusDefiende
         );
 
+        // NUEVO: Marcar la pieza atacante como movida siempre (gane o pierda)
+        // Esto asegura que se reste una acción del turno
+        atacaPieza.setMovida(true);
+        EventBus.emit(Eventos.PIECE_MOVED, atacaPieza, true)
+        // Se elimina la pieza si el atacante gana en el evento que se emite en actualizarPanel (inicio)
+        // Restablecer resaltados/selección
         this.tableroGrafico.restTablero();
     }
 
