@@ -20,13 +20,15 @@ class Artilleria extends Pieza {
      * @param {string} jugador - 'J1' o 'J2'
      */
     constructor(tablero, fil, col, jugador) {
-        super(tablero, 'Artilleria', fil, col, jugador, 1, 3, -1);
+        super(tablero, 'Artilleria', fil, col, jugador, 1, 0, -1);
 
         this.cooldown = 4;
         this.turnosTranscurridos = 0;
         this.utilizable = true;
 
         this.explosion = null;
+
+        this.pesoBase = 3;
 
         EventBus.on(Eventos.CHANGE_TURN, (jugador) => { this.pasoTurno(jugador) });
     }
@@ -40,22 +42,22 @@ class Artilleria extends Pieza {
      * @param {number} tamCasilla - tamaño de la casilla en píxeles
      */
     lanzarProyectil(fil, col, escena, tablero, tamCasilla = 64) {
-        const randomCell = Phaser.Math.Between(0, 4);
+        let randomCell = Phaser.Math.Between(0, 4);
         const direcciones = [
-            { df: 0, dc: 0 },     // centro
+            { df: 0, dc: 0 },    // centro
             { df: -1, dc: 0 },  // arriba
             { df: 1, dc: 0 },   // abajo
             { df: 0, dc: -1 },  // izquierda
             { df: 0, dc: 1 }    // derecha
         ];
 
-        const filaProyectil = fil + direcciones[randomCell].df;
-        const colProyectil = col + direcciones[randomCell].dc;
+        let filaProyectil = fil + direcciones[randomCell].df;
+        let colProyectil = col + direcciones[randomCell].dc;
 
-        while ((filaProyectil &lt; 0 || filaProyectil > 7) || (colProyectil &lt; 0 || colProyectil > 9)){
+        while ((filaProyectil &lt; 0 || filaProyectil > 7) || (colProyectil &lt; 0 || colProyectil > 9)) {
             randomCell = Phaser.Math.Between(0, 4);
             filaProyectil = fil + direcciones[randomCell].df;
-            colProyectil = col + direcciones[randomCell].df;
+            colProyectil = col + direcciones[randomCell].dc;
         }
 
         const x = colProyectil * tamCasilla + tamCasilla / 2;
@@ -65,7 +67,7 @@ class Artilleria extends Pieza {
             this.explosion.on('animationcomplete', () => {
                 this.explosion.visible = false;
             });
-            this.explosion.setDepth(999);
+            this.explosion.setDepth(99);
         }
 
         this.explosion.visible = true;
@@ -73,17 +75,71 @@ class Artilleria extends Pieza {
         this.explosion.play('explotar');
 
         let celda = tablero.getCelda(filaProyectil, colProyectil);
-        if (!celda.estaVacia()){
+        if (!celda.estaVacia()) {
             let pieza = celda.getPieza();
             escena.eliminarPieza(pieza);
 
-            if (pieza.getTipo() == "Comandante"){
-                EventBus.emit(Eventos.END_GAME, this);
+            if (pieza.getTipo() == "Comandante") {
+                const atacanteJugador = this.jugador; // La artillería pertenece a alguien
+                const defensorJugador = pieza.getJugador();
+
+                let ganadorFinal;
+                let autoEliminacion = false;
+                // Si un jugador mata a SU PROPIO comandante, pierde
+                if (atacanteJugador === defensorJugador) {
+                    autoEliminacion = true;
+                    ganadorFinal = atacanteJugador === "J1" ? "J2" : "J1";
+                }
+                // Si mata al comandante enemigo, gana
+                else {
+                    ganadorFinal = atacanteJugador;
+                }
+
+                EventBus.emit(Eventos.END_GAME, {
+                    jugador: ganadorFinal,
+                    tipo: "COMBATE",
+                    autoEliminacion: autoEliminacion //info extra
+                });
             }
             celda.limpiar();
         }
 
         this.utilizable = false;
+    }
+
+    calculaPeso() {
+        let bestCelda = null;
+        let bestPeso = -Infinity;
+        for (let f = 0; f &lt; this.tablero.filas - 1; f++) {
+            for (let c = this.col - 4; c &lt; this.tablero.columnas - 1; c++) {
+                let celda = this.tablero.getCelda(f, c);
+                let pesoTmp = 0;
+
+                if (!celda.estaVacia() &amp;&amp; celda.getPieza().getJugador() === 'J1') {
+                    pesoTmp += this.detectaTipo(celda)
+                }
+                else if (!celda.estaVacia() &amp;&amp; celda.getPieza().getJugador() === 'J2') {
+                    pesoTmp -= this.detectaTipo(celda)
+                }
+
+                let vecinos = this.getVecinos(celda);
+                
+                for (const vecino of vecinos) {
+                    if (!vecino.estaVacia() &amp;&amp; vecino.getPieza().getJugador() === 'J1') {
+                        pesoTmp += this.detectaTipo(vecino)
+                    }
+                    else if (!vecino.estaVacia() &amp;&amp; vecino.getPieza().getJugador() === 'J2') {
+                        pesoTmp -= this.detectaTipo(vecino)
+                    }
+                }
+                if (pesoTmp > bestPeso){
+                    bestPeso = pesoTmp
+                    bestCelda = celda
+                }
+            }
+        }
+
+        return {peso: (bestPeso + this.pesoBase), bestCelda: bestCelda};
     }
 
     /**
@@ -92,10 +148,10 @@ class Artilleria extends Pieza {
      * Si el contador alcanza el valor del cooldown, la pieza se vuelve utilizable nuevamente.
      * @param {string} jugador - jugador actual 'J1' o 'J2'
      */
-    pasoTurno(jugador){
-        if (!this.utilizable &amp;&amp; jugador == this.jugador){
+    pasoTurno(jugador) {
+        if (!this.utilizable &amp;&amp; jugador == this.jugador) {
             this.turnosTranscurridos++;
-            if (this.turnosTranscurridos >= this.cooldown){
+            if (this.turnosTranscurridos >= this.cooldown) {
                 this.utilizable = true;
                 this.turnosTranscurridos = 0;
             }
@@ -108,6 +164,55 @@ class Artilleria extends Pieza {
      */
     puedeDisparar() {
         return this.utilizable;
+    }
+
+    detectaTipo(celda) {
+        // Solo contabiliza piezas enemigas del jugador J1
+        if (!celda.estaVacia()) {
+            switch (celda.getPieza().getTipo()) {
+                case 'Soldado':
+                    return 2;
+                case 'Caballeria':
+                    return 3;
+                case 'Comandante':
+                    return 5;
+                default:
+                    return 0;
+            }
+        }
+    }
+
+    getVecinos(celda) {
+        const pos = celda.getPosicion();
+        const fila = pos.fila;
+        const col = pos.col;
+        const res = [];
+
+        // Arriba
+        if (fila > 0) {
+            let celdaArriba = this.tablero.getCelda(fila - 1, col);
+            res.push(celdaArriba);
+        }
+
+        // Izquierda
+        if (col > 0) {
+            let celdaIzquierda = this.tablero.getCelda(fila, col - 1);
+            res.push(celdaIzquierda);
+        }
+
+        // Abajo
+        if (fila &lt; this.tablero.filas - 1) {
+            let celdaAbajo = this.tablero.getCelda(fila + 1, col);
+            res.push(celdaAbajo);
+        }
+
+        // Derecha
+        if (col &lt; this.tablero.columnas - 1) {
+            let celdaDerecha = this.tablero.getCelda(fila, col + 1);
+            res.push(celdaDerecha);
+        }
+
+        return res;
     }
 }
 

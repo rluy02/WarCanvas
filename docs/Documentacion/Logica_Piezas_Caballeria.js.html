@@ -17,8 +17,9 @@ class Caballeria extends Pieza {
      * @param {string} jugador - 'J1' o 'J2'
      */
     constructor(tablero, fil, col, jugador) {
-        super(tablero, 'Caballeria', fil, col, jugador, 3, 2 , 0);
+        super(tablero, 'Caballeria', fil, col, jugador, 3, 2, 0);
         this.saltoCaballeria = true;
+        this.pesoBase = 2;
     }
 
     /**
@@ -36,6 +37,169 @@ class Caballeria extends Pieza {
     getSaltoCaballeria() {
         return this.saltoCaballeria;
     }
+
+    calculaPeso() {
+        let bestCelda = null; // Guarda la celda que será atacada por formación
+        let bestPeso = 0; // Mejor peso encontrado durante el análisis
+        const celdasVisitadas = new Set(); // Evita procesar la misma celda múltiples veces
+        celdasVisitadas.add(this.tablero.getCelda(this.fil, this.col));
+
+
+        // Obtener celdas vecinas directas (distancia 1: arriba, abajo, izquierda, derecha)
+        const celdasVecinas = this.getVecinos(this.tablero.getCelda(this.fil, this.col), celdasVisitadas, false);
+
+        // Primera pasada: analizar vecinos directos en busca de enemigos y formaciones
+        for (const vecino of celdasVecinas) {
+            celdasVisitadas.add(vecino.celda);
+            
+            if (!vecino.celda.estaVacia() &amp;&amp; vecino.celda.getPieza().getJugador() === 'J1' &amp;&amp; !vecino.salto) {
+                const result = this.detectaTipo(vecino.celda);
+                if (result > bestPeso) {
+                    bestPeso = result;
+                    bestCelda = vecino.celda;
+                }
+            }
+            
+            if (vecino.celda.estaVacia()) {
+                const segVecinos = this.getVecinos(vecino.celda, celdasVisitadas, true);
+                
+                for (const segVecino of segVecinos) {
+                    celdasVisitadas.add(segVecino.celda);
+                    
+                    if (!segVecino.celda.estaVacia() &amp;&amp; segVecino.celda.getPieza().getJugador() === 'J1') {
+                        const segResult = this.detectaTipo(segVecino.celda);
+                        if (segResult > bestPeso) {
+                            bestPeso = segResult;
+                            bestCelda = segVecino.celda;
+                        }
+                    }
+                    
+                    if (vecino.salto === false) {
+                        if (segVecino.celda.estaVacia()) {
+                            const terVecinos = this.getVecinos(segVecino.celda, celdasVisitadas, true);
+                            
+                            for (const terVecino of terVecinos) {
+                                celdasVisitadas.add(terVecino.celda);
+                                
+                                const terResult = this.detectaTipo(terVecino.celda);
+                                if (terResult > bestPeso) {
+                                    bestPeso = terResult;
+                                    bestCelda = terVecino.celda;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // DEBUG: Pintar celdas comprobadas
+
+        return { peso: (bestPeso + this.pesoBase), bestCelda: bestCelda};
+    }
+
+    /**
+ * Detecta el tipo de pieza en una celda y devuelve su valor táctico
+ * Solo cuenta piezas del jugador 'J1' (enemigo)
+ * @param {Celda} celda - Celda a analizar
+ * @returns {number} Peso según tipo de pieza enemiga (0 si vacía o aliada)
+ */
+    detectaTipo(celda) {
+        let peso = 0;
+        // Solo contabiliza piezas enemigas del jugador J1
+        if (!celda.estaVacia() &amp;&amp; celda.getPieza().getJugador() === 'J1') {
+            switch (celda.getPieza().getTipo()) {
+                case 'Soldado':
+                    peso = 1;
+                    break;
+                case 'Caballeria':
+                    peso = 2;
+                    break;
+                case 'Artilleria':
+                    peso = 3;
+                    break;
+                case 'Comandante':
+                    peso = 4;
+                    break;
+                
+            }
+        }
+        return peso;
+    }
+
+    /**
+     * Obtiene las celdas vecinas válidas (arriba, abajo, izquierda, derecha)
+     * Excluye vecinos fuera del tablero o ya visitados
+     * @param {Celda} celda - Celda central desde la que buscar vecinos
+     * @param {Set&lt;Celda>} celdasVisitadas - Set de celdas ya procesadas (evita repeticiones)
+     * @returns {Array&lt;Celda>} Array de celdas vecinas válidas
+     */
+    getVecinos(celda, celdasVisitadas, salto) {
+        const pos = celda.getPosicion();
+        const fila = pos.fila;
+        const col = pos.col;
+        const res = [];
+        let haSaltado = false;
+
+        // Arriba
+        if (fila > 0 &amp;&amp; !celdasVisitadas.has(this.tablero.getCelda(fila - 1, col))) {
+            let celdaArriba = this.tablero.getCelda(fila - 1, col);
+            if (fila > 1 &amp;&amp; !celdaArriba.estaVacia() &amp;&amp; celdaArriba.getPieza().getJugador() === 'J2' &amp;&amp; !salto) {
+                const sigCelda = this.tablero.getCelda(fila - 2, col);
+                if (sigCelda.estaVacia()) {
+                    celdasVisitadas.add(celdaArriba);
+                    celdaArriba = sigCelda;
+                    haSaltado = true;
+                }
+            }
+            res.push({ celda: celdaArriba, salto: haSaltado });
+        }
+        haSaltado = false;
+        // Izquierda
+        if (col > 0 &amp;&amp; !celdasVisitadas.has(this.tablero.getCelda(fila, col - 1))) {
+            let celdaIzquierda = this.tablero.getCelda(fila, col - 1);
+            if (fila > 1 &amp;&amp; !celdaIzquierda.estaVacia() &amp;&amp; celdaIzquierda.getPieza().getJugador() === 'J2' &amp;&amp; !salto) {
+                const sigCelda = this.tablero.getCelda(fila, col - 2);
+                if (sigCelda.estaVacia()) {
+                    celdasVisitadas.add(celdaIzquierda);
+                    celdaIzquierda = sigCelda;
+                    haSaltado = true;
+                }
+            }
+            res.push({ celda: celdaIzquierda, salto: haSaltado });
+        }
+        haSaltado = false;
+        // Abajo
+        if (fila &lt; this.tablero.filas - 1 &amp;&amp; !celdasVisitadas.has(this.tablero.getCelda(fila + 1, col))) {
+            let celdaAbajo = this.tablero.getCelda(fila + 1, col);
+            if (fila &lt; this.tablero.filas - 2 &amp;&amp; !celdaAbajo.estaVacia() &amp;&amp; celdaAbajo.getPieza().getJugador() === 'J2' &amp;&amp; !salto) {
+                const sigCelda = this.tablero.getCelda(fila + 2, col);
+                if (sigCelda.estaVacia()) {
+                    celdasVisitadas.add(celdaAbajo);
+                    celdaAbajo = sigCelda;
+                    haSaltado = true;
+                }
+            }
+            res.push({ celda: celdaAbajo, salto: haSaltado });
+        }
+        haSaltado = false;
+        // Derecha
+        if (col &lt; this.tablero.columnas - 1 &amp;&amp; !celdasVisitadas.has(this.tablero.getCelda(fila, col + 1))) {
+            let celdaDerecha = this.tablero.getCelda(fila, col + 1);
+            if (col &lt; this.tablero.columnas - 2 &amp;&amp; !celdaDerecha.estaVacia() &amp;&amp; celdaDerecha.getPieza().getJugador() === 'J2' &amp;&amp; !salto) {
+                const sigCelda = this.tablero.getCelda(fila, col + 2);
+                if (sigCelda.estaVacia()) {
+                    celdasVisitadas.add(celdaDerecha);
+                    celdaDerecha = sigCelda;
+                    haSaltado = true;
+                }
+            }
+            res.push({ celda: celdaDerecha, salto: haSaltado });
+        }
+
+        return res;
+    }
+
 }
 
 export default Caballeria;</code></pre></article></section><footer class="footer" id="PeOAagUepe"><div class="wrapper">© 2024 WarCanvas. Todos los derechos reservados.</div></footer></div></div></div><div class="search-container" id="PkfLWpAbet" style="display:none"><div class="wrapper" id="iCxFxjkHbP"><button class="icon-button search-close-button" id="VjLlGakifb" aria-label="close search"><svg><use xlink:href="#close-icon"></use></svg></button><div class="search-box-c"><svg><use xlink:href="#search-icon"></use></svg> <input type="text" id="vpcKVYIppa" class="search-input" placeholder="Search..." autofocus></div><div class="search-result-c" id="fWwVHRuDuN"><span class="search-result-c-text">Type anything to view search result</span></div></div></div><div class="mobile-menu-icon-container"><button class="icon-button" id="mobile-menu" data-isopen="false" aria-label="menu"><svg><use xlink:href="#menu-icon"></use></svg></button></div><div id="mobile-sidebar" class="mobile-sidebar-container"><div class="mobile-sidebar-wrapper"><a href="/" class="sidebar-title sidebar-title-anchor">WarCanvas Docs</a><div class="mobile-nav-links"><div class="menu-item navbar-item"><a id="repository-mobile" href="https://github.com/CapitanManzana/WarCanvas" target="_blank">Repositorio</a></div></div><div class="mobile-sidebar-items-c"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-namespaces"><div>Namespaces</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="Escenas.html">Escenas</a></div><div class="sidebar-section-children"><a href="Logica.html">Logica</a></div><div class="sidebar-section-children"><a href="Render.html">Render</a></div></div></div><div class="mobile-navbar-actions"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#light-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div></div></div><script type="text/javascript" src="scripts/core.min.js"></script><script src="scripts/search.min.js" defer="defer"></script><script src="scripts/third-party/fuse.js" defer="defer"></script><script type="text/javascript">var tocbotInstance=tocbot.init({tocSelector:"#eed4d2a0bfd64539bb9df78095dec881",contentSelector:".main-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0,scrollContainer:".main-content",headingsOffset:130,onClick:bringLinkToView})</script></body></html>

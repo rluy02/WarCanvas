@@ -20,7 +20,7 @@ class PanelColocarPiezas {
      * @param {Equipo} equipo2 - segundo equipo (J2)
      * @constructor
      */
-    constructor(escena, tablero, tableroGrafico, equipo1, equipo2) {
+    constructor(escena, tablero, tableroGrafico, equipo1, equipo2, panelEventos) {
         this.escena = escena;
         this.tablero = tablero;
         this.tableroGrafico = tableroGrafico;
@@ -28,6 +28,8 @@ class PanelColocarPiezas {
         this.equipo2 = equipo2;
 
         this.piezaSeleccionada = null;
+
+        this.panelEventos = panelEventos;
 
         this.equipoActual = equipo1;
         this.create();
@@ -49,33 +51,39 @@ class PanelColocarPiezas {
         this.infoText = this.createText(width - sideWidth + 20, 120, 'Pulsa sobre las piezas para posicionarlas', 300, ' ', '18px', 0.0);
 
         this.Soldados = this.createText(width - sideWidth + 100, 200, 'Soldados', 300, ' ', '20px', 0.0,);
-        this.Caballeria = this.createText(width - sideWidth + 100, 250, 'Caballeria', 300, ' ', '20px', 0.0);
-        this.Artilleria = this.createText(width - sideWidth + 100, 300, 'Artilleria', 300, ' ', '20px', 0.0);
-        this.Comandante = this.createText(width - sideWidth + 100, 350, 'Comandante', 300, ' ', '20px', 0.0);
+        this.Caballeria = this.createText(width - sideWidth + 100, 275, 'Caballeria', 300, ' ', '20px', 0.0);
+        this.Artilleria = this.createText(width - sideWidth + 100, 350, 'Artilleria', 300, ' ', '20px', 0.0);
+        this.Comandante = this.createText(width - sideWidth + 100, 425, 'Comandante', 300, ' ', '20px', 0.0);
 
         // IMAGENES
-        this.soldadoImg = this.cargarImagen('peon', width - sideWidth + 50, 200, 0.07, 'Soldado', this.Soldados);
-        this.caballeriaImg = this.cargarImagen('caballeria',width - sideWidth + 50, 250, 0.028, 'Caballeria', this.Caballeria);
-        this.artilleriaImg = this.cargarImagen('artilleria', width - sideWidth + 50, 300, 0.105, 'Artilleria', this.Artilleria);
-        this.comandanteImg = this.cargarImagen('comandante', width - sideWidth + 50, 350, 0.07, 'Comandante', this.Comandante);
+        this.soldadoImg = this.cargarImagen('peon', width - sideWidth + 50, 200, 50, 'Soldado', this.Soldados);
+        this.caballeriaImg = this.cargarImagen('caballeria', width - sideWidth + 50, 275, 200, 'Caballeria', this.Caballeria);
+        if (this.equipoActual === this.equipo2) {
+            this.caballeriaImg.setDisplaySize(200, 200); // tamaño más grande solo para este caso
+        } else {
+            this.caballeriaImg.setDisplaySize(50, 50); // tamaño normal
+        }
+        this.artilleriaImg = this.cargarImagen('artilleria', width - sideWidth + 50, 350, 50, 'Artilleria', this.Artilleria);
+        this.comandanteImg = this.cargarImagen('comandante', width - sideWidth + 50, 425, 50, 'Comandante', this.Comandante);
 
         this.SoldadosNum = this.createText(width - sideWidth / 2 + 80, 200, '+' + this.equipoActual.getSoldados(), 300, ' ', '24px', 0.0);
-        this.CaballeriaNum = this.createText(width - sideWidth / 2 + 80, 250, '+' + this.equipoActual.getCaballeria(), 300, ' ', '24px', 0.0);
-        this.ArtilleriaNum = this.createText(width - sideWidth / 2 + 80, 300, '+' + this.equipoActual.getArtilleria(), 300, ' ', '24px', 0.0);
-        this.ComandanteNum = this.createText(width - sideWidth / 2 + 80, 350, '+' + this.equipoActual.getComandante(), 300, ' ', '24px', 0.0);
+        this.CaballeriaNum = this.createText(width - sideWidth / 2 + 80, 275, '+' + this.equipoActual.getCaballeria(), 300, ' ', '24px', 0.0);
+        this.ArtilleriaNum = this.createText(width - sideWidth / 2 + 80, 350, '+' + this.equipoActual.getArtilleria(), 300, ' ', '24px', 0.0);
+        this.ComandanteNum = this.createText(width - sideWidth / 2 + 80, 425, '+' + this.equipoActual.getComandante(), 300, ' ', '24px', 0.0);
 
-        this.buttonTry = this.createText(width - sideWidth / 2, 500, 'Iniciar', 0, ' ', '32px', 0.5, '#ffffffff');
+        this.buttonTry = this.createText(width - sideWidth / 2, 520, 'Iniciar', 0, ' ', '32px', 0.5, '#ffffffff');
         this.buttonTry.setInteractive({ useHandCursor: true });
 
         this.buttonTry.on('pointerdown', () => {
-            this.escena.cambiarEscena();
+            if(this.panelEventos.getInput()){
+            this.escena.cambiarEscena();}
         });
 
-        this.buttonChange = this.createText(width - sideWidth / 2, 450, 'Cambiar de equipo', 0, ' ', '24px', 0.5, '#ff0000ff');
+        this.buttonChange = this.createText(width - sideWidth / 2, 490, 'Cambiar de equipo', 0, ' ', '24px', 0.5, '#ff0000ff');
         this.buttonChange.setInteractive({ useHandCursor: true });
 
         this.buttonChange.on('pointerdown', () => {
-            this.cambiarEquipos();
+            if(this.panelEventos.getInput()) this.cambiarEquipos();
         });
 
         this.buttonCheat = this.createText(width - sideWidth / 2, 550, '(Pulsar para no poner todas las piezas)', 0, ' ', '16px', 0.5, '#ffffffff');
@@ -90,8 +98,9 @@ class PanelColocarPiezas {
         });
 
         this.buttonCheat.on('pointerdown', () => {
+            if(this.panelEventos.getInput()){
             this.buttonCheat.setColor('#000000');
-            this.escena.Cheat();
+            this.escena.Cheat();}
         });
 
         EventBus.on(Eventos.PIECE_POSITION, (pieza) => {
@@ -115,13 +124,13 @@ class PanelColocarPiezas {
      * @param {string} [fill='#ffffffff'] - color de relleno en formato RGBA
      * @returns {Phaser.GameObjects.Text} objeto de texto creado
      */
-    createText(width, height, text, wordWrapWidth, fontStyle, px, origin, fill = '#ffffffff') { 
+    createText(width, height, text, wordWrapWidth, fontStyle, px, origin, fill = '#ffffffff') {
         return this.escena.add.text(width, height, text, { // Equipo que defiende
             fontSize: px,
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
             fontStyle: fontStyle,
             fill: fill,
-            wordWrap: { width: wordWrapWidth, useAdvancedWrap: true } 
+            wordWrap: { width: wordWrapWidth, useAdvancedWrap: true }
         }).setOrigin(origin, 0.5);
     }
 
@@ -135,18 +144,22 @@ class PanelColocarPiezas {
      * @param {Phaser.GameObjects.Text} texto - texto que muestra el contador asociado
      * @returns {Phaser.GameObjects.Sprite} sprite interactivo creado
      */
-    cargarImagen(sprite, x, y, size, tipo, texto){
+    cargarImagen(sprite, x, y, size, tipo, texto) {
         let img = this.escena.add.sprite(x, y, sprite);
-        img.setScale(size);
+        // const factor = Math.min(size / img.width, size / img.height, 1);
+        // img.setScale(factor);
+        img.setDisplaySize(size, size);
         img.setOrigin(0.5, 0.5);
         img.setInteractive();
+        console.log(img)
 
         img.on('pointerdown', () => {
-            if(this.piezaSeleccionada)this.piezaSeleccionada.setColor('#ffffffff');
+            if(this.panelEventos.getInput()){
+            if (this.piezaSeleccionada) this.piezaSeleccionada.setColor('#ffffffff');
             this.piezaSeleccionada = texto;
             this.pintarCasillas();
             this.tablero.setTipo(tipo);
-            texto.setColor('#000000ff');
+            texto.setColor('#000000ff');}
         })
 
         return img;
@@ -155,14 +168,14 @@ class PanelColocarPiezas {
     /**
      * Solicita al tablero gráfico que coloree las casillas según el tipo seleccionado.
      */
-    pintarCasillas(){
+    pintarCasillas() {
         this.tableroGrafico.colorearRango();
     }
-    
+
     /**
      * Actualiza los contadores numéricos en el panel cuando una pieza es posicionada o eliminada.
      */
-    piezaPosicionada(){
+    piezaPosicionada() {
         this.SoldadosNum.setText(`+${this.equipoActual.getSoldados()}`);
         this.CaballeriaNum.setText(`+${this.equipoActual.getCaballeria()}`);
         this.ArtilleriaNum.setText(`+${this.equipoActual.getArtilleria()}`);
@@ -173,29 +186,32 @@ class PanelColocarPiezas {
      * Actualiza las texturas de los sprites del panel según el equipo activo.
      */
     cambiarImagenes() {
-         // IMAGENES
-        if(this.equipoActual === this.equipo2){
-        this.soldadoImg.setTexture('peon2');
-        this.caballeriaImg.setTexture('caballeria2');
-        this.artilleriaImg.setTexture('artilleria2');
-        this.comandanteImg.setTexture('comandante2');}
+        // IMAGENES
+        if (this.equipoActual === this.equipo2) {
+            this.soldadoImg.setTexture('peon2');
+            this.caballeriaImg.setTexture('caballeria2');
+            this.caballeriaImg.setDisplaySize(100, 100); //por alguna razon a pesar de que todas las img son 800x800 he de forzar su tamaño
+            this.artilleriaImg.setTexture('artilleria2');
+            this.comandanteImg.setTexture('comandante2');
+        }
         else {
-        this.soldadoImg.setTexture('peon');
-        this.caballeriaImg.setTexture('caballeria');
-        this.artilleriaImg.setTexture('artilleria');
-        this.comandanteImg.setTexture('comandante');
+            this.soldadoImg.setTexture('peon');
+            this.caballeriaImg.setTexture('caballeria');
+             this.caballeriaImg.setDisplaySize(50, 50);
+            this.artilleriaImg.setTexture('artilleria');
+            this.comandanteImg.setTexture('comandante');
         }
     }
 
     /**
      * Cambia el equipo actual que está posicionando piezas y actualiza la UI.
      */
-    cambiarEquipos(){
+    cambiarEquipos() {
         this.equipoActual = (this.equipoActual === this.equipo1) ? this.equipo2 : this.equipo1;
         this.titleEquipo.setText(this.equipoActual.getNombre());
         this.piezaPosicionada();
         this.cambiarImagenes();
-        
+
         EventBus.emit(Eventos.CHANGE_TEAM_SET_PIECES, this.equipoActual); // On ElegirPiezaEscena - Inicio
 
     }

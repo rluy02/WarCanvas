@@ -20,8 +20,9 @@ class Menu extends Phaser.Scene {
      * Carga las imágenes necesarias para la escena.
      */
     preload() {
-        this.load.image('fondo', 'imgs/menuJuego/FondoMenu.webp')
-        this.load.image('boton', 'imgs/menuJuego/boton.webp')
+        this.load.image('fondo', 'imgs/ui/fondo_menu.webp')
+        this.load.image('boton', 'imgs/ui/boton.webp')
+        this.load.font('Kotton', 'font/Kotton.ttf')
     }
 
     /**
@@ -29,44 +30,58 @@ class Menu extends Phaser.Scene {
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
     create() {
-        this.add.image(400, 300, 'fondo').setOrigin(0.5)
+        this.add.image(400, 300, 'fondo').setOrigin(0.5).setScale(0.5);
         this.add.text(this.scale.width / 2, this.scale.height / 2 - 200, 'WAR CANVAS', {
-            fontSize: '60px',
-            color: '#ffffff',
-            stroke: '#000000',
+            fontSize: '80px',
+            color: '#305a23ff',
+            stroke: '#021601ff',
             strokeThickness: 10,
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
         }).setOrigin(0.5);
 
-        let botonInicio = this.add.image(this.scale.width / 2, this.scale.height / 2 - 80, 'boton')
+        let botonInicio = this.add.image(this.scale.width / 2, this.scale.height / 2 - 70, 'boton')
             .setOrigin(0.5)
-            .setScale(0.25)
+            .setScale(0.4)
             .setInteractive({ useHandCursor: true }) // Se vuelve interactuable y muestra el cursor como una mano
 
-        let botonCreditos = this.add.image(this.scale.width / 2, this.scale.height / 2 + 80, 'boton')
+        let botonCreditos = this.add.image(this.scale.width / 2, this.scale.height / 2 + 40, 'boton')
             .setOrigin(0.5)
-            .setScale(0.25)
+            .setScale(0.4)
             .setInteractive({ useHandCursor: true }) // Se vuelve interactuable y muestra el cursor como una mano
 
         let buttonText = this.add.text(botonInicio.x, botonInicio.y, 'JUGAR', {
-            fontSize: '30px',
+            fontSize: '36px',
             color: '#ffffff',
-            stroke: '#7b0000ff',
+            stroke: '#021601ff',
             strokeThickness: 10,
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
         }).setOrigin(0.5);
 
         let creditosText = this.add.text(botonCreditos.x, botonCreditos.y, 'CRÉDITOS', {
-            fontSize: '20px',
+            fontSize: '36px',
             color: '#ffffff',
-            stroke: '#7b0000ff',
+            stroke: '#021601ff',
             strokeThickness: 10,
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
         }).setOrigin(0.5);
+
+        //BOTON MINIJUEGO
+        let botonMinijuego = this.add.image(this.scale.width/2, this.scale.height / 2 + 150, 'boton')
+            .setOrigin(0.5)
+            .setScale(0.4)
+            .setInteractive({ useHandCursor: true })
+
+        let minijuegoText = this.add.text(botonMinijuego.x,botonMinijuego.y, 'Minijuego',{
+            fontSize: '36px',
+            color: '#ffffff',
+            stroke: '#021601ff',
+            strokeThickness: 10,
+            fontFamily: 'Kotton',
+        }).setOrigin(0.5);    
 
         //BOTON JUGAR
         botonInicio.on('pointerdown', () => {
-            this.scene.launch('ElegirPiezas'); //launch para evitar destruir la escena del menu
+            this.scene.launch('Tutorial'); //launch para evitar destruir la escena del menu
 
             //desactivamos los botones para evitar doble clicks mientras dormimos la escena
             botonInicio.disableInteractive();
@@ -75,13 +90,13 @@ class Menu extends Phaser.Scene {
         });
 
         botonInicio.on('pointerover', () => {
-            buttonText.setColor('#7b7b7bff');
-            buttonText.setStroke('#4a0000ff');
+            buttonText.setColor('#abffabff');
+            buttonText.setStroke('#035c00ff',);
         })
 
         botonInicio.on('pointerout', () => {
             buttonText.setColor('#ffffff');
-            buttonText.setStroke('#7b0000ff');
+            buttonText.setStroke('#021601ff');
         })
 
         // BOTON CREDITOS
@@ -91,32 +106,64 @@ class Menu extends Phaser.Scene {
         })
 
         botonCreditos.on('pointerover', () => {
-            creditosText.setColor('#7b7b7bff');
-            creditosText.setStroke('#4a0000ff');
+            creditosText.setColor('#abffabff');
+            creditosText.setStroke('#035c00ff');
         })
 
         botonCreditos.on('pointerout', () => {
             creditosText.setColor('#ffffff');
-            creditosText.setStroke('#7b0000ff');
+            creditosText.setStroke('#021601ff');
         })
 
-        let defaultText = this.add.text(this.scale.width / 2, this.scale.height - 50, 'DEFAULT', {
-            fontSize: '20px',
-            color: '#ffffff',
-            stroke: '#7b0000ff',
-            strokeThickness: 10,
-            fontFamily: 'Arial',
-        }).setOrigin(0.5).setInteractive();
-
-        //BOTON DEFAULT
-        defaultText.on('pointerdown', () => {
-            this.scene.launch('Inicio', {}); //launch para evitar destruir la escena del menu
+        //Boton minijuego
+        botonMinijuego.on('pointerdown', () => {
+            this.scene.launch('Minijuego'); //launch para evitar destruir la escena del menu
 
             //desactivamos los botones para evitar doble clicks mientras dormimos la escena
             botonInicio.disableInteractive();
             botonCreditos.disableInteractive();
             this.scene.sleep(); //ocultamos el menu
         });
+
+        botonMinijuego.on('pointerover', () => {
+            minijuegoText.setColor('#abffabff');
+            minijuegoText.setStroke('#035c00ff');
+        })
+
+        botonMinijuego.on('pointerout', () => {
+            minijuegoText.setColor('#ffffff');
+            minijuegoText.setStroke('#021601ff');
+        })
+
+        let defaultText = this.add.text(this.scale.width / 2, this.scale.height - 50, 'MODO  IA', {
+            fontSize: '26px',
+            color: '#ffffff',
+            stroke: '#021601ff',
+            strokeThickness: 10,
+            fontFamily: 'Kotton',
+        }).setOrigin(0.5).setInteractive();
+
+        //BOTON DEFAULT
+        defaultText.on('pointerdown', () => {
+            this.scene.launch('Inicio', { 
+                ia: true
+            }); //launch para evitar destruir la escena del menu
+
+            //desactivamos los botones para evitar doble clicks mientras dormimos la escena
+            botonInicio.disableInteractive();
+            botonCreditos.disableInteractive();
+            this.scene.sleep(); //ocultamos el menu
+        });
+
+        defaultText.on('pointerover', () => {
+            defaultText.setColor('#abffabff');
+            defaultText.setStroke('#035c00ff',);
+        })
+
+        defaultText.on('pointerout', () => {
+            defaultText.setColor('#ffffff');
+            defaultText.setStroke('#021601ff');
+        })
 
         //Listener para cuando se vuelva al menu
         this.events.on('wake', () => {

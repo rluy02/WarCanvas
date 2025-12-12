@@ -18,17 +18,10 @@ class TurnoGraficos {
         this.escena = escena;
         this.piezasMover = 3;
         this.accionesPieza = 0;
+        this.jugadorTurno = "J1"; //Default porque siempre es el que empieza
 
         EventBus.on(Eventos.CHANGE_TURN, () => {
             this.setAccionesTurno(3);
-        })
-
-        EventBus.on(Eventos.CONQUER_CELL, (pJ1, pJ2) => {
-            this.setPorcentaje(pJ1, pJ2);
-        })
-
-        EventBus.on(Eventos.UPDATE_PERCENTAGES, (pJ1, pJ2) => {
-            this.setPorcentaje(pJ1, pJ2);
         })
     }
 
@@ -40,40 +33,28 @@ class TurnoGraficos {
         const width = this.escena.scale.width;
         const height = this.escena.scale.height;
 
-        this.JugadorText = this.escena.add.text(40, height - 75, 'Turno J1', { // Título
-            fontSize: '22px',
-            fontFamily: 'Arial',
-            fill: '#ffffff'
-        });
+        this.escena.add.rectangle(0, height - 83, width, 83, 0x402200).setOrigin(0, 0);
 
-        this.turnosText = this.escena.add.text(170, height - 75, 'Piezas a mover: ' + this.piezasMover, { // Título
-            fontSize: '22px',
-            fontFamily: 'Arial',
+        this.JugadorText = this.escena.add.text(50, height - 45, 'J1: ', { // Título
+            fontSize: '32px',
+            fontFamily: 'Kotton',
             fill: '#ffffff'
-        });
+        }).setOrigin(0.5);
 
-        this.accionessText = this.escena.add.text(380, height - 75, 'Acciones de pieza: ' + this.accionesPieza, { // Título
-            fontSize: '22px',
-            fontFamily: 'Arial',
+        //Imagenes de los movimientos restantes de cada jugador
+        this.procesarIconos();
+
+        this.accionessText = this.escena.add.text(width / 2, height - 60, 'Acciones de pieza: ' + this.accionesPieza, { // Título
+            fontSize: '28px',
+            fontFamily: 'Kotton',
             fill: '#ffffff'
-        });
+        }).setOrigin(0.5);
 
-        this.porcentajeJ1Text = this.escena.add.text(390, height - 40, 'J1: ' + 0 + '%', { // Título
+        this.acabarText = this.escena.add.text(width / 2, height - 30, 'Finalizar Movimiento', { // Título
             fontSize: '22px',
-            fontFamily: 'Arial',
-            fill: '#ffffff'
-        });
-        this.porcentajeJ2Text = this.escena.add.text(510, height - 40, 'J2: ' + 0 + '%', { // Título
-            fontSize: '22px',
-            fontFamily: 'Arial',
-            fill: '#ff6666ff'
-        });
-
-        this.acabarText = this.escena.add.text(90, height - 40, 'Finalizar Movimiento', { // Título
-            fontSize: '22px',
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
             fill: '#ce2020ff'
-        }).setInteractive({ useHandCursor: true })
+        }).setInteractive({ useHandCursor: true }).setOrigin(0.5);
 
         this.acabarText.on('pointerdown', () => {
             turno.acabarMovimientos();
@@ -104,7 +85,33 @@ class TurnoGraficos {
      */
     setAccionesTurno(acciones) {
         this.piezasMover = acciones;
-        this.turnosText.text = 'Piezas a mover: ' + this.piezasMover;
+        this.procesarIconos();
+    }
+
+    /**
+     * Crea la lista de iconos segun los movimientos restantes de cada jugador
+     * 
+     */
+    procesarIconos() {
+        // eliminar iconos y crearlos otra vez (Tras cada accion de cada jugador)
+        if (this.iconosAcciones) {
+            this.iconosAcciones.forEach(i => i.destroy());
+        }
+        this.iconosAcciones = [];
+
+        const startX = 110;
+        const y = this.escena.scale.height - 45;
+
+        for (let i = 0; i &lt; this.piezasMover; i++) {
+            let icon = undefined;
+            if (this.jugadorTurno == "J1") {
+                icon = this.escena.add.sprite(startX + i * 70, y, 'peon').setScale(0.08);
+            } else {
+                icon = this.escena.add.sprite(startX + i * 70, y, 'peon2').setScale(0.08);
+            }
+
+            this.iconosAcciones.push(icon);
+        }
     }
 
     /**
@@ -112,17 +119,31 @@ class TurnoGraficos {
      * @param {Jugador} jugador 
      */
     setTurnoJugador(jugador) {
-        this.JugadorText.text = 'Turno ' + jugador;
+        this.JugadorText.text = jugador + ": ";
+        this.jugadorTurno = jugador;
+
+        // Redibujar iconos según el jugador (J1 o J2)
+        this.setAccionesTurno(this.piezasMover);
     }
 
     /**
-     * Establecer el porcentaje de control de cada jugador
-     * @param {number} pJ1 
-     * @param {number} pJ2 
+    * Desactiva el botón "Finalizar Movimiento" durante el turno de la IA
+    */
+    desactivarBotonFinalizar() {
+        if (this.acabarText) {
+            this.acabarText.setAlpha(0.5);
+            this.acabarText.disableInteractive();
+        }
+    }
+
+    /**
+     * Activa el botón "Finalizar Movimiento" durante el turno del jugador
      */
-    setPorcentaje(pJ1, pJ2){
-        this.porcentajeJ1Text.text = 'J1: ' + pJ1 + '%';
-        this.porcentajeJ2Text.text = 'J1: ' + pJ2 + '%';
+    activarBotonFinalizar() {
+        if (this.acabarText) {
+            this.acabarText.setAlpha(1);
+            this.acabarText.setInteractive({ useHandCursor: true });
+        }
     }
 
     /**

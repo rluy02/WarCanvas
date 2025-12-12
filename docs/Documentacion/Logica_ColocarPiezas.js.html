@@ -33,6 +33,9 @@ class ColocarPiezas {
         this.equipo1 = equipo1;
         this.equipo2 = equipo2;
 
+        this.celdasJ1 = 0;
+        this.celdasJ2 = 0;
+
         this.equipoActual = this.equipo1;
 
         this.tipo;
@@ -68,33 +71,112 @@ class ColocarPiezas {
     }
 
     /**
-     * Genera una pieza del tipo seleccionado en la posición (fil, col).
+     * Genera una pieza del tipo seleccionado / especificado en la posición (fil, col).
      * @param {number} fil - fila
      * @param {number} col - columna
+     * @param {string} p - tipo de pieza
      */
-    generarPieza(fil, col) {
+    generarPieza(fil, col, p=null) {
         let nombre = this.equipoActual.getNombre();
-        if((this.equipoActual === this.equipo1 &amp;&amp; col &lt; 3) || (this.equipoActual === this.equipo2 &amp;&amp; col &lt; 10 &amp;&amp; col > 6) ) {
         let pieza = null;
-        if (this.tipo == 'Soldado' &amp;&amp; this.equipoActual.getSoldados() > 0)  {
+        let tipo;
+        if(!p) tipo = this.tipo;
+        else tipo = p;
+        if (tipo == 'Soldado' &amp;&amp; this.equipoActual.getSoldados() > 0)  {
             pieza =  new Soldado(this.tablero, fil, col, nombre);
             this.equipoActual.setSoldado(pieza);
         }
-        else if (this.tipo == 'Artilleria' &amp;&amp; this.equipoActual.getArtilleria() > 0) {
+        else if (tipo == 'Artilleria' &amp;&amp; this.equipoActual.getArtilleria() > 0) {
             pieza = new Artilleria(this.tablero, fil, col, nombre);
             this.equipoActual.setArtilleria(pieza);
         }
-        else if (this.tipo == 'Caballeria' &amp;&amp; this.equipoActual.getCaballeria() > 0) {
+        else if (tipo == 'Caballeria' &amp;&amp; this.equipoActual.getCaballeria() > 0) {
             pieza = new Caballeria(this.tablero, fil, col, nombre);
             this.equipoActual.setCaballeria(pieza);
         }
-        else if (this.tipo == 'Comandante' &amp;&amp; this.equipoActual.getComandante() > 0){
+        else if (tipo == 'Comandante' &amp;&amp; this.equipoActual.getComandante() > 0){
             pieza = new Comandante(this.tablero, fil, col, nombre);
             this.equipoActual.setComandante(pieza);
         }
         this.tablero[fil][col].setContenido(pieza);
         if (pieza != null)EventBus.emit(Eventos.PIECE_POSITION, pieza); // On ElegirPiezaEscena - Inicio
-    }}
+        return pieza;
+    }
+
+    /**
+     * Genera una pieza del tipo seleccionado / especificado en la posición (fil, col) - del equipo contrario
+     * @param {number} fil - fila
+     * @param {number} col - columna
+     * @param {string} p - tipo de pieza
+     */
+    generarPiezaEnemiga(fil, col, p=null) {
+        console.log(fil, col);
+        let nombre;
+        nombre = ((this.equipoActual === this.equipo1)) ? this.equipo2.getNombre() : this.equipo1.getNombre();
+        console.log(nombre);
+        let pieza = null;
+        let tipo;
+
+        let casillas = this.piezaSeleccionada(fil, col);
+        console.log(casillas);
+        let select = false;
+        for (let i=0; i &lt; casillas.length &amp;&amp; !select; i++)
+        { console.log(casillas[i].tipo);
+            if (casillas[i].tipo == "vacia") {
+            fil = casillas[i].fil;
+            col = casillas[i].col;
+            console.log(i, fil, col);
+            select = true;}
+        }
+        if(this.tablero[fil][col].estaVacia()) {
+        if(!p) tipo = this.tipo;
+        else tipo = p;
+        if (tipo == 'Soldado' &amp;&amp; this.equipoActual.getSoldados() > 0)  {
+            pieza =  new Soldado(this.tablero, fil, col, nombre);
+        }
+        else if (tipo == 'Artilleria' &amp;&amp; this.equipoActual.getArtilleria() > 0) {
+            pieza = new Artilleria(this.tablero, fil, col, nombre);
+        }
+        else if (tipo == 'Caballeria' &amp;&amp; this.equipoActual.getCaballeria() > 0) {
+            pieza = new Caballeria(this.tablero, fil, col, nombre);
+        }
+        else if (tipo == 'Comandante' &amp;&amp; this.equipoActual.getComandante() > 0){
+            pieza = new Comandante(this.tablero, fil, col, nombre);
+        }
+        this.tablero[fil][col].setContenido(pieza);
+        if (pieza != null){EventBus.emit(Eventos.PIECE_POSITION, pieza); // On ElegirPiezaEscena - Inicio
+        ((this.equipoActual === this.equipo1)) ? this.equipo2.piezas.push(pieza) : this.equipo1.piezas.push(pieza);}
+        return pieza;}
+    }
+
+    /**
+     * Genera soldados en la cruz de ataque de la artilleria, empezando por la fila y columna especificadas (fil, col) - del equipo contrario
+     * @param {number} fil - fila
+     * @param {number} col - columna
+     */
+    generarPiezaEnemigaArtilleria(fil, col) 
+    {
+        let nombre;
+        nombre = ((this.equipoActual === this.equipo1)) ? this.equipo2.getNombre() : this.equipo1.getNombre();
+        const direcciones = [
+            { df: 0, dc: 0 },     // centro
+            { df: -1, dc: 0 },  // arriba
+            { df: 1, dc: 0 },   // abajo
+            { df: 0, dc: -1 },  // izquierda
+            { df: 0, dc: 1 }    // derecha
+        ];
+        let fila ;
+        let columna;
+        for(let i=0; i&lt;5;i++){
+            fila = fil + direcciones[i].df;
+            columna = col + direcciones[i].dc;
+            let pieza = new Soldado(this.tablero, fila, columna, nombre);
+            this.tablero[fila][columna].setContenido(pieza);
+        if (pieza != null){EventBus.emit(Eventos.PIECE_POSITION, pieza); // On ElegirPiezaEscena - Inicio
+        ((this.equipoActual === this.equipo1)) ? this.equipo2.piezas.push(pieza) : this.equipo1.piezas.push(pieza);
+        }   
+        }
+    }
 
     /**
      * Elimina la pieza en la posición (fil, col).
@@ -108,6 +190,22 @@ class ColocarPiezas {
         this.tablero[fil][col].setContenido(null);
         EventBus.emit(Eventos.PIECE_DELETE, pieza); }// On ElegirPiezaEscena - Inicio
     }
+
+    /**
+     * Elimina todas las piezas 
+     */
+    eliminarTodasLasPiezas(){
+        for (let i = 0; i &lt; this.filas; i++) {
+            for (let j = 0; j &lt; this.columnas; j++) {
+                if (!this.tablero[i][j].estaVacia()) {
+                let pieza = this.tablero[i][j].getPieza();
+                EventBus.emit(Eventos.PIECE_DELETE, pieza); // On ElegirPiezaEscena - Inicio
+                this.tablero[pieza.fil][pieza.col].setContenido(null);
+                (pieza.getJugador == 'J2') ? this.equipo2.eliminarPieza(pieza) : this.equipo1.eliminarPieza(pieza);
+            }}
+        }
+        
+    }
     
     /**
      * Establece el tipo de pieza a colocar.
@@ -118,13 +216,209 @@ class ColocarPiezas {
     }
 
     /**
+     * Obtiene la pieza actualmente seleccionada.
+     * @returns {Pieza|null} pieza activa o null si ninguna está seleccionada
+     */
+    getPiezaActiva() {
+        return this.piezaActiva;
+    }
+
+    /**
+     * Reinicia la pieza activa (deselecciona).
+     */
+    resetPiezaActiva() {
+        this.piezaActiva = null;
+    }
+
+    /**
      * Cambia el equipo actual.
      */
     cambiarEquipo() {
         this.equipoActual = (this.equipoActual === this.equipo1) ? this.equipo2 : this.equipo1;
     }
 
-    
+    // Selecciona las casillas de movimiento/ataque de la pieza
+    /**
+     * Calcula las casillas disponibles para mover o atacar cuando se selecciona una pieza.
+     * Devuelve las casillas según el tipo de pieza y su alcance.
+     * @param {number} fil - fila de la pieza seleccionada
+     * @param {number} col - columna de la pieza seleccionada
+     * @returns {Array&lt;Object>} array de objetos con coordenadas y tipo de acción (vacia/enemigo)
+     */
+    piezaSeleccionada(fil, col) {
+
+        let celda = this.tablero[fil][col];
+        let celdasSeleccionadas = [];
+
+        let pieza = celda.getPieza();
+
+        // Si la pieza ya no puede actuar, no devuelvas casillas
+        if (!pieza || pieza.getMovida()) return [];
+
+        if (pieza != this.piezaActiva) {
+            //Lanzamos el evento de pieza seleccionada
+            EventBus.emit(Eventos.PIECE_SELECTED, pieza);
+            this.piezaActiva = pieza;
+        }
+
+        //if (pieza.getTipo() == "Artilleria" &amp;&amp; !pieza.puedeDisparar()) return [];
+
+        // Direcciones cardinales
+        const direcciones = [
+            { df: -1, dc: 0 },  // arriba
+            { df: 1, dc: 0 },   // abajo
+            { df: 0, dc: -1 },  // izquierda
+            { df: 0, dc: 1 }    // derecha
+        ];
+
+        if (pieza.getTipo() == "Artilleria") {
+            const jugador = pieza.getJugador();
+
+            let iniCol;
+            let maxCol;
+            if (jugador === "J1") {
+                iniCol = pieza.getPosicion().col + 1; // La siguiente a la artilleria
+                maxCol = iniCol + 4;
+            }
+            else {
+                iniCol = pieza.getPosicion().col - 4; // La siguiente a la artilleria
+                maxCol = pieza.getPosicion().col;
+            }
+
+            for (let col = iniCol; col &lt; maxCol; col++) {
+                for (let fil = 0; fil &lt; this.filas; fil++) {
+                    let celda = this.tablero[fil][col];
+
+                    let esRival;
+                    if (!celda.estaVacia()) esRival = jugador !== celda.getPieza().getJugador();
+
+                    if (esRival) {
+                        celdasSeleccionadas.push({ fil: fil, col: col, tipo: "enemigo" });
+                    }
+                    else {
+                        celdasSeleccionadas.push({ fil: fil, col: col, tipo: "vacia" });
+                    }
+                }
+            }
+
+        }
+        else if (pieza.getTipo() != "Comandante") { //solo el comandante puede moverse en diagonal
+            for (let dir of direcciones) {
+                const f = fil + dir.df;
+                const c = col + dir.dc;
+                // fuera de tablero → deja de mirar en esta dirección
+                if (f &lt; 0 || c &lt; 0 || f >= this.filas || c >= this.columnas) continue;
+
+                const cel = this.tablero[f][c];
+
+                if (cel.estaVacia()) {
+                    // casilla libre: se puede mover; sigue mirando más lejos
+                    celdasSeleccionadas.push({ fil: f, col: c, tipo: "vacia" });
+                } else {
+                    // hay pieza: si es rival, puedes atacar esa casilla; en ambos casos paras
+                    const esRival = cel.getPieza().getJugador() !== celda.getPieza().getJugador();
+                    if (esRival) celdasSeleccionadas.push({ fil: f, col: c, tipo: "enemigo" });
+                    if (pieza.getTipo() == "Caballeria" &amp;&amp; pieza.getSaltoCaballeria()) {
+
+                        const f2 = f + dir.df;
+                        const c2 = c + dir.dc;
+
+                        // Comprobar límites correctamente
+                        if (f2 >= 0 &amp;&amp; f2 &lt; this.filas &amp;&amp; c2 >= 0 &amp;&amp; c2 &lt; this.columnas) {
+
+                            // Puede saltar solo si la casilla destino está vacía
+                            if (this.tablero[f2][c2].estaVacia()) {
+                                celdasSeleccionadas.push({ fil: f2, col: c2, tipo: "vacia" });
+                            }
+                        }
+                    }
+
+
+                }
+            }
+        }
+        else {
+            for (let i = col - 1; i &lt;= col + 1; i++) {
+                for (let j = fil - 1; j &lt;= fil + 1; j++) {
+                    // fuera de tablero → deja de mirar en esta dirección
+                    if (j &lt; 0 || i &lt; 0 || j >= this.filas || i >= this.columnas) continue;
+                    if (j == fil &amp;&amp; i == col) continue; // saltar la casilla central
+                    const cel = this.tablero[j][i];
+
+                    if (cel.estaVacia()) {
+                        // casilla libre: se puede mover; sigue mirando más lejos
+                        celdasSeleccionadas.push({ fil: j, col: i, tipo: "vacia" });
+                    } else {
+                        // hay pieza: si es rival, puedes atacar esa casilla; en ambos casos paras
+                        const esRival = cel.getPieza().getJugador() !== celda.getPieza().getJugador();
+                        if (esRival) celdasSeleccionadas.push({ fil: j, col: i, tipo: "enemigo" });
+                    }
+                }
+            }
+        }
+        return celdasSeleccionadas;
+    }
+
+    // Mueve la pieza a fil, col
+    /**
+     * Mueve la pieza activa a una nueva posición en el tablero.
+     * @param {number} fil - fila de destino
+     * @param {number} col - columna de destino
+     */
+    moverPieza(fil, col) {
+
+        //Limpia la celda de origen
+        let origen = this.piezaActiva.getPosicion()
+        this.tablero[origen.fila][origen.col].limpiar();
+
+        //Añade la pieza a la celda de destino
+        this.piezaActiva.moverse(fil, col);
+        this.tablero[fil][col].setContenido(this.piezaActiva);
+
+        EventBus.emit(Eventos.PIECE_MOVED, this.piezaActiva, false);
+    }
+
+    /**
+     * Registra la conquista de una celda por un jugador.
+     * Actualiza los contadores de territorio y verifica condición de victoria.
+     * @param {string} jugador - identificador del jugador ('J1' o 'J2')
+     * @param {boolean} ocupada - indica si la celda estaba previamente ocupada por el enemigo
+     */
+    conquistarCelda(jugador, ocupada) {
+        if (jugador == "J1") {
+            this.celdasJ1++;
+            if (ocupada) this.celdasJ2--;
+        }
+        else {
+            this.celdasJ2++;
+            if (ocupada) this.celdasJ1--;
+        }
+        let j1Porcentaje = this.celdasJ1 * 100 / 80;
+        let j2Porcentaje = this.celdasJ2 * 100 / 80;
+
+        EventBus.emit(Eventos.CONQUER_CELL, j1Porcentaje, j2Porcentaje)
+
+        if (this.celdasJ1 >= 64 || this.celdasJ2 >= 64) EventBus.emit(Eventos.END_GAME, {
+            jugador: this.piezaActiva.getJugador(),
+            tipo: "TERRITORIO"
+        });
+    }
+
+    /**
+     * Elimina una celda conquistada por el jugador especificado (por lluvia).
+     * @param {string} jugadorAnterior - identificador del jugador anterior ('J1' o 'J2')
+     */
+    borrarCelda(jugadorAnterior) {
+        if (jugadorAnterior === 'J1') {
+            this.celdasJ1--;
+        } else if (jugadorAnterior === 'J2') {
+            this.celdasJ2--;
+        }
+
+        let j1Porcentaje = this.celdasJ1 * 100 / 80;
+        let j2Porcentaje = this.celdasJ2 * 100 / 80;
+        EventBus.emit(Eventos.UPDATE_PERCENTAGES, j1Porcentaje, j2Porcentaje);
+    }
 }
 
 export default ColocarPiezas;</code></pre></article></section><footer class="footer" id="PeOAagUepe"><div class="wrapper">© 2024 WarCanvas. Todos los derechos reservados.</div></footer></div></div></div><div class="search-container" id="PkfLWpAbet" style="display:none"><div class="wrapper" id="iCxFxjkHbP"><button class="icon-button search-close-button" id="VjLlGakifb" aria-label="close search"><svg><use xlink:href="#close-icon"></use></svg></button><div class="search-box-c"><svg><use xlink:href="#search-icon"></use></svg> <input type="text" id="vpcKVYIppa" class="search-input" placeholder="Search..." autofocus></div><div class="search-result-c" id="fWwVHRuDuN"><span class="search-result-c-text">Type anything to view search result</span></div></div></div><div class="mobile-menu-icon-container"><button class="icon-button" id="mobile-menu" data-isopen="false" aria-label="menu"><svg><use xlink:href="#menu-icon"></use></svg></button></div><div id="mobile-sidebar" class="mobile-sidebar-container"><div class="mobile-sidebar-wrapper"><a href="/" class="sidebar-title sidebar-title-anchor">WarCanvas Docs</a><div class="mobile-nav-links"><div class="menu-item navbar-item"><a id="repository-mobile" href="https://github.com/CapitanManzana/WarCanvas" target="_blank">Repositorio</a></div></div><div class="mobile-sidebar-items-c"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-namespaces"><div>Namespaces</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="Escenas.html">Escenas</a></div><div class="sidebar-section-children"><a href="Logica.html">Logica</a></div><div class="sidebar-section-children"><a href="Render.html">Render</a></div></div></div><div class="mobile-navbar-actions"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#light-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div></div></div><script type="text/javascript" src="scripts/core.min.js"></script><script src="scripts/search.min.js" defer="defer"></script><script src="scripts/third-party/fuse.js" defer="defer"></script><script type="text/javascript">var tocbotInstance=tocbot.init({tocSelector:"#eed4d2a0bfd64539bb9df78095dec881",contentSelector:".main-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0,scrollContainer:".main-content",headingsOffset:130,onClick:bringLinkToView})</script></body></html>

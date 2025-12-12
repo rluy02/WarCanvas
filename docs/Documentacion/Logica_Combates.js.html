@@ -66,24 +66,58 @@ class Combates {
 
         if (ataca == 'Soldado') {
 
-            let filSoldado = atacaPieza.getPosicion().fila;
-            let colSoldado = atacaPieza.getPosicion().col;
+            let fil = atacaPieza.getPosicion().fila;
+            let col = atacaPieza.getPosicion().col;
 
-            if (filSoldado == defiendePieza.getPosicion().fila) {
-                let arriba = filSoldado - 1;
-                let abajo = filSoldado + 1;
+            // ATAQUE HORIZONTAL
+            if (fil == defiendePieza.getPosicion().fila) {
 
-                if (arriba >= 0 &amp;&amp; this.tablero.getCelda(arriba, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
-                if (abajo &lt; this.tablero.size().fila &amp;&amp; this.tablero.getCelda(abajo, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
+                // Arriba
+                let arriba = fil - 1;
+                if (arriba >= 0) {
+                    let piezaArriba = this.tablero.getCelda(arriba, col).getPieza();
+                    if (piezaArriba &amp;&amp; piezaArriba.getTipo() === 'Soldado' &amp;&amp;
+                        piezaArriba.getJugador() === atacaPieza.getJugador()) {
+                        bonusAtaca++;
+                    }
+                }
+
+                // Abajo
+                let abajo = fil + 1;
+                if (abajo &lt; this.tablero.size().fila) {
+                    let piezaAbajo = this.tablero.getCelda(abajo, col).getPieza();
+                    if (piezaAbajo &amp;&amp; piezaAbajo.getTipo() === 'Soldado' &amp;&amp;
+                        piezaAbajo.getJugador() === atacaPieza.getJugador()) {
+                        bonusAtaca++;
+                    }
+                }
             }
+
+            // ATAQUE VERTICAL
             else {
-                let izquierda = colSoldado - 1;
-                let derecha = colSoldado + 1;
-                if (izquierda >= 0 &amp;&amp; this.tablero.getCelda(filSoldado, izquierda).getTipo() == 'Soldado') bonusAtaca++;
-                if (derecha &lt; this.tablero.size().fila &amp;&amp; this.tablero.getCelda(filSoldado, derecha).getTipo() == 'Soldado') bonusAtaca++;
+
+                // Izquierda
+                let izquierda = col - 1;
+                if (izquierda >= 0) {
+                    let piezaIzq = this.tablero.getCelda(fil, izquierda).getPieza();
+                    if (piezaIzq &amp;&amp; piezaIzq.getTipo() === 'Soldado' &amp;&amp;
+                        piezaIzq.getJugador() === atacaPieza.getJugador()) {
+                        bonusAtaca++;
+                    }
+                }
+
+                // Derecha
+                let derecha = col + 1;
+                if (derecha &lt; this.tablero.size().col) {
+                    let piezaDer = this.tablero.getCelda(fil, derecha).getPieza();
+                    if (piezaDer &amp;&amp; piezaDer.getTipo() === 'Soldado' &amp;&amp;
+                        piezaDer.getJugador() === atacaPieza.getJugador()) {
+                        bonusAtaca++;
+                    }
+                }
             }
 
-            console.log("El soldado tiene de bonus: ", bonusAtaca)
+            console.log("El soldado tiene bonus:", bonusAtaca);
         }
         bonusDefiende = defiendePieza.getBonusDefensa();
 
@@ -93,6 +127,11 @@ class Combates {
         ganador = (totalAtaque > totalDefensa);
 
         this.actualizarPanelAtaque(dadosAtaque1, dadosAtaque2, dadosDefensa1, dadosDefensa2, ganador, bonusAtaca, bonusDefiende);
+        
+        // NUEVO: Marcar la pieza atacante como movida siempre (gane o pierda)
+        // Esto asegura que se reste una acción del turno
+        atacaPieza.setMovida(true);
+        EventBus.emit(Eventos.PIECE_MOVED, atacaPieza, true)
         // Se elimina la pieza si el atacante gana en el evento que se emite en actualizarPanel (inicio)
         // Restablecer resaltados/selección
         this.tableroGrafico.restTablero();
@@ -112,8 +151,9 @@ class Combates {
         let bonusAtaca = 100;
         let bonusDefiende = this.defensa.getPieza().getBonusDefensa();
 
-        let totalAtaque = dadosAtaque1 + dadosAtaque2 + bonusAtaca;
-        let totalDefensa = dadosDefensa1 + dadosDefensa2 + bonusDefiende;
+         // Se suman los bonus
+        let atacaPieza = this.atacante.getPieza();
+        //let defiendePieza = this.defensa.getPieza();
 
         let ganador = true; // Siempre gana
 
@@ -124,6 +164,12 @@ class Combates {
             bonusAtaca, bonusDefiende
         );
 
+        // NUEVO: Marcar la pieza atacante como movida siempre (gane o pierda)
+        // Esto asegura que se reste una acción del turno
+        atacaPieza.setMovida(true);
+        EventBus.emit(Eventos.PIECE_MOVED, atacaPieza, true)
+        // Se elimina la pieza si el atacante gana en el evento que se emite en actualizarPanel (inicio)
+        // Restablecer resaltados/selección
         this.tableroGrafico.restTablero();
     }
 

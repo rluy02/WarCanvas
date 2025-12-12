@@ -79,8 +79,17 @@ class Pieza {
      */
     setMovida(){
       this.movida = true;
+      if (!this.tablero) return;
       const escena = this.tablero.getEscena();
-      escena.getPiezaGrafico().getMapSprites().get(this).setAlpha(0.5); // Hacer la pieza semi-transparente al moverse
+      if (!escena) return;
+      const piezaGrafico = escena.getPiezaGrafico();
+      if (!piezaGrafico) return;
+      const mapSprites = piezaGrafico.getMapSprites();
+      if (!mapSprites) return;
+      const sprite = mapSprites.get(this);
+      if (sprite) {
+        sprite.setAlpha(0.5); // Hacer la pieza semi-transparente al moverse
+      }
     }
 
     /**
@@ -89,8 +98,17 @@ class Pieza {
      */
     resetMovida(){
       this.movida = false;
+      if (!this.tablero) return;
       const escena = this.tablero.getEscena();
-      escena.getPiezaGrafico().getMapSprites().get(this).setAlpha(1); // Restaurar opacidad completa al resetear movimiento
+      if (!escena) return;
+      const piezaGrafico = escena.getPiezaGrafico();
+      if (!piezaGrafico) return;
+      const mapSprites = piezaGrafico.getMapSprites();
+      if (!mapSprites) return;
+      const sprite = mapSprites.get(this);
+      if (sprite) {
+        sprite.setAlpha(1); // Restaurar opacidad completa al resetear movimiento
+      }
     }
 
     /**

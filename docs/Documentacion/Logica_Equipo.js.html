@@ -45,27 +45,33 @@ class Equipo {
      */
     crearPiezasJ1() {
         const posicionesSoldadosJ1 = [
-            { x: 0, y: 2 }, { x: 1, y: 2 }, { x: 2, y: 2 },
-            { x: 3, y: 2 }, { x: 4, y: 2 }, { x: 5, y: 2 },
-            { x: 6, y: 2 }, { x: 7, y: 2 }
+            // Columna 0 (primera)
+            { x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 3, y: 2 },
+            { x: 4, y: 0 }, { x: 5, y: 0 }, { x: 6, y: 0 }, { x: 7, y: 0 },
+            // Columna 1 (segunda)
+            { x: 0, y: 1 }, { x: 2, y: 1 }, { x: 3, y: 1 }, { x: 5, y: 1 },
+            { x: 6, y: 1 }, { x: 7, y: 1 },
+            // Columna 2 (tercera)
+            { x: 1, y: 2 }, { x: 6, y: 2 }
         ];
 
         const posicionesCaballeriasJ1 = [
-            { x: 5, y: 1 }, { x: 1, y: 1 }
+            { x: 1, y: 1 }, { x: 4, y: 2 }, // Caballería reemplaza donde estaba comandante
+            { x: 0, y: 2 }, { x: 2, y: 2 }, { x: 5, y: 2 }, { x: 7, y: 2 } // Columna 2
         ];
-        const posicionComandanteJ1 = { x: 4, y: 0 };
-
-        const posicionArtilleria = { x: 3, y: 0 };
+        
+        const posicionComandanteJ1 = { x: 3, y: 0 }; // Columna 2 (más atrás) - reemplaza artillería
+        const posicionArtilleria = { x: 4, y: 1 }; // Columna 1 (medio) - reemplaza caballería
 
         // Generamos las piezas para el equipo "J1" 
         for (let pos of posicionesSoldadosJ1) {
-            let soldado = new Soldado(this.tablero, pos.x, pos.y, "J1");  // Crear soldado
+            let soldado = new Soldado(this.tablero, pos.x, pos.y, "J1");
             this.tablero.getCelda(pos.x, pos.y).setContenido(soldado);
             this.piezas.push(soldado);
         }
 
         for (let pos of posicionesCaballeriasJ1) {
-            let caballeria = new Caballeria(this.tablero, pos.x, pos.y, "J1");  // Crear caballería
+            let caballeria = new Caballeria(this.tablero, pos.x, pos.y, "J1");
             this.tablero.getCelda(pos.x, pos.y).setContenido(caballeria)
             this.piezas.push(caballeria);
         }
@@ -75,7 +81,7 @@ class Equipo {
         this.tablero.getCelda(posicionComandanteJ1.x, posicionComandanteJ1.y).setContenido(comandante);
         this.piezas.push(comandante);
 
-        //Crear artilleria
+        // Crear artilleria
         let artilleria = new Artilleria(this.tablero, posicionArtilleria.x, posicionArtilleria.y, "J1");
         this.tablero.getCelda(posicionArtilleria.x, posicionArtilleria.y).setContenido(artilleria);
         this.piezas.push(artilleria);
@@ -86,26 +92,33 @@ class Equipo {
      */
     crearPiezasJ2() {
         const posicionesSoldadosJ2 = [
-            { x: 3, y: 7 }, { x: 4, y: 7 }
+            // Columna 9 (última)
+            { x: 0, y: 9 }, { x: 1, y: 9 }, { x: 2, y: 9 }, { x: 3, y: 7 },
+            { x: 4, y: 9 }, { x: 5, y: 9 }, { x: 6, y: 9 }, { x: 7, y: 9 },
+            // Columna 8 (antepenúltima)
+            { x: 0, y: 8 }, { x: 2, y: 8 }, { x: 3, y: 8 }, { x: 5, y: 8 },
+            { x: 6, y: 8 }, { x: 7, y: 8 },
+            // Columna 7 (penúltima)
+            { x: 1, y: 7 }, { x: 6, y: 7 }
         ];
 
         const posicionesCaballeriasJ2 = [
-            { x: 7, y: 7 }
+            { x: 1, y: 8 }, { x: 4, y: 7 }, // Caballería reemplaza donde estaba comandante
+            { x: 0, y: 7 }, { x: 2, y: 7 }, { x: 5, y: 7 }, { x: 7, y: 7 } // Columna 7
         ];
 
-        const posicionComandanteJ2 = { x: 4, y: 8 };
-
-        const posicionArtilleria = { x: 2, y: 7 };
+        const posicionComandanteJ2 = { x: 3, y: 9 }; // Columna 7 (más atrás) - reemplaza artillería
+        const posicionArtilleria = { x: 4, y: 8 }; // Columna 8 (medio) - reemplaza caballería
 
         // Generamos las piezas para el equipo "J2" 
         for (let pos of posicionesSoldadosJ2) {
-            let soldado = new Soldado(this.tablero, pos.x, pos.y, "J2");  // Crear soldado
+            let soldado = new Soldado(this.tablero, pos.x, pos.y, "J2");
             this.tablero.getCelda(pos.x, pos.y).setContenido(soldado);
             this.piezas.push(soldado);
         }
 
         for (let pos of posicionesCaballeriasJ2) {
-            let caballeria = new Caballeria(this.tablero, pos.x, pos.y, "J2");  // Crear caballería
+            let caballeria = new Caballeria(this.tablero, pos.x, pos.y, "J2");
             this.tablero.getCelda(pos.x, pos.y).setContenido(caballeria)
             this.piezas.push(caballeria);
         }
@@ -115,11 +128,10 @@ class Equipo {
         this.tablero.getCelda(posicionComandanteJ2.x, posicionComandanteJ2.y).setContenido(comandante);
         this.piezas.push(comandante);
 
-        //Crear artilleria
+        // Crear artilleria
         let artilleria = new Artilleria(this.tablero, posicionArtilleria.x, posicionArtilleria.y, "J2");
         this.tablero.getCelda(posicionArtilleria.x, posicionArtilleria.y).setContenido(artilleria);
         this.piezas.push(artilleria);
-
     }
 
     /**

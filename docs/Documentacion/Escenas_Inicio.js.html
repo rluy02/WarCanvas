@@ -16,6 +16,7 @@ import EventosAleatorios from "../Logica/EventosAleatorios.js";
 import PanelEventos from "../Render/PanelEventos.js";
 import InteligenciaArtificial from "../Logica/InteligenciaArtificial.js";
 import Pieza from "../Logica/Pieza.js";
+import BarraTerritorio from "../Render/BarraTerritorio.js";
 
 /**
  * Escena de inicio del juego.
@@ -39,6 +40,7 @@ class Inicio extends Phaser.Scene {
     init(datos) {
         if (datos.equipo1) this.equipo1 = datos.equipo1;
         if (datos.equipo2) this.equipo2 = datos.equipo2;
+        this.ia = datos.ia; // si la ia esta activa o no
     }
 
     /**
@@ -50,6 +52,22 @@ class Inicio extends Phaser.Scene {
     }
 
     /**
+     * Se llama a este metodo cuando se despierta la escena
+     */
+    wake() {
+        const data = this.dataWake;
+        console.log("Juego Inicio", data);
+        let name, nameEnemy;
+        name = (data == 'J1') ? 'Drawful' : 'el equipo Realista'
+        nameEnemy = (data == 'J2') ? 'Drawful' : 'el equipo Realista'
+        // Aquí restauras lógica, reinicias inputs, etc.
+        //let infoEvento = this.eventosAleatorios.infoEventoActual();
+        this.panelEventos.mostrar('MiniJuego Terminado', `El ganador del miniJuego es ${name}, el evento no le afectará`, 'Drawful', 'ACEPTAR', ()=>{
+            this.eventosAleatorios.runEventoActual(data);
+        });
+    }
+
+    /**
      * Método create de la escena Inicio.
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
@@ -57,7 +75,7 @@ class Inicio extends Phaser.Scene {
         this.crearAnimaciones();
 
         //Creamos la instancia y la guardamos en tab
-        this.tab = new Tablero(8,10,this);
+        this.tab = new Tablero(8, 10, this);
 
         this.piezas = [];
         this.acciones = 3;
@@ -68,9 +86,9 @@ class Inicio extends Phaser.Scene {
         this.piezaGrafico = new PiezaGrafico(this, this.tab);
 
         //Dibujamos el tablero
-        this.tabGrafico = new TableroGrafico(this, this.tab, this.panel);
+        this.tabGrafico = new TableroGrafico(this, this.tab, this.panel, this.panelEventos);
 
-        this.eventosAleatorios = new EventosAleatorios(this.tab, this.tabGrafico, this.panelEventos);
+        this.eventosAleatorios = new EventosAleatorios(this, this.tab, this.tabGrafico, this.panelEventos);
 
 
         this.combates = new Combates(this.tab, this.tabGrafico, this.panel);
@@ -80,11 +98,12 @@ class Inicio extends Phaser.Scene {
         this.turno = new Turno(this, this.acciones, this.turnoGrafico);
         this.turnoGrafico.create(this.turno);
         this.turno.crearListeners();
+        this.marcoConquista = new BarraTerritorio(this);
 
         if (this.equipo1 == undefined) this.equipo1 = new Equipo("J1", this.tab, true);
         if (this.equipo2 == undefined) this.equipo2 = new Equipo("J2", this.tab, true);
 
-        this.inteligenciaArtificial = new InteligenciaArtificial(this.tab, this.tabGrafico, this.equipo2, this, this.acciones)
+        if (this.ia) this.inteligenciaArtificial = new InteligenciaArtificial(this.tab, this.tabGrafico, this.equipo2, this, this.acciones, this.turno)
 
         console.log(this.equipo1);
 
@@ -124,6 +143,10 @@ class Inicio extends Phaser.Scene {
             this.partidaTerminada(info);
         });
 
+        this.events.on('wake', (data) => { // Evento que se llama al despertar la escena (data -> ganador MiniJuego)
+            this.wake();
+        });
+
         this.panel.create();
         this.panelInfo.crearPanel();
     }
@@ -141,6 +164,31 @@ class Inicio extends Phaser.Scene {
             let descripcion = "";
             let titulo = "";
 
+            //Caso especial: auto-eliminación del Comandante
+            if (info.autoEliminacion === true) {
+
+                if (info.jugador === "J1") {
+                    nombre = "¡Buena Suerte!";
+                    titulo = "VICTORIA";
+                    descripcion = "El enemigo cometió un grave error y destruyó a su propio comandante.";
+                } else {
+                    nombre = "Derrota inesperada";
+                    titulo = "DERROTA";
+                    descripcion = "Por eso hay que aprobar métodos matemáticos, has causado la pérdida del nuestro comandante.";
+                }
+
+                this.panelEventos.mostrar(
+                    nombre,
+                    descripcion,
+                    titulo,
+                    "IR AL MENÚ",
+                    () => this.ResetInfoYcambiarEscena()
+                );
+
+                return; //evitar que siga al bloque normal
+            }
+
+            //Flujo normal del juego
             if (info.jugador === "J1") {
                 nombre = '¡El equipo dibujado vence!';
                 titulo = 'VICTORIA';
@@ -174,9 +222,9 @@ class Inicio extends Phaser.Scene {
     moverPieza(pieza) {
         for (let p of this.piezas) {
             if (p == pieza) {
-                let data =this.piezaGrafico.eliminarPieza(pieza);
+                let data = this.piezaGrafico.eliminarPieza(pieza);
                 this.piezaGrafico.dibujarPieza(pieza, data);
-           }
+            }
         }
     }
 
@@ -189,6 +237,13 @@ class Inicio extends Phaser.Scene {
             if (p == pieza) {
                 this.piezaGrafico.eliminarPieza(pieza);
             }
+        }
+        
+        // Eliminar la pieza del equipo correspondiente
+        if (pieza.getJugador() === 'J1') {
+            this.equipo1.eliminarPieza(pieza);
+        } else {
+            this.equipo2.eliminarPieza(pieza);
         }
     }
 
@@ -259,14 +314,17 @@ class Inicio extends Phaser.Scene {
         this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
         this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
 
-        this.load.image('peon', './imgs/piezas/peon.webp');
-        this.load.image('peon2', './imgs/piezas/peon2.webp');
+        this.load.image('peon', './imgs/piezas/soldado-dibujado.webp');
+        this.load.image('peon-blanco', './imgs/piezas/white-pawn.webp');
+        this.load.image('peon-rojo', './imgs/piezas/red-pawn.webp');
+        this.load.image('peon2', './imgs/piezas/soldado-realista.webp');
         this.load.image('caballeria', './imgs/piezas/caballeria-dibujada.webp');
-        this.load.image('caballeria2', './imgs/piezas/Caballeria2.webp');
+        this.load.image('caballeria2', './imgs/piezas/caballeria-realista.webp');
         this.load.image('comandante', './imgs/piezas/Comandante.webp');
-        this.load.image('comandante2', './imgs/piezas/Comandante2.webp');
-        this.load.image('artilleria', './imgs/piezas/artilleriaJ1.webp');
-        this.load.image('artilleria2', './imgs/piezas/artilleriaJ1.webp');
+        this.load.image('comandante2', './imgs/piezas/comandante-realista.webp');
+        this.load.image('artilleria', './imgs/piezas/artilleria-dibujada.webp');
+        this.load.image('artilleria2', './imgs/piezas/artilleria-realista.webp');
+        this.load.image('marcoConquista', './imgs/ui/marcoTerrenoConquistado.webp');
 
         this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
     }
@@ -277,6 +335,11 @@ class Inicio extends Phaser.Scene {
      */
     getPiezaGrafico() {
         return this.piezaGrafico;
+    }
+
+    lanzarMinijuego() {
+        this.scene.sleep('Inicio');
+        this.scene.launch('Minijuego');
     }
 }
 

@@ -29,7 +29,7 @@ class PanelLateral {
      */
     create() {
         const width = this.escena.scale.width;
-        const height = this.escena.scale.height;
+        const height = this.escena.scale.height - 88;
 
         const sideWidth = 355; // Tamaño del panel
         this.escena.add.rectangle(width - (sideWidth / 2), height / 2, sideWidth, height, 0xd4b37c);
@@ -44,7 +44,7 @@ class PanelLateral {
         this.infoTextDefender = this.createText(width - sideWidth / 2, 300, 'Defiende', 300, ' ', '24px', 0.5);
 
         //Boton de abrir panel de informacion
-        this.btInfo = this.createText(width - 100, 25, 'INFO', 0, 'bold', '22px', 0.0, '#000000ff');
+        this.btInfo = this.createText(width - 70, 25, 'INFO', 0, 'bold', '22px', 0.0, '#000000ff');
         this.btInfo.setInteractive();
 
 
@@ -90,7 +90,7 @@ class PanelLateral {
 
         // Boton de Ataque / defensa
 
-        this.buttonTry = this.createText(width - sideWidth / 2, 500, ' ', 0, ' ', '24px', 0.5, '#ff0000');
+        this.buttonTry = this.createText(width - sideWidth / 2, 430, ' ', 0, ' ', '24px', 0.5, '#ff0000');
         this.buttonTry.disableInteractive();
 
 
@@ -115,7 +115,7 @@ class PanelLateral {
         });
 
         // Botón Cheat (+100 bonus)
-        this.buttonCheat = this.createText(width - sideWidth / 2, 540, 'CHEAT', 0, ' ', '16px', 0.5, '#523600');
+        this.buttonCheat = this.createText(width - sideWidth / 2, 470, 'CHEAT', 0, ' ', '16px', 0.5, '#523600');
         this.buttonCheat.setVisible(false);
         this.buttonCheat.disableInteractive();
 
@@ -138,6 +138,10 @@ class PanelLateral {
                     EventBus.emit(Eventos.ATACK); // Se recibe en combate
                 this.ataque = false;
             }
+        });
+
+        EventBus.on(Eventos.CLEAN_SIDE_PANEL, () => {
+            if (this.CombatInfo === false) this.updateInfoEsperandoAccion();
         });
     }
 
@@ -186,12 +190,12 @@ class PanelLateral {
      */
     updateInfo(fichaDefiende, fichaAtaque, equipoAtaque, equipoDefensa, accion, casillaAtacante, casillaDefensa) {
 
-        let bonusAtaca = casillaDefensa.getPieza().getBonusAtaque();
+        let bonusAtaca = casillaAtacante.getPieza().getBonusAtaque();
         bonusAtaca = this.bonus(bonusAtaca, casillaAtacante.getPieza(), casillaDefensa.getPieza());
         let bonusDefiende = casillaDefensa.getPieza().getBonusDefensa();
 
         // Actualiza el título del panel
-        this.titleText.setText('CONFIRMA EL COMBATE');
+        this.titleText.setText('CONFIRMA COMBATE');
         // Actualiza la información del panel
         this.infoText.setText(fichaAtaque + ' de ' + equipoAtaque + ' ataca a ' + fichaDefiende + ' de ' + equipoDefensa);
         this.infoTextAttacker.setText(`Ataca: ${equipoAtaque} Bonus (${bonusAtaca})`);
@@ -224,6 +228,8 @@ class PanelLateral {
 
         this.buttonTry.disableInteractive();
         this.buttonTry.setVisible(false);
+        this.buttonCheat.disableInteractive();
+        this.buttonCheat.setVisible(false);
     }
 
     /**
@@ -235,29 +241,58 @@ class PanelLateral {
      */
     bonus(bonusAtaca, atacaPieza, defiendePieza) {
         {
-            if (atacaPieza.getTipo() == 'Soldado') {
-                let filSoldado = atacaPieza.getPosicion().fila;
-                let colSoldado = atacaPieza.getPosicion().col;
 
-                if (filSoldado == defiendePieza.getPosicion().fila) {
-                    let arriba = filSoldado - 1;
-                    let abajo = filSoldado + 1;
+    let fil = atacaPieza.getPosicion().fila;
+    let col = atacaPieza.getPosicion().col;
 
-                    if (arriba >= 0 &amp;&amp; this.tablero.getCelda(arriba, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
-                    if (abajo &lt; this.tablero.size().fila &amp;&amp; this.tablero.getCelda(abajo, colSoldado).getTipo() == 'Soldado') bonusAtaca++;
-                }
-                else {
-                    let izquierda = colSoldado - 1;
-                    let derecha = colSoldado + 1;
-                    if (izquierda >= 0 &amp;&amp; this.tablero.getCelda(filSoldado, izquierda).getTipo() == 'Soldado') bonusAtaca++;
-                    if (derecha &lt; this.tablero.size().fila &amp;&amp; this.tablero.getCelda(filSoldado, derecha).getTipo() == 'Soldado') bonusAtaca++;
-                }
+    // ATAQUE HORIZONTAL
+    if (fil == defiendePieza.getPosicion().fila) {
 
-                console.log("El soldado tiene de bonus: ", bonusAtaca)
+        // Arriba
+        let arriba = fil - 1;
+        if (arriba >= 0) {
+            let piezaArriba = this.tablero.getCelda(arriba, col).getPieza();
+            if (piezaArriba &amp;&amp; piezaArriba.getTipo() === 'Soldado' &amp;&amp;
+                piezaArriba.getJugador() === atacaPieza.getJugador()) {
+                bonusAtaca++;
             }
         }
 
-        return bonusAtaca;
+        // Abajo
+        let abajo = fil + 1;
+        if (abajo &lt; this.tablero.size().fila) {
+            let piezaAbajo = this.tablero.getCelda(abajo, col).getPieza();
+            if (piezaAbajo &amp;&amp; piezaAbajo.getTipo() === 'Soldado' &amp;&amp;
+                piezaAbajo.getJugador() === atacaPieza.getJugador()) {
+                bonusAtaca++;
+            }
+        }
+    }
+
+    // ATAQUE VERTICAL
+    else {
+
+        // Izquierda
+        let izquierda = col - 1;
+        if (izquierda >= 0) {
+            let piezaIzq = this.tablero.getCelda(fil, izquierda).getPieza();
+            if (piezaIzq &amp;&amp; piezaIzq.getTipo() === 'Soldado' &amp;&amp;
+                piezaIzq.getJugador() === atacaPieza.getJugador()) {
+                bonusAtaca++;
+            }
+        }
+
+        // Derecha
+        let derecha = col + 1;
+        if (derecha &lt; this.tablero.size().col) {
+            let piezaDer = this.tablero.getCelda(fil, derecha).getPieza();
+            if (piezaDer &amp;&amp; piezaDer.getTipo() === 'Soldado' &amp;&amp;
+                piezaDer.getJugador() === atacaPieza.getJugador()) {
+                bonusAtaca++;
+            }
+        }
+    } }
+         return bonusAtaca;
     }
 
     /**
@@ -275,7 +310,7 @@ class PanelLateral {
     createText(width, height, text, wordWrapWidth, fontStyle, px, origin, fill = '#ffffffff') {
         return this.escena.add.text(width, height, text, { // Equipo que defiende
             fontSize: px,
-            fontFamily: 'Arial',
+            fontFamily: 'Kotton',
             fontStyle: fontStyle,
             fill: fill,
             wordWrap: { width: wordWrapWidth, useAdvancedWrap: true }

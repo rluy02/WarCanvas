@@ -1,0 +1,551 @@
+<!DOCTYPE html><html lang="en" style="font-size:16px"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="author" content="CapitanManzana"><title>Source: Logica/InteligenciaArtificial.js</title><!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--><script src="scripts/third-party/hljs.js" defer="defer"></script><script src="scripts/third-party/hljs-line-num.js" defer="defer"></script><script src="scripts/third-party/popper.js" defer="defer"></script><script src="scripts/third-party/tippy.js" defer="defer"></script><script src="scripts/third-party/tocbot.min.js"></script><script>var baseURL="/",locationPathname="";baseURL=(locationPathname=document.location.pathname).substr(0,locationPathname.lastIndexOf("/")+1)</script><link rel="stylesheet" href="styles/clean-jsdoc-theme.min.css"><svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none"><defs><symbol id="copy-icon" viewbox="0 0 488.3 488.3"><g><path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/><path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z"/></g></symbol><symbol id="search-icon" viewBox="0 0 512 512"><g><g><path d="M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474    c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323    c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848    S326.847,409.323,225.474,409.323z"/></g></g><g><g><path d="M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328    c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z"/></g></g></symbol><symbol id="font-size-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11.246 15H4.754l-2 5H.6L7 4h2l6.4 16h-2.154l-2-5zm-.8-2L8 6.885 5.554 13h4.892zM21 12.535V12h2v8h-2v-.535a4 4 0 1 1 0-6.93zM19 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></symbol><symbol id="add-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></symbol><symbol id="minus-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M5 11h14v2H5z"/></symbol><symbol id="dark-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/></symbol><symbol id="light-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></symbol><symbol id="reset-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M18.537 19.567A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10c0 2.136-.67 4.116-1.81 5.74L17 12h3a8 8 0 1 0-2.46 5.772l.997 1.795z"/></symbol><symbol id="down-icon" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z"></path></symbol><symbol id="codepen-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M16.5 13.202L13 15.535v3.596L19.197 15 16.5 13.202zM14.697 12L12 10.202 9.303 12 12 13.798 14.697 12zM20 10.869L18.303 12 20 13.131V10.87zM19.197 9L13 4.869v3.596l3.5 2.333L19.197 9zM7.5 10.798L11 8.465V4.869L4.803 9 7.5 10.798zM4.803 15L11 19.131v-3.596l-3.5-2.333L4.803 15zM4 13.131L5.697 12 4 10.869v2.262zM2 9a1 1 0 0 1 .445-.832l9-6a1 1 0 0 1 1.11 0l9 6A1 1 0 0 1 22 9v6a1 1 0 0 1-.445.832l-9 6a1 1 0 0 1-1.11 0l-9-6A1 1 0 0 1 2 15V9z"/></symbol><symbol id="close-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></symbol><symbol id="menu-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></symbol></defs></svg></head><body data-theme="dark"><div class="sidebar-container"><div class="sidebar" id="sidebar"><a href="/" class="sidebar-title sidebar-title-anchor">WarCanvas Docs</a><div class="sidebar-items-container"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-namespaces"><div>Namespaces</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="Escenas.html">Escenas</a></div><div class="sidebar-section-children"><a href="Logica.html">Logica</a></div><div class="sidebar-section-children"><a href="Render.html">Render</a></div></div></div></div></div><div class="navbar-container" id="VuAckcnZhf"><nav class="navbar"><div class="navbar-left-items"><div class="menu-item navbar-item"><a id="repository" href="https://github.com/CapitanManzana/WarCanvas" target="_blank">Repositorio</a></div></div><div class="navbar-right-items"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#light-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div><nav></nav></nav></div><div class="toc-container"><div class="toc-content"><span class="bold">On this page</span><div id="eed4d2a0bfd64539bb9df78095dec881"></div></div></div><div class="body-wrapper"><div class="main-content"><div class="main-wrapper"><section id="source-page" class="source-page"><header><h1 id="title" class="has-anchor">Logica_InteligenciaArtificial.js</h1></header><article><pre class="prettyprint source lang-js"><code>import { turnoJugador } from "./Turno.js";
+import { EventBus } from "../EventBus.js";
+import { Eventos } from "../Events.js";
+
+/**
+ * Clase que implementa la Inteligencia Artificial para el jugador J2.
+ * Gestiona la toma de decisiones, cálculo de pesos tácticos y ejecución de movimientos.
+ * @class InteligenciaArtificial
+ * @memberof Logica
+ */
+export default class InteligenciaArtificial {
+    /**
+     * Constructor de la Inteligencia Artificial
+     * @param {Tablero} tablero - Tablero de juego
+     * @param {TableroGrafico} tableroGrafico - Representación gráfica del tablero
+     * @param {Equipo} equipoIA - Equipo controlado por la IA (J2)
+     * @param {Phaser.Scene} escena - Escena de Phaser
+     * @param {number} acciones - Número de acciones por turno
+     * @param {Turno} turno - Instancia del sistema de turnos
+     */
+    constructor(tablero, tableroGrafico, equipoIA, escena, acciones, turno) {
+        this.tablero = tablero;
+        this.tableroGrafico = tableroGrafico;
+        this.equipoIA = equipoIA;
+        this.escena = escena;
+        
+        /**
+         * Número de acciones disponibles por turno
+         * @type {number}
+         */
+        this.acciones = acciones;
+        /**
+         * Contador de turnos transcurridos (usado para priorizar artillería)
+         * @type {number}
+         */
+        this.contadorArtilleria = 0;
+        /**
+         * Referencia al sistema de turnos
+         * @type {Turno}
+         */
+        this.turno = turno;
+
+        // Suscripción a eventos de cambio de turno
+        EventBus.on(Eventos.CHANGE_TURN, () => {
+            this.contadorArtilleria++;
+            if (turnoJugador == 'J2') {
+                // Añadir delay para permitir que restTablero() termine
+                setTimeout(() => this.TurnoIA(), 100);
+            }
+        });
+    }
+
+    /**
+     * Ejecuta el turno completo de la IA con delays entre acciones.
+     * Proceso:
+     * 1. Calcula pesos tácticos de todas las piezas disponibles
+     * 2. Prioriza piezas con objetivos claros
+     * 3. Ejecuta movimientos usando A* pathfinding
+     * 4. Maneja combates cuando se encuentra un enemigo
+     * 5. Si no hay objetivos, mueve piezas hacia adelante (columna izquierda)
+     */
+    async TurnoIA() {
+        // Desactivar controles del jugador durante el turno de la IA
+        this.tableroGrafico.desactivarInteraccion();
+        this.turno.turnoGrafico.desactivarBotonFinalizar();
+
+        // Ejecutar cada acción del turno
+        for (let accion = 0; accion &lt; this.acciones; accion++) {
+            let bestPieza = null;
+            let celdaObjetivo = null;
+            let bestPeso = -Infinity;
+            let pesos = new Map();
+            let camino = [];
+
+            // Calcular peso táctico de todas las piezas disponibles
+            for (let pieza of this.equipoIA.piezas) {
+                if (pieza.getTipo() === 'Artilleria') {
+                    // Artillería solo actúa si puede disparar
+                    if (pieza.puedeDisparar()) {
+                        let pesoData = pieza.calculaPeso();
+                        pesos.set(pieza, pesoData);
+                    }
+                }
+                else if (!pieza.getMovida()) {
+                    // Calcular peso de piezas no movidas
+                    let pesoData = pieza.calculaPeso();
+                    pesos.set(pieza, pesoData);
+                }
+            }
+
+            // Si no hay piezas disponibles, terminar turno
+            if (pesos.size === 0) {
+                break;
+            }
+
+            // Clasificar piezas según tengan objetivo claro o no
+            let piezasConObjetivo = [];
+            let piezasSinObjetivo = [];
+
+            for (let [pieza, data] of pesos) {
+                if (data.bestCelda !== null) {
+                    piezasConObjetivo.push({ pieza, data });
+                } else {
+                    piezasSinObjetivo.push({ pieza, data });
+                }
+            }
+
+            // Priorizar piezas con objetivo claro
+            if (piezasConObjetivo.length > 0) {
+                for (let { pieza, data } of piezasConObjetivo) {
+                    // Evitar usar artillería en los primeros 5 turnos
+                    if (pieza.getTipo() === 'Artilleria' &amp;&amp; this.contadorArtilleria &lt; 5) continue;
+                    // Evitar que el comandante se quede en su posición actual
+                    if (pieza.getTipo() === 'Comandante' &amp;&amp; data.bestCelda === this.tablero.getCelda(pieza.fil, pieza.col)) continue;
+                    
+                    // Seleccionar la pieza con mayor peso
+                    if (data.peso > bestPeso) {
+                        bestPeso = data.peso;
+                        bestPieza = pieza;
+                        celdaObjetivo = data.bestCelda;
+                    }
+                }
+            }
+            else {
+                // No hay objetivos claros, se manejará posteriormente
+                bestPieza = null;
+                celdaObjetivo = null;
+            }
+
+            // Manejo especial para artillería
+            if (bestPieza &amp;&amp; bestPieza.getTipo() === 'Artilleria') {
+                if (celdaObjetivo &amp;&amp; bestPieza.puedeDisparar()) {
+                    this.tablero.piezaActiva = bestPieza;
+                    EventBus.emit(Eventos.PIECE_SELECTED, bestPieza);
+
+                    let destino = celdaObjetivo.getPosicion();
+                    bestPieza.lanzarProyectil(destino.fila, destino.col, this.escena, this.tablero);
+
+                    EventBus.emit(Eventos.PIECE_MOVED, bestPieza, false);
+
+                    await this.esperarDelay(800);
+                    continue;
+                } else {
+                    continue;
+                }
+            }
+
+            // Calcular camino usando A* para piezas con objetivo
+            if (bestPieza &amp;&amp; celdaObjetivo) {
+                let origen = bestPieza.getPosicion();
+                camino = this.aStarPathFinding(
+                    bestPieza,
+                    this.tablero.getCelda(origen.fila, origen.col),
+                    celdaObjetivo
+                );
+
+                // Limitar camino a movimientos disponibles
+                let movimientosDisponibles = bestPieza.getMovimientos();
+                if (camino.length > movimientosDisponibles) {
+                    camino = camino.slice(0, movimientosDisponibles);
+                }
+            }
+            else {
+                // Sin objetivo claro: mover soldados y caballería hacia la izquierda (hacia J1)
+                camino = [];
+                for (let [pieza, data] of pesos) {
+                    let tipo = pieza.getTipo();
+
+                    if (tipo === 'Soldado' || tipo === 'Caballeria') {
+                        let pos = pieza.getPosicion();
+                        let movimientosMax = pieza.getMovimientos();
+                        let destinoCol = pos.col - movimientosMax;
+
+                        if (destinoCol >= 0) {
+                            let celdaDestino = this.tablero.getCelda(pos.fila, destinoCol);
+
+                            if (celdaDestino.estaVacia()) {
+                                camino = this.aStarPathFinding(
+                                    pieza,
+                                    this.tablero.getCelda(pos.fila, pos.col),
+                                    celdaDestino
+                                );
+
+                                if (camino.length > 0 &amp;&amp; camino.length &lt;= movimientosMax) {
+                                    bestPieza = pieza;
+                                    break;
+                                } else {
+                                    camino = [];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Ejecutar movimiento por el camino calculado
+            if (camino.length > 0 &amp;&amp; bestPieza) {
+                this.tablero.piezaActiva = bestPieza;
+                EventBus.emit(Eventos.PIECE_SELECTED, bestPieza);
+
+                let ultimaCelda = camino[camino.length - 1];
+                let hayEnemigoAlFinal = !ultimaCelda.estaVacia() &amp;&amp;
+                    ultimaCelda.getPieza().getJugador() !== bestPieza.getJugador();
+
+                // Si hay enemigo al final, detenerse antes para atacar
+                let pasosFinal = hayEnemigoAlFinal ? camino.length - 1 : camino.length;
+
+                // Ejecutar movimiento paso a paso
+                for (let paso = 0; paso &lt; pasosFinal; paso++) {
+                    let siguienteCelda = camino[paso];
+                    let destino = siguienteCelda.getPosicion();
+                    let origenActual = bestPieza.getPosicion();
+
+                    // Dibujar conquista de territorio
+                    this.tableroGrafico.dibujarFragmentoMapa(destino.fila, destino.col, bestPieza.getJugador());
+
+                    // Limpiar celda de origen
+                    this.tablero.getCelda(origenActual.fila, origenActual.col).limpiar();
+
+                    // Mover pieza a destino
+                    bestPieza.moverse(destino.fila, destino.col);
+                    this.tablero.getCelda(destino.fila, destino.col).setContenido(bestPieza);
+
+                    EventBus.emit(Eventos.PIECE_MOVED, bestPieza, false);
+
+                    await this.esperarDelay(300);
+                    
+                    // Verificar si el comandante llegó a su objetivo defensivo
+                    if (bestPieza.getTipo() === 'Comandante' &amp;&amp; !hayEnemigoAlFinal) {
+                        let posActual = bestPieza.getPosicion();
+                        let posObjetivo = celdaObjetivo.getPosicion();
+                        if (posActual.fila === posObjetivo.fila &amp;&amp; posActual.col === posObjetivo.col) {
+                            this.turno.acabarMovimientos();
+                            break;
+                        }
+                    }
+                }
+
+                // Ejecutar ataque si hay enemigo al final del camino
+                if (hayEnemigoAlFinal &amp;&amp; pasosFinal === camino.length - 1) {
+                    let celdaEnemiga = ultimaCelda.getPosicion();
+
+                    // Validaciones de seguridad
+                    if (!bestPieza || bestPieza.getPosicion() === undefined) {
+                        continue;
+                    }
+                    
+                    if (ultimaCelda.estaVacia()) {
+                        continue;
+                    }
+
+                    // Iniciar combate
+                    this.tablero.ataque(celdaEnemiga.fila, celdaEnemiga.col);
+
+                    await this.esperarDelay(300);
+
+                    EventBus.emit(Eventos.ATACK);
+                    
+                    await this.esperarDelay(1500);
+                    
+                    EventBus.emit(Eventos.PIECE_MOVED, bestPieza, true);
+                }
+
+            } else {
+                // No hay movimientos posibles, finalizar turno
+                this.turno.acabarMovimientos();
+                continue;
+            }
+
+            await this.esperarDelay(400);
+        }
+
+        // Reactivar controles del jugador
+        this.tableroGrafico.activarInteraccion();
+        this.turno.turnoGrafico.activarBotonFinalizar();
+    }
+    
+
+    /**
+     * Implementación del algoritmo A* para encontrar el camino óptimo entre dos celdas.
+     * Considera movimientos especiales según el tipo de pieza:
+     * - Comandante: movimiento diagonal (heurística Chebyshev)
+     * - Caballería: puede saltar piezas aliadas
+     * - Otros: solo movimiento cardinal (heurística Manhattan)
+     * 
+     * @param {Pieza} pieza - Pieza que se moverá
+     * @param {Celda} celdaInicio - Celda de origen
+     * @param {Celda} celdaDestino - Celda de destino
+     * @returns {Array&lt;Celda>} Camino óptimo (array vacío si no hay ruta)
+     */
+    aStarPathFinding(pieza, celdaInicio, celdaDestino) {
+        const MAX_PROFUNDIDAD = 20;
+        const openSet = [];
+        const closedSet = new Set();
+        const cameFrom = new Map();
+        const costoMovimiento = new Map();
+
+        const gScore = new Map();
+        const fScore = new Map();
+
+        // Inicializar scores
+        gScore.set(celdaInicio, 0);
+        pieza.getTipo() == 'Comandante' ? fScore.set(celdaInicio, this.diagHeuristic(celdaInicio, celdaDestino))
+            : fScore.set(celdaInicio, this.heuristic(celdaInicio, celdaDestino));
+        openSet.push(celdaInicio);
+
+        while (openSet.length > 0) {
+            // Encontrar celda con menor fScore en openSet
+            let currentIndex = 0;
+            let current = openSet[0];
+
+            for (let i = 1; i &lt; openSet.length; i++) {
+                const candidato = openSet[i];
+                const fCurr = fScore.get(current) ?? Infinity;
+                const fCand = fScore.get(candidato) ?? Infinity;
+                if (fCand &lt; fCurr) {
+                    currentIndex = i;
+                    current = candidato;
+                }
+            }
+
+            // Si llegamos al destino, reconstruir camino
+            if (current === celdaDestino) {
+                return this.reconstruirCamino(cameFrom, current);
+            }
+
+            openSet.splice(currentIndex, 1);
+            closedSet.add(current);
+
+            const gActual = gScore.get(current) ?? Infinity;
+
+            // Limitar profundidad de búsqueda
+            if (gActual > MAX_PROFUNDIDAD) {
+                continue;
+            }
+
+            // Obtener vecinos según tipo de pieza
+            const vecinos = pieza.getTipo() === 'Caballeria'
+                ? this.getVecinosConSalto(pieza, current, celdaInicio, gActual)
+                : this.getVecinos(pieza, current);
+
+            // Evaluar cada vecino
+            for (const vecinoInfo of vecinos) {
+                const vecino = vecinoInfo.celda || vecinoInfo;
+                const costoExtra = vecinoInfo.costo || 1;
+
+                if (closedSet.has(vecino)) continue;
+                if (!this.transitable(vecino, celdaDestino)) continue;
+
+                const expectedG = gActual + costoExtra;
+                const gVecino = gScore.get(vecino);
+
+                // Si encontramos un camino mejor, actualizarlo
+                if (gVecino === undefined || expectedG &lt; gVecino) {
+                    cameFrom.set(vecino, current);
+                    gScore.set(vecino, expectedG);
+                    costoMovimiento.set(vecino, costoExtra);
+
+                    const h = pieza.getTipo() == 'Comandante' ? this.diagHeuristic(vecino, celdaDestino) : this.heuristic(vecino, celdaDestino);
+                    fScore.set(vecino, expectedG + h);
+
+                    if (!openSet.includes(vecino))
+                        openSet.push(vecino);
+                }
+            }
+        }
+        return [];
+    }
+
+    /**
+     * Obtiene los vecinos de una celda considerando el salto de caballería.
+     * La caballería puede saltar piezas aliadas en su primer movimiento.
+     * 
+     * @param {Pieza} pieza - Pieza de caballería
+     * @param {Celda} celda - Celda actual
+     * @param {Celda} celdaInicio - Celda de inicio del pathfinding
+     * @param {number} gActual - Distancia desde el inicio
+     * @returns {Array&lt;Object>} Array de {celda, costo}
+     */
+    getVecinosConSalto(pieza, celda, celdaInicio, gActual) {
+        const pos = celda.getPosicion();
+        const fila = pos.fila;
+        const col = pos.col;
+        const res = [];
+
+        // Direcciones cardinales
+        const direcciones = [
+            { df: -1, dc: 0 },  // arriba
+            { df: 1, dc: 0 },   // abajo
+            { df: 0, dc: -1 },  // izquierda
+            { df: 0, dc: 1 }    // derecha
+        ];
+
+        for (const dir of direcciones) {
+            const nf = fila + dir.df;
+            const nc = col + dir.dc;
+
+            // Verificar límites del tablero
+            if (nf &lt; 0 || nf >= this.tablero.filas || nc &lt; 0 || nc >= this.tablero.columnas)
+                continue;
+
+            const vecinoCelda = this.tablero.getCelda(nf, nc);
+
+            if (vecinoCelda.estaVacia()) {
+                res.push({ celda: vecinoCelda, costo: 1 });
+            }
+            else if (!vecinoCelda.estaVacia() &amp;&amp; vecinoCelda.getPieza().getJugador() !== pieza.getJugador()) {
+                // Puede atacar enemigos
+                res.push({ celda: vecinoCelda, costo: 1 });
+            }
+            else if (celda === celdaInicio &amp;&amp; gActual === 0 &amp;&amp; pieza.getSaltoCaballeria()) {
+                // Desde posición inicial, puede saltar aliado
+                const nf2 = nf + dir.df;
+                const nc2 = nc + dir.dc;
+
+                if (nf2 >= 0 &amp;&amp; nf2 &lt; this.tablero.filas &amp;&amp; nc2 >= 0 &amp;&amp; nc2 &lt; this.tablero.columnas) {
+                    const celdaSalto = this.tablero.getCelda(nf2, nc2);
+
+                    if (celdaSalto.estaVacia() ||
+                        (!celdaSalto.estaVacia() &amp;&amp; celdaSalto.getPieza().getJugador() !== pieza.getJugador())) {
+                        res.push({ celda: celdaSalto, costo: 2 });
+                    }
+                }
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * Heurística de Chebyshev (distancia diagonal).
+     * Usada para el Comandante que puede moverse en diagonal.
+     * 
+     * @param {Celda} a - Celda origen
+     * @param {Celda} b - Celda destino
+     * @returns {number} Distancia estimada
+     */
+    diagHeuristic(a, b) {
+        const pa = a.getPosicion();
+        const pb = b.getPosicion();
+        const dx = Math.abs(pa.fila - pb.fila);
+        const dy = Math.abs(pa.col - pb.col);
+        return Math.max(dx, dy);
+    }
+
+    /**
+     * Heurística de Manhattan (distancia cardinal).
+     * Usada para piezas que solo se mueven en direcciones cardinales.
+     * 
+     * @param {Celda} a - Celda origen
+     * @param {Celda} b - Celda destino
+     * @returns {number} Distancia estimada
+     */
+    heuristic(a, b) {
+        const pa = a.getPosicion();
+        const pb = b.getPosicion();
+        return Math.abs(pa.fila - pb.fila) + Math.abs(pa.col - pb.col);
+    }
+
+    /**
+     * Determina si una celda es transitable.
+     * Una celda es transitable si está vacía, excepto si es el destino final.
+     * 
+     * @param {Celda} celda - Celda a evaluar
+     * @param {Celda} celdaDestino - Destino final del camino
+     * @returns {boolean} true si es transitable
+     */
+    transitable(celda, celdaDestino) {
+        if (celda === celdaDestino) return true;
+        return celda.estaVacia();
+    }
+
+    /**
+     * Reconstruye el camino desde el origen hasta el destino.
+     * Utiliza el mapa cameFrom generado por A*.
+     * 
+     * @param {Map} cameFrom - Mapa de predecesores
+     * @param {Celda} actual - Celda de destino
+     * @returns {Array&lt;Celda>} Camino ordenado desde origen a destino
+     */
+    reconstruirCamino(cameFrom, actual) {
+        const path = [];
+        let current = actual;
+        while (cameFrom.has(current)) {
+            path.push(current);
+            current = cameFrom.get(current);
+        }
+        path.reverse();
+        return path;
+    }
+
+    /**
+     * Obtiene las celdas vecinas válidas de una celda.
+     * Para el Comandante incluye diagonales, para otras piezas solo cardinales.
+     * 
+     * @param {Pieza} pieza - Pieza que se está moviendo
+     * @param {Celda} celda - Celda actual
+     * @returns {Array&lt;Celda>} Array de celdas vecinas
+     */
+    getVecinos(pieza, celda) {
+        const pos = celda.getPosicion();
+        const fila = pos.fila;
+        const col = pos.col;
+        const res = [];
+
+        // Movimientos cardinales (arriba, abajo, izquierda, derecha)
+        if (fila > 0) {
+            res.push(this.tablero.getCelda(fila - 1, col));
+        }
+        if (fila &lt; this.tablero.filas - 1) {
+            res.push(this.tablero.getCelda(fila + 1, col));
+        }
+        if (col > 0) {
+            res.push(this.tablero.getCelda(fila, col - 1));
+        }
+        if (col &lt; this.tablero.columnas - 1) {
+            res.push(this.tablero.getCelda(fila, col + 1));
+        }
+        
+        // Movimientos diagonales para el Comandante
+        if (pieza.getTipo() == 'Comandante') {
+            if (fila > 0 &amp;&amp; col > 0) {
+                res.push(this.tablero.getCelda(fila - 1, col - 1));
+            }
+            if (fila > 0 &amp;&amp; col &lt; this.tablero.columnas - 1) {
+                res.push(this.tablero.getCelda(fila - 1, col + 1));
+            }
+            if (fila &lt; this.tablero.filas - 1 &amp;&amp; col > 0) {
+                res.push(this.tablero.getCelda(fila + 1, col - 1));
+            }
+            if (fila &lt; this.tablero.filas - 1 &amp;&amp; col &lt; this.tablero.columnas - 1) {
+                res.push(this.tablero.getCelda(fila + 1, col + 1));
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * Función auxiliar para esperar un tiempo determinado.
+     * Usada para crear delays visuales entre acciones de la IA.
+     * 
+     * @param {number} ms - Milisegundos a esperar
+     * @returns {Promise} Promesa que se resuelve después del delay
+     */
+    esperarDelay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}</code></pre></article></section><footer class="footer" id="PeOAagUepe"><div class="wrapper">© 2024 WarCanvas. Todos los derechos reservados.</div></footer></div></div></div><div class="search-container" id="PkfLWpAbet" style="display:none"><div class="wrapper" id="iCxFxjkHbP"><button class="icon-button search-close-button" id="VjLlGakifb" aria-label="close search"><svg><use xlink:href="#close-icon"></use></svg></button><div class="search-box-c"><svg><use xlink:href="#search-icon"></use></svg> <input type="text" id="vpcKVYIppa" class="search-input" placeholder="Search..." autofocus></div><div class="search-result-c" id="fWwVHRuDuN"><span class="search-result-c-text">Type anything to view search result</span></div></div></div><div class="mobile-menu-icon-container"><button class="icon-button" id="mobile-menu" data-isopen="false" aria-label="menu"><svg><use xlink:href="#menu-icon"></use></svg></button></div><div id="mobile-sidebar" class="mobile-sidebar-container"><div class="mobile-sidebar-wrapper"><a href="/" class="sidebar-title sidebar-title-anchor">WarCanvas Docs</a><div class="mobile-nav-links"><div class="menu-item navbar-item"><a id="repository-mobile" href="https://github.com/CapitanManzana/WarCanvas" target="_blank">Repositorio</a></div></div><div class="mobile-sidebar-items-c"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-namespaces"><div>Namespaces</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="Escenas.html">Escenas</a></div><div class="sidebar-section-children"><a href="Logica.html">Logica</a></div><div class="sidebar-section-children"><a href="Render.html">Render</a></div></div></div><div class="mobile-navbar-actions"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#light-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div></div></div><script type="text/javascript" src="scripts/core.min.js"></script><script src="scripts/search.min.js" defer="defer"></script><script src="scripts/third-party/fuse.js" defer="defer"></script><script type="text/javascript">var tocbotInstance=tocbot.init({tocSelector:"#eed4d2a0bfd64539bb9df78095dec881",contentSelector:".main-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0,scrollContainer:".main-content",headingsOffset:130,onClick:bringLinkToView})</script></body></html>
