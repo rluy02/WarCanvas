@@ -1,0 +1,9 @@
+Pasar luego a PDF...
+-Se indica en la pagina web los controles necesarios para poder jugar. Click y espacio en los minijuegos
+
+
+
+Falta:
+Agregar sonidos...
+Pantalla de carga de espera...
+Evitar que el jugador pueda empezar una partida si por lo menos no hay el comandante propio y del rival. 
