@@ -4,6 +4,7 @@ import Menu from "./Escenas/Menu.js";
 import EscenaColocarPiezas from "./Escenas/EscenaColocarPiezas.js";
 import Minijuego from "./Escenas/Minijuego.js";
 import Tutorial from "./Escenas/Tutorial.js";
+import Preloader from "./Escenas/Preloader.js"
 //Config
 let config = {
   type: Phaser.CANVAS,
@@ -21,7 +22,7 @@ let config = {
   render:{
     pixelArt: true
   },
-  scene: [Menu, Inicio, EscenaColocarPiezas, Minijuego, Tutorial],
+  scene: [Preloader,Menu, Inicio, EscenaColocarPiezas, Minijuego, Tutorial],
 };
 
 // 2. Creación de la instancia del juego

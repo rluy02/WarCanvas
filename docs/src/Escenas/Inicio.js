@@ -42,14 +42,6 @@ class Inicio extends Phaser.Scene {
     }
 
     /**
-     * Método preload de la escena Inicio.
-     * Carga las imágenes necesarias para la escena.
-     */
-    preload() {
-        this.crearImagenes();
-    }
-
-    /**
      * Se llama a este metodo cuando se despierta la escena
      */
     wake() {
@@ -298,33 +290,6 @@ class Inicio extends Phaser.Scene {
                 repeat: 0
             });
         }
-    }
-
-    /**
-     * Método crearImagenes de la escena Inicio.
-     * Carga las imágenes necesarias para la escena.
-     */
-    crearImagenes() {
-        for (let i = 0; i <= 6; i++) {
-            this.load.image(`dice${i}`, `./imgs/dice/dice${i}.webp`);
-        }
-
-        this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
-        this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
-
-        this.load.image('peon', './imgs/piezas/soldado-dibujado.webp');
-        this.load.image('peon-blanco', './imgs/piezas/white-pawn.webp');
-        this.load.image('peon-rojo', './imgs/piezas/red-pawn.webp');
-        this.load.image('peon2', './imgs/piezas/soldado-realista.webp');
-        this.load.image('caballeria', './imgs/piezas/caballeria-dibujada.webp');
-        this.load.image('caballeria2', './imgs/piezas/caballeria-realista.webp');
-        this.load.image('comandante', './imgs/piezas/Comandante.webp');
-        this.load.image('comandante2', './imgs/piezas/comandante-realista.webp');
-        this.load.image('artilleria', './imgs/piezas/artilleria-dibujada.webp');
-        this.load.image('artilleria2', './imgs/piezas/artilleria-realista.webp');
-        this.load.image('marcoConquista', './imgs/ui/marcoTerrenoConquistado.webp');
-
-        this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
     }
 
     /**

@@ -25,14 +25,6 @@ class Tutorial extends Phaser.Scene {
     }
 
     /**
-     * Método preload de la escena Tutorial.
-     * Carga las imágenes necesarias para la escena.
-     */
-    preload() {
-       this.crearImagenes();
-    }
-
-    /**
      * Método create de la escena Tutorial.
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
@@ -126,31 +118,7 @@ class Tutorial extends Phaser.Scene {
     cambiarEscena() {
          this.scene.start('ElegirPiezas');
     }
-
-    /**
-     * Método crearImagenes de la escena Tutorial.
-     * Carga las imágenes necesarias para las piezas del juego.
-     */
-    crearImagenes(){
-        
-        this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
-        this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
-
-    this.load.image('peon', './imgs/piezas/soldado-dibujado.webp');
-        this.load.image('peon-blanco', './imgs/piezas/white-pawn.webp');
-        this.load.image('peon-rojo', './imgs/piezas/red-pawn.webp');
-        this.load.image('peon2', './imgs/piezas/soldado-realista.webp');
-        this.load.image('caballeria', './imgs/piezas/caballeria-dibujada.webp');
-        this.load.image('caballeria2', './imgs/piezas/caballeria-realista.webp');
-        this.load.image('comandante', './imgs/piezas/Comandante.webp');
-        this.load.image('comandante2', './imgs/piezas/comandante-realista.webp');
-        this.load.image('artilleria', './imgs/piezas/artilleria-dibujada.webp');
-        this.load.image('artilleria2', './imgs/piezas/artilleria-realista.webp');
-        this.load.image('dialogo', './imgs/Tutorial/Dialogue.webp');
-
-        this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
-
-    }    
+   
     /**
      * Crea las animaciones necesarias para la escena.
      */

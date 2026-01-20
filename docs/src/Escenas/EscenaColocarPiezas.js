@@ -24,14 +24,6 @@ class EscenaColocarPiezas extends Phaser.Scene {
     }
 
     /**
-     * Método preload de la escena EscenaColocarPiezas.
-     * Carga las imágenes necesarias para la escena.
-     */
-    preload() {
-       this.crearImagenes();
-    }
-
-    /**
      * Método create de la escena EscenaColocarPiezas.
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
@@ -64,23 +56,6 @@ class EscenaColocarPiezas extends Phaser.Scene {
             this.piezaEliminada(pieza); // Emit en ElegirPieza Tablero
             this.tabGrafico.colorearRango();
         });
-    }
-
-    /**
-     * Método crearImagenes de la escena EscenaColocarPiezas.
-     * Carga las imágenes necesarias para las piezas del juego.
-     */
-    crearImagenes(){
-       this.load.image('peon', './imgs/piezas/soldado-dibujado.webp');
-        this.load.image('peon-blanco', './imgs/piezas/white-pawn.webp');
-        this.load.image('peon-rojo', './imgs/piezas/red-pawn.webp');
-        this.load.image('peon2', './imgs/piezas/soldado-realista.webp');
-        this.load.image('caballeria', './imgs/piezas/caballeria-dibujada.webp');
-        this.load.image('caballeria2', './imgs/piezas/caballeria-realista.webp');
-        this.load.image('comandante', './imgs/piezas/Comandante.webp');
-        this.load.image('comandante2', './imgs/piezas/comandante-realista.webp');
-        this.load.image('artilleria', './imgs/piezas/artilleria-dibujada.webp');
-        this.load.image('artilleria2', './imgs/piezas/artilleria-realista.webp');
     }
 
     /**

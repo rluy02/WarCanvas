@@ -16,18 +16,6 @@ class Minijuego extends Phaser.Scene {
 
     }
 
-    /**
-     * Carga los recursos necesarios para la escena.
-     */
-    preload() {
-        //cuando esta escena venga de INICIO, que no recargue las imagenes
-        if (!this.textures.exists('Comandante')) this.load.image('Comandante', './imgs/piezas/Comandante.webp');
-        if (!this.textures.exists('ComandanteEnemigo')) this.load.image('ComandanteEnemigo', './imgs/piezas/comandante-realista.webp');
-        if (!this.textures.exists('Granada')) this.load.image('Granada', './imgs/minijuego/granada.webp');
-        if (!this.textures.exists('explosion')) this.load.spritesheet('explosion', './imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 })
-        if (!this.textures.exists('fondoMiniJuego')) this.load.image('fondoMiniJuego', './imgs/minijuego/miniJuegoFondo.webp');
-
-    }
 
     /**
      * Crea los elementos de la escena.
@@ -135,7 +123,7 @@ class Minijuego extends Phaser.Scene {
      */
     createDrawFull() {
         //agregamos la fisica y el sprite
-        this.comandante = this.physics.add.sprite(100, this.scale.height - 100, 'Comandante');
+        this.comandante = this.physics.add.sprite(100, this.scale.height - 100, 'comandante');
         //reducimos el tamaño
         this.comandante.setScale(0.1);
         //para que el comandante se choque con los limites (es el canvas)
@@ -178,7 +166,7 @@ class Minijuego extends Phaser.Scene {
 
         for (let i = 0; i < this.vidasComandante; i++) {
             let icon = undefined;
-            icon = this.add.image(startX + i * 50, y, 'Comandante');
+            icon = this.add.image(startX + i * 50, y, 'comandante');
             icon.setDisplaySize(64, 64);
             this.iconosVida.push(icon);
         }
@@ -189,7 +177,7 @@ class Minijuego extends Phaser.Scene {
      */
     createComandanteEnemigo() {
         //agregamos la fisica y el sprite
-        this.comandanteEnemigo = this.add.sprite(this.scale.width - 100, this.scale.height / 2, 'ComandanteEnemigo').setScale(0.1);
+        this.comandanteEnemigo = this.add.sprite(this.scale.width - 100, this.scale.height / 2, 'comandante2').setScale(0.1);
     }
 
     /**
@@ -197,7 +185,7 @@ class Minijuego extends Phaser.Scene {
      */
     createGranada() {
         //se crean varias granadas asi que mejor procesarlas como elementos temporales
-        let granada = this.physics.add.sprite(this.scale.width - 100, this.scale.height / 2, 'Granada').setScale(0.035);
+        let granada = this.physics.add.sprite(this.scale.width - 100, this.scale.height / 2, 'granada').setScale(0.035);
         //para que el comandante se choque con los limites (es el canvas)
         granada.setGravityY(-300);
         let randomY = Phaser.Math.Between(-500, 0);

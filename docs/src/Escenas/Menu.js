@@ -14,17 +14,6 @@ class Menu extends Phaser.Scene {
     }
 
     /**
-     * Método preload de la escena Menu.
-     * Carga las imágenes necesarias para la escena.
-     */
-    preload() {
-        this.load.image('fondo', 'imgs/ui/fondo_menu.webp')
-        this.load.image('boton', 'imgs/ui/boton.webp')
-        this.load.font('Kotton', 'font/Kotton.ttf')
-        this.load.audio('click', 'audio/clickSFX.wav')
-    }
-
-    /**
      * Método create de la escena Menu.
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
