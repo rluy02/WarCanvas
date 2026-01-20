@@ -37,6 +37,7 @@ export default class Preloader extends Phaser.Scene {
         this.load.image('dialogo', './imgs/Tutorial/Dialogue.webp');
         //Audio
         this.load.audio('click', 'audio/clickSFX.wav');
+        this.load.audio('finalizarMovimiento', 'audio/finalizarMovSFX.wav');
 
         // Tablero / mapa
         this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
