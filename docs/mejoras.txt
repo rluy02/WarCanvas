@@ -1,6 +1,6 @@
 Pasar luego a PDF...
 -Se indica en la pagina web los controles necesarios para poder jugar. Click y espacio en los minijuegos
-
+-Mejora semantica en los getters de soldados,caballerias, artillerias y comandantes.
 
 
 Falta:

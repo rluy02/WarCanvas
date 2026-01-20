@@ -64,10 +64,10 @@ class PanelColocarPiezas {
         this.artilleriaImg = this.cargarImagen('artilleria', width - sideWidth + 50, 350, 50, 'Artilleria', this.Artilleria);
         this.comandanteImg = this.cargarImagen('comandante', width - sideWidth + 50, 425, 50, 'Comandante', this.Comandante);
 
-        this.SoldadosNum = this.createText(width - sideWidth / 2 + 80, 200, '+' + this.equipoActual.getSoldados(), 300, ' ', '24px', 0.0);
-        this.CaballeriaNum = this.createText(width - sideWidth / 2 + 80, 275, '+' + this.equipoActual.getCaballeria(), 300, ' ', '24px', 0.0);
-        this.ArtilleriaNum = this.createText(width - sideWidth / 2 + 80, 350, '+' + this.equipoActual.getArtilleria(), 300, ' ', '24px', 0.0);
-        this.ComandanteNum = this.createText(width - sideWidth / 2 + 80, 425, '+' + this.equipoActual.getComandante(), 300, ' ', '24px', 0.0);
+        this.SoldadosNum = this.createText(width - sideWidth / 2 + 80, 200, '+' + this.equipoActual.getNumSoldados(), 300, ' ', '24px', 0.0);
+        this.CaballeriaNum = this.createText(width - sideWidth / 2 + 80, 275, '+' + this.equipoActual.getNumCaballerias(), 300, ' ', '24px', 0.0);
+        this.ArtilleriaNum = this.createText(width - sideWidth / 2 + 80, 350, '+' + this.equipoActual.getNumArtillerias(), 300, ' ', '24px', 0.0);
+        this.ComandanteNum = this.createText(width - sideWidth / 2 + 80, 425, '+' + this.equipoActual.getNumComandantes(), 300, ' ', '24px', 0.0);
 
         this.buttonTry = this.createText(width - sideWidth / 2, 520, 'Iniciar', 0, ' ', '32px', 0.5, '#ffffffff');
         this.buttonTry.setInteractive({ useHandCursor: true });
@@ -174,10 +174,10 @@ class PanelColocarPiezas {
      * Actualiza los contadores numéricos en el panel cuando una pieza es posicionada o eliminada.
      */
     piezaPosicionada() {
-        this.SoldadosNum.setText(`+${this.equipoActual.getSoldados()}`);
-        this.CaballeriaNum.setText(`+${this.equipoActual.getCaballeria()}`);
-        this.ArtilleriaNum.setText(`+${this.equipoActual.getArtilleria()}`);
-        this.ComandanteNum.setText(`+${this.equipoActual.getComandante()}`);
+        this.SoldadosNum.setText(`+${this.equipoActual.getNumSoldados()}`);
+        this.CaballeriaNum.setText(`+${this.equipoActual.getNumCaballerias()}`);
+        this.ArtilleriaNum.setText(`+${this.equipoActual.getNumArtillerias()}`);
+        this.ComandanteNum.setText(`+${this.equipoActual.getNumComandantes()}`);
     }
 
     /**
