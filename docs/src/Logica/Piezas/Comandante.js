@@ -16,7 +16,7 @@ class Comandante extends Pieza {
      */
     constructor(tablero, fil, col, jugador) {
         super(tablero, 'Comandante', fil, col, jugador, 4, 3, 5);
-        
+
         /**
          * Peso base del comandante (sin considerar amenazas o aliados)
          * @type {number}
@@ -35,7 +35,7 @@ class Comandante extends Pieza {
      */
     calculaModo() {
         let modo;
-        
+
         // Calcular límites del área de análisis (2 celdas alrededor)
         let topLimit = this.fil - 2 < 0 ? 0 : this.fil - 2;
         let bottomLimit = this.fil + 2 > this.tablero.filas - 1 ? this.tablero.filas - 1 : this.fil + 2;
@@ -47,23 +47,23 @@ class Comandante extends Pieza {
         let artilleria = 0;
         let comandante = 0;
         let piezasEnRango = 0;
-        
+
         // Escanear área alrededor del comandante
         for (let i = topLimit; i <= bottomLimit; i++) {
             for (let j = leftLimit; j <= rightLimit; j++) {
                 if (!this.tablero.getCelda(i, j).estaVacia() && this.tablero.getCelda(i, j).getPieza().getJugador() === 'J1') {
                     const pieza = this.tablero.getCelda(i, j).getPieza();
                     let res = this.detectaTipo(this.tablero.getCelda(i, j), 'J1');
-                    
+
                     // Clasificar piezas enemigas encontradas
                     switch (res) {
-                        case 1: 
+                        case 1:
                             soldados.push(pieza);
                             break;
-                        case 2: 
+                        case 2:
                             caballerias.push(pieza);
                             break;
-                        case 4: 
+                        case 4:
                             comandante = 1;
                             break;
                     }
@@ -71,20 +71,20 @@ class Comandante extends Pieza {
                 }
             }
         }
-        
+
         // Verificar si hay artillería enemiga en rango de disparo
         let artilleriaJ1 = this.encuentraArtilleria();
         if (artilleriaJ1 && artilleriaJ1.puedeDisparar()) {
             if (artilleriaJ1.getPosicion().col < this.col && artilleriaJ1.getPosicion().col + 4 >= this.col)
                 artilleria = 1;
         }
-        
+
         // Determinar modo según amenazas detectadas
         if (soldados.length > 2 || caballerias.length > 2 || artilleria == 1 || comandante == 1 || piezasEnRango > 3)
             modo = 'DEFENSA';
-        else 
+        else
             modo = 'ATAQUE';
-            
+
         return modo;
     }
 
@@ -159,7 +159,7 @@ class Comandante extends Pieza {
         if (modo === 'ATAQUE') {
             // Modo ofensivo: buscar enemigo de mayor valor en radio de 2 celdas
             let celdasVecinas = this.getVecinos(celdaInicial);
-            
+
             // Primera capa: vecinos directos
             for (const vecino of celdasVecinas) {
                 if (!vecino.estaVacia() && vecino.getPieza().getJugador() === 'J1') {
@@ -169,7 +169,7 @@ class Comandante extends Pieza {
                         bestCelda = vecino;
                     }
                 }
-                
+
                 // Segunda capa: vecinos de los vecinos
                 const segVecinos = this.getVecinos(vecino);
                 for (const segVecino of segVecinos) {
@@ -216,7 +216,7 @@ class Comandante extends Pieza {
                         break;
                     case 'Comandante':
                         if (jugadorObjetivo === 'J1')
-                        peso += 4;
+                            peso += 4;
                         break;
                 }
             }
@@ -293,6 +293,42 @@ class Comandante extends Pieza {
                 }
             }
         }
+    }
+
+    /**
+     * Calcula las casillas disponibles para mover o atacar cuando se selecciona una pieza.
+     * Devuelve las casillas según el tipo de pieza y su alcance.
+     * @param {number} fil - fila de la pieza seleccionada
+     * @param {number} col - columna de la pieza seleccionada
+     * @param {Tablero} tablero - el tablero del juego
+     * @returns {Array<Object>} array de objetos con coordenadas y tipo de acción (vacia/enemigo)
+     */
+    piezaSeleccionada(fil, col, tablero) {
+        if (this.movida) return [];
+        
+        let celdasSeleccionadas = [];
+        let filas = tablero.size().fila;
+        let columnas = tablero.size().col;
+        let tableroDeJuego = tablero.getTableroDeJuego();
+
+        for (let i = col - 1; i <= col + 1; i++) {
+            for (let j = fil - 1; j <= fil + 1; j++) {
+                // fuera de tablero deja de mirar en esta dirección
+                if (j < 0 || i < 0 || j >= filas || i >= columnas) continue;
+                if (j == fil && i == col) continue; // saltar la casilla central
+
+                const cel = tablero.tablero[j][i];
+                if (cel.estaVacia()) {
+                    // casilla libre: se puede mover; sigue mirando más lejos
+                    celdasSeleccionadas.push({ fil: j, col: i, tipo: "vacia" });
+                } else {
+                    // hay pieza: si es rival, puedes atacar esa casilla; en ambos casos paras
+                    const esRival = cel.getPieza().getJugador() !== this.jugador;
+                    if (esRival) celdasSeleccionadas.push({ fil: j, col: i, tipo: "enemigo" });
+                }
+            }
+        }
+        return celdasSeleccionadas;
     }
 }
 
