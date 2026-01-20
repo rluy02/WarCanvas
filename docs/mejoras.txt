@@ -4,6 +4,21 @@ Pasar luego a PDF...
 
 
 Falta:
-Agregar sonidos...
-Pantalla de carga de espera...
-Evitar que el jugador pueda empezar una partida si por lo menos no hay el comandante propio y del rival. 
+Agregar sonidos...{
+    -click para todos los accionables.
+    -algo mientras suenan los dados?, o al lanzarlos
+    -victoria
+    -derrota
+    -probar al soltar las piezas.
+    -evento terremoto.
+    -evento lluvia.
+    -explosion de las granadas del minijuego y el de la artilleria
+}
+-Pantalla de carga de espera...
+-Evitar que el jugador pueda empezar una partida si por lo menos no hay el comandante propio y del rival.
+-En el tutorial o colocar piezas un boton para volver al menu.
+-Durante el tutorial, que no se continuara con el texto del tutorial hasta que el usuario
+haya realizado la acción que se pretende que realice para entender el funcionamiento de la
+pieza, y no es algo muy complicado usando eventos. Es decir, para cuando se habla del movimiento tiene que confirmarse que se ha movido primeramente
+y cuando se explica el combate quizas simular el ataque en un panel informativo (o poner el boton atacar en el panel lateral encima de drawful).
+Otra opcion es pisar el panelLateral mostrando el flujo de combate normal y al terminar el combate y pasar 3 segundos, volver al panelLateral anterior.
