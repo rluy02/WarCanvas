@@ -21,6 +21,7 @@ class Menu extends Phaser.Scene {
         this.load.image('fondo', 'imgs/ui/fondo_menu.webp')
         this.load.image('boton', 'imgs/ui/boton.webp')
         this.load.font('Kotton', 'font/Kotton.ttf')
+        this.load.audio('click', 'audio/clickSFX.wav')
     }
 
     /**
@@ -28,6 +29,8 @@ class Menu extends Phaser.Scene {
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
     create() {
+        const clickSound = this.sound.add('click');
+
         this.add.image(400, 300, 'fondo').setOrigin(0.5).setScale(0.5);
         this.add.text(this.scale.width / 2, this.scale.height / 2 - 200, 'WAR CANVAS', {
             fontSize: '80px',
@@ -64,21 +67,22 @@ class Menu extends Phaser.Scene {
         }).setOrigin(0.5);
 
         //BOTON MINIJUEGO
-        let botonMinijuego = this.add.image(this.scale.width/2, this.scale.height / 2 + 150, 'boton')
+        let botonMinijuego = this.add.image(this.scale.width / 2, this.scale.height / 2 + 150, 'boton')
             .setOrigin(0.5)
             .setScale(0.4)
             .setInteractive({ useHandCursor: true })
 
-        let minijuegoText = this.add.text(botonMinijuego.x,botonMinijuego.y, 'Minijuego',{
+        let minijuegoText = this.add.text(botonMinijuego.x, botonMinijuego.y, 'Minijuego', {
             fontSize: '36px',
             color: '#ffffff',
             stroke: '#021601ff',
             strokeThickness: 10,
             fontFamily: 'Kotton',
-        }).setOrigin(0.5);    
+        }).setOrigin(0.5);
 
         //BOTON JUGAR
         botonInicio.on('pointerdown', () => {
+            clickSound.play();
             this.scene.launch('Tutorial'); //launch para evitar destruir la escena del menu
 
             //desactivamos los botones para evitar doble clicks mientras dormimos la escena
@@ -143,7 +147,7 @@ class Menu extends Phaser.Scene {
 
         //BOTON DEFAULT
         defaultText.on('pointerdown', () => {
-            this.scene.launch('Inicio', { 
+            this.scene.launch('Inicio', {
                 ia: true
             }); //launch para evitar destruir la escena del menu
 
