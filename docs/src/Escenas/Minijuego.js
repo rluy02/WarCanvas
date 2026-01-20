@@ -1,3 +1,4 @@
+import { Sfx } from "../AudioManager/Sfx.js";
 import PanelEventos from "../Render/PanelEventos.js";
 
 /**
@@ -21,7 +22,7 @@ class Minijuego extends Phaser.Scene {
      * Crea los elementos de la escena.
      */
     create() {
-        this.crearAnimaciones();
+         Sfx.bind(this);
         this.panelEventos = new PanelEventos(this);
         this.add.image(500, 300, 'fondoMiniJuego').setOrigin(0.5).setScale(0.85).setAlpha(0.5);
 
@@ -246,21 +247,6 @@ class Minijuego extends Phaser.Scene {
                 () => {
                     this.endMinijuego('J2');
                 });
-        }
-    }
-
-
-    /**
-     * Crea las animaciones
-     */
-    crearAnimaciones() {
-        if (!this.anims.exists('explotar')) {
-            this.anims.create({
-                key: 'explotar',
-                frames: this.anims.generateFrameNumbers('explosion', { frames: [0, 1, 2, 3, 4, 5, 6, 7] }),
-                frameRate: 10,
-                repeat: 0
-            });
         }
     }
 }

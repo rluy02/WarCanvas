@@ -1,3 +1,4 @@
+import { Sfx } from "../AudioManager/Sfx.js";
 import ColocarPiezas from "../Logica/ColocarPiezas.js";
 import TableroGraficoTutorial from "../Render/TableroGraficoTutorial.js";
 import PiezaGrafico from "../Render/PiezaGrafico.js";
@@ -29,8 +30,8 @@ class Tutorial extends Phaser.Scene {
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
     create() {
-       this.crearAnimaciones();
-       this.todasLasPiezas = true;
+        Sfx.bind(this);
+        this.todasLasPiezas = true;
 
         this.equipoJ1 = new Equipo("J1");
         this.equipoJ2 = new Equipo("J2");
@@ -47,15 +48,15 @@ class Tutorial extends Phaser.Scene {
         this.PanelEventos.mostrar('Tutorial', 'Pulsa Aceptar y empieza a jugar', 'WarCanvas');
 
         this.tutorial = new PanelTutorial(this, this.tab, this.tabGrafico, this.PanelEventos);
-         EventBus.on(Eventos.PIECE_POSITION, (pieza) => {
+        EventBus.on(Eventos.PIECE_POSITION, (pieza) => {
             this.piezaPosicionada(pieza); // Emit en ElegirPieza Tablero
             //this.tabGrafico.colorearRango();
         });
-        EventBus.on(Eventos.PIECE_DELETE, (pieza)=> {
+        EventBus.on(Eventos.PIECE_DELETE, (pieza) => {
             this.piezaEliminada(pieza); // Emit en ElegirPieza Tablero
             //this.tabGrafico.colorearRango();
         });
-                // Se añade un evento para cuando se mueve la pieza
+        // Se añade un evento para cuando se mueve la pieza
         EventBus.on(Eventos.PIECE_MOVED, (pieza) => {
             this.moverPieza(pieza);
         });
@@ -72,8 +73,9 @@ class Tutorial extends Phaser.Scene {
         this.piezas.push(pieza);
         this.tabGrafico.limpiarTablero();
         let celda = this.tab.getPiezaActiva();
-        if (celda) {let posicion = celda.getPosicion();
-        this.tabGrafico.onCeldaClick(posicion.fila, posicion.col);
+        if (celda) {
+            let posicion = celda.getPosicion();
+            this.tabGrafico.onCeldaClick(posicion.fila, posicion.col);
         }
     }
 
@@ -85,7 +87,8 @@ class Tutorial extends Phaser.Scene {
         //this.piezas.eliminarPieza(pieza);
         this.tabGrafico.borrarFragmentoMapa(pieza.fil, pieza.col, pieza.getJugador())
         Phaser.Utils.Array.Remove(this.piezas, pieza);
-        this.piezaGrafico.eliminarPieza(pieza);    }
+        this.piezaGrafico.eliminarPieza(pieza);
+    }
 
     /**
      * Elimina la pieza del tablero y de la lista de piezas.
@@ -99,10 +102,10 @@ class Tutorial extends Phaser.Scene {
         }
     }
 
-        /**
-     * Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
-     * @param {Pieza} pieza 
-     */
+    /**
+ * Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
+ * @param {Pieza} pieza 
+ */
     moverPieza(pieza) {
         for (let p of this.piezas) {
             if (p == pieza) {
@@ -116,22 +119,9 @@ class Tutorial extends Phaser.Scene {
      * Cambiar de escena -> elegir piezas
      */
     cambiarEscena() {
-         this.scene.start('ElegirPiezas');
+        this.scene.start('ElegirPiezas');
     }
-   
-    /**
-     * Crea las animaciones necesarias para la escena.
-     */
-    crearAnimaciones() {
-        if (!this.anims.exists('explotar')) {
-            this.anims.create({
-                key: 'explotar',
-                frames: this.anims.generateFrameNumbers('explosion', { frames: [0, 1, 2, 3, 4, 5, 6, 7] }),
-                frameRate: 10,
-                repeat: 0
-            });
-        }
-    }
+
 }
 
 export default Tutorial;

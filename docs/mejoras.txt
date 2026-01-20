@@ -1,7 +1,8 @@
 Pasar luego a PDF...
 -Se indica en la pagina web los controles necesarios para poder jugar. Click y espacio en los minijuegos
 -Mejora semantica en los getters de soldados,caballerias, artillerias y comandantes.
-
+-Pantalla de carga de espera de todos los recursos al iniciar el juego.
+-Refactor de las llamadas a animacion
 
 Falta:
 Agregar sonidos...{
@@ -14,7 +15,6 @@ Agregar sonidos...{
     -evento lluvia.
     -explosion de las granadas del minijuego y el de la artilleria
 }
--Pantalla de carga de espera...
 -Evitar que el jugador pueda empezar una partida si por lo menos no hay el comandante propio y del rival.
 -En el tutorial o colocar piezas un boton para volver al menu.
 -Durante el tutorial, que no se continuara con el texto del tutorial hasta que el usuario

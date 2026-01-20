@@ -1,3 +1,9 @@
+/**
+ * Escena para cargar todos los recursos del juego.
+ * @class Preloader
+ * @extends Phaser.Scene
+ * @memberof Escenas
+ */
 export default class Preloader extends Phaser.Scene {
     constructor() {
         super("Preloader");
@@ -5,6 +11,9 @@ export default class Preloader extends Phaser.Scene {
 
     preload() {
         this._t0 = performance.now(); //tiempo exacto en el que empezo el preload
+        this._loaded = false;         //flag: indica si el loader ya terminó
+        this._elapsed = 0;            //tiempo real de carga (ms)
+
         //(rectángulo + texto)
         const { width, height } = this.scale;
 
@@ -25,8 +34,9 @@ export default class Preloader extends Phaser.Scene {
         this.load.image('fondo', 'imgs/ui/fondo_menu.webp');
         this.load.image('boton', 'imgs/ui/boton.webp');
         this.load.font('Kotton', 'font/Kotton.ttf');
-        this.load.audio('click', 'audio/clickSFX.wav');
         this.load.image('dialogo', './imgs/Tutorial/Dialogue.webp');
+        //Audio
+        this.load.audio('click', 'audio/clickSFX.wav');
 
         // Tablero / mapa
         this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
@@ -59,18 +69,39 @@ export default class Preloader extends Phaser.Scene {
 
 
 
+        // COMPLETE: aquí NO cambiamos de escena. Solo guardamos estado.
         this.load.once("complete", () => {
-            this.load.removeAllListeners();
-
-            const minMs = 500; //tiempo minimo que se muestra la pantalla de carga  
-            const elapsed = performance.now() - this._t0; //cuanto tardo la carga
-            const wait = Math.max(0, minMs - elapsed); //cuanto falta para llegar a ese tiempo minimo
-
-            this.time.delayedCall(wait, () => {
-                this.scene.start("Menu");
-            });
+            this.load.removeAllListeners(); //limpia progress (y otros) para evitar duplicados si se reentra
+            this._elapsed = performance.now() - this._t0; //cuanto tardo la carga
+            this._loaded = true; //marca que ya terminó
         });
         //este ultimo calculo de tiempo es para que en cargas con velocidades super altas se visualice un poco mas la pantalla de carga
         //y no sea solamente un pantallazo negro
+    }
+
+    create() {
+        //Esto es solo seguridad extra. (Ya deberia de haber cargado)
+        if (!this._loaded) {
+            this.time.delayedCall(0, () => this.create());
+            return;
+        }
+
+        // ya cargado el spritesheet. Creamos la anim.
+        if (!this.anims.exists('explotar')) {
+            this.anims.create({
+                key: 'explotar',
+                frames: this.anims.generateFrameNumbers('explosion', { frames: [0, 1, 2, 3, 4, 5, 6, 7] }),
+                frameRate: 10,
+                repeat: 0
+            });
+        }
+
+        //Tiempo mínimo visible del preloader
+        const minMs = 500;
+        const wait = Math.max(0, minMs - this._elapsed);
+
+        this.time.delayedCall(wait, () => {
+            this.scene.start("Menu");
+        });
     }
 }

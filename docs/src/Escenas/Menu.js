@@ -1,3 +1,4 @@
+import { Sfx } from "../AudioManager/Sfx.js";
 /**
  * Escena del menú principal del juego.
  * @class Menu
@@ -18,7 +19,8 @@ class Menu extends Phaser.Scene {
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
     create() {
-        const clickSound = this.sound.add('click');
+        Sfx.bind(this);
+        Sfx.setCooldown('click', 80);
 
         this.add.image(400, 300, 'fondo').setOrigin(0.5).setScale(0.5);
         this.add.text(this.scale.width / 2, this.scale.height / 2 - 200, 'WAR CANVAS', {
@@ -71,7 +73,7 @@ class Menu extends Phaser.Scene {
 
         //BOTON JUGAR
         botonInicio.on('pointerdown', () => {
-            clickSound.play();
+            Sfx.click();
             this.scene.launch('Tutorial'); //launch para evitar destruir la escena del menu
 
             //desactivamos los botones para evitar doble clicks mientras dormimos la escena
@@ -92,6 +94,7 @@ class Menu extends Phaser.Scene {
 
         // BOTON CREDITOS
         botonCreditos.on('pointerdown', () => {
+            Sfx.click();
             document.getElementById('creditos').style.display = 'block';
             document.getElementById('juego').style.display = 'none';
         })
@@ -108,6 +111,7 @@ class Menu extends Phaser.Scene {
 
         //Boton minijuego
         botonMinijuego.on('pointerdown', () => {
+            Sfx.click();
             this.scene.launch('Minijuego'); //launch para evitar destruir la escena del menu
 
             //desactivamos los botones para evitar doble clicks mientras dormimos la escena
@@ -136,6 +140,7 @@ class Menu extends Phaser.Scene {
 
         //BOTON DEFAULT
         defaultText.on('pointerdown', () => {
+            Sfx.click();
             this.scene.launch('Inicio', {
                 ia: true
             }); //launch para evitar destruir la escena del menu

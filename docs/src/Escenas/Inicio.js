@@ -1,6 +1,6 @@
+import { Sfx } from "../AudioManager/Sfx.js";
 import { Eventos } from "../Events.js"
 import { EventBus } from "../EventBus.js";
-
 import PanelLateral from "../Render/PanelLateral.js";
 import Tablero from "../Logica/Tablero.js";
 import TableroGrafico from "../Render/TableroGrafico.js";
@@ -52,7 +52,7 @@ class Inicio extends Phaser.Scene {
         nameEnemy = (data == 'J2') ? 'Drawful' : 'el equipo Realista'
         // Aquí restauras lógica, reinicias inputs, etc.
         //let infoEvento = this.eventosAleatorios.infoEventoActual();
-        this.panelEventos.mostrar('MiniJuego Terminado', `El ganador del miniJuego es ${name}, el evento no le afectará`, 'Drawful', 'ACEPTAR', ()=>{
+        this.panelEventos.mostrar('MiniJuego Terminado', `El ganador del miniJuego es ${name}, el evento no le afectará`, 'Drawful', 'ACEPTAR', () => {
             this.eventosAleatorios.runEventoActual(data);
         });
     }
@@ -62,7 +62,7 @@ class Inicio extends Phaser.Scene {
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
     create() {
-        this.crearAnimaciones();
+        Sfx.bind(this);
 
         //Creamos la instancia y la guardamos en tab
         this.tab = new Tablero(8, 10, this);
@@ -228,7 +228,7 @@ class Inicio extends Phaser.Scene {
                 this.piezaGrafico.eliminarPieza(pieza);
             }
         }
-        
+
         // Eliminar la pieza del equipo correspondiente
         if (pieza.getJugador() === 'J1') {
             this.equipo1.eliminarPieza(pieza);
@@ -276,20 +276,6 @@ class Inicio extends Phaser.Scene {
         //por si necesitamos seguir desactivando objetos tener en cuenta esto...
         /* Text + .on() → Listener permanece incluso después de disableInteractive().
            Sprite / Rect + .on() o EventBus → Listener suele ser removido o ignorado cuando desactivas input o destruyes objeto. */
-    }
-
-    /**
-     * Crea las animaciones necesarias para la escena.
-     */
-    crearAnimaciones() {
-        if (!this.anims.exists('explotar')) {
-            this.anims.create({
-                key: 'explotar',
-                frames: this.anims.generateFrameNumbers('explosion', { frames: [0, 1, 2, 3, 4, 5, 6, 7] }),
-                frameRate: 10,
-                repeat: 0
-            });
-        }
     }
 
     /**

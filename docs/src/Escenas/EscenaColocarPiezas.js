@@ -1,3 +1,4 @@
+import { Sfx } from "../AudioManager/Sfx.js";
 import PanelColocarPiezas from "../Render/PanelColocarPiezas.js";
 import ColocarPiezas from "../Logica/ColocarPiezas.js";
 import TableroGraficoColocarPiezas from "../Render/TableroGraficoColocarPiezas.js";
@@ -28,7 +29,7 @@ class EscenaColocarPiezas extends Phaser.Scene {
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
     create() {
-       // this.crearAnimaciones();
+       Sfx.bind(this);
        this.todasLasPiezas = true;
 
         this.equipoJ1 = new Equipo("J1");
