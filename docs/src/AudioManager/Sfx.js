@@ -99,8 +99,9 @@ export const Sfx = (() => {
    * Mantiene tu código más legible.
    */
   const click = () => play('click');
+  const explosion = () => play('explosion', { volume: 0.1 });
 
-  return { bind, setCooldown, play, click };
+  return { bind, setCooldown, play, click,explosion };
 })();
 
 //[Esquema básico pero escalable de lo que seria un modulo de AudioManager generado por Chatgpt]

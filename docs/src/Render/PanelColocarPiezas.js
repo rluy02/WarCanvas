@@ -1,6 +1,7 @@
 import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
 import Equipo from "../Logica/Equipo.js";
+import { Sfx } from "../AudioManager/Sfx.js";
 
 /**
  * Panel para colocar piezas antes de iniciar la partida.
@@ -73,15 +74,18 @@ class PanelColocarPiezas {
         this.buttonTry.setInteractive({ useHandCursor: true });
 
         this.buttonTry.on('pointerdown', () => {
-            if(this.panelEventos.getInput()){
-            this.escena.cambiarEscena();}
+            Sfx.click();
+            if (this.panelEventos.getInput()) {
+                this.escena.cambiarEscena();
+            }
         });
 
         this.buttonChange = this.createText(width - sideWidth / 2, 490, 'Cambiar de equipo', 0, ' ', '24px', 0.5, '#ff0000ff');
         this.buttonChange.setInteractive({ useHandCursor: true });
 
         this.buttonChange.on('pointerdown', () => {
-            if(this.panelEventos.getInput()) this.cambiarEquipos();
+            Sfx.play('interactuar', { volume: 0.3 });//
+            if (this.panelEventos.getInput()) this.cambiarEquipos();
         });
 
         this.buttonCheat = this.createText(width - sideWidth / 2, 550, '(Pulsar para no poner todas las piezas)', 0, ' ', '16px', 0.5, '#ffffffff');
@@ -96,9 +100,11 @@ class PanelColocarPiezas {
         });
 
         this.buttonCheat.on('pointerdown', () => {
-            if(this.panelEventos.getInput()){
-            this.buttonCheat.setColor('#000000');
-            this.escena.Cheat();}
+            //No hace falta sonido porque siempre come (ademas que se solapa)
+            if (this.panelEventos.getInput()) {
+                this.buttonCheat.setColor('#000000');
+                this.escena.Cheat();
+            }
         });
 
         EventBus.on(Eventos.PIECE_POSITION, (pieza) => {
@@ -152,12 +158,13 @@ class PanelColocarPiezas {
         console.log(img)
 
         img.on('pointerdown', () => {
-            if(this.panelEventos.getInput()){
-            if (this.piezaSeleccionada) this.piezaSeleccionada.setColor('#ffffffff');
-            this.piezaSeleccionada = texto;
-            this.pintarCasillas();
-            this.tablero.setTipo(tipo);
-            texto.setColor('#000000ff');}
+            if (this.panelEventos.getInput()) {
+                if (this.piezaSeleccionada) this.piezaSeleccionada.setColor('#ffffffff');
+                this.piezaSeleccionada = texto;
+                this.pintarCasillas();
+                this.tablero.setTipo(tipo);
+                texto.setColor('#000000ff');
+            }
         })
 
         return img;
@@ -195,7 +202,7 @@ class PanelColocarPiezas {
         else {
             this.soldadoImg.setTexture('peon');
             this.caballeriaImg.setTexture('caballeria');
-             this.caballeriaImg.setDisplaySize(50, 50);
+            this.caballeriaImg.setDisplaySize(50, 50);
             this.artilleriaImg.setTexture('artilleria');
             this.comandanteImg.setTexture('comandante');
         }

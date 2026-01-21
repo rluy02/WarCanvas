@@ -3,17 +3,21 @@ Pasar luego a PDF...
 -Mejora semantica en los getters de soldados,caballerias, artillerias y comandantes.
 -Pantalla de carga de espera de todos los recursos al iniciar el juego.
 -Refactor de las llamadas a animacion
-
+-Se corrige el poder pasar finalizar movimiento tras haber movido la primera pieza por completo.
+-Sonidos:{
+    -click/select para todos los accionables.
+    -al soltar las piezas y conquistar (ganar combate).
+    -explosion de las granadas del minijuego y el de la artilleria
+}
 Falta:
 Agregar sonidos...{
     -click para todos los accionables.
     -algo mientras suenan los dados?, o al lanzarlos
     -victoria
     -derrota
-    -probar al soltar las piezas.
     -evento terremoto.
     -evento lluvia.
-    -explosion de las granadas del minijuego y el de la artilleria
+    
 }
 -Evitar que el jugador pueda empezar una partida si por lo menos no hay el comandante propio y del rival.
 -En el tutorial o colocar piezas un boton para volver al menu.

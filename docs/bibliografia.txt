@@ -20,3 +20,9 @@ img https://opencritic.com/game/2866/drawful-2
 
 Cuadro de la batalla de Navas de Tolosa como fondo del menu
 Obra perteneciente a https://es.wikipedia.org/wiki/Francisco_de_Paula_Van_Halen
+
+Sonido lanzamiento granada.
+Sound Effect by <a href="https://pixabay.com/es/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=106342">freesound_community</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=106342">Pixabay</a>
+
+Sonido explosion. (editado y con modificaciones en audacity)
+Sound Effect by <a href="https://pixabay.com/es/users/daviddumaisaudio-41768500/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=190266">David Dumais</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=190266">Pixabay</a>

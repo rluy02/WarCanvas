@@ -22,7 +22,7 @@ class Minijuego extends Phaser.Scene {
      * Crea los elementos de la escena.
      */
     create() {
-         Sfx.bind(this);
+        Sfx.bind(this);
         this.panelEventos = new PanelEventos(this);
         this.add.image(500, 300, 'fondoMiniJuego').setOrigin(0.5).setScale(0.85).setAlpha(0.5);
 
@@ -60,7 +60,7 @@ class Minijuego extends Phaser.Scene {
                 repeat: 5
             });
 
-            this.cuentaAtrasTimer =this.time.addEvent({
+            this.cuentaAtrasTimer = this.time.addEvent({
                 delay: 1000,
                 callback: this.updateCuentaAtras,
                 callbackScope: this,
@@ -90,7 +90,7 @@ class Minijuego extends Phaser.Scene {
                     this.endMinijuego('J1');
                 });
         }
-        }
+    }
     /**
      * Finaliza el minijuego, recarga la escena load pasandole los parametros del miniJuego
      */
@@ -99,7 +99,7 @@ class Minijuego extends Phaser.Scene {
         if (this.scene.isSleeping('Inicio')) {
             this.scene.get('Inicio').dataWake = data;
             this.scene.wake('Inicio');
-        } 
+        }
         else this.scene.launch('Inicio');
         console.log("Fin del minijuego");
         this.scene.stop();
@@ -114,6 +114,7 @@ class Minijuego extends Phaser.Scene {
             this.explosion.visible = true;
             this.explosion.setPosition(granada.x, granada.y);
             this.explosion.play('explotar');
+            Sfx.explosion();
             granada.setData('flag', true);
         }
         granada.destroy();
@@ -130,12 +131,12 @@ class Minijuego extends Phaser.Scene {
         //para que el comandante se choque con los limites (es el canvas)
         this.comandante.setCollideWorldBounds(true);
         this.comandante.body.setImmovable(true);
-       this.comandante.body.setSize(this.comandante.width-200, this.comandante.height-200); 
+        this.comandante.body.setSize(this.comandante.width - 200, this.comandante.height - 200);
         const spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         spaceKey.on('down', () => {
-            if (this.panelEventos.getInput()){
-            this.comandante.body.setAcceleration(0, 100);
-            this.comandante.body.setVelocity(0, -500);
+            if (this.panelEventos.getInput()) {
+                this.comandante.body.setAcceleration(0, 100);
+                this.comandante.body.setVelocity(0, -500);
             }
 
         });
@@ -185,6 +186,7 @@ class Minijuego extends Phaser.Scene {
      * Crea una granada
      */
     createGranada() {
+        Sfx.play('lanzarGranada', { volume: 0.2 });
         //se crean varias granadas asi que mejor procesarlas como elementos temporales
         let granada = this.physics.add.sprite(this.scale.width - 100, this.scale.height / 2, 'granada').setScale(0.035);
         //para que el comandante se choque con los limites (es el canvas)
@@ -194,7 +196,7 @@ class Minijuego extends Phaser.Scene {
         granada.setCollideWorldBounds(true);
         granada.body.setVelocity(randomX, randomY);
         granada.body.setBounce(0.3);
-        granada.body.setSize(granada.width-500, granada.height-500);
+        granada.body.setSize(granada.width - 500, granada.height - 500);
         //Activa el metodo onCollide
         granada.body.onCollide = true;
         //Data para que no explote 2 veces
@@ -205,7 +207,7 @@ class Minijuego extends Phaser.Scene {
         this.physics.add.collider(granada, this.comandante, () => {
             // Guardamos el timer en cada granada
             if (!granada.explosionTimer) {
-                granada.explosionTimer = this.time.delayedCall(2000, () => {
+                granada.explosionTimer = this.time.delayedCall(1500, () => {
                     this.explotaGranada(granada);
                 });
             }

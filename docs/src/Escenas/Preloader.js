@@ -4,7 +4,7 @@
  * @extends Phaser.Scene
  * @memberof Escenas
  */
-export default class Preloader extends Phaser.Scene {
+class Preloader extends Phaser.Scene {
     constructor() {
         super("Preloader");
     }
@@ -37,7 +37,11 @@ export default class Preloader extends Phaser.Scene {
         this.load.image('dialogo', './imgs/Tutorial/Dialogue.webp');
         //Audio
         this.load.audio('click', 'audio/clickSFX.wav');
-        this.load.audio('finalizarMovimiento', 'audio/finalizarMovSFX.wav');
+        this.load.audio('interactuar', 'audio/selectSFX.wav');
+        this.load.audio('lanzarGranada', 'audio/lanzarGranadaSFX.wav');
+        this.load.audio('explosion', 'audio/explosionSFX.wav');
+        this.load.audio('conquistarPieza', 'audio/conquistarPiezaSFX.wav');
+        this.load.audio('moverPieza', 'audio/moverPiezaSFX.wav');
 
         // Tablero / mapa
         this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
@@ -106,3 +110,5 @@ export default class Preloader extends Phaser.Scene {
         });
     }
 }
+
+export default Preloader;

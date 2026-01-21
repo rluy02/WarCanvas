@@ -114,8 +114,8 @@ class Inicio extends Phaser.Scene {
             this.piezas.push(pieza);
         }
         // Se añade un evento para cuando se mueve la pieza (once se ejecuta antes que on)
-        EventBus.on(Eventos.PIECE_MOVED, (pieza) => {
-            this.moverPieza(pieza);
+        EventBus.on(Eventos.PIECE_MOVED, (pieza,movConquistaSFX=false) => {
+            this.moverPieza(pieza,movConquistaSFX);
         });
 
         //Evento eliminacion de una pieza tras combate
@@ -209,11 +209,12 @@ class Inicio extends Phaser.Scene {
      * Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
      * @param {Pieza} pieza 
      */
-    moverPieza(pieza) {
+    moverPieza(pieza,movConquistaSFX=false) {
         for (let p of this.piezas) {
             if (p == pieza) {
                 let data = this.piezaGrafico.eliminarPieza(pieza);
                 this.piezaGrafico.dibujarPieza(pieza, data);
+                if (!movConquistaSFX) Sfx.play('moverPieza');
             }
         }
     }

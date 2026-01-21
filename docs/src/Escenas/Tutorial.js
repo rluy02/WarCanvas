@@ -57,8 +57,8 @@ class Tutorial extends Phaser.Scene {
             //this.tabGrafico.colorearRango();
         });
         // Se añade un evento para cuando se mueve la pieza
-        EventBus.on(Eventos.PIECE_MOVED, (pieza) => {
-            this.moverPieza(pieza);
+        EventBus.on(Eventos.PIECE_MOVED, (pieza, movConquistaSFX = false) => {
+            this.moverPieza(pieza, movConquistaSFX);
         });
 
     }
@@ -106,11 +106,12 @@ class Tutorial extends Phaser.Scene {
  * Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
  * @param {Pieza} pieza 
  */
-    moverPieza(pieza) {
+    moverPieza(pieza, movConquistaSFX = false) {
         for (let p of this.piezas) {
             if (p == pieza) {
                 this.piezaGrafico.eliminarPieza(pieza);
                 this.piezaGrafico.dibujarPieza(pieza);
+                if (!movConquistaSFX) Sfx.play('moverPieza');
             }
         }
     }

@@ -33,6 +33,9 @@ class Turno {
         EventBus.on(Eventos.ATACK, () => {
             this.acabarMovimientos();
         })
+        EventBus.on(Eventos.ATTACK_CHEAT, () => {
+            this.acabarMovimientos();
+        })
         EventBus.on(Eventos.PIECE_MOVED, () => { this.restarAccion() })
         EventBus.on(Eventos.CHANGE_TURN, (turnoJugador) => {
             this.turnoGrafico.setTurnoJugador(turnoJugador);
@@ -57,10 +60,6 @@ class Turno {
      */
     restarAccion() {
         if (!this.piezaActual) return;
-        // Si se han acabado ya lo resetea y vuelve
-        if (this.acabadoMovimientos){
-            this.acabadoMovimientos = false;
-        }
 
         const posAntes = this.posicionPieza; // posición guardada antes de mover
         const posDespues = this.piezaActual.getPosicion();
@@ -103,8 +102,6 @@ class Turno {
         if (this.movimientosPieza <= 0) {
             this.piezasMovidas.push(this.piezaActual);
             this.acabarMovimientos();
-
-            this.acabadoMovimientos = true;
         }
     }
 
@@ -113,17 +110,20 @@ class Turno {
      */
     acabarMovimientos() {
         // Si se han acabado ya lo resetea y vuelve
-        if (this.acabadoMovimientos){
+
+        if (this.acabadoMovimientos) return;
+
+        this.acabadoMovimientos = true;
+        this.escena.time.delayedCall(0, () => { // se desbloquea automáticamente (evitamos asi doble clicks por accidente)
             this.acabadoMovimientos = false;
-            return;
-        }
+        });
+
 
         if (!this.piezaActual) {
             console.log("La pieza al acabar movimientos es null")
         }
         else {
             this.piezasMovidas.push(this.piezaActual);
-
             this.piezaActual.setMovida();
             if (this.piezaActual.getTipo() == "Caballeria") {
                 this.piezaActual.setSaltoCaballeria(true);
@@ -166,7 +166,7 @@ class Turno {
         this.piezasMovidas = [];
         turnoJugador = "J1";
     }
-    
+
     /**
      * Destruye los listeners creados por este objeto
      */

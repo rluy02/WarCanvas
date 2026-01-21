@@ -4,6 +4,7 @@ import Tablero from "./Tablero.js";
 import TableroGrafico from "../Render/TableroGrafico.js";
 import PanelLateral from "../Render/PanelLateral.js";
 import Pieza from "./Pieza.js";
+import { Sfx } from "../AudioManager/Sfx.js";
 
 /**
  * Clase que gestiona los combates entre piezas.
@@ -196,6 +197,8 @@ class Combates {
         ('Panel ataque - Combate.js');
 
         if (ganador) {
+           
+            Sfx.play('conquistarPieza');
             EventBus.emit(Eventos.PIECE_ERASE, defiende, ataca); //Se captura en Inicio (hace la parte grafica)
             if (defiende.getTipo() === "Comandante") {
                 EventBus.emit(Eventos.END_GAME, {

@@ -56,7 +56,7 @@ class TurnoGraficos {
         }).setInteractive({ useHandCursor: true }).setOrigin(0.5);
 
         this.acabarText.on('pointerdown', () => {
-            Sfx.play('finalizarMovimiento');
+            Sfx.play('interactuar', { volume: 0.6 });
             turno.acabarMovimientos();
         })
 
