@@ -23,6 +23,7 @@ class Minijuego extends Phaser.Scene {
      */
     create() {
         Sfx.bind(this);
+         Sfx.setCooldown('saltar', 80);
         this.panelEventos = new PanelEventos(this);
         this.add.image(500, 300, 'fondoMiniJuego').setOrigin(0.5).setScale(0.85).setAlpha(0.5);
 
@@ -135,6 +136,7 @@ class Minijuego extends Phaser.Scene {
         const spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         spaceKey.on('down', () => {
             if (this.panelEventos.getInput()) {
+                Sfx.play('saltar', { volume: 0.1 });
                 this.comandante.body.setAcceleration(0, 100);
                 this.comandante.body.setVelocity(0, -500);
             }

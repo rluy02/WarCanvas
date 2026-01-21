@@ -79,6 +79,13 @@ class PanelColocarPiezas {
                 this.escena.cambiarEscena();
             }
         });
+        this.buttonTry.on('pointerover', () => {
+            this.buttonTry.setColor('rgb(0, 0, 0)');
+        });
+
+        this.buttonTry.on('pointerout', () => {
+            this.buttonTry.setColor('#ffffffff');
+        });
 
         this.buttonChange = this.createText(width - sideWidth / 2, 490, 'Cambiar de equipo', 0, ' ', '24px', 0.5, '#ff0000ff');
         this.buttonChange.setInteractive({ useHandCursor: true });
@@ -87,6 +94,14 @@ class PanelColocarPiezas {
             Sfx.play('interactuar', { volume: 0.3 });//
             if (this.panelEventos.getInput()) this.cambiarEquipos();
         });
+        this.buttonChange.on('pointerover', () => {
+            this.buttonChange.setColor('rgb(168, 23, 23)');
+        });
+
+        this.buttonChange.on('pointerout', () => {
+            this.buttonChange.setColor('#ff0000ff');
+        });
+
 
         this.buttonCheat = this.createText(width - sideWidth / 2, 550, '(Pulsar para no poner todas las piezas)', 0, ' ', '16px', 0.5, '#ffffffff');
         this.buttonCheat.setInteractive({ useHandCursor: true });

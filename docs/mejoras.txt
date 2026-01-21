@@ -4,6 +4,7 @@ Pasar luego a PDF...
 -Pantalla de carga de espera de todos los recursos al iniciar el juego.
 -Refactor de las llamadas a animacion
 -Se corrige el poder pasar finalizar movimiento tras haber movido la primera pieza por completo.
+-Hovers a algunos botones para mejor sensacion y respuesta visual.
 -Sonidos:{
     -click/select para todos los accionables.
     -al soltar las piezas y conquistar (ganar combate).
@@ -17,7 +18,6 @@ Agregar sonidos...{
     -derrota
     -evento terremoto.
     -evento lluvia.
-    
 }
 -Evitar que el jugador pueda empezar una partida si por lo menos no hay el comandante propio y del rival.
 -En el tutorial o colocar piezas un boton para volver al menu.

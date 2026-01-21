@@ -95,6 +95,7 @@ class PanelLateral {
 
 
         this.buttonTry.on('pointerdown', () => {
+            Sfx.play('dados');
             // Se lanza el evento de ataque
             this.ataque = true;
             this.diceImages.attacker[0].setTexture(`dice1`);

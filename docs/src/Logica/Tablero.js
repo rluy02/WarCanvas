@@ -200,7 +200,7 @@ class Tablero {
      * @param {number} fil - fila de destino
      * @param {number} col - columna de destino
      * @param {Pieza} pieza - pieza a mover
-     */
+     */ 
     moverPiezaCombate(fil, col, pieza) {
 
         //Limpia la celda de origen
