@@ -8,19 +8,18 @@ Pasar luego a PDF...
 -Sonidos:{
     -click/select para todos los accionables.
     -al soltar las piezas y conquistar (ganar combate).
-    -explosion de las granadas del minijuego y el de la artilleria
+    -explosion de las granadas del minijuego y el de la artilleria.
+    -dados.
+    -salto.
+    -victoria
+    -derrota
 }
 Falta:
 Agregar sonidos...{
-    -click para todos los accionables.
-    -algo mientras suenan los dados?, o al lanzarlos
-    -victoria
-    -derrota
     -evento terremoto.
     -evento lluvia.
 }
 -Evitar que el jugador pueda empezar una partida si por lo menos no hay el comandante propio y del rival.
--En el tutorial o colocar piezas un boton para volver al menu.
 -Durante el tutorial, que no se continuara con el texto del tutorial hasta que el usuario
 haya realizado la acción que se pretende que realice para entender el funcionamiento de la
 pieza, y no es algo muy complicado usando eventos. Es decir, para cuando se habla del movimiento tiene que confirmarse que se ha movido primeramente

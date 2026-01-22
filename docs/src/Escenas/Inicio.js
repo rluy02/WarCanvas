@@ -114,8 +114,8 @@ class Inicio extends Phaser.Scene {
             this.piezas.push(pieza);
         }
         // Se añade un evento para cuando se mueve la pieza (once se ejecuta antes que on)
-        EventBus.on(Eventos.PIECE_MOVED, (pieza,movConquistaSFX=false) => {
-            this.moverPieza(pieza,movConquistaSFX);
+        EventBus.on(Eventos.PIECE_MOVED, (pieza, movConquistaSFX = false) => {
+            this.moverPieza(pieza, movConquistaSFX);
         });
 
         //Evento eliminacion de una pieza tras combate
@@ -161,10 +161,12 @@ class Inicio extends Phaser.Scene {
                     nombre = "¡Buena Suerte!";
                     titulo = "VICTORIA";
                     descripcion = "El enemigo cometió un grave error y destruyó a su propio comandante.";
+                    Sfx.play('victoria', { volume: 0.6 });
                 } else {
                     nombre = "Derrota inesperada";
                     titulo = "DERROTA";
                     descripcion = "Por eso hay que aprobar métodos matemáticos, has causado la pérdida del nuestro comandante.";
+                    Sfx.play('derrota', { volume: 0.8 });
                 }
 
                 this.panelEventos.mostrar(
@@ -182,6 +184,7 @@ class Inicio extends Phaser.Scene {
             if (info.jugador === "J1") {
                 nombre = '¡El equipo dibujado vence!';
                 titulo = 'VICTORIA';
+                Sfx.play('victoria', { volume: 0.6 });
                 if (info.tipo === "COMBATE")
                     descripcion = '¡Has conseguido derrotar al comandante rival!';
                 else
@@ -189,6 +192,7 @@ class Inicio extends Phaser.Scene {
             } else {
                 nombre = 'El equipo realista vence';
                 titulo = 'DERROTA';
+                Sfx.play('derrota', { volume: 0.8 });
                 if (info.tipo === "COMBATE")
                     descripcion = '¡Las fuerzas enemigas han derrotado a Drawful!';
                 else
@@ -209,7 +213,7 @@ class Inicio extends Phaser.Scene {
      * Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
      * @param {Pieza} pieza 
      */
-    moverPieza(pieza,movConquistaSFX=false) {
+    moverPieza(pieza, movConquistaSFX = false) {
         for (let p of this.piezas) {
             if (p == pieza) {
                 let data = this.piezaGrafico.eliminarPieza(pieza);

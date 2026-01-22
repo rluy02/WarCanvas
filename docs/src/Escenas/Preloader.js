@@ -44,6 +44,8 @@ class Preloader extends Phaser.Scene {
         this.load.audio('moverPieza', 'audio/moverPiezaSFX.wav');
         this.load.audio('dados', 'audio/dadosSFX.wav');
         this.load.audio('saltar', 'audio/saltoSFX.wav');
+        this.load.audio('victoria', 'audio/winSFX.wav');
+        this.load.audio('derrota', 'audio/defeatSFX.wav');
 
         // Tablero / mapa
         this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
