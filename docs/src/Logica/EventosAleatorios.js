@@ -1,5 +1,6 @@
 import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
+import { Sfx } from "../AudioManager/Sfx.js";
 
 /**
  * Clase que gestiona los eventos aleatorios durante el juego.
@@ -179,9 +180,25 @@ class EventosAleatorios {
      */
     runEventoActual(jugador) {
         this.panelEventoAleatorio.mostrar(this.evento.nombre, this.evento.descripcion, 'Evento Aleatorio', 'ACEPTAR', () => {
-            this.evento.runEvent(jugador);
+             this.aplicarEvento(jugador);
         });
     }
+
+ /**
+     * Aplica el evento y reproduce los sonidos segun si se juega el minijuego (modo ia-> despues) o no (normal -> de forma inmediata)
+     * @param {*String} jugador 
+     */
+    aplicarEvento(jugador) {
+        if (!this.evento) return;
+
+        if (this.evento.nombre === "Fuerte Lluvia")Sfx.play("lluvia", {volume: 0.6});         
+        else if (this.evento.nombre === "Terremoto")Sfx.play("terremoto");
+        
+        // Ejecutar lógica del evento
+        this.evento.runEvent(jugador);
+    }
+
+
 
     /**
      * Dispara un evento aleatorio basado en los pesos definidos de cada evento.
@@ -204,7 +221,7 @@ class EventosAleatorios {
                     });
                 }
                 else this.panelEventoAleatorio.mostrar(this.evento.nombre, this.evento.descripcion, 'Evento Aleatorio', 'ACEPTAR', () => {
-                    this.evento.runEvent();
+                     this.aplicarEvento(null);
                 });
                 //this.panelEventoAleatorio.mostrar(this.evento.evento.nombre, this.evento.evento.descripcion, 'Ha ganado' , 'ACEPTAR' );
                 return;
