@@ -1,3 +1,4 @@
+import { Sfx } from "../AudioManager/Sfx.js";
 import ColocarPiezas from "../Logica/ColocarPiezas.js";
 import TableroGraficoTutorial from "../Render/TableroGraficoTutorial.js";
 import PiezaGrafico from "../Render/PiezaGrafico.js";
@@ -25,20 +26,12 @@ class Tutorial extends Phaser.Scene {
     }
 
     /**
-     * Método preload de la escena Tutorial.
-     * Carga las imágenes necesarias para la escena.
-     */
-    preload() {
-       this.crearImagenes();
-    }
-
-    /**
      * Método create de la escena Tutorial.
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
     create() {
-       this.crearAnimaciones();
-       this.todasLasPiezas = true;
+        Sfx.bind(this);
+        this.todasLasPiezas = true;
 
         this.equipoJ1 = new Equipo("J1");
         this.equipoJ2 = new Equipo("J2");
@@ -55,17 +48,17 @@ class Tutorial extends Phaser.Scene {
         this.PanelEventos.mostrar('Tutorial', 'Pulsa Aceptar y empieza a jugar', 'WarCanvas');
 
         this.tutorial = new PanelTutorial(this, this.tab, this.tabGrafico, this.PanelEventos);
-         EventBus.on(Eventos.PIECE_POSITION, (pieza) => {
+        EventBus.on(Eventos.PIECE_POSITION, (pieza) => {
             this.piezaPosicionada(pieza); // Emit en ElegirPieza Tablero
             //this.tabGrafico.colorearRango();
         });
-        EventBus.on(Eventos.PIECE_DELETE, (pieza)=> {
+        EventBus.on(Eventos.PIECE_DELETE, (pieza) => {
             this.piezaEliminada(pieza); // Emit en ElegirPieza Tablero
             //this.tabGrafico.colorearRango();
         });
-                // Se añade un evento para cuando se mueve la pieza
-        EventBus.on(Eventos.PIECE_MOVED, (pieza) => {
-            this.moverPieza(pieza);
+        // Se añade un evento para cuando se mueve la pieza
+        EventBus.on(Eventos.PIECE_MOVED, (pieza, movConquistaSFX = false) => {
+            this.moverPieza(pieza, movConquistaSFX);
         });
 
     }
@@ -80,8 +73,9 @@ class Tutorial extends Phaser.Scene {
         this.piezas.push(pieza);
         this.tabGrafico.limpiarTablero();
         let celda = this.tab.getPiezaActiva();
-        if (celda) {let posicion = celda.getPosicion();
-        this.tabGrafico.onCeldaClick(posicion.fila, posicion.col);
+        if (celda) {
+            let posicion = celda.getPosicion();
+            this.tabGrafico.onCeldaClick(posicion.fila, posicion.col);
         }
     }
 
@@ -93,7 +87,8 @@ class Tutorial extends Phaser.Scene {
         //this.piezas.eliminarPieza(pieza);
         this.tabGrafico.borrarFragmentoMapa(pieza.fil, pieza.col, pieza.getJugador())
         Phaser.Utils.Array.Remove(this.piezas, pieza);
-        this.piezaGrafico.eliminarPieza(pieza);    }
+        this.piezaGrafico.eliminarPieza(pieza);
+    }
 
     /**
      * Elimina la pieza del tablero y de la lista de piezas.
@@ -107,15 +102,16 @@ class Tutorial extends Phaser.Scene {
         }
     }
 
-        /**
-     * Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
-     * @param {Pieza} pieza 
-     */
-    moverPieza(pieza) {
+    /**
+ * Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
+ * @param {Pieza} pieza 
+ */
+    moverPieza(pieza, movConquistaSFX = false) {
         for (let p of this.piezas) {
             if (p == pieza) {
                 this.piezaGrafico.eliminarPieza(pieza);
                 this.piezaGrafico.dibujarPieza(pieza);
+                if (!movConquistaSFX) Sfx.play('moverPieza');
             }
         }
     }
@@ -124,46 +120,9 @@ class Tutorial extends Phaser.Scene {
      * Cambiar de escena -> elegir piezas
      */
     cambiarEscena() {
-         this.scene.start('ElegirPiezas');
+        this.scene.start('ElegirPiezas');
     }
 
-    /**
-     * Método crearImagenes de la escena Tutorial.
-     * Carga las imágenes necesarias para las piezas del juego.
-     */
-    crearImagenes(){
-        
-        this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
-        this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
-
-    this.load.image('peon', './imgs/piezas/soldado-dibujado.webp');
-        this.load.image('peon-blanco', './imgs/piezas/white-pawn.webp');
-        this.load.image('peon-rojo', './imgs/piezas/red-pawn.webp');
-        this.load.image('peon2', './imgs/piezas/soldado-realista.webp');
-        this.load.image('caballeria', './imgs/piezas/caballeria-dibujada.webp');
-        this.load.image('caballeria2', './imgs/piezas/caballeria-realista.webp');
-        this.load.image('comandante', './imgs/piezas/Comandante.webp');
-        this.load.image('comandante2', './imgs/piezas/comandante-realista.webp');
-        this.load.image('artilleria', './imgs/piezas/artilleria-dibujada.webp');
-        this.load.image('artilleria2', './imgs/piezas/artilleria-realista.webp');
-        this.load.image('dialogo', './imgs/Tutorial/Dialogue.webp');
-
-        this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
-
-    }    
-    /**
-     * Crea las animaciones necesarias para la escena.
-     */
-    crearAnimaciones() {
-        if (!this.anims.exists('explotar')) {
-            this.anims.create({
-                key: 'explotar',
-                frames: this.anims.generateFrameNumbers('explosion', { frames: [0, 1, 2, 3, 4, 5, 6, 7] }),
-                frameRate: 10,
-                repeat: 0
-            });
-        }
-    }
 }
 
 export default Tutorial;

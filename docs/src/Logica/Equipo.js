@@ -181,7 +181,7 @@ class Equipo {
      * Devuelve el número de soldados restantes disponibles.
      * @returns {number} - número de soldados restantes
      */
-    getSoldados() {
+    getNumSoldados() {
         return this.Soldados;
     }
     
@@ -197,7 +197,7 @@ class Equipo {
      * Devuelve el número de caballerías restantes disponibles.
      * @returns {number} - número de caballerías restantes
      */
-    getCaballeria() {
+    getNumCaballerias() {
         return this.Caballeria;
     }
     
@@ -213,7 +213,7 @@ class Equipo {
      * Devuelve el número de piezas de artillería restantes disponibles.
      * @returns {number} - número de artillerías restantes
      */
-    getArtilleria() {
+    getNumArtillerias() {
         return this.Artilleria;
     }
     
@@ -229,7 +229,7 @@ class Equipo {
      * Devuelve el número de comandantes restantes disponibles.
      * @returns {number} - número de comandantes restantes
      */
-    getComandante() {
+    getNumComandantes() {
         return this.Comandante;
     }
     

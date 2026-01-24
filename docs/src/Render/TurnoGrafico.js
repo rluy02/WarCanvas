@@ -1,6 +1,7 @@
 import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
 import Turno from "../Logica/Turno.js";
+import { Sfx } from "../AudioManager/Sfx.js";
 
 /**
  * Clase que gestiona la parte gráfica del turno 
@@ -55,6 +56,7 @@ class TurnoGraficos {
         }).setInteractive({ useHandCursor: true }).setOrigin(0.5);
 
         this.acabarText.on('pointerdown', () => {
+            Sfx.play('interactuar', { volume: 0.3 });
             turno.acabarMovimientos();
         })
 

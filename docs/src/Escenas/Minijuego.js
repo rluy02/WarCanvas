@@ -1,3 +1,4 @@
+import { Sfx } from "../AudioManager/Sfx.js";
 import PanelEventos from "../Render/PanelEventos.js";
 
 /**
@@ -16,24 +17,13 @@ class Minijuego extends Phaser.Scene {
 
     }
 
-    /**
-     * Carga los recursos necesarios para la escena.
-     */
-    preload() {
-        //cuando esta escena venga de INICIO, que no recargue las imagenes
-        if (!this.textures.exists('Comandante')) this.load.image('Comandante', './imgs/piezas/Comandante.webp');
-        if (!this.textures.exists('ComandanteEnemigo')) this.load.image('ComandanteEnemigo', './imgs/piezas/comandante-realista.webp');
-        if (!this.textures.exists('Granada')) this.load.image('Granada', './imgs/minijuego/granada.webp');
-        if (!this.textures.exists('explosion')) this.load.spritesheet('explosion', './imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 })
-        if (!this.textures.exists('fondoMiniJuego')) this.load.image('fondoMiniJuego', './imgs/minijuego/miniJuegoFondo.webp');
-
-    }
 
     /**
      * Crea los elementos de la escena.
      */
     create() {
-        this.crearAnimaciones();
+        Sfx.bind(this);
+         Sfx.setCooldown('saltar', 80);
         this.panelEventos = new PanelEventos(this);
         this.add.image(500, 300, 'fondoMiniJuego').setOrigin(0.5).setScale(0.85).setAlpha(0.5);
 
@@ -71,7 +61,7 @@ class Minijuego extends Phaser.Scene {
                 repeat: 5
             });
 
-            this.cuentaAtrasTimer =this.time.addEvent({
+            this.cuentaAtrasTimer = this.time.addEvent({
                 delay: 1000,
                 callback: this.updateCuentaAtras,
                 callbackScope: this,
@@ -101,7 +91,7 @@ class Minijuego extends Phaser.Scene {
                     this.endMinijuego('J1');
                 });
         }
-        }
+    }
     /**
      * Finaliza el minijuego, recarga la escena load pasandole los parametros del miniJuego
      */
@@ -110,7 +100,7 @@ class Minijuego extends Phaser.Scene {
         if (this.scene.isSleeping('Inicio')) {
             this.scene.get('Inicio').dataWake = data;
             this.scene.wake('Inicio');
-        } 
+        }
         else this.scene.launch('Inicio');
         console.log("Fin del minijuego");
         this.scene.stop();
@@ -125,6 +115,7 @@ class Minijuego extends Phaser.Scene {
             this.explosion.visible = true;
             this.explosion.setPosition(granada.x, granada.y);
             this.explosion.play('explotar');
+            Sfx.explosion();
             granada.setData('flag', true);
         }
         granada.destroy();
@@ -135,18 +126,19 @@ class Minijuego extends Phaser.Scene {
      */
     createDrawFull() {
         //agregamos la fisica y el sprite
-        this.comandante = this.physics.add.sprite(100, this.scale.height - 100, 'Comandante');
+        this.comandante = this.physics.add.sprite(100, this.scale.height - 100, 'comandante');
         //reducimos el tamaño
         this.comandante.setScale(0.1);
         //para que el comandante se choque con los limites (es el canvas)
         this.comandante.setCollideWorldBounds(true);
         this.comandante.body.setImmovable(true);
-       this.comandante.body.setSize(this.comandante.width-200, this.comandante.height-200); 
+        this.comandante.body.setSize(this.comandante.width - 200, this.comandante.height - 200);
         const spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         spaceKey.on('down', () => {
-            if (this.panelEventos.getInput()){
-            this.comandante.body.setAcceleration(0, 100);
-            this.comandante.body.setVelocity(0, -500);
+            if (this.panelEventos.getInput()) {
+                Sfx.play('saltar', { volume: 0.1 });
+                this.comandante.body.setAcceleration(0, 100);
+                this.comandante.body.setVelocity(0, -500);
             }
 
         });
@@ -178,7 +170,7 @@ class Minijuego extends Phaser.Scene {
 
         for (let i = 0; i < this.vidasComandante; i++) {
             let icon = undefined;
-            icon = this.add.image(startX + i * 50, y, 'Comandante');
+            icon = this.add.image(startX + i * 50, y, 'comandante');
             icon.setDisplaySize(64, 64);
             this.iconosVida.push(icon);
         }
@@ -189,15 +181,16 @@ class Minijuego extends Phaser.Scene {
      */
     createComandanteEnemigo() {
         //agregamos la fisica y el sprite
-        this.comandanteEnemigo = this.add.sprite(this.scale.width - 100, this.scale.height / 2, 'ComandanteEnemigo').setScale(0.1);
+        this.comandanteEnemigo = this.add.sprite(this.scale.width - 100, this.scale.height / 2, 'comandante2').setScale(0.1);
     }
 
     /**
      * Crea una granada
      */
     createGranada() {
+        Sfx.play('lanzarGranada', { volume: 0.2 });
         //se crean varias granadas asi que mejor procesarlas como elementos temporales
-        let granada = this.physics.add.sprite(this.scale.width - 100, this.scale.height / 2, 'Granada').setScale(0.035);
+        let granada = this.physics.add.sprite(this.scale.width - 100, this.scale.height / 2, 'granada').setScale(0.035);
         //para que el comandante se choque con los limites (es el canvas)
         granada.setGravityY(-300);
         let randomY = Phaser.Math.Between(-500, 0);
@@ -205,7 +198,7 @@ class Minijuego extends Phaser.Scene {
         granada.setCollideWorldBounds(true);
         granada.body.setVelocity(randomX, randomY);
         granada.body.setBounce(0.3);
-        granada.body.setSize(granada.width-500, granada.height-500);
+        granada.body.setSize(granada.width - 500, granada.height - 500);
         //Activa el metodo onCollide
         granada.body.onCollide = true;
         //Data para que no explote 2 veces
@@ -216,7 +209,7 @@ class Minijuego extends Phaser.Scene {
         this.physics.add.collider(granada, this.comandante, () => {
             // Guardamos el timer en cada granada
             if (!granada.explosionTimer) {
-                granada.explosionTimer = this.time.delayedCall(2000, () => {
+                granada.explosionTimer = this.time.delayedCall(1500, () => {
                     this.explotaGranada(granada);
                 });
             }
@@ -258,21 +251,6 @@ class Minijuego extends Phaser.Scene {
                 () => {
                     this.endMinijuego('J2');
                 });
-        }
-    }
-
-
-    /**
-     * Crea las animaciones
-     */
-    crearAnimaciones() {
-        if (!this.anims.exists('explotar')) {
-            this.anims.create({
-                key: 'explotar',
-                frames: this.anims.generateFrameNumbers('explosion', { frames: [0, 1, 2, 3, 4, 5, 6, 7] }),
-                frameRate: 10,
-                repeat: 0
-            });
         }
     }
 }

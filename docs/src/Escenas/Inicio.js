@@ -1,6 +1,6 @@
+import { Sfx } from "../AudioManager/Sfx.js";
 import { Eventos } from "../Events.js"
 import { EventBus } from "../EventBus.js";
-
 import PanelLateral from "../Render/PanelLateral.js";
 import Tablero from "../Logica/Tablero.js";
 import TableroGrafico from "../Render/TableroGrafico.js";
@@ -42,14 +42,6 @@ class Inicio extends Phaser.Scene {
     }
 
     /**
-     * Método preload de la escena Inicio.
-     * Carga las imágenes necesarias para la escena.
-     */
-    preload() {
-        this.crearImagenes();
-    }
-
-    /**
      * Se llama a este metodo cuando se despierta la escena
      */
     wake() {
@@ -60,7 +52,7 @@ class Inicio extends Phaser.Scene {
         nameEnemy = (data == 'J2') ? 'Drawful' : 'el equipo Realista'
         // Aquí restauras lógica, reinicias inputs, etc.
         //let infoEvento = this.eventosAleatorios.infoEventoActual();
-        this.panelEventos.mostrar('MiniJuego Terminado', `El ganador del miniJuego es ${name}, el evento no le afectará`, 'Drawful', 'ACEPTAR', ()=>{
+        this.panelEventos.mostrar('MiniJuego Terminado', `El ganador del miniJuego es ${name}, el evento no le afectará`, 'Drawful', 'ACEPTAR', () => {
             this.eventosAleatorios.runEventoActual(data);
         });
     }
@@ -70,7 +62,7 @@ class Inicio extends Phaser.Scene {
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
     create() {
-        this.crearAnimaciones();
+        Sfx.bind(this);
 
         //Creamos la instancia y la guardamos en tab
         this.tab = new Tablero(8, 10, this);
@@ -122,8 +114,8 @@ class Inicio extends Phaser.Scene {
             this.piezas.push(pieza);
         }
         // Se añade un evento para cuando se mueve la pieza (once se ejecuta antes que on)
-        EventBus.on(Eventos.PIECE_MOVED, (pieza) => {
-            this.moverPieza(pieza);
+        EventBus.on(Eventos.PIECE_MOVED, (pieza, movConquistaSFX = false) => {
+            this.moverPieza(pieza, movConquistaSFX);
         });
 
         //Evento eliminacion de una pieza tras combate
@@ -169,10 +161,12 @@ class Inicio extends Phaser.Scene {
                     nombre = "¡Buena Suerte!";
                     titulo = "VICTORIA";
                     descripcion = "El enemigo cometió un grave error y destruyó a su propio comandante.";
+                    Sfx.play('victoria', { volume: 0.6 });
                 } else {
                     nombre = "Derrota inesperada";
                     titulo = "DERROTA";
                     descripcion = "Por eso hay que aprobar métodos matemáticos, has causado la pérdida del nuestro comandante.";
+                    Sfx.play('derrota', { volume: 0.8 });
                 }
 
                 this.panelEventos.mostrar(
@@ -190,6 +184,7 @@ class Inicio extends Phaser.Scene {
             if (info.jugador === "J1") {
                 nombre = '¡El equipo dibujado vence!';
                 titulo = 'VICTORIA';
+                Sfx.play('victoria', { volume: 0.6 });
                 if (info.tipo === "COMBATE")
                     descripcion = '¡Has conseguido derrotar al comandante rival!';
                 else
@@ -197,6 +192,7 @@ class Inicio extends Phaser.Scene {
             } else {
                 nombre = 'El equipo realista vence';
                 titulo = 'DERROTA';
+                Sfx.play('derrota', { volume: 0.8 });
                 if (info.tipo === "COMBATE")
                     descripcion = '¡Las fuerzas enemigas han derrotado a Drawful!';
                 else
@@ -217,11 +213,12 @@ class Inicio extends Phaser.Scene {
      * Busca la pieza entre la lista de piezas, la borra y la coloca en su nueva posición (esta posición esta ya asignada desde tablero.js)
      * @param {Pieza} pieza 
      */
-    moverPieza(pieza) {
+    moverPieza(pieza, movConquistaSFX = false) {
         for (let p of this.piezas) {
             if (p == pieza) {
                 let data = this.piezaGrafico.eliminarPieza(pieza);
                 this.piezaGrafico.dibujarPieza(pieza, data);
+                if (!movConquistaSFX) Sfx.play('moverPieza');
             }
         }
     }
@@ -236,7 +233,7 @@ class Inicio extends Phaser.Scene {
                 this.piezaGrafico.eliminarPieza(pieza);
             }
         }
-        
+
         // Eliminar la pieza del equipo correspondiente
         if (pieza.getJugador() === 'J1') {
             this.equipo1.eliminarPieza(pieza);
@@ -284,47 +281,6 @@ class Inicio extends Phaser.Scene {
         //por si necesitamos seguir desactivando objetos tener en cuenta esto...
         /* Text + .on() → Listener permanece incluso después de disableInteractive().
            Sprite / Rect + .on() o EventBus → Listener suele ser removido o ignorado cuando desactivas input o destruyes objeto. */
-    }
-
-    /**
-     * Crea las animaciones necesarias para la escena.
-     */
-    crearAnimaciones() {
-        if (!this.anims.exists('explotar')) {
-            this.anims.create({
-                key: 'explotar',
-                frames: this.anims.generateFrameNumbers('explosion', { frames: [0, 1, 2, 3, 4, 5, 6, 7] }),
-                frameRate: 10,
-                repeat: 0
-            });
-        }
-    }
-
-    /**
-     * Método crearImagenes de la escena Inicio.
-     * Carga las imágenes necesarias para la escena.
-     */
-    crearImagenes() {
-        for (let i = 0; i <= 6; i++) {
-            this.load.image(`dice${i}`, `./imgs/dice/dice${i}.webp`);
-        }
-
-        this.load.image('mapaTopo', './imgs/mapa/mapaTopo.webp');
-        this.load.image('mapaSat', './imgs/mapa/mapaSat.webp');
-
-        this.load.image('peon', './imgs/piezas/soldado-dibujado.webp');
-        this.load.image('peon-blanco', './imgs/piezas/white-pawn.webp');
-        this.load.image('peon-rojo', './imgs/piezas/red-pawn.webp');
-        this.load.image('peon2', './imgs/piezas/soldado-realista.webp');
-        this.load.image('caballeria', './imgs/piezas/caballeria-dibujada.webp');
-        this.load.image('caballeria2', './imgs/piezas/caballeria-realista.webp');
-        this.load.image('comandante', './imgs/piezas/Comandante.webp');
-        this.load.image('comandante2', './imgs/piezas/comandante-realista.webp');
-        this.load.image('artilleria', './imgs/piezas/artilleria-dibujada.webp');
-        this.load.image('artilleria2', './imgs/piezas/artilleria-realista.webp');
-        this.load.image('marcoConquista', './imgs/ui/marcoTerrenoConquistado.webp');
-
-        this.load.spritesheet('explosion', 'imgs/efectos/explosion.png', { frameWidth: 144, frameHeight: 128 });
     }
 
     /**

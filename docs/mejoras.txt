@@ -1,0 +1,23 @@
+Mejoras y cambios implementados.
+-Se indica en la pagina web los controles necesarios para poder jugar. Click y espacio en los minijuegos
+-Mejora semantica en los getters de soldados,caballerias, artillerias y comandantes.
+-Pantalla de carga de espera mientras se procesan de todos los recursos al iniciar el juego.
+-Refactor de las llamadas a animacion.
+-Se corrige el bug/comportamiento de "finalizar movimiento" tras haber gastado las acciones de la primera pieza en su primer movimiento. (En casos raros antes se necesitaba doble click para que se accionara el "finalizar movimiento").
+-Hovers a algunos botones para mejor sensacion y respuesta visual.
+-Script de un pequeño módulo para controlar los sonidos.
+-Evitar que el jugador pueda empezar una partida si por lo menos no hay el comandante propio y del rival.
+-Sonidos:{
+    -Click/select para todos los accionables.
+    -Al soltar las piezas y conquistar (ganar combate).
+    -Explosion de las granadas del minijuego y el de la artilleria.
+    -Tiada de dados.
+    -Salto.
+    -Victoria.
+    -Derrota.
+    -Evento terremoto.
+    -Evento lluvia. {Estos ultimos 2 se disparan de forma diferente segun si hay minijuego o no}
+
+    (Todos los utilizado son propios o con licencia gratis y de uso libre, con algunas modificaciones en audacity).
+}
+

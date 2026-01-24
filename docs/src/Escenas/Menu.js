@@ -1,3 +1,4 @@
+import { Sfx } from "../AudioManager/Sfx.js";
 /**
  * Escena del menú principal del juego.
  * @class Menu
@@ -14,20 +15,13 @@ class Menu extends Phaser.Scene {
     }
 
     /**
-     * Método preload de la escena Menu.
-     * Carga las imágenes necesarias para la escena.
-     */
-    preload() {
-        this.load.image('fondo', 'imgs/ui/fondo_menu.webp')
-        this.load.image('boton', 'imgs/ui/boton.webp')
-        this.load.font('Kotton', 'font/Kotton.ttf')
-    }
-
-    /**
      * Método create de la escena Menu.
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
     create() {
+        Sfx.bind(this);
+        Sfx.setCooldown('click', 80);
+
         this.add.image(400, 300, 'fondo').setOrigin(0.5).setScale(0.5);
         this.add.text(this.scale.width / 2, this.scale.height / 2 - 200, 'WAR CANVAS', {
             fontSize: '80px',
@@ -64,21 +58,22 @@ class Menu extends Phaser.Scene {
         }).setOrigin(0.5);
 
         //BOTON MINIJUEGO
-        let botonMinijuego = this.add.image(this.scale.width/2, this.scale.height / 2 + 150, 'boton')
+        let botonMinijuego = this.add.image(this.scale.width / 2, this.scale.height / 2 + 150, 'boton')
             .setOrigin(0.5)
             .setScale(0.4)
             .setInteractive({ useHandCursor: true })
 
-        let minijuegoText = this.add.text(botonMinijuego.x,botonMinijuego.y, 'Minijuego',{
+        let minijuegoText = this.add.text(botonMinijuego.x, botonMinijuego.y, 'Minijuego', {
             fontSize: '36px',
             color: '#ffffff',
             stroke: '#021601ff',
             strokeThickness: 10,
             fontFamily: 'Kotton',
-        }).setOrigin(0.5);    
+        }).setOrigin(0.5);
 
         //BOTON JUGAR
         botonInicio.on('pointerdown', () => {
+            Sfx.click();
             this.scene.launch('Tutorial'); //launch para evitar destruir la escena del menu
 
             //desactivamos los botones para evitar doble clicks mientras dormimos la escena
@@ -99,6 +94,7 @@ class Menu extends Phaser.Scene {
 
         // BOTON CREDITOS
         botonCreditos.on('pointerdown', () => {
+            Sfx.click();
             document.getElementById('creditos').style.display = 'block';
             document.getElementById('juego').style.display = 'none';
         })
@@ -115,6 +111,7 @@ class Menu extends Phaser.Scene {
 
         //Boton minijuego
         botonMinijuego.on('pointerdown', () => {
+            Sfx.click();
             this.scene.launch('Minijuego'); //launch para evitar destruir la escena del menu
 
             //desactivamos los botones para evitar doble clicks mientras dormimos la escena
@@ -143,7 +140,8 @@ class Menu extends Phaser.Scene {
 
         //BOTON DEFAULT
         defaultText.on('pointerdown', () => {
-            this.scene.launch('Inicio', { 
+            Sfx.click();
+            this.scene.launch('Inicio', {
                 ia: true
             }); //launch para evitar destruir la escena del menu
 

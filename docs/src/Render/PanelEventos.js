@@ -1,3 +1,4 @@
+import { Sfx } from "../AudioManager/Sfx.js";
 import { EventBus } from "../EventBus.js";
 import { Eventos } from "../Events.js";
 
@@ -137,6 +138,7 @@ class PanelEventos {
         });
 
         botonRect.on('pointerdown', () => {
+            Sfx.click();
             this.ocultar();
             this.input = true;
             if (onClose) onClose(); //el callback

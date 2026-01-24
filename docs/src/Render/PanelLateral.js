@@ -1,5 +1,6 @@
 import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
+import { Sfx } from "../AudioManager/Sfx.js";
 
 /**
  * Panel lateral que muestra información y controles relacionados con el combate.
@@ -47,6 +48,7 @@ class PanelLateral {
 
 
         this.btInfo.on('pointerdown', () => {
+            Sfx.click();
             this.panelInfo.abrirPanel();
         })
 
@@ -93,6 +95,7 @@ class PanelLateral {
 
 
         this.buttonTry.on('pointerdown', () => {
+            Sfx.play('dados');
             // Se lanza el evento de ataque
             this.ataque = true;
             this.diceImages.attacker[0].setTexture(`dice1`);
@@ -120,6 +123,7 @@ class PanelLateral {
         // Emitirá un ataque especial
         this.buttonCheat.on('pointerdown', () => {
             EventBus.emit(Eventos.ATTACK_CHEAT);
+            // Sfx.click(); No hace falta, solapa sonidos
         });
 
         this.buttonCheat.on('pointerover', () => {

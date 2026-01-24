@@ -1,3 +1,5 @@
+import { Sfx } from "../AudioManager/Sfx.js";
+
 /**
  * Gestiona el panel lateral de información.
  * @class
@@ -69,6 +71,7 @@ class PanelInfoPiezas {
         }).setInteractive({ useHandCursor: true })
 
         cerrarBoton.on('pointerdown', () => {
+            Sfx.click();
             this.cerrarPanel();
         })
 

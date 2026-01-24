@@ -1,6 +1,7 @@
 import { Eventos } from "../Events.js";
 import { EventBus } from "../EventBus.js";
 import Equipo from "../Logica/Equipo.js";
+import { Sfx } from "../AudioManager/Sfx.js";
 
 /**
  * Panel para colocar piezas antes de iniciar la partida.
@@ -65,28 +66,37 @@ class PanelColocarPiezas {
         this.artilleriaImg = this.cargarImagen('artilleria', width - sideWidth + 50, 350, 50, 'Artilleria', this.Artilleria);
         this.comandanteImg = this.cargarImagen('comandante', width - sideWidth + 50, 425, 50, 'Comandante', this.Comandante);
 
-        this.SoldadosNum = this.createText(width - sideWidth / 2 + 80, 200, '+' + this.equipoActual.getSoldados(), 300, ' ', '24px', 0.0);
-        this.CaballeriaNum = this.createText(width - sideWidth / 2 + 80, 275, '+' + this.equipoActual.getCaballeria(), 300, ' ', '24px', 0.0);
-        this.ArtilleriaNum = this.createText(width - sideWidth / 2 + 80, 350, '+' + this.equipoActual.getArtilleria(), 300, ' ', '24px', 0.0);
-        this.ComandanteNum = this.createText(width - sideWidth / 2 + 80, 425, '+' + this.equipoActual.getComandante(), 300, ' ', '24px', 0.0);
+        this.SoldadosNum = this.createText(width - sideWidth / 2 + 80, 200, '+' + this.equipoActual.getNumSoldados(), 300, ' ', '24px', 0.0);
+        this.CaballeriaNum = this.createText(width - sideWidth / 2 + 80, 275, '+' + this.equipoActual.getNumCaballerias(), 300, ' ', '24px', 0.0);
+        this.ArtilleriaNum = this.createText(width - sideWidth / 2 + 80, 350, '+' + this.equipoActual.getNumArtillerias(), 300, ' ', '24px', 0.0);
+        this.ComandanteNum = this.createText(width - sideWidth / 2 + 80, 425, '+' + this.equipoActual.getNumComandantes(), 300, ' ', '24px', 0.0);
 
         this.buttonTry = this.createText(width - sideWidth / 2, 520, 'Iniciar', 0, ' ', '32px', 0.5, '#ffffffff');
         this.buttonTry.setInteractive({ useHandCursor: true });
 
         this.buttonTry.on('pointerdown', () => {
-            if (this.panelEventos.getInput()) {
-                this.escena.cambiarEscena();
-            }
+            Sfx.click();
+            if(this.panelEventos.getInput()){
+            this.escena.cambiarEscena();}
         });
+         this.buttonTry.on('pointerover', () => {
+            this.buttonTry.setColor('rgb(0, 0, 0)');
+        });
+
+        this.buttonTry.on('pointerout', () => {
+            this.buttonTry.setColor('#ffffffff');
+        });
+
 
         this.buttonChange = this.createText(width - sideWidth / 2, 490, 'Cambiar de equipo', 0, ' ', '24px', 0.5, '#ff0000ff');
         this.buttonChange.setInteractive({ useHandCursor: true });
 
         this.buttonChange.on('pointerdown', () => {
+            Sfx.play('interactuar', { volume: 0.3 });//
             if (this.panelEventos.getInput()) this.cambiarEquipos();
         });
 
-        this.buttonCheat = this.createText(width - sideWidth / 2, 550, '(Pulsar para no poner todas las piezas)', 0, ' ', '16px', 0.5, this.cheatButtonColor);
+        this.buttonCheat = this.createText(width - sideWidth / 2, 550, '(Pulsar para no poner todas las piezas)', 0, ' ', '16px', 0.5, '#ffffffff');
         this.buttonCheat.setInteractive({ useHandCursor: true });
 
         this.buttonCheat.on('pointerover', () => {
@@ -98,8 +108,9 @@ class PanelColocarPiezas {
         });
 
         this.buttonCheat.on('pointerdown', () => {
-            if (this.panelEventos.getInput()) {
-                if (this.cheatButtonColor == '#ffffff') this.cheatButtonColor = '#000000';
+            Sfx.click();
+            if(this.panelEventos.getInput()){
+            if (this.cheatButtonColor == '#ffffff') this.cheatButtonColor = '#000000';
                 else this.cheatButtonColor = '#ffffff';
                 this.buttonCheat.setColor(this.cheatButtonColor);
                 this.escena.Cheat();
@@ -157,13 +168,12 @@ class PanelColocarPiezas {
         console.log(img)
 
         img.on('pointerdown', () => {
-            if (this.panelEventos.getInput()) {
-                if (this.piezaSeleccionada) this.piezaSeleccionada.setColor('#ffffffff');
-                this.piezaSeleccionada = texto;
-                this.pintarCasillas();
-                this.tablero.setTipo(tipo);
-                texto.setColor('#000000ff');
-            }
+            if(this.panelEventos.getInput()){
+            if (this.piezaSeleccionada) this.piezaSeleccionada.setColor('#ffffffff');
+            this.piezaSeleccionada = texto;
+            this.pintarCasillas();
+            this.tablero.setTipo(tipo);
+            texto.setColor('#000000ff');}
         })
 
         return img;
@@ -180,10 +190,10 @@ class PanelColocarPiezas {
      * Actualiza los contadores numéricos en el panel cuando una pieza es posicionada o eliminada.
      */
     piezaPosicionada() {
-        this.SoldadosNum.setText(`+${this.equipoActual.getSoldados()}`);
-        this.CaballeriaNum.setText(`+${this.equipoActual.getCaballeria()}`);
-        this.ArtilleriaNum.setText(`+${this.equipoActual.getArtilleria()}`);
-        this.ComandanteNum.setText(`+${this.equipoActual.getComandante()}`);
+        this.SoldadosNum.setText(`+${this.equipoActual.getNumSoldados()}`);
+        this.CaballeriaNum.setText(`+${this.equipoActual.getNumCaballerias()}`);
+        this.ArtilleriaNum.setText(`+${this.equipoActual.getNumArtillerias()}`);
+        this.ComandanteNum.setText(`+${this.equipoActual.getNumComandantes()}`);
     }
 
     /**
@@ -201,7 +211,7 @@ class PanelColocarPiezas {
         else {
             this.soldadoImg.setTexture('peon');
             this.caballeriaImg.setTexture('caballeria');
-            this.caballeriaImg.setDisplaySize(50, 50);
+             this.caballeriaImg.setDisplaySize(50, 50);
             this.artilleriaImg.setTexture('artilleria');
             this.comandanteImg.setTexture('comandante');
         }

@@ -2,6 +2,7 @@ import Pieza from '../Pieza.js';
 import { Eventos } from '../../Events.js';
 import { EventBus } from '../../EventBus.js';
 import Tablero from '../Tablero.js';
+import { Sfx } from '../../AudioManager/Sfx.js';
 
 /**
  * Clase que representa la pieza de Artillería en el juego.
@@ -71,6 +72,7 @@ class Artilleria extends Pieza {
         this.explosion.visible = true;
         this.explosion.setPosition(x, y);
         this.explosion.play('explotar');
+        Sfx.explosion();
 
         let celda = tablero.getCelda(filaProyectil, colProyectil);
         if (!celda.estaVacia()) {
