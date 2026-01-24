@@ -49,7 +49,7 @@ El objetivo es **conquistar el 80% del tablero o derrotar al Comandante enemigo*
 
 ## 🌐 Enlace al Juego
 👉 **Juega la versión publicada en GitHub Pages:**  
-[https://capitanmanzana.github.io/WarCanvas/](https://rluy02.github.io/WarCanvas/)
+[https://rluy02.github.io/WarCanvas/](https://rluy02.github.io/WarCanvas/)
 
 ---
 
