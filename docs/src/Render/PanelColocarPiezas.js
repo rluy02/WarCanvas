@@ -76,10 +76,11 @@ class PanelColocarPiezas {
 
         this.buttonTry.on('pointerdown', () => {
             Sfx.click();
-            if(this.panelEventos.getInput()){
-            this.escena.cambiarEscena();}
+            if (this.panelEventos.getInput()) {
+                this.escena.cambiarEscena();
+            }
         });
-         this.buttonTry.on('pointerover', () => {
+        this.buttonTry.on('pointerover', () => {
             this.buttonTry.setColor('rgb(0, 0, 0)');
         });
 
@@ -109,8 +110,8 @@ class PanelColocarPiezas {
 
         this.buttonCheat.on('pointerdown', () => {
             Sfx.click();
-            if(this.panelEventos.getInput()){
-            if (this.cheatButtonColor == '#ffffff') this.cheatButtonColor = '#000000';
+            if (this.panelEventos.getInput()) {
+                if (this.cheatButtonColor == '#ffffff') this.cheatButtonColor = '#000000';
                 else this.cheatButtonColor = '#ffffff';
                 this.buttonCheat.setColor(this.cheatButtonColor);
                 this.escena.Cheat();
@@ -168,12 +169,13 @@ class PanelColocarPiezas {
         console.log(img)
 
         img.on('pointerdown', () => {
-            if(this.panelEventos.getInput()){
-            if (this.piezaSeleccionada) this.piezaSeleccionada.setColor('#ffffffff');
-            this.piezaSeleccionada = texto;
-            this.pintarCasillas();
-            this.tablero.setTipo(tipo);
-            texto.setColor('#000000ff');}
+            if (this.panelEventos.getInput()) {
+                if (this.piezaSeleccionada) this.piezaSeleccionada.setColor('#ffffffff');
+                this.piezaSeleccionada = texto;
+                this.pintarCasillas();
+                this.tablero.setTipo(tipo);
+                texto.setColor('#000000ff');
+            }
         })
 
         return img;
@@ -211,7 +213,7 @@ class PanelColocarPiezas {
         else {
             this.soldadoImg.setTexture('peon');
             this.caballeriaImg.setTexture('caballeria');
-             this.caballeriaImg.setDisplaySize(50, 50);
+            this.caballeriaImg.setDisplaySize(50, 50);
             this.artilleriaImg.setTexture('artilleria');
             this.comandanteImg.setTexture('comandante');
         }
