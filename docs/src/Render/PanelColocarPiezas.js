@@ -115,7 +115,7 @@ class PanelColocarPiezas {
         });
 
         this.buttonCheat.on('pointerdown', () => {
-            //No hace falta sonido porque siempre come (ademas que se solapa)
+            Sfx.click();
             if (this.panelEventos.getInput()) {
                 this.buttonCheat.setColor('#000000');
                 this.escena.Cheat();

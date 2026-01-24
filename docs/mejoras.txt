@@ -1,28 +1,23 @@
-Pasar luego a PDF...
+Mejoras y cambios implementados.
 -Se indica en la pagina web los controles necesarios para poder jugar. Click y espacio en los minijuegos
 -Mejora semantica en los getters de soldados,caballerias, artillerias y comandantes.
--Pantalla de carga de espera de todos los recursos al iniciar el juego.
--Refactor de las llamadas a animacion
--Se corrige el poder pasar finalizar movimiento tras haber movido la primera pieza por completo.
+-Pantalla de carga de espera mientras se procesan de todos los recursos al iniciar el juego.
+-Refactor de las llamadas a animacion.
+-Se corrige el bug/comportamiento de "finalizar movimiento" tras haber gastado las acciones de la primera pieza en su primer movimiento. (En casos raros antes se necesitaba doble click para que se accionara el "finalizar movimiento").
 -Hovers a algunos botones para mejor sensacion y respuesta visual.
--Sonidos:{
-    -click/select para todos los accionables.
-    -al soltar las piezas y conquistar (ganar combate).
-    -explosion de las granadas del minijuego y el de la artilleria.
-    -dados.
-    -salto.
-    -victoria
-    -derrota
-}
-Falta:
-Agregar sonidos...{
-    -evento terremoto.
-    -evento lluvia.
-}
+-Script de un pequeño módulo para controlar los sonidos.
 -Evitar que el jugador pueda empezar una partida si por lo menos no hay el comandante propio y del rival.
+-Sonidos:{
+    -Click/select para todos los accionables.
+    -Al soltar las piezas y conquistar (ganar combate).
+    -Explosion de las granadas del minijuego y el de la artilleria.
+    -Tiada de dados.
+    -Salto.
+    -Victoria.
+    -Derrota.
+    -Evento terremoto.
+    -Evento lluvia. {Estos ultimos 2 se disparan de forma diferente segun si hay minijuego o no}
 
--Durante el tutorial, que no se continuara con el texto del tutorial hasta que el usuario
-haya realizado la acción que se pretende que realice para entender el funcionamiento de la
-pieza, y no es algo muy complicado usando eventos. Es decir, para cuando se habla del movimiento tiene que confirmarse que se ha movido primeramente
-y cuando se explica el combate quizas simular el ataque en un panel informativo (o poner el boton atacar en el panel lateral encima de drawful).
-Otra opcion es pisar el panelLateral mostrando el flujo de combate normal y al terminar el combate y pasar 3 segundos, volver al panelLateral anterior.
+    (Todos los utilizado son propios o con licencia gratis y de uso libre, con algunas modificaciones en audacity).
+}
+
