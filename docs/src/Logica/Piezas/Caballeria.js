@@ -49,7 +49,7 @@ class Caballeria extends Pieza {
         // Primera pasada: analizar vecinos directos en busca de enemigos y formaciones
         for (const vecino of celdasVecinas) {
             celdasVisitadas.add(vecino.celda);
-            
+
             if (!vecino.celda.estaVacia() && vecino.celda.getPieza().getJugador() === 'J1' && !vecino.salto) {
                 const result = this.detectaTipo(vecino.celda);
                 if (result > bestPeso) {
@@ -57,13 +57,13 @@ class Caballeria extends Pieza {
                     bestCelda = vecino.celda;
                 }
             }
-            
+
             if (vecino.celda.estaVacia()) {
                 const segVecinos = this.getVecinos(vecino.celda, celdasVisitadas, true);
-                
+
                 for (const segVecino of segVecinos) {
                     celdasVisitadas.add(segVecino.celda);
-                    
+
                     if (!segVecino.celda.estaVacia() && segVecino.celda.getPieza().getJugador() === 'J1') {
                         const segResult = this.detectaTipo(segVecino.celda);
                         if (segResult > bestPeso) {
@@ -71,14 +71,14 @@ class Caballeria extends Pieza {
                             bestCelda = segVecino.celda;
                         }
                     }
-                    
+
                     if (vecino.salto === false) {
                         if (segVecino.celda.estaVacia()) {
                             const terVecinos = this.getVecinos(segVecino.celda, celdasVisitadas, true);
-                            
+
                             for (const terVecino of terVecinos) {
                                 celdasVisitadas.add(terVecino.celda);
-                                
+
                                 const terResult = this.detectaTipo(terVecino.celda);
                                 if (terResult > bestPeso) {
                                     bestPeso = terResult;
@@ -93,7 +93,7 @@ class Caballeria extends Pieza {
 
         // DEBUG: Pintar celdas comprobadas
 
-        return { peso: (bestPeso + this.pesoBase), bestCelda: bestCelda};
+        return { peso: (bestPeso + this.pesoBase), bestCelda: bestCelda };
     }
 
     /**
@@ -119,7 +119,7 @@ class Caballeria extends Pieza {
                 case 'Comandante':
                     peso = 4;
                     break;
-                
+
             }
         }
         return peso;
@@ -198,6 +198,66 @@ class Caballeria extends Pieza {
         return res;
     }
 
+    /**
+   * Calcula las casillas disponibles para mover o atacar cuando se selecciona una pieza.
+   * Devuelve las casillas según el tipo de pieza y su alcance.
+   * @param {number} fil - fila de la pieza seleccionada
+   * @param {number} col - columna de la pieza seleccionada
+   * @param {Tablero} tablero - el tablero del juego
+   * @returns {Array<Object>} array de objetos con coordenadas y tipo de acción (vacia/enemigo)
+   */
+    piezaSeleccionada(fil, col, tablero) {
+        if (this.movida) return [];
+        
+        let celdasSeleccionadas = [];
+        let filas = tablero.size().fila;
+        let columnas = tablero.size().col;
+
+        // Definimos solo los 4 movimientos de la cruz: [cambioFila, cambioColumna]
+        // Arriba, Abajo, Izquierda, Derecha
+        const direcciones = [
+            [-1, 0], [1, 0], [0, -1], [0, 1]
+        ];
+
+        for (let k = 0; k < direcciones.length; k++) {
+            let j = fil + direcciones[k][0];
+            let i = col + direcciones[k][1];
+
+            // Comprobamos si se sale del tablero
+            if (j < 0 || i < 0 || j >= filas || i >= columnas) continue;
+
+            const cel = tablero.tablero[j][i];
+
+            if (cel.estaVacia()) {
+                celdasSeleccionadas.push({ fil: j, col: i, tipo: "vacia" });
+            } else {
+                const esRival = cel.getPieza().getJugador() !== this.jugador;
+                if (esRival) celdasSeleccionadas.push({ fil: j, col: i, tipo: "enemigo" });
+                if (this.saltoCaballeria) {
+                    const f2 = i + direcciones[k][0];
+                    const c2 = j + direcciones[k][1];
+
+                    if (this.saltoCaballeria) {
+                        let f2 = j + direcciones[k][0];
+                        let c2 = i + direcciones[k][1];
+
+                        // Comprobar límites de la casilla de aterrizaje
+                        if (f2 >= 0 && f2 < filas && c2 >= 0 && c2 < columnas) {
+                            const celdaDestino = tablero.tablero[f2][c2];
+
+                            // Generalmente solo se puede saltar si el destino está vacío
+                            // (Opcional: Si quieres que aplaste enemigos al caer, cambia esta condición)
+                            if (celdaDestino.estaVacia()) {
+                                celdasSeleccionadas.push({ fil: f2, col: c2, tipo: "vacia" });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return celdasSeleccionadas;
+    }
 }
 
 export default Caballeria;

@@ -121,7 +121,7 @@ class Artilleria extends Pieza {
                 }
 
                 let vecinos = this.getVecinos(celda);
-                
+
                 for (const vecino of vecinos) {
                     if (!vecino.estaVacia() && vecino.getPieza().getJugador() === 'J1') {
                         pesoTmp += this.detectaTipo(vecino)
@@ -130,14 +130,14 @@ class Artilleria extends Pieza {
                         pesoTmp -= this.detectaTipo(vecino)
                     }
                 }
-                if (pesoTmp > bestPeso){
+                if (pesoTmp > bestPeso) {
                     bestPeso = pesoTmp
                     bestCelda = celda
                 }
             }
         }
 
-        return {peso: (bestPeso + this.pesoBase), bestCelda: bestCelda};
+        return { peso: (bestPeso + this.pesoBase), bestCelda: bestCelda };
     }
 
     /**
@@ -211,6 +211,53 @@ class Artilleria extends Pieza {
         }
 
         return res;
+    }
+
+    /**
+     * Calcula las casillas disponibles para mover o atacar cuando se selecciona una pieza.
+     * Devuelve las casillas según el tipo de pieza y su alcance.
+     * @param {number} fil - fila de la pieza seleccionada
+     * @param {number} col - columna de la pieza seleccionada
+     * @param {Tablero} tablero - el tablero del juego
+     * @returns {Array<Object>} array de objetos con coordenadas y tipo de acción (vacia/enemigo)
+     */
+    piezaSeleccionada(fil, col, tablero) {
+        if (!this.puedeDisparar()) return [];
+
+        let celdasSeleccionadas = [];
+        const jugador = this.getJugador();
+
+        let iniCol;
+        let maxCol;
+        if (jugador === "J1") {
+            iniCol = this.col + 1; // La siguiente a la artilleria
+            maxCol = iniCol + 4;
+        }
+        else {
+            iniCol = this.col - 4; // La siguiente a la artilleria
+            maxCol = this.col;
+        }
+
+        let filas = tablero.size().fila;
+        let tableroDeJuego = tablero.getTableroDeJuego();
+
+        for (let col = iniCol; col < maxCol; col++) {
+            for (let fil = 0; fil < filas; fil++) {
+                let celda = tableroDeJuego[fil][col];
+
+                let esRival;
+                if (!celda.estaVacia()) esRival = jugador !== celda.getPieza().getJugador();
+
+                if (esRival) {
+                    celdasSeleccionadas.push({ fil: fil, col: col, tipo: "enemigo" });
+                }
+                else {
+                    celdasSeleccionadas.push({ fil: fil, col: col, tipo: "vacia" });
+                }
+            }
+        }
+
+        return celdasSeleccionadas;
     }
 }
 

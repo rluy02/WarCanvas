@@ -62,10 +62,7 @@ class Tablero {
      * @returns {Array<Object>} array de objetos con coordenadas y tipo de acción (vacia/enemigo)
      */
     piezaSeleccionada(fil, col) {
-
         let celda = this.tablero[fil][col];
-        let celdasSeleccionadas = [];
-
         let pieza = celda.getPieza();
 
         // Si la pieza ya no puede actuar, no devuelvas casillas
@@ -77,102 +74,7 @@ class Tablero {
             this.piezaActiva = pieza;
         }
 
-        if (pieza.getTipo() == "Artilleria" && !pieza.puedeDisparar()) return [];
-
-        // Direcciones cardinales
-        const direcciones = [
-            { df: -1, dc: 0 },  // arriba
-            { df: 1, dc: 0 },   // abajo
-            { df: 0, dc: -1 },  // izquierda
-            { df: 0, dc: 1 }    // derecha
-        ];
-
-        if (pieza.getTipo() == "Artilleria") {
-            const jugador = pieza.getJugador();
-
-            let iniCol;
-            let maxCol;
-            if (jugador === "J1") {
-                iniCol = pieza.getPosicion().col + 1; // La siguiente a la artilleria
-                maxCol = iniCol + 4;
-            }
-            else {
-                iniCol = pieza.getPosicion().col - 4; // La siguiente a la artilleria
-                maxCol = pieza.getPosicion().col;
-            }
-
-            for (let col = iniCol; col < maxCol; col++) {
-                for (let fil = 0; fil < this.filas; fil++) {
-                    let celda = this.tablero[fil][col];
-
-                    let esRival;
-                    if (!celda.estaVacia()) esRival = jugador !== celda.getPieza().getJugador();
-
-                    if (esRival) {
-                        celdasSeleccionadas.push({ fil: fil, col: col, tipo: "enemigo" });
-                    }
-                    else {
-                        celdasSeleccionadas.push({ fil: fil, col: col, tipo: "vacia" });
-                    }
-                }
-            }
-
-        }
-        else if (pieza.getTipo() != "Comandante") { //solo el comandante puede moverse en diagonal
-            for (let dir of direcciones) {
-                const f = fil + dir.df;
-                const c = col + dir.dc;
-                // fuera de tablero → deja de mirar en esta dirección
-                if (f < 0 || c < 0 || f >= this.filas || c >= this.columnas) continue;
-
-                const cel = this.tablero[f][c];
-
-                if (cel.estaVacia()) {
-                    // casilla libre: se puede mover; sigue mirando más lejos
-                    celdasSeleccionadas.push({ fil: f, col: c, tipo: "vacia" });
-                } else {
-                    // hay pieza: si es rival, puedes atacar esa casilla; en ambos casos paras
-                    const esRival = cel.getPieza().getJugador() !== celda.getPieza().getJugador();
-                    if (esRival) celdasSeleccionadas.push({ fil: f, col: c, tipo: "enemigo" });
-                    if (pieza.getTipo() == "Caballeria" && pieza.getSaltoCaballeria()) {
-
-                        const f2 = f + dir.df;
-                        const c2 = c + dir.dc;
-
-                        // Comprobar límites correctamente
-                        if (f2 >= 0 && f2 < this.filas && c2 >= 0 && c2 < this.columnas) {
-
-                            // Puede saltar solo si la casilla destino está vacía
-                            if (this.tablero[f2][c2].estaVacia()) {
-                                celdasSeleccionadas.push({ fil: f2, col: c2, tipo: "vacia" });
-                            }
-                        }
-                    }
-
-
-                }
-            }
-        }
-        else {
-            for (let i = col - 1; i <= col + 1; i++) {
-                for (let j = fil - 1; j <= fil + 1; j++) {
-                    // fuera de tablero → deja de mirar en esta dirección
-                    if (j < 0 || i < 0 || j >= this.filas || i >= this.columnas) continue;
-                    if (j == fil && i == col) continue; // saltar la casilla central
-                    const cel = this.tablero[j][i];
-
-                    if (cel.estaVacia()) {
-                        // casilla libre: se puede mover; sigue mirando más lejos
-                        celdasSeleccionadas.push({ fil: j, col: i, tipo: "vacia" });
-                    } else {
-                        // hay pieza: si es rival, puedes atacar esa casilla; en ambos casos paras
-                        const esRival = cel.getPieza().getJugador() !== celda.getPieza().getJugador();
-                        if (esRival) celdasSeleccionadas.push({ fil: j, col: i, tipo: "enemigo" });
-                    }
-                }
-            }
-        }
-        return celdasSeleccionadas;
+        return pieza.piezaSeleccionada(fil, col, this);
     }
 
     // Mueve la pieza a fil, col
@@ -302,6 +204,14 @@ class Tablero {
      */
     getEscena() {
         return this.escena;
+    }
+
+    /**
+     * Devuelve el tablero del juego
+     * @returns {Tablero}
+     */
+    getTableroDeJuego(){
+        return this.tablero;
     }
 
     /**
