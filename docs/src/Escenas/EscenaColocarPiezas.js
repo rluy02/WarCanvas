@@ -36,6 +36,9 @@ class EscenaColocarPiezas extends Phaser.Scene {
      * Crea los elementos gráficos y lógicos necesarios para la escena.
      */
     create() {
+        this.comandanteEquipo1Colocado = false;
+        this.comandanteEquipo2Colocado = false;
+
        // this.crearAnimaciones();
        this.todasLasPiezas = true;
 
@@ -89,6 +92,10 @@ class EscenaColocarPiezas extends Phaser.Scene {
      */
     piezaPosicionada(pieza) {
         this.piezaGrafico.dibujarPieza(pieza);
+        if (pieza.getTipo() == 'Comandante'){
+            if (pieza.getJugador() == 'J1') this.comandanteEquipo1Colocado = true;
+            else this.comandanteEquipo2Colocado = true;
+        }
     }
 
     /**
@@ -103,6 +110,11 @@ class EscenaColocarPiezas extends Phaser.Scene {
      * Cambia a la escena de inicio si todas las piezas están colocadas.
      */
     cambiarEscena() {
+        if (!this.comandanteEquipo1Colocado || !this.comandanteEquipo2Colocado) {
+            this.PanelEventos.mostrar("No puedes empezar", "Para empezar a jugar hay que colocar al menos a los 2 comandantes", "Coloca los Comandantes");
+            return;
+        }
+
         let e1 = this.equipoJ1.getSoldados() + this.equipoJ1.getCaballeria() + this.equipoJ1.getArtilleria() + this.equipoJ1.getComandante();
         let e2 = this.equipoJ2.getSoldados() + this.equipoJ2.getCaballeria() + this.equipoJ2.getArtilleria() + this.equipoJ2.getComandante();
         if(this.todasLasPiezas && (e1 > 0 || e2 > 0)) this.PanelEventos.mostrar('Colocar el tablero', 'Para continuar todas las piezas deben estar posicionadas.', 'Coloca todas las piezas');
