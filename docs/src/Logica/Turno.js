@@ -150,7 +150,7 @@ class Turno {
 
             EventBus.emit(Eventos.CHANGE_TURN, turnoJugador);
 
-            if (!this.escena.partidaTerminadaFlag && Math.random() < 0.40 && turnoJugador === 'J1') { // 35% de probabilidad de evento aleatorio y que la partida no este terminada
+            if (!this.escena.partidaTerminadaFlag && Math.random() < 0.25 && turnoJugador === 'J1') { // 25% de probabilidad de evento aleatorio y que la partida no este terminada
                 EventBus.emit(Eventos.RANDOM_EVENT);
             }
         }
