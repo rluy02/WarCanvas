@@ -153,10 +153,10 @@ Durante la partida se incluirán eventos aleatorios que afecten a las diferentes
     - En caso de victoria: El evento de terremoto o lluvia solo le afecta al equipo realista y zonas neutras.
     - En caso de derrota: El evento de terremoto o lluvia solo le afecta al equipo dibujado y zonas neutras. 
 
-Probabilidades de cada evento: 
-En cada turno hay un 20% de probabilidad de que ocurra el minijuego para decidir el evento aleatorio. Cuando hay un evento:
-- Probabilidad de que sea lluvia = 10%.
-- Probabilidad de que sea terremoto = 25%.
+- Probabilidades de cada evento: 
+En cada turno del jugador J1 hay un 25% de probabilidad de que se dispare un evento aleatorio (independientemente de que luego haya minijuego o no). Si ocurre el evento:
+    - Probabilidad de que sea lluvia = 62.5%. (5/8)
+    - Probabilidad de que sea terremoto = 37.5%. (3/8)
 
 
 ### 3.4 Fin del Juego
